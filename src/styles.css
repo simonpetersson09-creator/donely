@@ -118,8 +118,17 @@
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
+  --accent-work: oklch(0.72 0.12 250);
+  --accent-work-soft: oklch(0.3 0.05 250);
+  --accent-life: oklch(0.72 0.11 155);
+  --accent-life-soft: oklch(0.3 0.05 155);
+  --gold: oklch(0.78 0.12 82);
+  --gold-foreground: oklch(0.2 0.02 82);
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 40%), 0 8px 24px oklch(0 0 0 / 30%);
+  --shadow-gold: 0 8px 24px color-mix(in oklab, var(--gold) 25%, transparent);
+  --background: oklch(0.13 0.01 260);
   --foreground: oklch(0.984 0.003 247.858);
+
   --card: oklch(0.208 0.042 265.755);
   --card-foreground: oklch(0.984 0.003 247.858);
   --popover: oklch(0.208 0.042 265.755);
