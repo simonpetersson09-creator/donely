@@ -4,13 +4,13 @@ import { ChevronLeft } from "lucide-react";
 export const Route = createFileRoute("/statistik")({
   head: () => ({
     meta: [
-      { title: "Statistik – Veckans Resultat" },
+      { title: "Statistik – Donely" },
       {
         name: "description",
         content:
           "Översikt över dina registrerade aktiviteter inom jobb och privat. Statistikvyn är under utveckling.",
       },
-      { property: "og:title", content: "Statistik – Veckans Resultat" },
+      { property: "og:title", content: "Statistik – Donely" },
       {
         property: "og:description",
         content: "Översikt över dina registrerade aktiviteter inom jobb och privat.",
