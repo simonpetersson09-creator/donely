@@ -263,18 +263,15 @@ function AreaButton({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "rounded-xl border py-2.5 text-[13px] font-semibold transition-all duration-200 active:scale-[0.97]",
+        "rounded-xl border py-3 text-[14px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
             : "border-transparent bg-accent-life text-primary-foreground shadow-card"
           : "border-border bg-card text-foreground/55",
       )}
-
     >
-      <span className="block text-[17px] leading-none">{emoji}</span>
-      <span className="mt-0.5 block">{label}</span>
-
+      {label}
     </button>
   );
 }
