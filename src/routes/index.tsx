@@ -269,10 +269,11 @@ function AreaButton({
         "rounded-2xl border py-5 text-[17px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
-            ? "border-accent-work bg-accent-work-soft text-accent-work shadow-card"
-            : "border-accent-life bg-accent-life-soft text-accent-life shadow-card"
-          : "border-border bg-card text-muted-foreground",
+            ? "border-transparent bg-primary text-primary-foreground shadow-card"
+            : "border-transparent bg-accent-life text-primary-foreground shadow-card"
+          : "border-border bg-card text-foreground/55",
       )}
+
     >
       <span className="block text-[26px] leading-none">{emoji}</span>
       <span className="mt-2 block">{label}</span>
