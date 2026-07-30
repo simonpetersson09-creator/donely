@@ -161,12 +161,13 @@ function Index() {
               key={n}
               type="button"
               onClick={() => setAmount(String(n))}
-              className="flex-1 rounded-full border border-border bg-secondary/60 py-2 text-[15px] font-medium text-secondary-foreground transition-colors active:bg-secondary"
+              className="flex-1 rounded-full border border-primary/20 bg-card py-2 text-[15px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
             >
               {n}
             </button>
           ))}
         </div>
+
       </section>
 
       <div className="flex-1" />
