@@ -116,12 +116,12 @@ function Index() {
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2.5 text-left shadow-card transition-transform active:scale-[0.985]"
+            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2.5 text-left text-card-foreground shadow-card transition-transform active:scale-[0.985]"
           >
             <span className="text-[15px] font-medium">
               {hydrated ? (selected?.name ?? "Skapa en kategori") : "Laddar…"}
             </span>
-            <ChevronDown className="size-3.5 text-muted-foreground" />
+            <ChevronDown className="size-3.5 text-card-foreground/60" />
           </button>
         </section>
 
@@ -142,7 +142,7 @@ function Index() {
               onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, "").slice(0, 5))}
               onFocus={(e) => e.target.select()}
               aria-label="Antal"
-              className="min-w-0 flex-1 bg-transparent text-center text-[24px] font-semibold tabular-nums outline-none"
+              className="min-w-0 flex-1 bg-transparent text-center text-[24px] font-semibold tabular-nums text-card-foreground outline-none"
             />
             <StepButton
               onClick={() => setAmount(String((parsed || 0) + 1))}
@@ -264,7 +264,7 @@ function AreaButton({
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
             : "border-transparent bg-accent-life text-primary-foreground shadow-card"
-          : "border-border bg-card text-foreground/55",
+          : "border-border bg-card text-card-foreground",
       )}
     >
       {label}
@@ -316,7 +316,7 @@ function CategorySheet({
             <button
               key={c.id}
               onClick={() => onSelect(c.id)}
-              className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left text-[17px] transition-colors active:bg-secondary"
+              className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left text-[17px] text-card-foreground transition-colors active:bg-secondary"
             >
               {c.name}
               {c.id === selectedId && <Check className={cn("size-5", accent)} />}
