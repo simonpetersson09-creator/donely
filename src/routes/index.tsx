@@ -116,12 +116,12 @@ function Index() {
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2.5 text-left shadow-card transition-transform active:scale-[0.985]"
+            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2.5 text-left text-card-foreground shadow-card transition-transform active:scale-[0.985]"
           >
             <span className="text-[15px] font-medium">
               {hydrated ? (selected?.name ?? "Skapa en kategori") : "Laddar…"}
             </span>
-            <ChevronDown className="size-3.5 text-muted-foreground" />
+            <ChevronDown className="size-3.5 text-card-foreground/60" />
           </button>
         </section>
 
