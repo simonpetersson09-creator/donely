@@ -277,8 +277,9 @@ function AreaButton({
       )}
 
     >
-      <span className="block text-[26px] leading-none">{emoji}</span>
-      <span className="mt-2 block">{label}</span>
+      <span className="block text-[20px] leading-none">{emoji}</span>
+      <span className="mt-1 block">{label}</span>
+
     </button>
   );
 }
