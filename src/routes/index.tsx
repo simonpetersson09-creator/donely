@@ -352,7 +352,7 @@ function CategorySheet({
           <button
             type="submit"
             disabled={!newName.trim()}
-            className="rounded-xl bg-gold px-5 text-[17px] font-semibold text-gold-foreground transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-xl bg-gradient-gold px-5 text-[17px] font-semibold text-gold-foreground transition-transform active:scale-95 disabled:opacity-40"
           >
             Lägg till
           </button>
