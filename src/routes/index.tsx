@@ -157,7 +157,7 @@ function Index() {
                 key={n}
                 type="button"
                 onClick={() => setAmount(String(n))}
-                className="flex-1 rounded-full border border-primary/20 bg-card py-1 text-[13px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
+                className="flex-1 rounded-full border border-primary/20 bg-card py-1 text-[12px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
               >
                 {n}
               </button>
@@ -314,10 +314,10 @@ function CategorySheet({
             <button
               key={c.id}
               onClick={() => onSelect(c.id)}
-              className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left text-[17px] text-card-foreground transition-colors active:bg-secondary"
+              className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-[15px] text-card-foreground transition-colors active:bg-secondary"
             >
               {c.name}
-              {c.id === selectedId && <Check className={cn("size-5", accent)} />}
+              {c.id === selectedId && <Check className={cn("size-4", accent)} />}
             </button>
           ))}
         </div>
