@@ -74,16 +74,27 @@ function Index() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-8 pt-[calc(env(safe-area-inset-top)+1.5rem)]">
-      <header className="pb-1">
-        <h1 className="sr-only">Donely</h1>
-        <img
-          src={logo}
-          alt="Donely"
-          width={1152}
-          height={576}
-          className="h-11 w-auto dark:invert dark:hue-rotate-180"
-        />
+      <header className="flex justify-center pb-1">
+        <div className="inline-flex items-center gap-2 rounded-2xl bg-card px-5 py-3 shadow-sm">
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            className="h-6 w-6 text-[hsl(var(--gold,42_78%_52%))]"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={3}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ color: "var(--color-gold-deep, #c9a227)" }}
+          >
+            <path d="M4 13.5 9.5 19 20 5.5" />
+          </svg>
+          <h1 className="text-2xl font-semibold tracking-tight text-card-foreground">
+            donely
+          </h1>
+        </div>
       </header>
+
 
 
       {/* Område */}
