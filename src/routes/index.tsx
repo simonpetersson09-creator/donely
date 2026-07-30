@@ -72,13 +72,13 @@ function Index() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-[calc(env(safe-area-inset-top)+0.75rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <header className="flex justify-center">
-        <div className="inline-flex items-center gap-1.5 rounded-xl bg-card px-3.5 py-1.5 shadow-sm">
+        <div className="inline-flex items-center gap-1.5 rounded-lg bg-card px-3 py-1 shadow-sm">
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
-            className="h-4 w-4"
+            className="h-3.5 w-3.5"
             fill="none"
             stroke="currentColor"
             strokeWidth={3}
@@ -88,15 +88,15 @@ function Index() {
           >
             <path d="M4 13.5 9.5 19 20 5.5" />
           </svg>
-          <h1 className="text-[19px] font-semibold tracking-tight text-card-foreground">
+          <h1 className="text-[16px] font-semibold tracking-tight text-card-foreground">
             donely
           </h1>
         </div>
       </header>
 
-      <div className="flex flex-1 flex-col justify-center gap-4">
+      <div className="flex flex-1 flex-col justify-center gap-3">
         {/* Område */}
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-2">
           <AreaButton
             active={area === "jobb"}
             onClick={() => setArea("jobb")}
@@ -119,24 +119,24 @@ function Index() {
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
-            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-4 py-3 text-left shadow-card transition-transform active:scale-[0.985]"
+            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2.5 text-left shadow-card transition-transform active:scale-[0.985]"
           >
-            <span className="text-[16px] font-medium">
+            <span className="text-[15px] font-medium">
               {hydrated ? (selected?.name ?? "Skapa en kategori") : "Laddar…"}
             </span>
-            <ChevronDown className="size-4 text-muted-foreground" />
+            <ChevronDown className="size-3.5 text-muted-foreground" />
           </button>
         </section>
 
         {/* Antal */}
         <section>
           <Label>Antal</Label>
-          <div className="flex items-center gap-2 rounded-xl border border-border bg-card p-1.5 shadow-card">
+          <div className="flex items-center gap-1.5 rounded-xl border border-border bg-card p-1 shadow-card">
             <StepButton
               onClick={() => setAmount(String(Math.max(1, (parsed || 1) - 1)))}
               aria-label="Minska antal"
             >
-              <Minus className="size-4" />
+              <Minus className="size-3.5" />
             </StepButton>
             <input
               inputMode="numeric"
@@ -145,22 +145,22 @@ function Index() {
               onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, "").slice(0, 5))}
               onFocus={(e) => e.target.select()}
               aria-label="Antal"
-              className="min-w-0 flex-1 bg-transparent text-center text-[28px] font-semibold tabular-nums outline-none"
+              className="min-w-0 flex-1 bg-transparent text-center text-[24px] font-semibold tabular-nums outline-none"
             />
             <StepButton
               onClick={() => setAmount(String((parsed || 0) + 1))}
               aria-label="Öka antal"
             >
-              <Plus className="size-4" />
+              <Plus className="size-3.5" />
             </StepButton>
           </div>
-          <div className="mt-2 flex gap-2">
+          <div className="mt-1.5 flex gap-2">
             {[1, 5, 10, 25].map((n) => (
               <button
                 key={n}
                 type="button"
                 onClick={() => setAmount(String(n))}
-                className="flex-1 rounded-full border border-primary/20 bg-card py-1.5 text-[14px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
+                className="flex-1 rounded-full border border-primary/20 bg-card py-1 text-[13px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
               >
                 {n}
               </button>
@@ -170,11 +170,11 @@ function Index() {
       </div>
 
       {/* Registrera + Statistik — fasta längst ner */}
-      <div className="mt-auto space-y-2.5 pb-1">
+      <div className="mt-auto space-y-2 pb-1">
         <div className="h-4 text-center">
           <span
             className={cn(
-              "inline-flex items-center gap-1.5 text-[14px] font-medium transition-all duration-300",
+              "inline-flex items-center gap-1.5 text-[13px] font-medium transition-all duration-300",
               accentText,
               flash ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0",
             )}
@@ -186,13 +186,13 @@ function Index() {
           type="button"
           disabled={!valid}
           onClick={register}
-          className="w-full rounded-xl bg-gradient-gold py-3.5 text-[17px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
+          className="w-full rounded-xl bg-gradient-gold py-3 text-[16px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
         >
           Registrera
         </button>
         <Link
           to="/statistik"
-          className="flex w-full items-center justify-center rounded-xl border border-primary/20 bg-card py-3.5 text-[17px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
+          className="flex w-full items-center justify-center rounded-xl border border-primary/20 bg-card py-3 text-[16px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
         >
           📊 Statistik
         </Link>
@@ -223,7 +223,7 @@ function Index() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1.5 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
+    <p className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
       {children}
     </p>
   );
@@ -237,7 +237,7 @@ function StepButton({
     <button
       type="button"
       {...props}
-      className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-primary transition-transform active:scale-90"
+      className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-primary transition-transform active:scale-90"
     >
       {children}
     </button>
@@ -264,7 +264,7 @@ function AreaButton({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "rounded-xl border py-3 text-[15px] font-semibold transition-all duration-200 active:scale-[0.97]",
+        "rounded-xl border py-2.5 text-[13px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
@@ -273,8 +273,8 @@ function AreaButton({
       )}
 
     >
-      <span className="block text-[20px] leading-none">{emoji}</span>
-      <span className="mt-1 block">{label}</span>
+      <span className="block text-[17px] leading-none">{emoji}</span>
+      <span className="mt-0.5 block">{label}</span>
 
     </button>
   );
