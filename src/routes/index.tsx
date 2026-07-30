@@ -314,10 +314,10 @@ function CategorySheet({
             <button
               key={c.id}
               onClick={() => onSelect(c.id)}
-              className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left text-[17px] text-card-foreground transition-colors active:bg-secondary"
+              className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-[15px] text-card-foreground transition-colors active:bg-secondary"
             >
               {c.name}
-              {c.id === selectedId && <Check className={cn("size-5", accent)} />}
+              {c.id === selectedId && <Check className={cn("size-4", accent)} />}
             </button>
           ))}
         </div>
