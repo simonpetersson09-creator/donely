@@ -161,12 +161,13 @@ function Index() {
               key={n}
               type="button"
               onClick={() => setAmount(String(n))}
-              className="flex-1 rounded-full border border-border bg-secondary/60 py-2 text-[15px] font-medium text-secondary-foreground transition-colors active:bg-secondary"
+              className="flex-1 rounded-full border border-primary/20 bg-card py-2 text-[15px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
             >
               {n}
             </button>
           ))}
         </div>
+
       </section>
 
       <div className="flex-1" />
@@ -188,16 +189,17 @@ function Index() {
           type="button"
           disabled={!valid}
           onClick={register}
-          className="w-full rounded-2xl bg-gold py-4 text-[19px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
+          className="w-full rounded-2xl bg-gradient-gold py-4 text-[19px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
         >
           Registrera
         </button>
         <Link
           to="/statistik"
-          className="flex w-full items-center justify-center rounded-2xl border border-border bg-card py-3.5 text-[17px] font-medium shadow-card transition-transform active:scale-[0.98]"
+          className="flex w-full items-center justify-center rounded-2xl border border-primary/20 bg-card py-3.5 text-[17px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
         >
           📊 Statistik
         </Link>
+
       </div>
 
       {pickerOpen && (
@@ -223,7 +225,7 @@ function Index() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-2 px-1 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+    <p className="mb-2 px-1 text-[13px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
       {children}
     </p>
   );
@@ -237,12 +239,13 @@ function StepButton({
     <button
       type="button"
       {...props}
-      className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-transform active:scale-90"
+      className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent text-primary transition-transform active:scale-90"
     >
       {children}
     </button>
   );
 }
+
 
 function AreaButton({
   active,
@@ -266,10 +269,11 @@ function AreaButton({
         "rounded-2xl border py-5 text-[17px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
-            ? "border-accent-work bg-accent-work-soft text-accent-work shadow-card"
-            : "border-accent-life bg-accent-life-soft text-accent-life shadow-card"
-          : "border-border bg-card text-muted-foreground",
+            ? "border-transparent bg-primary text-primary-foreground shadow-card"
+            : "border-transparent bg-accent-life text-primary-foreground shadow-card"
+          : "border-border bg-card text-foreground/55",
       )}
+
     >
       <span className="block text-[26px] leading-none">{emoji}</span>
       <span className="mt-2 block">{label}</span>
@@ -348,7 +352,7 @@ function CategorySheet({
           <button
             type="submit"
             disabled={!newName.trim()}
-            className="rounded-xl bg-gold px-5 text-[17px] font-semibold text-gold-foreground transition-transform active:scale-95 disabled:opacity-40"
+            className="rounded-xl bg-gradient-gold px-5 text-[17px] font-semibold text-gold-foreground transition-transform active:scale-95 disabled:opacity-40"
           >
             Lägg till
           </button>
