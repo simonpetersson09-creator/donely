@@ -99,14 +99,12 @@ function Index() {
           <AreaButton
             active={area === "jobb"}
             onClick={() => setArea("jobb")}
-            emoji="💼"
             label="Jobb"
             tone="work"
           />
           <AreaButton
             active={area === "privat"}
             onClick={() => setArea("privat")}
-            emoji="🏡"
             label="Privat"
             tone="life"
           />
