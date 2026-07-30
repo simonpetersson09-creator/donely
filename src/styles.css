@@ -239,3 +239,7 @@
 }
 
 }
+
+@utility bg-gradient-gold {
+  background-image: var(--gradient-gold);
+}
