@@ -59,7 +59,7 @@ function Index() {
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
 
-  const accentText = area === "jobb" ? "text-accent-work" : "text-accent-life";
+  const accentText = "text-primary";
 
   function register() {
     if (!valid || !selected) return;
@@ -261,9 +261,7 @@ function AreaButton({
       className={cn(
         "rounded-xl border py-3 text-[14px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
-          ? tone === "work"
-            ? "border-transparent bg-primary text-primary-foreground shadow-card"
-            : "border-transparent bg-accent-life text-primary-foreground shadow-card"
+          ? "border-transparent bg-primary text-primary-foreground shadow-card"
           : "border-border bg-card text-card-foreground",
       )}
     >
@@ -288,7 +286,7 @@ function CategorySheet({
   onClose: () => void;
 }) {
   const [newName, setNewName] = useState("");
-  const accent = area === "jobb" ? "text-accent-work" : "text-accent-life";
+  const accent = "text-primary";
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
