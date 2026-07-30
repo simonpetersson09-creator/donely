@@ -223,7 +223,7 @@ function Index() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1.5 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
+    <p className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
       {children}
     </p>
   );
@@ -237,7 +237,7 @@ function StepButton({
     <button
       type="button"
       {...props}
-      className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-primary transition-transform active:scale-90"
+      className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent text-primary transition-transform active:scale-90"
     >
       {children}
     </button>
@@ -264,7 +264,7 @@ function AreaButton({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "rounded-xl border py-3 text-[15px] font-semibold transition-all duration-200 active:scale-[0.97]",
+        "rounded-xl border py-2.5 text-[13px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
@@ -273,8 +273,8 @@ function AreaButton({
       )}
 
     >
-      <span className="block text-[20px] leading-none">{emoji}</span>
-      <span className="mt-1 block">{label}</span>
+      <span className="block text-[17px] leading-none">{emoji}</span>
+      <span className="mt-0.5 block">{label}</span>
 
     </button>
   );
