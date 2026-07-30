@@ -24,8 +24,11 @@
   --color-accent-life: var(--accent-life);
   --color-accent-life-soft: var(--accent-life-soft);
   --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-gold-deep: var(--gold-deep);
   --color-gold-foreground: var(--gold-foreground);
   --shadow-card: var(--shadow-card);
+  --shadow-soft: var(--shadow-soft);
   --shadow-gold: var(--shadow-gold);
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI",
     system-ui, sans-serif;
