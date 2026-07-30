@@ -99,14 +99,12 @@ function Index() {
           <AreaButton
             active={area === "jobb"}
             onClick={() => setArea("jobb")}
-            emoji="💼"
             label="Jobb"
             tone="work"
           />
           <AreaButton
             active={area === "privat"}
             onClick={() => setArea("privat")}
-            emoji="🏡"
             label="Privat"
             tone="life"
           />
@@ -247,13 +245,11 @@ function StepButton({
 function AreaButton({
   active,
   onClick,
-  emoji,
   label,
   tone,
 }: {
   active: boolean;
   onClick: () => void;
-  emoji: string;
   label: string;
   tone: "work" | "life";
 }) {
@@ -263,18 +259,15 @@ function AreaButton({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "rounded-xl border py-2.5 text-[13px] font-semibold transition-all duration-200 active:scale-[0.97]",
+        "rounded-xl border py-3 text-[14px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
             : "border-transparent bg-accent-life text-primary-foreground shadow-card"
           : "border-border bg-card text-foreground/55",
       )}
-
     >
-      <span className="block text-[17px] leading-none">{emoji}</span>
-      <span className="mt-0.5 block">{label}</span>
-
+      {label}
     </button>
   );
 }
@@ -307,7 +300,7 @@ function CategorySheet({
       <div className="relative w-full max-w-md rounded-t-3xl border border-border bg-card p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-[20px] font-bold">
-            {area === "jobb" ? "💼 Jobb" : "🏡 Privat"}
+            {area === "jobb" ? "Jobb" : "Privat"}
           </h2>
           <button
             onClick={onClose}
