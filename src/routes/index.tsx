@@ -74,22 +74,21 @@ function Index() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <header className="flex justify-center">
-        <div className="inline-flex items-center gap-1.5 rounded-lg bg-card px-3 py-1 shadow-sm">
+        <div className="inline-flex items-center gap-1.5 text-primary">
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
-            className="h-3.5 w-3.5"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             strokeWidth={3}
             strokeLinecap="round"
             strokeLinejoin="round"
-            style={{ color: "var(--color-gold-deep, #c9a227)" }}
           >
             <path d="M4 13.5 9.5 19 20 5.5" />
           </svg>
-          <h1 className="text-[16px] font-semibold tracking-tight text-card-foreground">
-            donely
+          <h1 className="text-[18px] font-semibold tracking-tight">
+            Donely
           </h1>
         </div>
       </header>
