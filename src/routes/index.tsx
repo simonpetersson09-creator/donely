@@ -300,7 +300,7 @@ function CategorySheet({
       <div className="relative w-full max-w-md rounded-t-3xl border border-border bg-card p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-[20px] font-bold">
-            {area === "jobb" ? "💼 Jobb" : "🏡 Privat"}
+            {area === "jobb" ? "Jobb" : "Privat"}
           </h2>
           <button
             onClick={onClose}
