@@ -87,7 +87,7 @@ function Index() {
           >
             <path d="M20 6 9 17 4 12" />
           </svg>
-          <h1 className="font-[Inter] text-[36px] font-bold leading-none tracking-[-0.04em]">
+          <h1 className="font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em]">
             Donely
           </h1>
         </div>
