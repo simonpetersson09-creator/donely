@@ -286,7 +286,7 @@ function CategorySheet({
   onClose: () => void;
 }) {
   const [newName, setNewName] = useState("");
-  const accent = area === "jobb" ? "text-accent-work" : "text-accent-life";
+  const accent = "text-primary";
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
