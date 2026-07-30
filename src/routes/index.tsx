@@ -9,13 +9,13 @@ import logo from "@/assets/donely-logo.png";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Veckans Resultat – registrera på under 5 sekunder" },
+      { title: "Donely – registrera på under 5 sekunder" },
       {
         name: "description",
         content:
           "Dokumentera genomförda aktiviteter inom jobb och privat. Välj område, kategori och antal – registrera på under fem sekunder.",
       },
-      { property: "og:title", content: "Veckans Resultat" },
+      { property: "og:title", content: "Donely" },
       {
         property: "og:description",
         content: "Dokumentera vad du faktiskt har åstadkommit – jobb och privat, på fem sekunder.",
