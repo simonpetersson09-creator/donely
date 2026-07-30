@@ -142,7 +142,7 @@ function Index() {
               onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, "").slice(0, 5))}
               onFocus={(e) => e.target.select()}
               aria-label="Antal"
-              className="min-w-0 flex-1 bg-transparent text-center text-[24px] font-semibold tabular-nums outline-none"
+              className="min-w-0 flex-1 bg-transparent text-center text-[24px] font-semibold tabular-nums text-card-foreground outline-none"
             />
             <StepButton
               onClick={() => setAmount(String((parsed || 0) + 1))}
