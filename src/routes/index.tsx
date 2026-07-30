@@ -268,7 +268,7 @@ function AreaButton({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "rounded-2xl border py-5 text-[17px] font-semibold transition-all duration-200 active:scale-[0.97]",
+        "rounded-xl border py-3 text-[15px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
