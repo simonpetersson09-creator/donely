@@ -73,12 +73,12 @@ function Index() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
-      <header className="flex justify-center">
-        <div className="inline-flex items-center gap-1.5 text-primary">
+      <div className="flex flex-1 items-center justify-center">
+        <div className="inline-flex items-center gap-2 text-primary">
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
-            className="h-4 w-4"
+            className="h-6 w-6"
             fill="none"
             stroke="currentColor"
             strokeWidth={3}
@@ -87,11 +87,11 @@ function Index() {
           >
             <path d="M4 13.5 9.5 19 20 5.5" />
           </svg>
-          <h1 className="text-[18px] font-semibold tracking-tight">
+          <h1 className="text-[26px] font-semibold tracking-tight">
             Donely
           </h1>
         </div>
-      </header>
+      </div>
 
       <div className="flex flex-1 flex-col justify-center gap-3">
         {/* Område */}
