@@ -264,7 +264,7 @@ function AreaButton({
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
             : "border-transparent bg-accent-life text-primary-foreground shadow-card"
-          : "border-border bg-card text-foreground/55",
+          : "border-border bg-card text-card-foreground",
       )}
     >
       {label}
