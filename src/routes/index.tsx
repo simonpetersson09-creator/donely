@@ -185,15 +185,15 @@ function Index() {
           type="button"
           disabled={!valid}
           onClick={register}
-          className="w-full rounded-xl bg-gradient-gold py-3 text-[16px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
+          className="w-full rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-card transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
         >
           Registrera
         </button>
         <Link
           to="/statistik"
-          className="flex w-full items-center justify-center rounded-xl border border-primary/20 bg-card py-3 text-[16px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
+          className="flex w-full items-center justify-center rounded-xl border border-border bg-card py-3 text-[16px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
         >
-          📊 Statistik
+          Statistik
         </Link>
       </div>
 
