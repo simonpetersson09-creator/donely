@@ -72,13 +72,13 @@ function Index() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-8 pt-[calc(env(safe-area-inset-top)+1.5rem)]">
-      <header className="flex justify-center pb-1">
-        <div className="inline-flex items-center gap-2 rounded-2xl bg-card px-5 py-3 shadow-sm">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-[calc(env(safe-area-inset-top)+0.75rem)]">
+      <header className="flex justify-center">
+        <div className="inline-flex items-center gap-1.5 rounded-xl bg-card px-3.5 py-1.5 shadow-sm">
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
-            className="h-6 w-6 text-[hsl(var(--gold,42_78%_52%))]"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             strokeWidth={3}
@@ -88,7 +88,7 @@ function Index() {
           >
             <path d="M4 13.5 9.5 19 20 5.5" />
           </svg>
-          <h1 className="text-2xl font-semibold tracking-tight text-card-foreground">
+          <h1 className="text-[19px] font-semibold tracking-tight text-card-foreground">
             donely
           </h1>
         </div>
@@ -97,7 +97,8 @@ function Index() {
 
 
       {/* Område */}
-      <div className="mt-7 grid grid-cols-2 gap-3">
+      <div className="mt-4 grid grid-cols-2 gap-2.5">
+
         <AreaButton
           active={area === "jobb"}
           onClick={() => setArea("jobb")}
@@ -115,29 +116,29 @@ function Index() {
       </div>
 
       {/* Kategori */}
-      <section className="mt-6">
+      <section className="mt-4">
         <Label>Kategori</Label>
         <button
           type="button"
           onClick={() => setPickerOpen(true)}
-          className="flex w-full items-center justify-between rounded-2xl border border-border bg-card px-5 py-4 text-left shadow-card transition-transform active:scale-[0.985]"
+          className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-4 py-3 text-left shadow-card transition-transform active:scale-[0.985]"
         >
-          <span className="text-[17px] font-medium">
+          <span className="text-[16px] font-medium">
             {hydrated ? (selected?.name ?? "Skapa en kategori") : "Laddar…"}
           </span>
-          <ChevronDown className="size-5 text-muted-foreground" />
+          <ChevronDown className="size-4 text-muted-foreground" />
         </button>
       </section>
 
       {/* Antal */}
-      <section className="mt-6">
+      <section className="mt-4">
         <Label>Antal</Label>
-        <div className="flex items-center gap-3 rounded-2xl border border-border bg-card p-2 shadow-card">
+        <div className="flex items-center gap-2 rounded-xl border border-border bg-card p-1.5 shadow-card">
           <StepButton
             onClick={() => setAmount(String(Math.max(1, (parsed || 1) - 1)))}
             aria-label="Minska antal"
           >
-            <Minus className="size-5" />
+            <Minus className="size-4" />
           </StepButton>
           <input
             inputMode="numeric"
@@ -146,22 +147,22 @@ function Index() {
             onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, "").slice(0, 5))}
             onFocus={(e) => e.target.select()}
             aria-label="Antal"
-            className="min-w-0 flex-1 bg-transparent text-center text-[36px] font-semibold tabular-nums outline-none"
+            className="min-w-0 flex-1 bg-transparent text-center text-[28px] font-semibold tabular-nums outline-none"
           />
           <StepButton
             onClick={() => setAmount(String((parsed || 0) + 1))}
             aria-label="Öka antal"
           >
-            <Plus className="size-5" />
+            <Plus className="size-4" />
           </StepButton>
         </div>
-        <div className="mt-3 flex gap-2">
+        <div className="mt-2 flex gap-2">
           {[1, 5, 10, 25].map((n) => (
             <button
               key={n}
               type="button"
               onClick={() => setAmount(String(n))}
-              className="flex-1 rounded-full border border-primary/20 bg-card py-2 text-[15px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
+              className="flex-1 rounded-full border border-primary/20 bg-card py-1.5 text-[14px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
             >
               {n}
             </button>
@@ -173,34 +174,35 @@ function Index() {
       <div className="flex-1" />
 
       {/* Registrera */}
-      <div className="mt-8 space-y-3">
-        <div className="h-5 text-center">
+      <div className="mt-5 space-y-2">
+        <div className="h-4 text-center">
           <span
             className={cn(
-              "inline-flex items-center gap-1.5 text-[15px] font-medium transition-all duration-300",
+              "inline-flex items-center gap-1.5 text-[14px] font-medium transition-all duration-300",
               accentText,
               flash ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0",
             )}
           >
-            <Check className="size-4" /> Registrerat
+            <Check className="size-3.5" /> Registrerat
           </span>
         </div>
         <button
           type="button"
           disabled={!valid}
           onClick={register}
-          className="w-full rounded-2xl bg-gradient-gold py-4 text-[19px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
+          className="w-full rounded-xl bg-gradient-gold py-3.5 text-[17px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
         >
           Registrera
         </button>
         <Link
           to="/statistik"
-          className="flex w-full items-center justify-center rounded-2xl border border-primary/20 bg-card py-3.5 text-[17px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
+          className="flex w-full items-center justify-center rounded-xl border border-primary/20 bg-card py-2.5 text-[15px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
         >
           📊 Statistik
         </Link>
 
       </div>
+
 
       {pickerOpen && (
         <CategorySheet
@@ -225,7 +227,7 @@ function Index() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-2 px-1 text-[13px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
+    <p className="mb-1.5 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
       {children}
     </p>
   );
@@ -239,7 +241,7 @@ function StepButton({
     <button
       type="button"
       {...props}
-      className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent text-primary transition-transform active:scale-90"
+      className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-primary transition-transform active:scale-90"
     >
       {children}
     </button>
@@ -266,7 +268,7 @@ function AreaButton({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "rounded-2xl border py-5 text-[17px] font-semibold transition-all duration-200 active:scale-[0.97]",
+        "rounded-xl border py-3 text-[15px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
           ? tone === "work"
             ? "border-transparent bg-primary text-primary-foreground shadow-card"
@@ -275,8 +277,9 @@ function AreaButton({
       )}
 
     >
-      <span className="block text-[26px] leading-none">{emoji}</span>
-      <span className="mt-2 block">{label}</span>
+      <span className="block text-[20px] leading-none">{emoji}</span>
+      <span className="mt-1 block">{label}</span>
+
     </button>
   );
 }
