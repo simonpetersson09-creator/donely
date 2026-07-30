@@ -59,7 +59,7 @@ function Index() {
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
 
-  const accentText = area === "jobb" ? "text-accent-work" : "text-accent-life";
+  const accentText = "text-primary";
 
   function register() {
     if (!valid || !selected) return;
