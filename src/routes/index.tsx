@@ -47,7 +47,12 @@ function Index() {
     }
   }, [areaCategories, categoryId]);
 
-  useEffect(() => () => flashTimer.current && clearTimeout(flashTimer.current), []);
+  useEffect(() => {
+    return () => {
+      if (flashTimer.current) clearTimeout(flashTimer.current);
+    };
+  }, []);
+
 
   const selected = areaCategories.find((c) => c.id === categoryId);
   const parsed = Number.parseInt(amount, 10);
