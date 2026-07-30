@@ -241,7 +241,7 @@ function StepButton({
     <button
       type="button"
       {...props}
-      className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent text-primary transition-transform active:scale-90"
+      className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-primary transition-transform active:scale-90"
     >
       {children}
     </button>
