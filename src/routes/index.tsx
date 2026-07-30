@@ -261,9 +261,7 @@ function AreaButton({
       className={cn(
         "rounded-xl border py-3 text-[14px] font-semibold transition-all duration-200 active:scale-[0.97]",
         active
-          ? tone === "work"
-            ? "border-transparent bg-primary text-primary-foreground shadow-card"
-            : "border-transparent bg-accent-life text-primary-foreground shadow-card"
+          ? "border-transparent bg-primary text-primary-foreground shadow-card"
           : "border-border bg-card text-card-foreground",
       )}
     >
