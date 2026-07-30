@@ -92,5 +92,51 @@ export function useEntries() {
     });
   }, []);
 
-  return { entries, addEntry };
+  const removeEntry = useCallback((id: string) => {
+    setEntries((prev) => {
+      const next = prev.filter((e) => e.id !== id);
+      write(ENTRIES_KEY, next);
+      return next;
+    });
+  }, []);
+
+  return { entries, addEntry, removeEntry };
+}
+
+const GOALS_KEY = "vr.goals.v1";
+
+/** key: `${year}:${categoryId}` -> yearly target */
+export type Goals = Record<string, number>;
+
+export function goalKey(year: number, categoryId: string) {
+  return `${year}:${categoryId}`;
+}
+
+export function useGoals() {
+  const [goals, setGoals] = useState<Goals>({});
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setGoals(read<Goals>(GOALS_KEY, {}));
+    setHydrated(true);
+  }, []);
+
+  const setGoal = useCallback((year: number, categoryId: string, target: number) => {
+    setGoals((prev) => {
+      const next = { ...prev, [goalKey(year, categoryId)]: target };
+      write(GOALS_KEY, next);
+      return next;
+    });
+  }, []);
+
+  const removeGoal = useCallback((year: number, categoryId: string) => {
+    setGoals((prev) => {
+      const next = { ...prev };
+      delete next[goalKey(year, categoryId)];
+      write(GOALS_KEY, next);
+      return next;
+    });
+  }, []);
+
+  return { goals, setGoal, removeGoal, hydrated };
 }
