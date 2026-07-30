@@ -167,35 +167,35 @@ function Index() {
             ))}
           </div>
         </section>
+      </div>
 
-        {/* Registrera */}
-        <div className="space-y-2">
-          <div className="h-4 text-center">
-            <span
-              className={cn(
-                "inline-flex items-center gap-1.5 text-[14px] font-medium transition-all duration-300",
-                accentText,
-                flash ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0",
-              )}
-            >
-              <Check className="size-3.5" /> Registrerat
-            </span>
-          </div>
-          <button
-            type="button"
-            disabled={!valid}
-            onClick={register}
-            className="w-full rounded-xl bg-gradient-gold py-3.5 text-[17px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
+      {/* Registrera + Statistik — fasta längst ner */}
+      <div className="mt-auto space-y-2.5 pb-1">
+        <div className="h-4 text-center">
+          <span
+            className={cn(
+              "inline-flex items-center gap-1.5 text-[14px] font-medium transition-all duration-300",
+              accentText,
+              flash ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0",
+            )}
           >
-            Registrera
-          </button>
-          <Link
-            to="/statistik"
-            className="flex w-full items-center justify-center rounded-xl border border-primary/20 bg-card py-2.5 text-[15px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
-          >
-            📊 Statistik
-          </Link>
+            <Check className="size-3.5" /> Registrerat
+          </span>
         </div>
+        <button
+          type="button"
+          disabled={!valid}
+          onClick={register}
+          className="w-full rounded-xl bg-gradient-gold py-3.5 text-[17px] font-semibold text-gold-foreground shadow-gold transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
+        >
+          Registrera
+        </button>
+        <Link
+          to="/statistik"
+          className="flex w-full items-center justify-center rounded-xl border border-primary/20 bg-card py-3.5 text-[17px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
+        >
+          📊 Statistik
+        </Link>
       </div>
 
 
