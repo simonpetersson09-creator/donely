@@ -3,7 +3,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, Minus, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCategories, useEntries, type Area } from "@/lib/store";
-import logo from "@/assets/donely-logo.png";
 
 
 export const Route = createFileRoute("/")({
