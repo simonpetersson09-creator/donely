@@ -225,7 +225,7 @@ function Index() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-2 px-1 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+    <p className="mb-2 px-1 text-[13px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
       {children}
     </p>
   );
@@ -239,12 +239,13 @@ function StepButton({
     <button
       type="button"
       {...props}
-      className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-secondary text-secondary-foreground transition-transform active:scale-90"
+      className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-accent text-primary transition-transform active:scale-90"
     >
       {children}
     </button>
   );
 }
+
 
 function AreaButton({
   active,
