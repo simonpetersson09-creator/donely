@@ -72,13 +72,13 @@ function Index() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-8 pt-[calc(env(safe-area-inset-top)+1.5rem)]">
-      <header className="flex justify-center pb-1">
-        <div className="inline-flex items-center gap-2 rounded-2xl bg-card px-5 py-3 shadow-sm">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] pt-[calc(env(safe-area-inset-top)+0.75rem)]">
+      <header className="flex justify-center">
+        <div className="inline-flex items-center gap-1.5 rounded-xl bg-card px-3.5 py-1.5 shadow-sm">
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
-            className="h-6 w-6 text-[hsl(var(--gold,42_78%_52%))]"
+            className="h-4 w-4"
             fill="none"
             stroke="currentColor"
             strokeWidth={3}
@@ -88,7 +88,7 @@ function Index() {
           >
             <path d="M4 13.5 9.5 19 20 5.5" />
           </svg>
-          <h1 className="text-2xl font-semibold tracking-tight text-card-foreground">
+          <h1 className="text-[19px] font-semibold tracking-tight text-card-foreground">
             donely
           </h1>
         </div>
@@ -97,7 +97,8 @@ function Index() {
 
 
       {/* Område */}
-      <div className="mt-7 grid grid-cols-2 gap-3">
+      <div className="mt-4 grid grid-cols-2 gap-2.5">
+
         <AreaButton
           active={area === "jobb"}
           onClick={() => setArea("jobb")}
