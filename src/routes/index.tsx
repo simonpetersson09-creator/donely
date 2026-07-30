@@ -245,13 +245,11 @@ function StepButton({
 function AreaButton({
   active,
   onClick,
-  emoji,
   label,
   tone,
 }: {
   active: boolean;
   onClick: () => void;
-  emoji: string;
   label: string;
   tone: "work" | "life";
 }) {
