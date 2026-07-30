@@ -72,12 +72,17 @@ function Index() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pb-8 pt-[calc(env(safe-area-inset-top)+1.5rem)]">
-      <header>
-        <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Genomfört
-        </p>
-        <h1 className="mt-1 text-[34px] font-bold leading-tight tracking-tight">Veckans Resultat</h1>
+      <header className="pb-1">
+        <h1 className="sr-only">Donely</h1>
+        <img
+          src={logo}
+          alt="Donely"
+          width={1152}
+          height={576}
+          className="h-11 w-auto dark:invert dark:hue-rotate-180"
+        />
       </header>
+
 
       {/* Område */}
       <div className="mt-7 grid grid-cols-2 gap-3">
