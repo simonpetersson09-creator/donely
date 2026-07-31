@@ -85,8 +85,8 @@ function Index() {
 
   function register() {
     if (!valid || !selected) return;
-    // Trial over and no subscription: nothing is saved, the paywall takes over.
-    if (premium.hydrated && !premium.active) {
+    // All mutating actions are gated through the same premium status.
+    if (!canMutate(premium)) {
       navigator.vibrate?.(8);
       setPaywallOpen(true);
       return;
