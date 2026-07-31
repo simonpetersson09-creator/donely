@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useCategories, useEntries, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
+import { useCategories, useEntries, useOnboarding, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
 import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
