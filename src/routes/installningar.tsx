@@ -80,8 +80,19 @@ function Installningar() {
       </div>
 
       <div>
-        <section>
-          <div className="mb-5 rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
+        <section className="space-y-3">
+          <button
+            type="button"
+            onClick={() => toast.message(t("premiumFlowComing"))}
+            className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
+          >
+            <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
+              <Crown className="size-4" />
+              {t("startPremiumPrice")}
+            </span>
+          </button>
+
+          <div className="rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
             {premium.subscribed && (
               <p className="text-[15px] font-semibold leading-[20px] text-primary">
                 {t("premiumActive")}
@@ -103,35 +114,22 @@ function Installningar() {
             )}
           </div>
 
-          <div className="mt-5 space-y-3">
+          <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => toast.message(t("premiumFlowComing"))}
-              className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
+              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
             >
-              <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
-                <Crown className="size-4" />
-                {t("startPremiumPrice")}
-              </span>
+              {t("manageSubscription")}
             </button>
 
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => toast.message(t("premiumFlowComing"))}
-                className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
-              >
-                {t("manageSubscription")}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => toast.message(t("purchasesRestored"))}
-                className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
-              >
-                {t("restorePurchase")}
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => toast.message(t("purchasesRestored"))}
+              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+            >
+              {t("restorePurchase")}
+            </button>
           </div>
         </section>
 
