@@ -78,7 +78,11 @@ function Installningar() {
         </div>
       </section>
 
-      <section className="mt-8">
+      <p className="mt-auto pt-8 text-center text-[12px] text-muted-foreground">
+        Donely · {t("version")} 1.0
+      </p>
+
+      <section className="mt-6 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
         <div className="rounded-xl border border-destructive/30 bg-card px-3.5 py-3 shadow-card">
           <span className="flex items-center gap-2 text-[15px] font-semibold text-destructive">
             <Trash2 className="size-4" />
@@ -119,10 +123,6 @@ function Installningar() {
           )}
         </div>
       </section>
-
-      <p className="mt-auto pt-8 text-center text-[12px] text-muted-foreground">
-        Donely · {t("version")} 1.0
-      </p>
     </main>
   );
 }
