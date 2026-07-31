@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, Minus, Pencil, Plus, Settings, Trash2, X } from "lucide-react";
+import { Briefcase, Check, ChevronDown, Home, Minus, Pencil, Plus, Settings, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useCategories, useEntries, useGoals, useOnboarding, useLanguageGuide, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
@@ -360,7 +360,8 @@ function CategorySheet({
       />
       <div className="relative flex w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
         <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-[15px] font-bold">
+          <h2 className="flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
+            {area === "jobb" ? <Briefcase className="size-5" /> : <Home className="size-5" />}
             {area === "jobb" ? t("work") : t("private")}
           </h2>
           <button
