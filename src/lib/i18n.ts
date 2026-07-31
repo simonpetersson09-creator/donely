@@ -98,6 +98,10 @@ const sv = {
   "cat.j-avtal": "Avtal",
   "cat.j-samtal": "Nya samtal",
   "cat.j-admin": "Admin-uppgifter",
+  welcomeTitle: "Välkommen till Donely",
+  welcomeLine1: "Registrera det du faktiskt gör.",
+  welcomeLine2: "Följ dina resultat över tid.",
+  getStarted: "Kom igång",
 };
 
 type Dict = typeof sv;
