@@ -89,7 +89,7 @@ const sv = {
   goalReached: "Målet uppnåddes.",
   goalNotReached: "Målet uppnåddes inte.",
   barA11y: "{{year}}: {{total}} registrerade",
-  "cat.p-traning": "Träning",
+  "cat.p-traning": "Träningspass",
   "cat.p-promenad": "Promenad",
   "cat.p-meditation": "Meditation",
   "cat.p-bocker": "Lästa böcker",
