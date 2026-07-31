@@ -55,21 +55,18 @@ function Installningar() {
           <button
             type="button"
             onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl bg-primary px-3.5 py-3 text-left shadow-card transition-transform active:scale-[0.985]"
+            className="w-full rounded-xl bg-primary px-3.5 py-2.5 text-left shadow-card transition-transform active:scale-[0.985]"
           >
             <span className="flex items-center gap-2 text-[15px] font-semibold text-primary-foreground">
               <Crown className="size-4" />
               {t("startPremium")}
-            </span>
-            <span className="mt-0.5 block text-[13px] text-primary-foreground/80">
-              {t("startPremiumDesc")}
             </span>
           </button>
 
           <button
             type="button"
             onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl border border-border bg-card px-3.5 py-3 text-left shadow-card transition-colors active:bg-accent"
+            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-left shadow-card transition-colors active:bg-accent"
           >
             <span className="flex items-center gap-2 text-[15px] font-semibold text-primary">
               {t("manageSubscription")}
