@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as StatistikRouteImport } from './routes/statistik'
+import { Route as KategoriIdRouteImport } from './routes/kategori.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const StatistikRoute = StatistikRouteImport.update({
   path: '/statistik',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KategoriIdRoute = KategoriIdRouteImport.update({
+  id: '/kategori/$id',
+  path: '/kategori/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/statistik': typeof StatistikRoute
+  '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/statistik': typeof StatistikRoute
+  '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/statistik': typeof StatistikRoute
+  '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/statistik'
+  fullPaths: '/' | '/statistik' | '/kategori/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/statistik'
-  id: '__root__' | '/' | '/statistik'
+  to: '/' | '/statistik' | '/kategori/$id'
+  id: '__root__' | '/' | '/statistik' | '/kategori/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   StatistikRoute: typeof StatistikRoute
+  KategoriIdRoute: typeof KategoriIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,13 +75,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatistikRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/kategori/$id': {
+      id: '/kategori/$id'
+      path: '/kategori/$id'
+      fullPath: '/kategori/$id'
+      preLoaderRoute: typeof KategoriIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   StatistikRoute: StatistikRoute,
+  KategoriIdRoute: KategoriIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
