@@ -13,7 +13,7 @@ import {
 } from "@/lib/store";
 import { useTranslation } from "react-i18next";
 import { Paywall } from "@/components/Paywall";
-import { usePremium } from "@/lib/premium";
+import { canMutate, usePremium } from "@/lib/premium";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 
 export const Route = createFileRoute("/statistik")({

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Paywall } from "@/components/Paywall";
-import { usePremium } from "@/lib/premium";
+import { canMutate, usePremium } from "@/lib/premium";
 
 const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
 
