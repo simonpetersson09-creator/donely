@@ -85,24 +85,22 @@ function Installningar() {
 
       <div className="flex flex-1 items-center justify-center py-6">
         <div className="relative">
-          {(premium.subscribed || premium.inTrial) && (
-            <div className="absolute -right-14 -top-14 z-10 rotate-[6deg]">
-              <div className="relative rounded-full border border-primary bg-background px-4 py-3 shadow-card">
-                <p className="max-w-[9rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
-                  {premium.subscribed ? (
-                    <span className="inline-flex items-center gap-1">
-                      <Crown className="size-3 text-gold" fill="currentColor" />
-                      {t("premiumActive")}
-                    </span>
-                  ) : (
-                    t("trialLeft", { count: premium.trialDaysLeft })
-                  )}
-                </p>
+          <div className="absolute -right-14 -top-14 z-10 rotate-[6deg]">
+            <div className="relative rounded-full border border-primary bg-background px-4 py-3 shadow-card">
+              <p className="max-w-[9rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
+                {premium.subscribed ? (
+                  <span className="inline-flex items-center gap-1">
+                    <Crown className="size-3 text-gold" fill="currentColor" />
+                    {t("premiumActive")}
+                  </span>
+                ) : (
+                  t("trialLeft", { count: premium.inTrial ? premium.trialDaysLeft : 0 })
+                )}
+              </p>
 
-                <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
-              </div>
+              <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
             </div>
-          )}
+          </div>
           <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
