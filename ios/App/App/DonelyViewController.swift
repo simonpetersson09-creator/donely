@@ -16,6 +16,8 @@ final class DonelyViewController: CAPBridgeViewController {
     /// Strong reference — the bridge is the WKScriptMessageHandler and the
     /// UNUserNotificationCenter delegate for the whole app lifetime.
     private var notificationBridge: DonelyNotificationBridge?
+    /// Strong reference — StoreKit 2 bridge (WKScriptMessageHandler).
+    private var storeKitBridge: AnyObject?
     private var loadingObservation: NSKeyValueObservation?
 
     override func viewDidLoad() {
@@ -37,6 +39,15 @@ final class DonelyViewController: CAPBridgeViewController {
         // JS → Swift message handlers.
         bridge.register(on: webView.configuration.userContentController)
 
+        // StoreKit 2 bridge (products, purchase, restore, entitlement).
+        var store: DonelyStoreKitBridge?
+        if #available(iOS 15.0, *) {
+            let storeBridge = DonelyStoreKitBridge(webView: webView)
+            storeBridge.register(on: webView.configuration.userContentController)
+            storeKitBridge = storeBridge
+            store = storeBridge
+        }
+
         // Notification delegate (also set in the bridge initializer; explicit
         // here so the wiring is obvious and survives refactors).
         UNUserNotificationCenter.current().delegate = bridge
@@ -47,10 +58,15 @@ final class DonelyViewController: CAPBridgeViewController {
                 guard change.newValue == false else { return }
                 self?.loadingObservation = nil
                 self?.notificationBridge?.webViewDidFinishLoad()
+                if #available(iOS 15.0, *) {
+                    (self?.storeKitBridge as? DonelyStoreKitBridge)?.webViewDidFinishLoad()
+                }
             }
         } else {
             bridge.webViewDidFinishLoad()
+            if #available(iOS 15.0, *) { store?.webViewDidFinishLoad() }
         }
+
 
         // A tap that cold-launched the app is replayed once the web app loads.
         AppDelegate.pendingNotificationRoute.map { route in
