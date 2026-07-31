@@ -179,3 +179,26 @@ dev-tickern eller av återställning.
 - `AppStore.sync()` för återställning.
 - `showManageSubscriptions(in:)` för abonnemangshantering.
 - `Transaction.updates`-lyssnare som pushar nytt entitlement när prenumerationen förnyas eller avslutas.
+
+## Kontraktsgranskning – 2026-07-31
+
+Verifierat i förhandsvisningen med ett simulerat iOS-skal (mockade
+`webkit.messageHandlers`):
+
+- JS postar `bridgeReady {version:1}`, `requestEntitlement {}` och
+  `requestProduct {product}` direkt vid start. ✅
+- Med skal närvarande ignoreras localStorage helt – `vr.premium.v1 = "1"` gav
+  fortsatt låst app tills entitlement kom via bryggan. ✅
+- `__donelySetEntitlement` accepterar objekt och JSON-sträng, och
+  `trialDaysLeft: "3"` tolkas som 3 dagar. ✅
+- `__donelySetProduct({displayPrice:"€2.99"})` slog direkt igenom i UI:t:
+  "Start Premium – €2.99/mo". ✅
+- Okänd status i `__donelyPurchaseResult` faller tillbaka på `failed`. ✅
+
+Tillagt i denna granskning: versionerad handshake (`bridgeReady`,
+`__donelyBridgeVersion`, `__donelyBridgeReady`), payload-validering, samt
+timeouts för entitlement/produkt/köp så att UI aldrig fastnar om skalet tystnar.
+
+**JavaScript-sidan är därmed färdig.** Återstående arbete är enbart Swift:
+registrera de sju message handlers, implementera StoreKit 2-anropen och pusha
+entitlement vid start, `bridgeReady`, `Transaction.updates` och när appen blir aktiv.
