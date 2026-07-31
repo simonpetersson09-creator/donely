@@ -76,7 +76,7 @@ function Installningar() {
           {t("donelyPremium")}
         </h2>
 
-        <div className="mb-5 rounded-2xl border border-border bg-card px-5 py-5 text-center shadow-card">
+        <div className="mb-5 rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
           <p className="text-[17px] font-semibold leading-[22px] text-primary">
             {premium.subscribed
               ? t("premiumActive")
