@@ -304,17 +304,17 @@ function CategorySheet({
         onClick={onClose}
         className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px] animate-in fade-in"
       />
-      <div className="relative flex w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-[17px] font-bold">
+      <div className="relative flex w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="text-[15px] font-bold">
             {area === "jobb" ? "Jobb" : "Privat"}
           </h2>
           <button
             onClick={onClose}
             aria-label="Stäng"
-            className="flex size-8 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
+            className="flex size-7 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
           >
-            <X className="size-4" />
+            <X className="size-3.5" />
           </button>
         </div>
 
@@ -328,19 +328,19 @@ function CategorySheet({
                 setAdding(false);
               }
             }}
-            className="mb-2 flex gap-2"
+            className="mb-1.5 flex gap-2"
           >
             <input
               autoFocus
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder="Namn på kategori"
-              className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[15px] outline-none placeholder:text-muted-foreground focus:border-ring"
+              className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-[14px] outline-none placeholder:text-muted-foreground focus:border-ring"
             />
             <button
               type="submit"
               disabled={!newName.trim()}
-              className="rounded-xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
+              className="rounded-xl bg-primary px-3 text-[14px] font-semibold text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
             >
               Spara
             </button>
@@ -349,14 +349,14 @@ function CategorySheet({
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="mb-2 flex w-full items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2.5 text-[15px] font-semibold text-primary transition-colors active:bg-secondary"
+            className="mb-1.5 flex w-full items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
           >
-            <Plus className="size-4" />
+            <Plus className="size-3.5" />
             Lägg till kategori
           </button>
         )}
 
-        <div className="max-h-[60dvh] space-y-1 overflow-y-auto">
+        <div className="max-h-[55dvh] space-y-0.5 overflow-y-auto">
           {categories.map((c) =>
             renamingId === c.id ? (
               <form
