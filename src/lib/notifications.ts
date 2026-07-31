@@ -261,14 +261,28 @@ function writeEnabled(value: boolean) {
 /** Serializes schedule calls so a double tap can never create two requests. */
 let scheduling: Promise<void> | null = null;
 
+/**
+ * Enables and schedules the reminder when the user has previously asked for it
+ * and permission has since become granted (e.g. after visiting iOS Settings).
+ */
+function maybeAutoEnable(permission: PermissionStatus) {
+  if (state.enabled) return;
+  if (!readIntent()) return;
+  if (permission !== "granted" && permission !== "provisional") return;
+  writeEnabled(true);
+  setState({ enabled: true });
+  scheduleWeeklyReminder(i18n.language || "sv");
+}
+
 /** Ask iOS for the current authorization status (no prompt). */
 export function refreshPermission() {
   if (post("requestNotificationStatus")) return;
   if (typeof window !== "undefined" && "Notification" in window) {
     const p = Notification.permission;
-    setState({
-      permission: p === "granted" ? "granted" : p === "denied" ? "denied" : "notDetermined",
-    });
+    const permission: PermissionStatus =
+      p === "granted" ? "granted" : p === "denied" ? "denied" : "notDetermined";
+    setState({ permission });
+    maybeAutoEnable(permission);
     return;
   }
   setState({ permission: "unsupported" });
@@ -432,15 +446,9 @@ function installBridge() {
       pendingEnable = null;
       writeEnabled(false);
       setState({ enabled: false });
-    } else if (
-      !state.enabled &&
-      readIntent() &&
-      (permission === "granted" || permission === "provisional")
-    ) {
-      // The user came back from iOS Settings after allowing notifications.
-      writeEnabled(true);
-      setState({ enabled: true });
-      scheduleWeeklyReminder(i18n.language || "sv");
+    } else {
+      // The user may have come back from iOS Settings after allowing notifications.
+      maybeAutoEnable(permission);
     }
   };
 
