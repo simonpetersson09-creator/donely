@@ -76,7 +76,7 @@ function Installningar() {
       <div className="flex flex-1 items-center justify-center py-6">
         <div className="relative">
           {!premium.subscribed && !premium.trialExpired && (
-            <div className="absolute -right-8 -top-14 z-10 rotate-[6deg]">
+            <div className="absolute -right-14 -top-14 z-10 rotate-[6deg]">
               <div className="relative rounded-full border border-primary bg-background px-4 py-3 shadow-card">
                 <p className="text-center text-[11px] font-semibold leading-[14px] text-primary">
                   {(() => {
