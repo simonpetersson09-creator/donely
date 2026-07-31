@@ -71,8 +71,25 @@ export function useCategories() {
     return category;
   }, []);
 
-  return { categories, addCategory, hydrated };
+  const renameCategory = useCallback((id: string, name: string) => {
+    setCategories((prev) => {
+      const next = prev.map((c) => (c.id === id ? { ...c, name: name.trim() } : c));
+      write(CATS_KEY, next);
+      return next;
+    });
+  }, []);
+
+  const removeCategory = useCallback((id: string) => {
+    setCategories((prev) => {
+      const next = prev.filter((c) => c.id !== id);
+      write(CATS_KEY, next);
+      return next;
+    });
+  }, []);
+
+  return { categories, addCategory, renameCategory, removeCategory, hydrated };
 }
+
 
 export function useEntries() {
   const [entries, setEntries] = useState<Entry[]>([]);

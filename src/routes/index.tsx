@@ -1,8 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, Minus, Plus, X } from "lucide-react";
+import { Check, ChevronDown, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCategories, useEntries, type Area } from "@/lib/store";
+import { useCategories, useEntries, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
+
+const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
+
+
 
 
 export const Route = createFileRoute("/")({
@@ -34,13 +38,18 @@ function Index() {
   const [flash, setFlash] = useState(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { categories, addCategory, hydrated } = useCategories();
+  const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { addEntry } = useEntries();
 
-  const areaCategories = useMemo(
-    () => categories.filter((c) => c.area === area),
-    [categories, area],
-  );
+  const areaCategories = useMemo(() => {
+    const list = categories.filter((c) => c.area === area);
+    const isStd = (id: string) => DEFAULT_IDS.has(id);
+    return [
+      ...list.filter((c) => isStd(c.id)),
+      ...list.filter((c) => !isStd(c.id)),
+    ];
+  }, [categories, area]);
+
 
   useEffect(() => {
     if (!areaCategories.some((c) => c.id === categoryId)) {
@@ -197,7 +206,10 @@ function Index() {
             setCategoryId(created.id);
             setPickerOpen(false);
           }}
+          onRename={renameCategory}
+          onDelete={removeCategory}
           onClose={() => setPickerOpen(false)}
+
         />
       )}
     </main>
@@ -262,6 +274,8 @@ function CategorySheet({
   selectedId,
   onSelect,
   onCreate,
+  onRename,
+  onDelete,
   onClose,
 }: {
   area: Area;
@@ -269,10 +283,15 @@ function CategorySheet({
   selectedId: string | null;
   onSelect: (id: string) => void;
   onCreate: (name: string) => void;
+  onRename: (id: string, name: string) => void;
+  onDelete: (id: string) => void;
   onClose: () => void;
 }) {
+  const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState("");
-  const accent = "text-primary";
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
@@ -281,58 +300,193 @@ function CategorySheet({
         onClick={onClose}
         className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px] animate-in fade-in"
       />
-      <div className="relative w-full max-w-md rounded-t-3xl border border-border bg-card p-5 pb-[calc(1.25rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-[20px] font-bold">
+      <div className="relative flex w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-4 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-[17px] font-bold">
             {area === "jobb" ? "Jobb" : "Privat"}
           </h2>
           <button
             onClick={onClose}
             aria-label="Stäng"
-            className="flex size-9 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
+            className="flex size-8 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
           >
             <X className="size-4" />
           </button>
         </div>
 
-        <div className="max-h-[45dvh] space-y-1 overflow-y-auto">
-          {categories.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => onSelect(c.id)}
-              className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-[15px] text-card-foreground transition-colors active:bg-secondary"
-            >
-              {c.name}
-              {c.id === selectedId && <Check className={cn("size-4", accent)} />}
-            </button>
-          ))}
-        </div>
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (newName.trim()) {
-              onCreate(newName);
-              setNewName("");
-            }
-          }}
-          className="mt-4 flex gap-2 border-t border-border pt-4"
-        >
-          <input
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            placeholder="Ny kategori"
-            className="min-w-0 flex-1 rounded-xl border border-border bg-background px-4 py-3 text-[17px] outline-none placeholder:text-muted-foreground focus:border-ring"
-          />
-          <button
-            type="submit"
-            disabled={!newName.trim()}
-            className="rounded-xl bg-gradient-gold px-5 text-[17px] font-semibold text-gold-foreground transition-transform active:scale-95 disabled:opacity-40"
+        {adding ? (
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (newName.trim()) {
+                onCreate(newName);
+                setNewName("");
+                setAdding(false);
+              }
+            }}
+            className="mb-2 flex gap-2"
           >
-            Lägg till
+            <input
+              autoFocus
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              placeholder="Namn på kategori"
+              className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[15px] outline-none placeholder:text-muted-foreground focus:border-ring"
+            />
+            <button
+              type="submit"
+              disabled={!newName.trim()}
+              className="rounded-xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
+            >
+              Spara
+            </button>
+          </form>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setAdding(true)}
+            className="mb-2 flex w-full items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2.5 text-[15px] font-semibold text-primary transition-colors active:bg-secondary"
+          >
+            <Plus className="size-4" />
+            Lägg till kategori
           </button>
-        </form>
+        )}
+
+        <div className="max-h-[60dvh] space-y-1 overflow-y-auto">
+          {categories.map((c) =>
+            renamingId === c.id ? (
+              <form
+                key={c.id}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (renameValue.trim()) onRename(c.id, renameValue);
+                  setRenamingId(null);
+                }}
+                className="flex gap-2 py-1"
+              >
+                <input
+                  autoFocus
+                  value={renameValue}
+                  onChange={(e) => setRenameValue(e.target.value)}
+                  className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[15px] outline-none focus:border-ring"
+                />
+                <button
+                  type="submit"
+                  className="rounded-xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground active:scale-95"
+                >
+                  Spara
+                </button>
+              </form>
+            ) : (
+              <CategoryRow
+                key={c.id}
+                name={c.name}
+                selected={c.id === selectedId}
+                actionsOpen={openId === c.id}
+                onOpenActions={() => setOpenId(c.id)}
+                onCloseActions={() => setOpenId(null)}
+                onSelect={() => onSelect(c.id)}
+                onRename={() => {
+                  setRenameValue(c.name);
+                  setRenamingId(c.id);
+                  setOpenId(null);
+                }}
+                onDelete={() => {
+                  onDelete(c.id);
+                  setOpenId(null);
+                }}
+              />
+            ),
+          )}
+        </div>
       </div>
     </div>
   );
 }
+
+function CategoryRow({
+  name,
+  selected,
+  actionsOpen,
+  onOpenActions,
+  onCloseActions,
+  onSelect,
+  onRename,
+  onDelete,
+}: {
+  name: string;
+  selected: boolean;
+  actionsOpen: boolean;
+  onOpenActions: () => void;
+  onCloseActions: () => void;
+  onSelect: () => void;
+  onRename: () => void;
+  onDelete: () => void;
+}) {
+  const startX = useRef(0);
+  const moved = useRef(false);
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearPress = () => {
+    if (pressTimer.current) clearTimeout(pressTimer.current);
+    pressTimer.current = null;
+  };
+
+  return (
+    <div className="relative overflow-hidden rounded-xl">
+      <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
+        <button
+          type="button"
+          onClick={onRename}
+          aria-label="Byt namn"
+          className="flex size-9 items-center justify-center rounded-lg bg-secondary text-primary"
+        >
+          <Pencil className="size-4" />
+        </button>
+        <button
+          type="button"
+          onClick={onDelete}
+          aria-label="Ta bort"
+          className="flex size-9 items-center justify-center rounded-lg bg-destructive text-destructive-foreground"
+        >
+          <Trash2 className="size-4" />
+        </button>
+      </div>
+
+      <button
+        type="button"
+        onTouchStart={(e) => {
+          startX.current = e.touches[0].clientX;
+          moved.current = false;
+          clearPress();
+          pressTimer.current = setTimeout(onOpenActions, 500);
+        }}
+        onTouchMove={(e) => {
+          const dx = e.touches[0].clientX - startX.current;
+          if (Math.abs(dx) > 8) {
+            moved.current = true;
+            clearPress();
+          }
+          if (dx < -40) onOpenActions();
+          if (dx > 40) onCloseActions();
+        }}
+        onTouchEnd={clearPress}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          onOpenActions();
+        }}
+        onClick={() => {
+          if (moved.current) return;
+          if (actionsOpen) onCloseActions();
+          else onSelect();
+        }}
+        style={{ transform: actionsOpen ? "translateX(-88px)" : "translateX(0)" }}
+        className="relative flex w-full items-center justify-between rounded-xl bg-card px-4 py-2.5 text-left text-[15px] text-card-foreground transition-transform duration-200 active:bg-secondary"
+      >
+        <span className="truncate">{name}</span>
+        {selected && !actionsOpen && <Check className="size-4 shrink-0 text-primary" />}
+      </button>
+    </div>
+  );
+}
+
