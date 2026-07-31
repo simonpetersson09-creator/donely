@@ -213,7 +213,7 @@ kalenderkomponenter** (veckodag/timme/minut) – aldrig som ett fast UTC-klocksl
 | --- | --- | --- |
 | `requestNotificationStatus` | `{}` | `getNotificationSettings` → svara med status |
 | `requestNotificationPermission` | `{}` | `requestAuthorization([.alert,.sound,.badge])` → svara med status |
-| `scheduleWeeklyReminder` | `{id, weekday, hour, minute, repeats, title, body, language, timeZone, route}` | Se koden nedan. `body` är veckans sammanfattning (flera rader) och `route` är djuplänken (`/veckostatistik`) |
+| `scheduleWeeklyReminder` | `{id, weekday, hour, minute, repeats, title, body, bodyLines, language, timeZone, route}` | Se koden nedan. `body` är veckans sammanfattning (flera rader) och `route` är djuplänken (`/veckostatistik`) |
 | `cancelNotification` | `{id}` | `removePendingNotificationRequests(withIdentifiers: [id])` |
 | `openAppSettings` | `{}` | `UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)` |
 
@@ -234,6 +234,12 @@ aktivitet skapas, ändras eller tas bort, samt vid språkbyte. Swift ska sätta
 `content.userInfo["route"] = payload.route` och i
 `userNotificationCenter(_:didReceive:)` anropa `__donelyOpenRoute` med den rutten
 så appen öppnas direkt i veckostatistiken.
+
+### Färdig Swift-implementation
+Referensimplementationen finns i `ios/DonelyNotificationBridge.swift` – lägg in
+filen i Xcode-projektet och registrera handlarna enligt kommentaren längst ned.
+Den använder `title`/`bodyLines` direkt från JS (radbrutet innehåll), sätter
+`userInfo["route"]` och anropar `__donelyOpenRoute` vid tryck.
 
 ### Swift-implementation (kärnan)
 ```swift

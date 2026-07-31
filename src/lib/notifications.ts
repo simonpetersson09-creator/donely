@@ -32,7 +32,7 @@ import { weeklyNotificationContent } from "@/lib/weekly-summary";
  * JS -> Swift (`webkit.messageHandlers`):
  *   requestNotificationStatus      {}
  *   requestNotificationPermission  {}
- *   scheduleWeeklyReminder         {id, weekday, hour, minute, repeats, title, body, language, timeZone}
+ *   scheduleWeeklyReminder         {id, weekday, hour, minute, repeats, title, body, bodyLines, language, timeZone, route}
  *   cancelNotification             {id}
  *   openAppSettings                {}
  *
@@ -322,7 +322,7 @@ export async function requestPermission(): Promise<PermissionStatus> {
 
 /** (Re)schedules the weekly reminder with the given language. Idempotent. */
 export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
-  const { title, body } = notificationText(language);
+  const { title, body, bodyLines } = notificationText(language);
   const timeZone = currentTimeZone();
   const next = nextReminderDate();
 
@@ -337,6 +337,7 @@ export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
     repeats: true,
     title,
     body,
+    bodyLines,
     language,
     timeZone,
     route: REMINDER_ROUTE,

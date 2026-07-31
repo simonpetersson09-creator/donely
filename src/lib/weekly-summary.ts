@@ -93,11 +93,17 @@ export function formatWeeklyBody(summary: WeeklySummary, language = i18n.languag
   return lines.join("\n");
 }
 
-/** Title + body for the weekly notification, in the given language. */
+/**
+ * Title + body for the weekly notification, in the given language.
+ * `bodyLines` is the same text pre-split, so the native shell can rebuild the
+ * multi-line body without depending on how newlines survive the bridge.
+ */
 export function weeklyNotificationContent(language = i18n.language || "sv") {
   const fixed = i18n.getFixedT(language);
+  const body = formatWeeklyBody(currentWeeklySummary(language), language);
   return {
     title: fixed("weeklySummaryTitle") as string,
-    body: formatWeeklyBody(currentWeeklySummary(language), language),
+    body,
+    bodyLines: body.split("\n"),
   };
 }
