@@ -108,6 +108,8 @@ export function usePremium() {
     // so an expired subscription re-locks registration automatically.
     refresh();
     listeners.add(refresh);
+    // Tick while the app is open so the countdown reaches 0 on its own.
+    const timer = window.setInterval(refresh, 60 * 1000);
     const onVisible = () => {
       if (document.visibilityState === "visible") refresh();
     };
@@ -115,6 +117,7 @@ export function usePremium() {
     window.addEventListener("focus", refresh);
     window.addEventListener("storage", refresh);
     return () => {
+      window.clearInterval(timer);
       listeners.delete(refresh);
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("focus", refresh);
