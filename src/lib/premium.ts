@@ -254,12 +254,14 @@ function localDaysLeft(start: number) {
 }
 
 function refreshLocalFallback() {
-  const subscribed = window.localStorage.getItem(PREMIUM_KEY) === "1";
-  const left = localDaysLeft(localTrialStart());
-  applyEntitlement({ subscribed, inTrial: !subscribed && left > 0, trialDaysLeft: left });
   if (state.productStatus === "idle") {
     setProduct({ id: PRODUCT_ID, displayPrice: FALLBACK_PRICE });
   }
+  // A bridge entitlement always wins over the local dev fallback.
+  if (bridgeControlled) return;
+  const subscribed = window.localStorage.getItem(PREMIUM_KEY) === "1";
+  const left = localDaysLeft(localTrialStart());
+  applyEntitlement({ subscribed, inTrial: !subscribed && left > 0, trialDaysLeft: left });
 }
 
 // ---------------------------------------------------------------------------
