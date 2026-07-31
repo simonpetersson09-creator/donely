@@ -132,29 +132,17 @@ function Index() {
           {(premium.subscribed || premium.inTrial) && (
             <div className="absolute -right-12 -top-12 z-10 rotate-[6deg] scale-90">
               <div className="relative rounded-full border border-primary bg-background px-3 py-2 shadow-card">
-                <p className="text-center text-[10px] font-semibold leading-[13px] text-primary">
+                <p className="max-w-[8rem] text-balance text-center text-[10px] font-semibold leading-[13px] text-primary">
                   {premium.subscribed ? (
                     <span className="inline-flex items-center gap-1">
                       <Crown className="size-3 text-gold" fill="currentColor" />
                       {t("premiumActive")}
                     </span>
                   ) : (
-                    (() => {
-                      const text = t("trialLeft", { count: premium.trialDaysLeft });
-                      const parts = text.split(/kvar\s*/);
-                      if (parts.length === 2) {
-                        return (
-                          <>
-                            {parts[0]}kvar
-                            <br />
-                            {parts[1]}
-                          </>
-                        );
-                      }
-                      return text;
-                    })()
+                    t("trialLeft", { count: premium.trialDaysLeft })
                   )}
                 </p>
+
                 <div className="absolute -bottom-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
               </div>
             </div>
