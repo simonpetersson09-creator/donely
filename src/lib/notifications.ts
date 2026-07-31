@@ -511,6 +511,29 @@ function installBridge() {
       setState({ nextFireDate: nextReminderDate().toISOString() });
     }
   };
+  // Whenever an activity is created, edited or deleted the pending Friday
+  // notification is rebuilt so its summary is never stale. Debounced so a burst
+  // of edits results in a single reschedule.
+  let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+  window.addEventListener(DATA_CHANGED_EVENT, () => {
+    if (!readEnabled()) return;
+    if (state.permission === "denied" || state.permission === "unsupported") return;
+    if (refreshTimer) clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => {
+      refreshTimer = null;
+      scheduleWeeklyReminder(state.scheduledLanguage ?? i18n.language ?? "sv");
+    }, 400);
+  });
+
+  // Swift calls this when the user taps the reminder, so Donely opens straight
+  // on the weekly summary the notification showed.
+  w.__donelyOpenRoute = (value: unknown) => {
+    const path =
+      typeof value === "string" ? value : (parsePayload<{ route?: string }>(value)?.route ?? REMINDER_ROUTE);
+    if (!path.startsWith("/")) return;
+    if (window.location.pathname !== path) window.location.assign(path);
+  };
+
   const onForeground = () => {
     // Re-check the iOS authorization status: the user may have changed it in
     // the system settings while Donely was in the background.
