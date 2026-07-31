@@ -105,21 +105,23 @@ function Installningar() {
             </span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => toast.message(t("premiumFlowComing"))}
-            className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3.5 py-3 text-[15px] font-semibold leading-[20px] text-primary shadow-card transition-colors active:bg-accent"
-          >
-            {t("manageSubscription")}
-          </button>
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => toast.message(t("premiumFlowComing"))}
+              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[15px] font-semibold leading-[20px] text-primary shadow-card transition-colors active:bg-accent"
+            >
+              {t("manageSubscription")}
+            </button>
 
-          <button
-            type="button"
-            onClick={() => toast.message(t("purchasesRestored"))}
-            className="w-full px-3 py-1.5 text-center text-[14px] font-normal leading-[19px] text-system-blue transition-opacity active:opacity-60"
-          >
-            {t("restorePurchase")}
-          </button>
+            <button
+              type="button"
+              onClick={() => toast.message(t("purchasesRestored"))}
+              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[15px] font-semibold leading-[20px] text-primary shadow-card transition-colors active:bg-accent"
+            >
+              {t("restorePurchase")}
+            </button>
+          </div>
         </div>
       </section>
 
