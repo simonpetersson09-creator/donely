@@ -496,6 +496,10 @@ const ptBR: Dict = {
   "cat.j-avtal": "Contratos",
   "cat.j-samtal": "Novas chamadas",
   "cat.j-admin": "Tarefas admin",
+  welcomeTitle: "Bem-vindo ao Donely",
+  welcomeLine1: "Registre o que você realmente faz.",
+  welcomeLine2: "Acompanhe seus resultados ao longo do tempo.",
+  getStarted: "Começar",
 };
 
 const nl: Dict = {
