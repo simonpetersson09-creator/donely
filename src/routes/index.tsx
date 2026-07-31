@@ -287,9 +287,9 @@ function AreaSegmented({
   workLabel: string;
   privateLabel: string;
 }) {
-  const options: { value: Area; label: string }[] = [
-    { value: "jobb", label: workLabel },
-    { value: "privat", label: privateLabel },
+  const options: { value: Area; label: string; icon: typeof Briefcase }[] = [
+    { value: "jobb", label: workLabel, icon: Briefcase },
+    { value: "privat", label: privateLabel, icon: Home },
   ];
   const index = area === "jobb" ? 0 : 1;
 
@@ -303,24 +303,28 @@ function AreaSegmented({
         className="absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-lg bg-primary shadow-soft transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
         style={{ transform: `translateX(${index * 100}%)` }}
       />
-      {options.map((o) => (
-        <button
-          key={o.value}
-          type="button"
-          role="tab"
-          aria-selected={area === o.value}
-          onClick={() => {
-            if (area !== o.value) navigator.vibrate?.(8);
-            onChange(o.value);
-          }}
-          className={cn(
-            "relative z-10 rounded-lg py-2.5 text-[14px] font-semibold transition-colors duration-200",
-            area === o.value ? "text-primary-foreground" : "text-foreground/60",
-          )}
-        >
-          {o.label}
-        </button>
-      ))}
+      {options.map((o) => {
+        const Icon = o.icon;
+        return (
+          <button
+            key={o.value}
+            type="button"
+            role="tab"
+            aria-selected={area === o.value}
+            onClick={() => {
+              if (area !== o.value) navigator.vibrate?.(8);
+              onChange(o.value);
+            }}
+            className={cn(
+              "relative z-10 flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition-colors duration-200",
+              area === o.value ? "text-primary-foreground" : "text-foreground/60",
+            )}
+          >
+            <Icon className="size-4" />
+            {o.label}
+          </button>
+        );
+      })}
     </div>
   );
 }
