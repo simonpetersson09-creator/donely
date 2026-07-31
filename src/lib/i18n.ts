@@ -562,6 +562,10 @@ const nl: Dict = {
   "cat.j-avtal": "Contracten",
   "cat.j-samtal": "Nieuwe gesprekken",
   "cat.j-admin": "Admintaken",
+  welcomeTitle: "Welkom bij Donely",
+  welcomeLine1: "Registreer wat je echt doet.",
+  welcomeLine2: "Volg je resultaten in de loop van de tijd.",
+  getStarted: "Aan de slag",
 };
 
 const pl: Dict = {
