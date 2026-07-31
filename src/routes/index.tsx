@@ -7,6 +7,7 @@ import {
   ChevronDown,
   Crown,
   Home,
+  Lock,
   Minus,
   Pencil,
   Plus,
