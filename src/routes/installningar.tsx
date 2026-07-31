@@ -4,6 +4,7 @@ import { ChevronLeft, Crown, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
+import { usePremium } from "@/lib/premium";
 
 export const Route = createFileRoute("/installningar")({
   head: () => ({
@@ -28,6 +29,7 @@ export const Route = createFileRoute("/installningar")({
 
 function Installningar() {
   const { t } = useLanguage();
+  const premium = usePremium();
   const [confirming, setConfirming] = useState(false);
 
   return (
