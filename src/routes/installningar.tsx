@@ -94,7 +94,7 @@ function Installningar() {
                     return text;
                   })()}
                 </p>
-                <div className="absolute -bottom-1.5 left-3 h-3 w-3 rotate-45 border-b border-r border-primary bg-background" />
+                <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
               </div>
             </div>
           )}
