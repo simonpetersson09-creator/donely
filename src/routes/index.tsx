@@ -44,7 +44,7 @@ function Index() {
 
   const { t } = useLanguage();
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
-  const { addEntry } = useEntries();
+  const { entries, addEntry } = useEntries();
 
   const areaCategories = useMemo(() => {
     const list = categories.filter((c) => c.area === area);
@@ -61,6 +61,19 @@ function Index() {
       setCategoryId(areaCategories[0]?.id ?? null);
     }
   }, [areaCategories, categoryId]);
+
+  const todayRows = useMemo(() => {
+    const key = new Date().toDateString();
+    const totals = new Map<string, { name: string; total: number }>();
+    for (const e of entries) {
+      if (new Date(e.createdAt).toDateString() !== key) continue;
+      const cat = categories.find((c) => c.id === e.categoryId);
+      const name = cat ? categoryLabel(t, cat) : e.categoryName;
+      const prev = totals.get(e.categoryId);
+      totals.set(e.categoryId, { name, total: (prev?.total ?? 0) + e.amount });
+    }
+    return [...totals.values()].sort((a, b) => b.total - a.total);
+  }, [entries, categories, t]);
 
   useEffect(() => {
     return () => {
@@ -91,6 +104,8 @@ function Index() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+      <TodayCard rows={todayRows} title={t("todayTitle")} empty={t("noEntriesToday")} />
+
       <div className="flex flex-1 items-center justify-center">
         <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
           Donely
@@ -99,20 +114,12 @@ function Index() {
 
       <div className="flex flex-1 flex-col justify-center gap-3">
         {/* Område */}
-        <div className="grid grid-cols-2 gap-2">
-          <AreaButton
-            active={area === "jobb"}
-            onClick={() => setArea("jobb")}
-            label={t("work")}
-            tone="work"
-          />
-          <AreaButton
-            active={area === "privat"}
-            onClick={() => setArea("privat")}
-            label={t("private")}
-            tone="life"
-          />
-        </div>
+        <AreaSegmented
+          area={area}
+          onChange={setArea}
+          workLabel={t("work")}
+          privateLabel={t("private")}
+        />
 
         {/* Kategori */}
         <section>
@@ -164,10 +171,10 @@ function Index() {
               <button
                 key={n}
                 type="button"
-                onClick={() => setAmount(String(n))}
-                className="flex-1 rounded-full border border-primary/20 bg-card py-1 text-[12px] font-semibold text-primary shadow-soft transition-colors active:bg-accent"
+                onClick={() => setAmount(String(Math.min(99999, (parsed || 0) + n)))}
+                className="flex-1 rounded-full border border-primary/20 bg-card py-1.5 text-[12px] font-semibold text-primary shadow-soft transition-all duration-200 active:scale-95 active:bg-accent"
               >
-                {n}
+                +{n}
               </button>
             ))}
           </div>
@@ -191,7 +198,7 @@ function Index() {
           type="button"
           disabled={!valid}
           onClick={register}
-          className="w-full rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-card transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
+          className="w-full rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none"
         >
           {t("register")}
         </button>
@@ -256,31 +263,82 @@ function StepButton({
 }
 
 
-function AreaButton({
-  active,
-  onClick,
-  label,
-  tone,
+function TodayCard({
+  rows,
+  title,
+  empty,
 }: {
-  active: boolean;
-  onClick: () => void;
-  label: string;
-  tone: "work" | "life";
+  rows: { name: string; total: number }[];
+  title: string;
+  empty: string;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={cn(
-        "rounded-xl border py-3 text-[14px] font-semibold transition-all duration-200 active:scale-[0.97]",
-        active
-          ? "border-transparent bg-primary text-primary-foreground shadow-card"
-          : "border-border bg-card text-card-foreground",
+    <section className="rounded-2xl border border-border bg-card px-3.5 py-2.5 shadow-card">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-card-foreground/50">
+        {title}
+      </p>
+      {rows.length === 0 ? (
+        <p className="mt-1 text-[13px] text-card-foreground/60">{empty}</p>
+      ) : (
+        <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
+          {rows.map((r) => (
+            <li key={r.name} className="text-[13px] font-medium text-card-foreground">
+              {r.name} <span className="text-card-foreground/40">•</span>{" "}
+              <span className="tabular-nums font-semibold">{r.total}</span>
+            </li>
+          ))}
+        </ul>
       )}
+    </section>
+  );
+}
+
+function AreaSegmented({
+  area,
+  onChange,
+  workLabel,
+  privateLabel,
+}: {
+  area: Area;
+  onChange: (a: Area) => void;
+  workLabel: string;
+  privateLabel: string;
+}) {
+  const options: { value: Area; label: string }[] = [
+    { value: "jobb", label: workLabel },
+    { value: "privat", label: privateLabel },
+  ];
+  const index = area === "jobb" ? 0 : 1;
+
+  return (
+    <div
+      role="tablist"
+      className="relative grid grid-cols-2 rounded-xl bg-secondary p-1 shadow-card"
     >
-      {label}
-    </button>
+      <span
+        aria-hidden
+        className="absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-lg bg-primary shadow-soft transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        style={{ transform: `translateX(${index * 100}%)` }}
+      />
+      {options.map((o) => (
+        <button
+          key={o.value}
+          type="button"
+          role="tab"
+          aria-selected={area === o.value}
+          onClick={() => {
+            if (area !== o.value) navigator.vibrate?.(8);
+            onChange(o.value);
+          }}
+          className={cn(
+            "relative z-10 rounded-lg py-2.5 text-[14px] font-semibold transition-colors duration-200",
+            area === o.value ? "text-primary-foreground" : "text-foreground/60",
+          )}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
   );
 }
 
