@@ -6,7 +6,6 @@ const config: CapacitorConfig = {
   webDir: "dist/client",
   ios: {
     contentInset: "always",
-    limitsNavigationsToAppBoundDomains: true,
   },
   server: {
     androidScheme: "https",
