@@ -32,7 +32,6 @@ import i18n, { localeOf } from "@/lib/i18n";
  *   requestNotificationPermission  {}
  *   scheduleWeeklyReminder         {id, weekday, hour, minute, repeats, title, body, language, timeZone}
  *   cancelNotification             {id}
- *   scheduleTestNotification       {id, seconds, title, body, language}
  *   openAppSettings                {}
  *
  * Swift -> JS (globals installed below):
@@ -47,8 +46,6 @@ import i18n, { localeOf } from "@/lib/i18n";
 
 /** Stable identifier — used to replace or remove the weekly reminder. */
 export const WEEKLY_REMINDER_ID = "donely.reminder.weekly.friday";
-/** Identifier for the development test notification. */
-export const TEST_NOTIFICATION_ID = "donely.reminder.test";
 
 /** JS weekday (0 = Sunday … 5 = Friday). iOS uses 1-based, so weekday + 1. */
 export const REMINDER_WEEKDAY = 5;
@@ -57,6 +54,8 @@ export const REMINDER_MINUTE = 0;
 
 const ENABLED_KEY = "vr.reminder.weekly.v1";
 const TZ_KEY = "vr.reminder.tz.v1";
+/** The user asked for the reminder — used to auto-enable when permission later becomes granted. */
+const INTENT_KEY = "vr.reminder.intent.v1";
 
 export type PermissionStatus =
   | "unknown"
@@ -231,6 +230,22 @@ function readEnabled(): boolean {
   }
 }
 
+function readIntent(): boolean {
+  try {
+    return localStorage.getItem(INTENT_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function writeIntent(value: boolean) {
+  try {
+    localStorage.setItem(INTENT_KEY, String(value));
+  } catch {
+    /* storage unavailable */
+  }
+}
+
 function writeEnabled(value: boolean) {
   try {
     localStorage.setItem(ENABLED_KEY, String(value));
@@ -324,6 +339,7 @@ export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
 
 /** Turns the reminder on. Asks for permission first if needed. */
 export async function enableWeeklyReminder(language = i18n.language || "sv"): Promise<PermissionStatus> {
+  writeIntent(true);
   let permission = state.permission;
   if (permission === "unknown" || permission === "notDetermined") {
     permission = await requestPermission();
@@ -346,44 +362,11 @@ export async function enableWeeklyReminder(language = i18n.language || "sv"): Pr
 
 /** Turns the reminder off and removes the pending request. */
 export function disableWeeklyReminder(): void {
+  writeIntent(false);
   writeEnabled(false);
   post("cancelNotification", { id: WEEKLY_REMINDER_ID });
   setState({ enabled: false, nextFireDate: null, scheduledLanguage: null, busy: false });
   logReminderDiagnostics("cancelled");
-}
-
-/** Development helper: fires a test notification in ~90 seconds. */
-export function scheduleTestNotification(seconds = 90): boolean {
-  const language = i18n.language || "sv";
-  const fixed = i18n.getFixedT(language);
-  const sent = post("scheduleTestNotification", {
-    id: TEST_NOTIFICATION_ID,
-    seconds,
-    title: fixed("reminderNotifTitle"),
-    body: fixed("reminderNotifBody"),
-    language,
-  });
-  const fireAt = new Date(Date.now() + seconds * 1000);
-  // eslint-disable-next-line no-console
-  console.info("[Donely] test notification", {
-    id: TEST_NOTIFICATION_ID,
-    native: sent,
-    language,
-    localTime: new Date().toString(),
-    timeZone: currentTimeZone(),
-    fireAt: fireAt.toString(),
-  });
-  if (!sent && typeof window !== "undefined" && "Notification" in window && Notification.permission === "granted") {
-    // Web preview only: a real timer while the tab is open.
-    window.setTimeout(() => {
-      try {
-        new Notification(fixed("reminderNotifTitle"), { body: fixed("reminderNotifBody") });
-      } catch {
-        /* ignore */
-      }
-    }, seconds * 1000);
-  }
-  return sent;
 }
 
 /** Opens the iOS system settings for Donely (notification permissions). */
@@ -449,6 +432,15 @@ function installBridge() {
       pendingEnable = null;
       writeEnabled(false);
       setState({ enabled: false });
+    } else if (
+      !state.enabled &&
+      readIntent() &&
+      (permission === "granted" || permission === "provisional")
+    ) {
+      // The user came back from iOS Settings after allowing notifications.
+      writeEnabled(true);
+      setState({ enabled: true });
+      scheduleWeeklyReminder(i18n.language || "sv");
     }
   };
 
@@ -504,9 +496,15 @@ function installBridge() {
       setState({ nextFireDate: nextReminderDate().toISOString() });
     }
   };
-  window.addEventListener("focus", checkTimeZone);
+  const onForeground = () => {
+    // Re-check the iOS authorization status: the user may have changed it in
+    // the system settings while Donely was in the background.
+    refreshPermission();
+    checkTimeZone();
+  };
+  window.addEventListener("focus", onForeground);
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") checkTimeZone();
+    if (document.visibilityState === "visible") onForeground();
   });
 }
 
