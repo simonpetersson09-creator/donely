@@ -223,7 +223,7 @@ function GoalCard({
         showGoalCta && "cursor-pointer transition-colors active:bg-secondary",
       )}
     >
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-[12px] font-medium text-card-foreground/70">
             {category.name}
@@ -234,11 +234,18 @@ function GoalCard({
               : `${total.toLocaleString("sv-SE")} hittills`}
           </p>
         </div>
-        {reached && (
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2 py-1 text-[11px] font-semibold text-primary-foreground">
-            <Check className="size-3" /> Uppnått
-          </span>
-        )}
+        <div className="flex shrink-0 items-center gap-1.5">
+          {reached && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-[11px] font-semibold text-primary-foreground">
+              <Check className="size-3" /> Uppnått
+            </span>
+          )}
+          {showGoalCta && (
+            <span className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary">
+              <Pencil className="size-3" />
+            </span>
+          )}
+        </div>
       </div>
 
       {pct !== null && (
