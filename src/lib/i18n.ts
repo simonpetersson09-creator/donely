@@ -232,6 +232,10 @@ const de: Dict = {
   "cat.j-avtal": "Verträge",
   "cat.j-samtal": "Neue Anrufe",
   "cat.j-admin": "Admin-Aufgaben",
+  welcomeTitle: "Willkommen bei Donely",
+  welcomeLine1: "Erfasse, was du tatsächlich tust.",
+  welcomeLine2: "Verfolge deine Ergebnisse über die Zeit.",
+  getStarted: "Loslegen",
 };
 
 const fr: Dict = {
