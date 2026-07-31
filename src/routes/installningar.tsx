@@ -72,24 +72,25 @@ function Installningar() {
       </p>
 
       <section className="mt-6">
-        <h2 className="mb-1.5 px-1 text-[12px] font-semibold uppercase leading-[16px] tracking-[0.08em] text-foreground/60">
-          {t("donelyPremium")}
-        </h2>
-
         <div className="mb-5 rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
-          <p className="text-[17px] font-semibold leading-[22px] text-primary">
-            {premium.subscribed
-              ? t("premiumActive")
-              : premium.trialExpired
-                ? t("donelyPremium")
-                : t("trialLeft", { count: premium.trialDaysLeft })}
-          </p>
-          {!premium.subscribed && (
-            <p className="mt-1.5 text-[15px] font-normal leading-[20px] text-muted-foreground">
-              {premium.trialExpired
-                ? t("premiumUnlockAll")
-                : `${t("freeTrialTitle")} · ${t("freeTrialThen")}`}
+          {premium.subscribed && (
+            <p className="text-[17px] font-semibold leading-[22px] text-primary">
+              {t("premiumActive")}
             </p>
+          )}
+          {!premium.subscribed && (
+            <>
+              {!premium.trialExpired && (
+                <p className="text-[17px] font-semibold leading-[22px] text-primary">
+                  {t("trialLeft", { count: premium.trialDaysLeft })}
+                </p>
+              )}
+              <p className="mt-1.5 text-[15px] font-normal leading-[20px] text-muted-foreground">
+                {premium.trialExpired
+                  ? t("premiumUnlockAll")
+                  : `${t("freeTrialTitle")} · ${t("freeTrialThen")}`}
+              </p>
+            </>
           )}
         </div>
 
