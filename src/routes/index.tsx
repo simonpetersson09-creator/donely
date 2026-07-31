@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useCategories, useEntries, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
 
@@ -78,6 +79,9 @@ function Index() {
     setFlash(true);
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => setFlash(false), 1100);
+    toast.success(`${parsed} ${selected.name} registrerat`, {
+      description: area === "jobb" ? "Jobb" : "Privat",
+    });
   }
 
   return (
