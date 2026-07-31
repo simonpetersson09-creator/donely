@@ -27,9 +27,9 @@ export const STORAGE_KEYS = {
   onboarding: "vr.onboarding.v1",
   langGuide: "vr.langGuide.v1",
   reminderPrompt: "vr.reminderPrompt.v1",
-  language: "donely.lang",
-  schemaVersion: "donely.schemaVersion",
-  backups: "donely.backups.v1",
+  language: "vr.lang.v1",
+  schemaVersion: "vr.schemaVersion.v1",
+  backups: "vr.backups.v1",
   /** Suffix used for the write-ahead journal of an in-flight write. */
   journalSuffix: ".writing",
 } as const;
