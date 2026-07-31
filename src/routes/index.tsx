@@ -34,13 +34,18 @@ function Index() {
   const [flash, setFlash] = useState(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { categories, addCategory, hydrated } = useCategories();
+  const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { addEntry } = useEntries();
 
-  const areaCategories = useMemo(
-    () => categories.filter((c) => c.area === area),
-    [categories, area],
-  );
+  const areaCategories = useMemo(() => {
+    const list = categories.filter((c) => c.area === area);
+    const isStd = (id: string) => DEFAULT_IDS.has(id);
+    return [
+      ...list.filter((c) => isStd(c.id)),
+      ...list.filter((c) => !isStd(c.id)),
+    ];
+  }, [categories, area]);
+
 
   useEffect(() => {
     if (!areaCategories.some((c) => c.id === categoryId)) {
