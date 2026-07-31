@@ -226,3 +226,27 @@ export function useLanguageGuide() {
 
   return { seen, markSeen, hydrated };
 }
+
+/** Clears every locally stored entry, category and goal. Language stays untouched. */
+export function clearAllData() {
+  if (typeof window === "undefined") return;
+  for (const key of [CATS_KEY, ENTRIES_KEY, GOALS_KEY, ONBOARDING_KEY, LANG_GUIDE_KEY]) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+/** Makes the welcome screen and the language guide show up again on next start. */
+export function replayOnboarding() {
+  if (typeof window === "undefined") return;
+  for (const key of [ONBOARDING_KEY, LANG_GUIDE_KEY]) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      /* ignore */
+    }
+  }
+}
