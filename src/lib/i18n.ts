@@ -166,6 +166,10 @@ const en: Dict = {
   "cat.j-avtal": "Contracts",
   "cat.j-samtal": "New calls",
   "cat.j-admin": "Admin tasks",
+  welcomeTitle: "Welcome to Donely",
+  welcomeLine1: "Register what you actually do.",
+  welcomeLine2: "Follow your results over time.",
+  getStarted: "Get started",
 };
 
 const de: Dict = {
