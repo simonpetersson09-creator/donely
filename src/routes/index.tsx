@@ -1,8 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, Minus, Plus, X } from "lucide-react";
+import { Check, ChevronDown, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useCategories, useEntries, type Area } from "@/lib/store";
+import { useCategories, useEntries, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
+
+const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
+
+
 
 
 export const Route = createFileRoute("/")({
