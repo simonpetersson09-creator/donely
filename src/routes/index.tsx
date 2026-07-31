@@ -146,24 +146,22 @@ function Index() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-1 items-center justify-center">
         <div className="relative">
-          {(premium.subscribed || premium.inTrial) && (
-            <div className="absolute -right-12 -top-12 z-10 rotate-[6deg] scale-90">
-              <div className="relative rounded-full border border-primary bg-background px-3 py-2 shadow-card">
-                <p className="max-w-[8rem] text-balance text-center text-[10px] font-semibold leading-[13px] text-primary">
-                  {premium.subscribed ? (
-                    <span className="inline-flex items-center gap-1">
-                      <Crown className="size-3 text-gold" fill="currentColor" />
-                      {t("premiumActive")}
-                    </span>
-                  ) : (
-                    t("trialLeft", { count: premium.trialDaysLeft })
-                  )}
-                </p>
+          <div className="absolute -right-12 -top-12 z-10 rotate-[6deg] scale-90">
+            <div className="relative rounded-full border border-primary bg-background px-3 py-2 shadow-card">
+              <p className="max-w-[8rem] text-balance text-center text-[10px] font-semibold leading-[13px] text-primary">
+                {premium.subscribed ? (
+                  <span className="inline-flex items-center gap-1">
+                    <Crown className="size-3 text-gold" fill="currentColor" />
+                    {t("premiumActive")}
+                  </span>
+                ) : (
+                  t("trialLeft", { count: premium.inTrial ? premium.trialDaysLeft : 0 })
+                )}
+              </p>
 
-                <div className="absolute -bottom-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
-              </div>
+              <div className="absolute -bottom-1 left-1/2 h-2.5 w-2.5 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
             </div>
-          )}
+          </div>
           <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
