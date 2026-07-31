@@ -201,7 +201,10 @@ function Index() {
           >
             {t("statistics")}
           </Link>
-          <LanguageSwitcher />
+          <div className="relative shrink-0">
+            <LanguageSwitcher />
+            {!guideSeen && guideHydrated && <LanguageGuideBubble onClose={markGuideSeen} />}
+          </div>
         </div>
       </div>
 
