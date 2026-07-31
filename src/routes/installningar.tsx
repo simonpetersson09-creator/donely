@@ -57,25 +57,27 @@ function Installningar() {
       <div className="py-2">
         <Link
           to="/"
-          className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
+          className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[17px] font-normal leading-[22px] text-primary transition-colors active:bg-secondary"
         >
           <ChevronLeft className="size-4" />
           {t("back")}
         </Link>
       </div>
 
-      <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
+      <h1 className="px-1 text-[28px] font-bold leading-[34px] tracking-[-0.03em] text-primary">
         {t("settings")}
       </h1>
-      <p className="mt-0.5 px-1 text-[14px] text-muted-foreground">{t("settingsSubtitle")}</p>
+      <p className="mt-1 px-1 text-[15px] font-normal leading-[20px] text-muted-foreground">
+        {t("settingsSubtitle")}
+      </p>
 
       <section className="mt-6">
-        <h2 className="mb-1.5 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
+        <h2 className="mb-1.5 px-1 text-[13px] font-semibold uppercase leading-[18px] tracking-[0.08em] text-foreground/60">
           {t("donelyPremium")}
         </h2>
 
         <div className="mb-2 rounded-xl border border-border bg-card px-3.5 py-2.5 shadow-card">
-          <p className="text-[14px] font-semibold text-primary">
+          <p className="text-[17px] font-semibold leading-[22px] text-primary">
             {premium.subscribed
               ? t("premiumActive")
               : premium.trialExpired
@@ -83,7 +85,7 @@ function Installningar() {
                 : t("trialLeft", { count: premium.trialDaysLeft })}
           </p>
           {!premium.subscribed && (
-            <p className="mt-0.5 text-[13px] text-muted-foreground">
+            <p className="mt-1 text-[15px] font-normal leading-[20px] text-muted-foreground">
               {premium.trialExpired
                 ? t("premiumUnlockAll")
                 : `${t("freeTrialTitle")} · ${t("freeTrialThen")}`}
@@ -97,7 +99,7 @@ function Installningar() {
             onClick={() => toast.message(t("premiumFlowComing"))}
             className="w-full rounded-xl bg-primary px-3.5 py-2.5 text-left shadow-card transition-transform active:scale-[0.985]"
           >
-            <span className="flex items-center gap-2 text-[15px] font-semibold text-primary-foreground">
+            <span className="flex items-center gap-2 text-[17px] font-semibold leading-[22px] text-primary-foreground">
               <Crown className="size-4" />
               {t("startPremiumPrice")}
             </span>
@@ -106,7 +108,7 @@ function Installningar() {
           <button
             type="button"
             onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-center text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-center text-[17px] font-semibold leading-[22px] text-primary shadow-card transition-colors active:bg-accent"
           >
             {t("manageSubscription")}
           </button>
@@ -114,7 +116,7 @@ function Installningar() {
           <button
             type="button"
             onClick={() => toast.message(t("purchasesRestored"))}
-            className="w-full rounded-lg px-3 py-1.5 text-center text-[13px] font-medium text-muted-foreground transition-colors active:bg-accent"
+            className="w-full rounded-lg px-3 py-1.5 text-center text-[15px] font-normal leading-[20px] text-muted-foreground transition-colors active:bg-accent"
           >
             {t("restorePurchase")}
           </button>
@@ -126,7 +128,7 @@ function Installningar() {
         <button
           type="button"
           onClick={requestAppStoreReview}
-          className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[15px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+          className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[17px] font-semibold leading-[22px] text-primary shadow-card transition-colors active:bg-accent"
         >
           <span>{t("rateDonely")}</span>
           <ChevronRight className="size-4 text-primary" />
@@ -134,7 +136,7 @@ function Installningar() {
       </section>
 
 
-      <p className="mt-auto pt-8 text-center text-[12px] text-muted-foreground">
+      <p className="mt-auto pt-8 text-center text-[13px] font-normal leading-[18px] text-muted-foreground">
         Donely · {t("version")} 1.0
       </p>
 
@@ -142,7 +144,7 @@ function Installningar() {
         <button
           type="button"
           onClick={() => setConfirming(true)}
-          className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[15px] font-semibold text-destructive shadow-card transition-colors active:bg-destructive/10"
+          className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[17px] font-semibold leading-[22px] text-destructive shadow-card transition-colors active:bg-destructive/10"
         >
           <span className="flex items-center gap-2">
             <Trash2 className="size-[18px]" />
@@ -156,10 +158,10 @@ function Installningar() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
           <div className="w-full max-w-[280px] overflow-hidden rounded-[14px] bg-card text-center shadow-xl">
             <div className="px-4 pb-4 pt-5">
-              <p className="text-[17px] font-semibold text-foreground">
+              <p className="text-[17px] font-semibold leading-[22px] text-foreground">
                 {t("deleteAllData")}
               </p>
-              <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
+              <p className="mt-1.5 text-[13px] font-normal leading-[18px] text-muted-foreground">
                 {t("deleteAllDataWarning")}
               </p>
             </div>
@@ -167,7 +169,7 @@ function Installningar() {
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="border-r border-border py-2.5 text-[17px] text-primary transition-colors active:bg-accent"
+                className="border-r border-border py-2.5 text-[17px] font-normal leading-[22px] text-primary transition-colors active:bg-accent"
               >
                 {t("cancel")}
               </button>
@@ -178,7 +180,7 @@ function Installningar() {
                   toast.success(t("allDataDeleted"));
                   window.location.href = "/";
                 }}
-                className="py-2.5 text-[17px] font-semibold text-destructive transition-colors active:bg-destructive/10"
+                className="py-2.5 text-[17px] font-semibold leading-[22px] text-destructive transition-colors active:bg-destructive/10"
               >
                 {t("deleteAllData")}
               </button>
