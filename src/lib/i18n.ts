@@ -142,7 +142,7 @@ const sv = {
   legalOpenError: "Sidan kunde inte öppnas. Försök igen.",
 };
 
-type Dict = typeof sv;
+type Dict = typeof sv & Record<string, string>;
 
 const en: Dict = {
   work: "Work",
