@@ -88,12 +88,16 @@ JS → Swift (`WKScriptMessageHandler`, `webkit.messageHandlers`):
 
 | Handler | Payload | Swift ska göra |
 | --- | --- | --- |
+| `bridgeReady` | `{ version: 1 }` | Skicka entitlement + produkt till webbvyn |
 | `requestEntitlement` | `{}` | Läs `Transaction.currentEntitlements` och svara med entitlement |
 | `requestProduct` | `{ product: "donely.premium.monthly" }` | `Product.products(for:)` och svara med `displayPrice` |
 | `purchasePremium` | `{ product: "donely.premium.monthly" }` | `product.purchase()` |
 | `restorePurchase` | `{}` | `try await AppStore.sync()` + verifiera entitlement |
 | `manageSubscription` | `{}` | `showManageSubscriptions(in:)` |
 | `requestReview` | `{}` | `AppStore.requestReview(in:)` |
+
+Alla sju handlers måste registreras i `WKUserContentController`, annars ignoreras
+motsvarande knapp tyst.
 
 Swift → JS (kör via `webView.evaluateJavaScript`):
 
@@ -103,10 +107,27 @@ window.__donelySetProduct({ id: "donely.premium.monthly", displayPrice: "29 kr" 
 window.__donelyPurchaseResult(status, message?)
 ```
 
+Payload får även skickas som JSON-sträng: `__donelySetEntitlement('{"subscribed":true,…}')`.
+
 `status` måste vara ett av:
 `"success" | "cancelled" | "failed" | "productUnavailable" | "restored" | "nothingToRestore" | "pending"`.
 `message` är valfritt och ska vara redan lokaliserat (t.ex. StoreKit-felbeskrivning);
 utelämnas det används appens egna översättningar.
+
+**Premium-statusar i appen** (`PremiumStatus` i `src/lib/premium.ts`):
+
+| Status | Betyder | Mappning från entitlement |
+| --- | --- | --- |
+| `loading` | Inget svar från skalet ännu – knappar visar "Hämtar status…", inget beviljas | initialt |
+| `trial` | Aktiv provperiod, full åtkomst | `subscribed:false, inTrial:true` |
+| `subscribed` | Betalande, full åtkomst | `subscribed:true` |
+| `expired` | Låst skrivning, historik/statistik läsbar | `subscribed:false, inTrial:false` |
+
+Köpfas (`PurchasePhase`): `idle | loadingProduct | purchasing | restoring`.
+`busy` är sant under köp/återställning och inaktiverar knapparna.
+Läsvyer (historik, statistik, språk, inställningar, återställ köp, hantera
+abonnemang) är aldrig låsta – endast `canMutate()` styr skrivning.
+
 
 ### Krav på Swift-implementationen
 
