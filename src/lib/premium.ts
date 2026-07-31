@@ -69,6 +69,16 @@ function notify() {
   for (const l of listeners) l();
 }
 
+/**
+ * Returns true when the user is allowed to perform mutating actions
+ * (register, create/edit/rename categories, set/remove goals, delete data).
+ * While the state is still hydrating we default to allowed so the UI
+ * does not flash-lock on app start.
+ */
+export function canMutate(state: PremiumState): boolean {
+  return !state.hydrated || state.active;
+}
+
 /** Marks the auto-renewable subscription as active (StoreKit purchase succeeded). */
 export function activateSubscription() {
   try {

@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Paywall } from "@/components/Paywall";
-import { usePremium } from "@/lib/premium";
+import { canMutate, usePremium } from "@/lib/premium";
 
 const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
 
@@ -85,8 +85,8 @@ function Index() {
 
   function register() {
     if (!valid || !selected) return;
-    // Trial over and no subscription: nothing is saved, the paywall takes over.
-    if (premium.hydrated && !premium.active) {
+    // All mutating actions are gated through the same premium status.
+    if (!canMutate(premium)) {
       navigator.vibrate?.(8);
       setPaywallOpen(true);
       return;
@@ -271,14 +271,25 @@ function Index() {
             setPickerOpen(false);
           }}
           onCreate={(name) => {
+            if (!canMutate(premium)) {
+              setPickerOpen(false);
+              setPaywallOpen(true);
+              return;
+            }
             const created = addCategory(name, area);
             setCategoryId(created.id);
             setPickerOpen(false);
           }}
-          onRename={renameCategory}
+          onRename={(id, name) => {
+            if (!canMutate(premium)) {
+              setPickerOpen(false);
+              setPaywallOpen(true);
+              return;
+            }
+            renameCategory(id, name);
+          }}
           onDelete={(id) => {
-            // Deleting a category also deletes activities — locked without Premium.
-            if (premium.hydrated && !premium.active) {
+            if (!canMutate(premium)) {
               setPickerOpen(false);
               setPaywallOpen(true);
               return;

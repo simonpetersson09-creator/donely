@@ -13,7 +13,7 @@ import {
 } from "@/lib/store";
 import { useTranslation } from "react-i18next";
 import { Paywall } from "@/components/Paywall";
-import { usePremium } from "@/lib/premium";
+import { canMutate, usePremium } from "@/lib/premium";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 
 export const Route = createFileRoute("/statistik")({
@@ -152,8 +152,32 @@ function Statistik() {
         </p>
       </div>
 
-      <Section title={t("private")} icon={<Home className="size-5" />} rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
-      <Section title={t("work")} icon={<Briefcase className="size-5" />} rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
+      <Section
+        title={t("private")}
+        icon={<Home className="size-5" />}
+        rows={rows.privat}
+        showGoalCta={isCurrentYear}
+        onSetGoal={(c) => {
+          if (!canMutate(premium)) {
+            setPaywallOpen(true);
+            return;
+          }
+          setEditing(c);
+        }}
+      />
+      <Section
+        title={t("work")}
+        icon={<Briefcase className="size-5" />}
+        rows={rows.jobb}
+        showGoalCta={isCurrentYear}
+        onSetGoal={(c) => {
+          if (!canMutate(premium)) {
+            setPaywallOpen(true);
+            return;
+          }
+          setEditing(c);
+        }}
+      />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">
@@ -167,15 +191,25 @@ function Statistik() {
           year={year}
           current={goals[goalKey(year, editing.id)] ?? null}
           onSave={(target) => {
+            if (!canMutate(premium)) {
+              setEditing(null);
+              setPaywallOpen(true);
+              return;
+            }
             setGoal(year, editing.id, target);
             setEditing(null);
           }}
           onRemove={() => {
+            if (!canMutate(premium)) {
+              setEditing(null);
+              setPaywallOpen(true);
+              return;
+            }
             removeGoal(year, editing.id);
             setEditing(null);
           }}
           onDelete={() => {
-            if (premium.hydrated && !premium.active) {
+            if (!canMutate(premium)) {
               setEditing(null);
               setPaywallOpen(true);
               return;
