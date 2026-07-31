@@ -81,26 +81,24 @@ function Installningar() {
             </span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-left shadow-card transition-colors active:bg-accent"
-          >
-            <span className="flex items-center gap-2 text-[15px] font-semibold text-primary">
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => toast.message(t("premiumFlowComing"))}
+              className="rounded-xl border border-border bg-card px-3 py-2.5 text-center text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+            >
               {t("manageSubscription")}
-            </span>
-            <span className="mt-0.5 block text-[13px] text-muted-foreground">
-              {t("manageSubscriptionDesc")}
-            </span>
-          </button>
+            </button>
 
-          <button
-            type="button"
-            onClick={() => toast.message(t("purchasesRestored"))}
-            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-left text-[15px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
-          >
-            {t("restorePurchase")}
-          </button>
+            <button
+              type="button"
+              onClick={() => toast.message(t("purchasesRestored"))}
+              className="rounded-xl border border-border bg-card px-3 py-2.5 text-center text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+            >
+              {t("restorePurchase")}
+            </button>
+          </div>
+
         </div>
       </section>
 
