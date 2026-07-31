@@ -12,6 +12,21 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Pin the build output layout so it is identical on every machine (Lovable sandbox,
+  // macOS, CI). Without this, nitro writes to `.output/` outside the sandbox, which
+  // breaks the Capacitor flow (`webDir: dist/client`).
+  nitro: {
+    preset: "cloudflare-module",
+    output: {
+      dir: "dist",
+      serverDir: "dist/server",
+      publicDir: "dist/client",
+    },
+    cloudflare: {
+      nodeCompat: true,
+      deployConfig: true,
+    },
+  },
 });
 
 

@@ -45,3 +45,5 @@ Detaljer:
 - `scripts/capacitor-postbuild.mjs` körs automatiskt efter `vite build` och renderar en statisk `dist/client/index.html` (TanStack Start bygger annars bara en serverbundle). På macOS skapas `ios/App` automatiskt om det saknas.
 - Appikonen ligger i `ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png` (1024×1024).
 - Öppna alltid `App.xcworkspace` (inte `.xcodeproj`) — `npx cap open ios` gör det åt dig.
+
+Felsökning: om `npx cap sync ios` klagar på `dist/client`, kör `rm -rf dist .output && npm run build` och kontrollera att både `dist/client/index.html` och `dist/server/index.mjs` skapas.
