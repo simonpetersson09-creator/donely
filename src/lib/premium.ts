@@ -183,8 +183,15 @@ function applyEntitlement(payload: EntitlementPayload) {
   });
 }
 
+/**
+ * True as soon as an entitlement has arrived over the bridge. From then on the
+ * dev localStorage fallback must never overwrite it (bridge = source of truth).
+ */
+let bridgeControlled = false;
+
 /** Called by the iOS shell with the current StoreKit entitlement. */
 export function setEntitlement(payload: EntitlementPayload) {
+  bridgeControlled = true;
   applyEntitlement(payload);
 }
 
@@ -247,12 +254,14 @@ function localDaysLeft(start: number) {
 }
 
 function refreshLocalFallback() {
-  const subscribed = window.localStorage.getItem(PREMIUM_KEY) === "1";
-  const left = localDaysLeft(localTrialStart());
-  applyEntitlement({ subscribed, inTrial: !subscribed && left > 0, trialDaysLeft: left });
   if (state.productStatus === "idle") {
     setProduct({ id: PRODUCT_ID, displayPrice: FALLBACK_PRICE });
   }
+  // A bridge entitlement always wins over the local dev fallback.
+  if (bridgeControlled) return;
+  const subscribed = window.localStorage.getItem(PREMIUM_KEY) === "1";
+  const left = localDaysLeft(localTrialStart());
+  applyEntitlement({ subscribed, inTrial: !subscribed && left > 0, trialDaysLeft: left });
 }
 
 // ---------------------------------------------------------------------------
@@ -333,7 +342,9 @@ export function restorePurchase() {
   if (LOCAL_FALLBACK_ENABLED) {
     setState({ phase: "restoring", busy: true });
     window.setTimeout(() => {
-      const found = window.localStorage.getItem(PREMIUM_KEY) === "1";
+      const found = bridgeControlled
+        ? state.subscribed
+        : window.localStorage.getItem(PREMIUM_KEY) === "1";
       refreshLocalFallback();
       reportPurchaseResult(found ? "restored" : "nothingToRestore");
     }, 400);

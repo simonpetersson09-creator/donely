@@ -105,3 +105,40 @@ utelämnas det används appens egna översättningar.
 6. Konfigurera produkten `donely.premium.monthly` i App Store Connect med ett
    7-dagars introduktionserbjudande (gratis provperiod).
 7. Priset i UI kommer enbart från `displayPrice` – inga hårdkodade belopp.
+
+## Verifierat återställningsflöde (webbläge) – 2026-07-31
+
+Testat i förhandsvisningen med Playwright. Resultat:
+
+| Kontroll | Status |
+| --- | --- |
+| "Återställ köp" anropar `restorePurchase()` | ✅ |
+| Ingen Premium-status sätts lokalt vid tryck (`vr.premium.v1` oförändrad) | ✅ |
+| Webbläge använder endast dev-fallback (`LOCAL_FALLBACK_ENABLED`) | ✅ |
+| `window.__donelySetEntitlement({subscribed:true,…})` → hela appen blir Premium | ✅ |
+| `window.__donelySetEntitlement({subscribed:false,…})` → skrivfunktioner låses, paywall visas | ✅ |
+| Alla vyer uppdateras direkt (`useSyncExternalStore`), ingen omstart | ✅ |
+| Historik och statistik läsbara utan Premium | ✅ |
+| Återställning med aktivt Premium → "Ditt köp har återställts" | ✅ |
+| Utan prenumeration → "Inga köp att återställa" | ✅ |
+| Inga lokala Premium-flaggor i produktion (fallback kompileras bort) | ✅ |
+
+Fix i samband med kontrollen: ett entitlement som kommit via bryggan
+(`bridgeControlled`) skrivs aldrig över av localStorage-fallbacken, varken av
+dev-tickern eller av återställning.
+
+### Mockat idag (endast web/dev)
+- Trial-start och nedräkning från `vr.trial.v1` i localStorage.
+- `purchasePremium()` sätter `vr.premium.v1` och rapporterar `success` efter 400 ms.
+- `restorePurchase()` läser befintlig status och rapporterar `restored` / `nothingToRestore`.
+- Pris: `FALLBACK_PRICE` ("29 kr") i stället för `product.displayPrice`.
+- `openManageSubscriptions()` öppnar apps.apple.com i ny flik.
+
+### Väntar på riktig StoreKit 2 (Swift)
+- `Transaction.currentEntitlements` → `__donelySetEntitlement`.
+- Trial härledd från `Transaction.offer` (introduktionserbjudande) → `inTrial` / `trialDaysLeft`.
+- `Product.products(for:)` → `__donelySetProduct({ id, displayPrice })`.
+- `product.purchase()` med alla utfall → `__donelyPurchaseResult(status, message?)`.
+- `AppStore.sync()` för återställning.
+- `showManageSubscriptions(in:)` för abonnemangshantering.
+- `Transaction.updates`-lyssnare som pushar nytt entitlement när prenumerationen förnyas eller avslutas.
