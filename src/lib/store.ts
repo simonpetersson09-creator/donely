@@ -206,3 +206,23 @@ export function useOnboarding() {
 
   return { seen, markSeen, hydrated };
 }
+
+const LANG_GUIDE_KEY = "vr.langGuide.v1";
+
+export function useLanguageGuide() {
+  const [seen, setSeen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const stored = read<boolean>(LANG_GUIDE_KEY, false);
+    setSeen(stored);
+    setHydrated(true);
+  }, []);
+
+  const markSeen = useCallback(() => {
+    write(LANG_GUIDE_KEY, true);
+    setSeen(true);
+  }, []);
+
+  return { seen, markSeen, hydrated };
+}
