@@ -46,6 +46,7 @@ function Index() {
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { entries, addEntry } = useEntries();
   const { seen: onboardingSeen, markSeen: markOnboardingSeen, hydrated: onboardingHydrated } = useOnboarding();
+  const { seen: guideSeen, markSeen: markGuideSeen, hydrated: guideHydrated } = useLanguageGuide();
 
   const areaCategories = useMemo(() => {
     const list = categories.filter((c) => c.area === area);
