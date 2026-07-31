@@ -364,6 +364,10 @@ const es: Dict = {
   "cat.j-avtal": "Contratos",
   "cat.j-samtal": "Nuevas llamadas",
   "cat.j-admin": "Tareas admin",
+  welcomeTitle: "Bienvenido a Donely",
+  welcomeLine1: "Registra lo que realmente haces.",
+  welcomeLine2: "Sigue tus resultados con el tiempo.",
+  getStarted: "Empezar",
 };
 
 const it: Dict = {
