@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as InstallningarRouteImport } from './routes/installningar'
 import { Route as StatistikRouteImport } from './routes/statistik'
 import { Route as KategoriIdRouteImport } from './routes/kategori.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstallningarRoute = InstallningarRouteImport.update({
+  id: '/installningar',
+  path: '/installningar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StatistikRoute = StatistikRouteImport.update({
@@ -31,30 +37,34 @@ const KategoriIdRoute = KategoriIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/installningar': typeof InstallningarRoute
   '/statistik': typeof StatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/installningar': typeof InstallningarRoute
   '/statistik': typeof StatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/installningar': typeof InstallningarRoute
   '/statistik': typeof StatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/statistik' | '/kategori/$id'
+  fullPaths: '/' | '/installningar' | '/statistik' | '/kategori/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/statistik' | '/kategori/$id'
-  id: '__root__' | '/' | '/statistik' | '/kategori/$id'
+  to: '/' | '/installningar' | '/statistik' | '/kategori/$id'
+  id: '__root__' | '/' | '/installningar' | '/statistik' | '/kategori/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InstallningarRoute: typeof InstallningarRoute
   StatistikRoute: typeof StatistikRoute
   KategoriIdRoute: typeof KategoriIdRoute
 }
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/installningar': {
+      id: '/installningar'
+      path: '/installningar'
+      fullPath: '/installningar'
+      preLoaderRoute: typeof InstallningarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/statistik': {
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InstallningarRoute: InstallningarRoute,
   StatistikRoute: StatistikRoute,
   KategoriIdRoute: KategoriIdRoute,
 }

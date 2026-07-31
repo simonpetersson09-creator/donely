@@ -187,14 +187,23 @@ function Index() {
             <Check className="size-3.5" /> {t("registered")}
           </span>
         </div>
-        <button
-          type="button"
-          disabled={!valid}
-          onClick={register}
-          className="w-full rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none"
-        >
-          {t("register")}
-        </button>
+        <div className="flex items-stretch gap-2">
+          <button
+            type="button"
+            disabled={!valid}
+            onClick={register}
+            className="flex-1 rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none"
+          >
+            {t("register")}
+          </button>
+          <Link
+            to="/installningar"
+            aria-label={t("settings")}
+            className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-card transition-transform duration-200 active:scale-[0.95]"
+          >
+            <Settings className="size-[20px]" />
+          </Link>
+        </div>
         <div className="flex items-stretch gap-2">
           <Link
             to="/statistik"
