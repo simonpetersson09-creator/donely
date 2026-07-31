@@ -27,3 +27,21 @@ npm run dev
 - TypeScript
 - React
 - Tailwind CSS
+
+## iOS / Capacitor-arbetsflöde
+
+Projektet är ett komplett Capacitor-projekt (native Xcode-projektet ligger i `ios/App` och är versionshanterat).
+
+```sh
+git pull
+npm install
+npm run build      # bygger web-appen och skriver dist/client/index.html (app-skalet)
+npx cap sync ios   # kopierar web-assets + kör pod install
+npx cap open ios   # öppnar ios/App/App.xcworkspace i Xcode
+```
+
+Detaljer:
+- `capacitor.config.ts` — appId `app.donely.mobile`, appName `Donely`, `webDir: dist/client`.
+- `scripts/capacitor-postbuild.mjs` körs automatiskt efter `vite build` och renderar en statisk `dist/client/index.html` (TanStack Start bygger annars bara en serverbundle). På macOS skapas `ios/App` automatiskt om det saknas.
+- Appikonen ligger i `ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png` (1024×1024).
+- Öppna alltid `App.xcworkspace` (inte `.xcodeproj`) — `npx cap open ios` gör det åt dig.
