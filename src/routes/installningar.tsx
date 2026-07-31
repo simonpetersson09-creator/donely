@@ -49,8 +49,24 @@ function Installningar() {
 
       <section className="mt-6">
         <h2 className="mb-1.5 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
-          {t("premium")}
+          {t("donelyPremium")}
         </h2>
+
+        <div className="mb-2 rounded-xl border border-border bg-card px-3.5 py-2.5 shadow-card">
+          <p className="text-[14px] font-semibold text-primary">
+            {premium.subscribed
+              ? t("premiumActive")
+              : premium.trialExpired
+                ? t("trialEnded")
+                : t("trialLeft", { count: premium.trialDaysLeft })}
+          </p>
+          {!premium.subscribed && (
+            <p className="mt-0.5 text-[13px] text-muted-foreground">
+              {t("freeTrialTitle")} · {t("freeTrialThen")}
+            </p>
+          )}
+        </div>
+
         <div className="space-y-2">
           <button
             type="button"
@@ -59,7 +75,7 @@ function Installningar() {
           >
             <span className="flex items-center gap-2 text-[15px] font-semibold text-primary-foreground">
               <Crown className="size-4" />
-              {t("startPremium")}
+              {t("startPremiumPrice")}
             </span>
           </button>
 
@@ -75,8 +91,17 @@ function Installningar() {
               {t("manageSubscriptionDesc")}
             </span>
           </button>
+
+          <button
+            type="button"
+            onClick={() => toast.message(t("purchasesRestored"))}
+            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-left text-[15px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+          >
+            {t("restorePurchase")}
+          </button>
         </div>
       </section>
+
 
       <p className="mt-auto pt-8 text-center text-[12px] text-muted-foreground">
         Donely · {t("version")} 1.0
