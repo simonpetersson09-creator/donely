@@ -121,23 +121,27 @@ function Installningar() {
         <section className="space-y-3">
           <button
             type="button"
+            disabled={premium.busy || premium.loading}
             onClick={() => {
               if (premium.subscribed) {
                 toast.message(t("premiumActive"));
                 return;
               }
-              if (purchasePremium()) {
-                premium.refresh();
-                toast.success(t("premiumActive"));
-              } else {
-                toast.message(t("premiumFlowComing"));
-              }
+              purchasePremium();
             }}
-            className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
+            className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985] disabled:opacity-60"
           >
             <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
               <Crown className="size-4 text-gold" fill="currentColor" />
-              {premium.subscribed ? t("premiumActive") : t("startPremiumPrice")}
+              {premium.loading
+                ? t("premiumLoading")
+                : premium.phase === "purchasing"
+                  ? t("purchasePending")
+                  : premium.subscribed
+                    ? t("premiumActive")
+                    : premium.productStatus === "loading"
+                      ? t("productLoading")
+                      : t("startPremiumPriceDynamic", { price })}
             </span>
           </button>
 
@@ -152,16 +156,14 @@ function Installningar() {
 
             <button
               type="button"
-              onClick={() => {
-                const found = restorePurchase();
-                premium.refresh();
-                toast.message(found ? t("premiumActive") : t("purchasesRestored"));
-              }}
-              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              disabled={premium.busy}
+              onClick={() => restorePurchase()}
+              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent disabled:opacity-60"
             >
-              {t("restorePurchase")}
+              {premium.phase === "restoring" ? t("restoring") : t("restorePurchase")}
             </button>
           </div>
+
         </section>
 
 
