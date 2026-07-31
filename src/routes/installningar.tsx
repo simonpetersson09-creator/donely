@@ -136,7 +136,7 @@ function Installningar() {
       </section>
 
 
-      <p className="mt-auto pt-8 text-center text-[12px] text-muted-foreground">
+      <p className="mt-auto pt-8 text-center text-[13px] font-normal leading-[18px] text-muted-foreground">
         Donely · {t("version")} 1.0
       </p>
 
@@ -144,7 +144,7 @@ function Installningar() {
         <button
           type="button"
           onClick={() => setConfirming(true)}
-          className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[15px] font-semibold text-destructive shadow-card transition-colors active:bg-destructive/10"
+          className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[17px] font-semibold leading-[22px] text-destructive shadow-card transition-colors active:bg-destructive/10"
         >
           <span className="flex items-center gap-2">
             <Trash2 className="size-[18px]" />
@@ -158,10 +158,10 @@ function Installningar() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
           <div className="w-full max-w-[280px] overflow-hidden rounded-[14px] bg-card text-center shadow-xl">
             <div className="px-4 pb-4 pt-5">
-              <p className="text-[17px] font-semibold text-foreground">
+              <p className="text-[17px] font-semibold leading-[22px] text-foreground">
                 {t("deleteAllData")}
               </p>
-              <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
+              <p className="mt-1.5 text-[13px] font-normal leading-[18px] text-muted-foreground">
                 {t("deleteAllDataWarning")}
               </p>
             </div>
