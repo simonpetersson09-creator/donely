@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "@tanstack/react-router";
 import { Crown, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
