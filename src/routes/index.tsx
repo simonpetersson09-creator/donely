@@ -76,6 +76,8 @@ function Index() {
     hydrated: onboardingHydrated,
   } = useOnboarding();
   const premium = usePremium();
+  const locked = !premium.loading && !canMutate(premium);
+
   const { seen: guideSeen, markSeen: markGuideSeen, hydrated: guideHydrated } = useLanguageGuide();
   const {
     answered: reminderPromptAnswered,
