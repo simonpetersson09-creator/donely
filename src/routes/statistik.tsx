@@ -81,6 +81,15 @@ function Statistik() {
 
   const yearIndex = years.indexOf(year);
 
+  const totalActivities = useMemo(
+    () =>
+      entries
+        .filter((e) => new Date(e.createdAt).getFullYear() === year)
+        .reduce((sum, e) => sum + e.amount, 0),
+    [entries, year],
+  );
+
+
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex items-center justify-between py-2">
@@ -116,6 +125,15 @@ function Statistik() {
       <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {year} {isCurrentYear ? "hittills" : "– slutresultat"}
       </h1>
+
+      <div className="mt-3 rounded-xl border border-border bg-card px-3.5 py-2.5 text-card-foreground shadow-card">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-card-foreground/60">
+          Totalt registrerade aktiviteter
+        </p>
+        <p className="mt-0.5 text-[26px] font-bold leading-none tabular-nums">
+          {totalActivities.toLocaleString("sv-SE")}
+        </p>
+      </div>
 
       <Section title="Privat" rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
       <Section title="Jobb" rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
@@ -159,11 +177,11 @@ function Section({
 }) {
   if (rows.length === 0) return null;
   return (
-    <section className="mt-6">
-      <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
+    <section className="mt-5">
+      <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
         {title}
       </p>
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {rows.map((row) => (
           <GoalCard key={row.category.id} row={row} showGoalCta={showGoalCta} onSetGoal={onSetGoal} />
         ))}
@@ -186,60 +204,55 @@ function GoalCard({
   const reached = pct !== null && total >= goal!;
 
   return (
-    <article className="rounded-xl border border-border bg-card px-3.5 py-3 text-card-foreground shadow-card">
-      <div className="flex items-start justify-between gap-3">
+    <article
+      role={showGoalCta ? "button" : undefined}
+      tabIndex={showGoalCta ? 0 : undefined}
+      onClick={showGoalCta ? () => onSetGoal(category) : undefined}
+      onKeyDown={
+        showGoalCta
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onSetGoal(category);
+              }
+            }
+          : undefined
+      }
+      className={cn(
+        "rounded-xl border border-border bg-card px-3.5 py-2.5 text-card-foreground shadow-card",
+        showGoalCta && "cursor-pointer transition-colors active:bg-secondary",
+      )}
+    >
+      <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="truncate text-[15px] font-semibold">{category.name}</h3>
-          <p className="mt-0.5 text-[18px] font-bold tabular-nums">
+          <h3 className="truncate text-[12px] font-medium text-card-foreground/70">
+            {category.name}
+          </h3>
+          <p className="text-[21px] font-bold leading-tight tabular-nums">
             {goal !== null
               ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
               : `${total.toLocaleString("sv-SE")} hittills`}
           </p>
         </div>
         {reached && (
-          <span className="mt-0.5 inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2 py-1 text-[11px] font-semibold text-primary-foreground">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2 py-1 text-[11px] font-semibold text-primary-foreground">
             <Check className="size-3" /> Uppnått
           </span>
         )}
       </div>
 
-      {pct !== null ? (
-        <div className="mt-2.5">
-          <div className="h-1.5 w-full overflow-hidden rounded-full bg-accent">
-            <div
-              className="h-full rounded-full bg-primary transition-all duration-500"
-              style={{ width: `${Math.min(100, pct)}%` }}
-            />
-          </div>
-          <div className="mt-1.5 flex items-center justify-between">
-            <span className="text-[12px] font-medium text-card-foreground/70">
-              {pct} % av årsmålet
-            </span>
-            {showGoalCta && (
-              <button
-                type="button"
-                onClick={() => onSetGoal(category)}
-                className="text-[12px] font-semibold text-primary underline-offset-2 active:underline"
-              >
-                Ändra mål
-              </button>
-            )}
-          </div>
+      {pct !== null && (
+        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-accent">
+          <div
+            className="h-full rounded-full bg-primary transition-all duration-500"
+            style={{ width: `${Math.min(100, pct)}%` }}
+          />
         </div>
-      ) : (
-        showGoalCta && (
-          <button
-            type="button"
-            onClick={() => onSetGoal(category)}
-            className="mt-2 text-[12px] font-semibold text-primary underline-offset-2 active:underline"
-          >
-            Sätt årsmål
-          </button>
-        )
       )}
     </article>
   );
 }
+
 
 function GoalSheet({
   category,
