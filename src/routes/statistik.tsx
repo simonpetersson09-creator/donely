@@ -227,21 +227,17 @@ function GoalCard({
   useEffect(() => setMounted(true), []);
 
   return (
-    <article
-      className={cn(
-        "rounded-xl border border-border bg-card px-3.5 py-2 text-card-foreground shadow-card",
-      )}
+    <Link
+      to="/kategori/$id"
+      params={{ id: category.id }}
+      className="block rounded-xl border border-border bg-card px-3.5 py-2 text-card-foreground shadow-card transition-colors active:bg-accent"
     >
       <div className="flex items-start justify-between gap-2">
-        <Link
-          to="/kategori/$id"
-          params={{ id: category.id }}
-          className="min-w-0 flex-1 text-left"
-        >
+        <div className="min-w-0 flex-1 text-left">
           <h3 className="truncate text-[12px] font-medium text-card-foreground/70">
             {categoryLabel(t, category)}
           </h3>
-        </Link>
+        </div>
         <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
@@ -252,7 +248,11 @@ function GoalCard({
             <button
               type="button"
               aria-label={t("changeGoalFor", { name: categoryLabel(t, category) })}
-              onClick={() => onSetGoal(category)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onSetGoal(category);
+              }}
               className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
             >
               <Pencil className="size-3" />
@@ -282,7 +282,7 @@ function GoalCard({
           />
         </div>
       )}
-    </article>
+    </Link>
   );
 }
 
