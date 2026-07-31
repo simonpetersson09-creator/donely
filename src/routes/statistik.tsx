@@ -49,9 +49,9 @@ function Statistik() {
 
   const { t } = useLanguage();
   const locale = useLocale();
-  const { categories } = useCategories();
-  const { entries } = useEntries();
-  const { goals, setGoal, removeGoal } = useGoals();
+  const { categories, removeCategory } = useCategories();
+  const { entries, removeEntriesByCategory } = useEntries();
+  const { goals, setGoal, removeGoal, removeGoalsByCategory } = useGoals();
 
   const isCurrentYear = year === currentYear;
 
@@ -168,6 +168,12 @@ function Statistik() {
           }}
           onRemove={() => {
             removeGoal(year, editing.id);
+            setEditing(null);
+          }}
+          onDelete={() => {
+            removeCategory(editing.id);
+            removeEntriesByCategory(editing.id);
+            removeGoalsByCategory(editing.id);
             setEditing(null);
           }}
           onClose={() => setEditing(null)}
@@ -312,6 +318,7 @@ function GoalSheet({
   current,
   onSave,
   onRemove,
+  onDelete,
   onClose,
 }: {
   category: Category;
@@ -319,6 +326,7 @@ function GoalSheet({
   current: number | null;
   onSave: (target: number) => void;
   onRemove: () => void;
+  onDelete: () => void;
   onClose: () => void;
 }) {
   const { t } = useTranslation();
@@ -383,6 +391,13 @@ function GoalSheet({
             {t("save")}
           </button>
         </div>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="mt-2 w-full rounded-xl border border-destructive/30 bg-card py-3 text-[15px] font-semibold text-destructive transition-colors active:bg-destructive/10"
+        >
+          {t("deleteCategoryAndStats")}
+        </button>
       </form>
     </div>
   );

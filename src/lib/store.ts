@@ -127,7 +127,15 @@ export function useEntries() {
     });
   }, []);
 
-  return { entries, addEntry, removeEntry };
+  const removeEntriesByCategory = useCallback((categoryId: string) => {
+    setEntries((prev) => {
+      const next = prev.filter((e) => e.categoryId !== categoryId);
+      write(ENTRIES_KEY, next);
+      return next;
+    });
+  }, []);
+
+  return { entries, addEntry, removeEntry, removeEntriesByCategory };
 }
 
 const GOALS_KEY = "vr.goals.v1";
@@ -165,5 +173,16 @@ export function useGoals() {
     });
   }, []);
 
-  return { goals, setGoal, removeGoal, hydrated };
+  const removeGoalsByCategory = useCallback((categoryId: string) => {
+    setGoals((prev) => {
+      const next = { ...prev };
+      for (const key of Object.keys(next)) {
+        if (key.endsWith(`:${categoryId}`)) delete next[key];
+      }
+      write(GOALS_KEY, next);
+      return next;
+    });
+  }, []);
+
+  return { goals, setGoal, removeGoal, removeGoalsByCategory, hydrated };
 }
