@@ -102,6 +102,8 @@ const sv = {
   welcomeLine1: "Registrera det du faktiskt gör.",
   welcomeLine2: "Följ dina resultat över tid.",
   getStarted: "Kom igång",
+  languageGuideTitle: "Byt språk här.",
+  languageGuideBody: "Donely finns på flera språk. Tryck här om du vill ändra språk.",
 };
 
 type Dict = typeof sv;
@@ -170,6 +172,8 @@ const en: Dict = {
   welcomeLine1: "Register what you actually do.",
   welcomeLine2: "Follow your results over time.",
   getStarted: "Get started",
+  languageGuideTitle: "Change language here.",
+  languageGuideBody: "Donely is available in several languages. Tap here to change.",
 };
 
 const de: Dict = {
@@ -236,6 +240,8 @@ const de: Dict = {
   welcomeLine1: "Erfasse, was du tatsächlich tust.",
   welcomeLine2: "Verfolge deine Ergebnisse über die Zeit.",
   getStarted: "Loslegen",
+  languageGuideTitle: "Sprache hier ändern.",
+  languageGuideBody: "Donely ist in mehreren Sprachen verfügbar. Tippe hier, um zu wechseln.",
 };
 
 const fr: Dict = {
@@ -302,6 +308,8 @@ const fr: Dict = {
   welcomeLine1: "Enregistre ce que tu fais réellement.",
   welcomeLine2: "Suis tes résultats au fil du temps.",
   getStarted: "Commencer",
+  languageGuideTitle: "Changer de langue ici.",
+  languageGuideBody: "Donely est disponible en plusieurs langues. Appuie ici pour changer.",
 };
 
 const es: Dict = {
@@ -368,6 +376,8 @@ const es: Dict = {
   welcomeLine1: "Registra lo que realmente haces.",
   welcomeLine2: "Sigue tus resultados con el tiempo.",
   getStarted: "Empezar",
+  languageGuideTitle: "Cambiar idioma aquí.",
+  languageGuideBody: "Donely está disponible en varios idiomas. Toca aquí para cambiar.",
 };
 
 const it: Dict = {
@@ -434,6 +444,8 @@ const it: Dict = {
   welcomeLine1: "Registra ciò che fai davvero.",
   welcomeLine2: "Segui i tuoi risultati nel tempo.",
   getStarted: "Inizia",
+  languageGuideTitle: "Cambia lingua qui.",
+  languageGuideBody: "Donely è disponibile in diverse lingue. Tocca qui per cambiare.",
 };
 
 const ptBR: Dict = {
@@ -500,6 +512,8 @@ const ptBR: Dict = {
   welcomeLine1: "Registre o que você realmente faz.",
   welcomeLine2: "Acompanhe seus resultados ao longo do tempo.",
   getStarted: "Começar",
+  languageGuideTitle: "Mudar idioma aqui.",
+  languageGuideBody: "O Donely está disponível em vários idiomas. Toque aqui para alterar.",
 };
 
 const nl: Dict = {
@@ -566,6 +580,8 @@ const nl: Dict = {
   welcomeLine1: "Registreer wat je echt doet.",
   welcomeLine2: "Volg je resultaten in de loop van de tijd.",
   getStarted: "Aan de slag",
+  languageGuideTitle: "Taal hier wijzigen.",
+  languageGuideBody: "Donely is beschikbaar in meerdere talen. Tik hier om te wijzigen.",
 };
 
 const pl: Dict = {
@@ -632,6 +648,8 @@ const pl: Dict = {
   welcomeLine1: "Rejestruj to, co faktycznie robisz.",
   welcomeLine2: "Śledź swoje wyniki w czasie.",
   getStarted: "Rozpocznij",
+  languageGuideTitle: "Zmień język tutaj.",
+  languageGuideBody: "Donely jest dostępne w wielu językach. Dotknij tutaj, aby zmienić.",
 };
 
 const da: Dict = {
@@ -698,6 +716,8 @@ const da: Dict = {
   welcomeLine1: "Registrer det, du faktisk gør.",
   welcomeLine2: "Følg dine resultater over tid.",
   getStarted: "Kom i gang",
+  languageGuideTitle: "Skift sprog her.",
+  languageGuideBody: "Donely findes på flere sprog. Tryk her for at skifte.",
 };
 
 const no: Dict = {
@@ -764,6 +784,8 @@ const no: Dict = {
   welcomeLine1: "Registrer det du faktisk gjør.",
   welcomeLine2: "Følg resultatene dine over tid.",
   getStarted: "Kom i gang",
+  languageGuideTitle: "Bytt språk her.",
+  languageGuideBody: "Donely er tilgjengelig på flere språk. Trykk her for å endre.",
 };
 
 const fi: Dict = {
@@ -830,6 +852,8 @@ const fi: Dict = {
   welcomeLine1: "Kirjaa mitä oikeasti teet.",
   welcomeLine2: "Seuraa tuloksiasi ajan mittaan.",
   getStarted: "Aloita",
+  languageGuideTitle: "Vaihda kieltä tästä.",
+  languageGuideBody: "Donely on saatavilla useilla kielillä. Napauta tästä vaihtaaksesi.",
 };
 
 const ja: Dict = {
@@ -896,6 +920,8 @@ const ja: Dict = {
   welcomeLine1: "実際に行ったことを記録します。",
   welcomeLine2: "時間をかけて結果を確認します。",
   getStarted: "始める",
+  languageGuideTitle: "言語を変更する",
+  languageGuideBody: "Donely は複数の言語に対応しています。ここをタップして変更してください。",
 };
 
 const resources = {
