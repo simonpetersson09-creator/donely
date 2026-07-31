@@ -120,19 +120,18 @@ final class DonelyStoreKitBridge: NSObject {
             }
         }
 
-        // Not subscribed yet, but eligible for the 7-day introductory offer.
-        if !subscribed,
-           let product = await currentProduct(),
-           let subscription = product.subscription,
-           await subscription.isEligibleForIntroOffer,
-           let intro = subscription.introductoryOffer,
-           intro.paymentMode == .freeTrial {
-            inTrial = false
-            trialDaysLeft = 0
+        // Not subscribed: grant the 7-day free trial locally. Apple's own
+        // introductory offer only starts once the user buys, so without this
+        // the app would demand Premium from the very first launch.
+        if !subscribed {
+            let daysLeft = TrialClock.daysLeft()
+            inTrial = daysLeft > 0
+            trialDaysLeft = daysLeft
         }
 
         sendEntitlement(subscribed: subscribed, inTrial: inTrial, trialDaysLeft: trialDaysLeft)
     }
+
 
     private func purchase() async {
         guard let product = await currentProduct() else {
