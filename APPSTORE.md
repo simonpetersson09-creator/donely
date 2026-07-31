@@ -236,10 +236,15 @@ aktivitet skapas, ändras eller tas bort, samt vid språkbyte. Swift ska sätta
 så appen öppnas direkt i veckostatistiken.
 
 ### Färdig Swift-implementation
-Referensimplementationen finns i `ios/DonelyNotificationBridge.swift` – lägg in
-filen i Xcode-projektet och registrera handlarna enligt kommentaren längst ned.
-Den använder `title`/`bodyLines` direkt från JS (radbrutet innehåll), sätter
-`userInfo["route"]` och anropar `__donelyOpenRoute` vid tryck.
+Bryggan ligger i `ios/App/App/DonelyNotificationBridge.swift` och är redan
+inkopplad: `ios/App/App/DonelyViewController.swift` (satt som klass i
+`Main.storyboard`) instansierar bryggan när WKWebView skapas, håller en stark
+referens, registrerar alla `handlerNames` på `WKUserContentController` och sätter
+`UNUserNotificationCenter.current().delegate`. Båda filerna ingår permanent i
+target `App` i `App.xcodeproj`, så inget behöver läggas till manuellt efter
+`git pull`. `AppDelegate` fångar kallstartstryck och skickar rutten vidare till
+`__donelyOpenRoute` när webbappen laddat klart.
+
 
 ### Swift-implementation (kärnan)
 ```swift

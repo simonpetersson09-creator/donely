@@ -2,13 +2,10 @@
 //  DonelyNotificationBridge.swift
 //  Donely
 //
-//  Reference implementation of the native half of the notification bridge.
-//  Drop this file into the Xcode project (Capacitor/WKWebView shell) and wire
-//  it up as described at the bottom of the file.
+//  Native half of the Donely notification bridge.
+//  Wired up automatically by DonelyViewController — no manual Xcode steps.
 //
-//  It only covers the weekly local notification. Permissions, scheduling,
-//  deduplication and the on/off toggle keep the exact same contract as before —
-//  the only new pieces are:
+//  Contract with the web app:
 //    * `title` / `body` come fully localized from JavaScript and are used as-is
 //    * `bodyLines` gives the same body pre-split, so multi-line rendering is
 //      guaranteed even if newlines are mangled somewhere in the bridge
@@ -62,13 +59,38 @@ final class DonelyNotificationBridge: NSObject {
         "openAppSettings",
     ]
 
+    static let defaultRoute = "/veckostatistik"
+
     private weak var webView: WKWebView?
     private let center = UNUserNotificationCenter.current()
+
+    /// Route captured before the web app was ready (cold start from a tap).
+    private var pendingRoute: String?
+    /// Set to true once the web view has finished loading Donely.
+    private var webAppReady = false
 
     init(webView: WKWebView) {
         self.webView = webView
         super.init()
         center.delegate = self
+    }
+
+    /// Registers every JS → Swift message handler on the given controller.
+    func register(on controller: WKUserContentController) {
+        for name in DonelyNotificationBridge.handlerNames {
+            controller.removeScriptMessageHandler(forName: name)
+            controller.add(self, name: name)
+        }
+    }
+
+    /// Called by the view controller once the web app has finished loading, so
+    /// a deep link captured during cold start can be delivered.
+    func webViewDidFinishLoad() {
+        webAppReady = true
+        if let route = pendingRoute {
+            pendingRoute = nil
+            openRoute(route)
+        }
     }
 
     // MARK: JS → Swift
@@ -103,9 +125,7 @@ final class DonelyNotificationBridge: NSObject {
         content.title = payload.title           // "Din vecka i Donely"
         content.body = payload.resolvedBody     // multi-line summary
         content.sound = .default
-        if let route = payload.route {
-            content.userInfo["route"] = route   // "/veckostatistik"
-        }
+        content.userInfo["route"] = payload.route ?? DonelyNotificationBridge.defaultRoute
 
         var comps = DateComponents()
         comps.weekday = payload.weekday         // 6 = Friday
@@ -155,7 +175,7 @@ final class DonelyNotificationBridge: NSObject {
         case .provisional: value = "provisional"
         default: value = "notDetermined"
         }
-        evaluate("window.__donelySetNotificationPermission(\(json(value)))")
+        evaluate("window.__donelySetNotificationPermission && window.__donelySetNotificationPermission(\(json(value)))")
     }
 
     private func sendScheduled(id: String, nextFireDate: Date?, language: String?) {
@@ -164,15 +184,19 @@ final class DonelyNotificationBridge: NSObject {
             payload["nextFireDate"] = ISO8601DateFormatter().string(from: nextFireDate)
         }
         if let language { payload["language"] = language }
-        evaluate("window.__donelyNotificationScheduled(\(json(payload)))")
+        evaluate("window.__donelyNotificationScheduled && window.__donelyNotificationScheduled(\(json(payload)))")
     }
 
     private func sendError(_ message: String) {
-        evaluate("window.__donelyNotificationError(\(json(message)))")
+        evaluate("window.__donelyNotificationError && window.__donelyNotificationError(\(json(message)))")
     }
 
     /// Called when the user taps the notification.
-    private func openRoute(_ route: String) {
+    func openRoute(_ route: String) {
+        guard webAppReady else {
+            pendingRoute = route
+            return
+        }
         evaluate("window.__donelyOpenRoute && window.__donelyOpenRoute(\(json(route)))")
     }
 
@@ -242,21 +266,7 @@ extension DonelyNotificationBridge: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let route = response.notification.request.content.userInfo["route"] as? String
-        openRoute(route ?? "/veckostatistik")
+        openRoute(route ?? DonelyNotificationBridge.defaultRoute)
         completionHandler()
     }
 }
-
-// MARK: - Wiring
-//
-// In the view controller that owns the WKWebView:
-//
-//   let config = WKWebViewConfiguration()
-//   let webView = WKWebView(frame: .zero, configuration: config)
-//   let bridge = DonelyNotificationBridge(webView: webView)   // keep a strong reference
-//   for name in DonelyNotificationBridge.handlerNames {
-//       config.userContentController.add(bridge, name: name)
-//   }
-//
-// The web app pings `requestNotificationStatus` on launch and whenever the app
-// regains focus, so no extra call is needed from Swift on foregrounding.
