@@ -186,3 +186,23 @@ export function useGoals() {
 
   return { goals, setGoal, removeGoal, removeGoalsByCategory, hydrated };
 }
+
+const ONBOARDING_KEY = "vr.onboarding.v1";
+
+export function useOnboarding() {
+  const [seen, setSeen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    const stored = read<boolean>(ONBOARDING_KEY, false);
+    setSeen(stored);
+    setHydrated(true);
+  }, []);
+
+  const markSeen = useCallback(() => {
+    write(ONBOARDING_KEY, true);
+    setSeen(true);
+  }, []);
+
+  return { seen, markSeen, hydrated };
+}

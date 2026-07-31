@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useCategories, useEntries, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
+import { useCategories, useEntries, useOnboarding, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
 import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -45,6 +45,7 @@ function Index() {
   const { t } = useLanguage();
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { entries, addEntry } = useEntries();
+  const { seen: onboardingSeen, markSeen: markOnboardingSeen, hydrated: onboardingHydrated } = useOnboarding();
 
   const areaCategories = useMemo(() => {
     const list = categories.filter((c) => c.area === area);
@@ -89,6 +90,9 @@ function Index() {
       description: area === "jobb" ? t("work") : t("private"),
     });
   }
+
+  if (!onboardingHydrated) return null;
+  if (!onboardingSeen) return <Onboarding onStart={markOnboardingSeen} />;
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -526,4 +530,38 @@ function CategoryRow({
     </div>
   );
 }
+
+function Onboarding({ onStart }: { onStart: () => void }) {
+  const { t } = useTranslation();
+
+  return (
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+      <div className="flex flex-1 flex-col items-center justify-center text-center">
+        <h1 className="select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+          Donely
+        </h1>
+        <p className="mt-6 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-foreground">
+          {t("welcomeTitle")}
+        </p>
+        <div className="mt-4 space-y-1.5">
+          <p className="text-[17px] leading-relaxed text-muted-foreground">
+            {t("welcomeLine1")}
+          </p>
+          <p className="text-[17px] leading-relaxed text-muted-foreground">
+            {t("welcomeLine2")}
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={onStart}
+        className="w-full rounded-xl bg-primary py-3.5 text-[17px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96]"
+      >
+        {t("getStarted")}
+      </button>
+    </main>
+  );
+}
+
 

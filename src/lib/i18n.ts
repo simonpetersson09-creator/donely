@@ -98,6 +98,10 @@ const sv = {
   "cat.j-avtal": "Avtal",
   "cat.j-samtal": "Nya samtal",
   "cat.j-admin": "Admin-uppgifter",
+  welcomeTitle: "Välkommen till Donely",
+  welcomeLine1: "Registrera det du faktiskt gör.",
+  welcomeLine2: "Följ dina resultat över tid.",
+  getStarted: "Kom igång",
 };
 
 type Dict = typeof sv;
@@ -162,6 +166,10 @@ const en: Dict = {
   "cat.j-avtal": "Contracts",
   "cat.j-samtal": "New calls",
   "cat.j-admin": "Admin tasks",
+  welcomeTitle: "Welcome to Donely",
+  welcomeLine1: "Register what you actually do.",
+  welcomeLine2: "Follow your results over time.",
+  getStarted: "Get started",
 };
 
 const de: Dict = {
@@ -224,6 +232,10 @@ const de: Dict = {
   "cat.j-avtal": "Verträge",
   "cat.j-samtal": "Neue Anrufe",
   "cat.j-admin": "Admin-Aufgaben",
+  welcomeTitle: "Willkommen bei Donely",
+  welcomeLine1: "Erfasse, was du tatsächlich tust.",
+  welcomeLine2: "Verfolge deine Ergebnisse über die Zeit.",
+  getStarted: "Loslegen",
 };
 
 const fr: Dict = {
@@ -286,6 +298,10 @@ const fr: Dict = {
   "cat.j-avtal": "Contrats",
   "cat.j-samtal": "Nouveaux appels",
   "cat.j-admin": "Tâches admin",
+  welcomeTitle: "Bienvenue sur Donely",
+  welcomeLine1: "Enregistre ce que tu fais réellement.",
+  welcomeLine2: "Suis tes résultats au fil du temps.",
+  getStarted: "Commencer",
 };
 
 const es: Dict = {
@@ -348,6 +364,10 @@ const es: Dict = {
   "cat.j-avtal": "Contratos",
   "cat.j-samtal": "Nuevas llamadas",
   "cat.j-admin": "Tareas admin",
+  welcomeTitle: "Bienvenido a Donely",
+  welcomeLine1: "Registra lo que realmente haces.",
+  welcomeLine2: "Sigue tus resultados con el tiempo.",
+  getStarted: "Empezar",
 };
 
 const it: Dict = {
@@ -410,6 +430,10 @@ const it: Dict = {
   "cat.j-avtal": "Contratti",
   "cat.j-samtal": "Nuove chiamate",
   "cat.j-admin": "Attività admin",
+  welcomeTitle: "Benvenuto in Donely",
+  welcomeLine1: "Registra ciò che fai davvero.",
+  welcomeLine2: "Segui i tuoi risultati nel tempo.",
+  getStarted: "Inizia",
 };
 
 const ptBR: Dict = {
@@ -472,6 +496,10 @@ const ptBR: Dict = {
   "cat.j-avtal": "Contratos",
   "cat.j-samtal": "Novas chamadas",
   "cat.j-admin": "Tarefas admin",
+  welcomeTitle: "Bem-vindo ao Donely",
+  welcomeLine1: "Registre o que você realmente faz.",
+  welcomeLine2: "Acompanhe seus resultados ao longo do tempo.",
+  getStarted: "Começar",
 };
 
 const nl: Dict = {
@@ -534,6 +562,10 @@ const nl: Dict = {
   "cat.j-avtal": "Contracten",
   "cat.j-samtal": "Nieuwe gesprekken",
   "cat.j-admin": "Admintaken",
+  welcomeTitle: "Welkom bij Donely",
+  welcomeLine1: "Registreer wat je echt doet.",
+  welcomeLine2: "Volg je resultaten in de loop van de tijd.",
+  getStarted: "Aan de slag",
 };
 
 const pl: Dict = {
@@ -596,6 +628,10 @@ const pl: Dict = {
   "cat.j-avtal": "Umowy",
   "cat.j-samtal": "Nowe rozmowy",
   "cat.j-admin": "Zadania administracyjne",
+  welcomeTitle: "Witaj w Donely",
+  welcomeLine1: "Rejestruj to, co faktycznie robisz.",
+  welcomeLine2: "Śledź swoje wyniki w czasie.",
+  getStarted: "Rozpocznij",
 };
 
 const da: Dict = {
@@ -658,6 +694,10 @@ const da: Dict = {
   "cat.j-avtal": "Kontrakter",
   "cat.j-samtal": "Nye opkald",
   "cat.j-admin": "Adminopgaver",
+  welcomeTitle: "Velkommen til Donely",
+  welcomeLine1: "Registrer det, du faktisk gør.",
+  welcomeLine2: "Følg dine resultater over tid.",
+  getStarted: "Kom i gang",
 };
 
 const no: Dict = {
@@ -720,6 +760,10 @@ const no: Dict = {
   "cat.j-avtal": "Kontrakter",
   "cat.j-samtal": "Nye samtaler",
   "cat.j-admin": "Adminoppgaver",
+  welcomeTitle: "Velkommen til Donely",
+  welcomeLine1: "Registrer det du faktisk gjør.",
+  welcomeLine2: "Følg resultatene dine over tid.",
+  getStarted: "Kom i gang",
 };
 
 const fi: Dict = {
@@ -782,6 +826,10 @@ const fi: Dict = {
   "cat.j-avtal": "Sopimukset",
   "cat.j-samtal": "Uudet puhelut",
   "cat.j-admin": "Hallintotehtävät",
+  welcomeTitle: "Tervetuloa Donelyyn",
+  welcomeLine1: "Kirjaa mitä oikeasti teet.",
+  welcomeLine2: "Seuraa tuloksiasi ajan mittaan.",
+  getStarted: "Aloita",
 };
 
 const ja: Dict = {
@@ -844,6 +892,10 @@ const ja: Dict = {
   "cat.j-avtal": "契約",
   "cat.j-samtal": "新規架電",
   "cat.j-admin": "管理業務",
+  welcomeTitle: "Donely へようこそ",
+  welcomeLine1: "実際に行ったことを記録します。",
+  welcomeLine2: "時間をかけて結果を確認します。",
+  getStarted: "始める",
 };
 
 const resources = {
