@@ -97,9 +97,9 @@ function Installningar() {
           <button
             type="button"
             onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl bg-primary px-3.5 py-2.5 text-left shadow-card transition-transform active:scale-[0.985]"
+            className="w-full rounded-xl bg-primary px-3.5 py-2.5 text-center shadow-card transition-transform active:scale-[0.985]"
           >
-            <span className="flex items-center gap-2 text-[15px] font-semibold leading-[20px] text-primary-foreground">
+            <span className="inline-flex items-center gap-2 text-[15px] font-semibold leading-[20px] text-primary-foreground">
               <Crown className="size-4" />
               {t("startPremiumPrice")}
             </span>
