@@ -252,7 +252,7 @@ function Index() {
 
 function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
+    <p className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">
       {children}
     </p>
   );
