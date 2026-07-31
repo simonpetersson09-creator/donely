@@ -276,25 +276,37 @@ export function reportPurchaseResult(status: PurchaseResultStatus, message?: str
 
 /** How long we wait for the shell to answer before falling back. */
 const ENTITLEMENT_TIMEOUT_MS = 8000;
-const PURCHASE_TIMEOUT_MS = 120000;
+const PRODUCT_TIMEOUT_MS = 15000;
+/** Ask to Buy / SCA can take a while, but never forever. */
+const PURCHASE_TIMEOUT_MS = 180000;
 
-let pendingTimeout: number | null = null;
+const timers: Record<"entitlement" | "product" | "purchase", number | null> = {
+  entitlement: null,
+  product: null,
+  purchase: null,
+};
 
-function clearPendingTimeout() {
-  if (pendingTimeout !== null) {
-    window.clearTimeout(pendingTimeout);
-    pendingTimeout = null;
-  }
+function clearTimer(key: keyof typeof timers) {
+  const id = timers[key];
+  if (id !== null && typeof window !== "undefined") window.clearTimeout(id);
+  timers[key] = null;
 }
 
-function armTimeout(ms: number, onTimeout: () => void) {
-  clearPendingTimeout();
+function armTimer(key: keyof typeof timers, ms: number, onTimeout: () => void) {
+  clearTimer(key);
   if (typeof window === "undefined") return;
-  pendingTimeout = window.setTimeout(() => {
-    pendingTimeout = null;
+  timers[key] = window.setTimeout(() => {
+    timers[key] = null;
     onTimeout();
   }, ms);
 }
+
+/** Cleared whenever the shell answers with an entitlement or a result. */
+function clearPendingTimeout() {
+  clearTimer("entitlement");
+  clearTimer("purchase");
+}
+
 
 /** Tells the shell that the web app is ready to receive entitlement/product. */
 export function notifyBridgeReady() {
