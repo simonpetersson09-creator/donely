@@ -217,10 +217,10 @@ function GoalCard({
   return (
     <article
       className={cn(
-        "rounded-xl border border-border bg-card px-3.5 py-2.5 text-card-foreground shadow-card",
+        "rounded-xl border border-border bg-card px-3.5 py-2 text-card-foreground shadow-card",
       )}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-2">
         <Link
           to="/kategori/$id"
           params={{ id: category.id }}
@@ -229,20 +229,10 @@ function GoalCard({
           <h3 className="truncate text-[12px] font-medium text-card-foreground/70">
             {category.name}
           </h3>
-          <p className="text-[21px] font-bold leading-tight tabular-nums">
-            {goal !== null
-              ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
-              : `${total.toLocaleString("sv-SE")} hittills`}
-          </p>
-          {lastAt && mounted && (
-            <p className="mt-0.5 text-[11px] text-card-foreground/50">
-              Senast {formatDate(lastAt)}
-            </p>
-          )}
         </Link>
         <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-[11px] font-semibold text-primary-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
               <Check className="size-3" /> Uppnått
             </span>
           )}
@@ -259,8 +249,21 @@ function GoalCard({
         </div>
       </div>
 
+      <div className="mt-0.5 flex items-center justify-between gap-2">
+        <p className="min-w-0 truncate text-[20px] font-bold leading-tight tabular-nums">
+          {goal !== null
+            ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
+            : `${total.toLocaleString("sv-SE")} hittills`}
+        </p>
+        {lastAt && mounted && (
+          <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[12px] text-muted-foreground">
+            {formatRelativeDate(lastAt)}
+          </span>
+        )}
+      </div>
+
       {pct !== null && (
-        <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-accent">
+        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">
           <div
             className="h-full rounded-full bg-primary transition-all duration-500"
             style={{ width: `${Math.min(100, pct)}%` }}
@@ -271,8 +274,21 @@ function GoalCard({
   );
 }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("sv-SE", {
+function formatRelativeDate(iso: string) {
+  const date = new Date(iso);
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const startOfDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const diffDays = Math.round(
+    (startOfToday.getTime() - startOfDate.getTime()) / (1000 * 60 * 60 * 24),
+  );
+  const time = date.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+
+  if (diffDays === 0) return `Idag ${time}`;
+  if (diffDays === 1) return `Igår ${time}`;
+  if (diffDays >= 2 && diffDays <= 6) return `För ${diffDays} dagar sedan`;
+
+  return date.toLocaleDateString("sv-SE", {
     day: "numeric",
     month: "long",
     year: "numeric",
