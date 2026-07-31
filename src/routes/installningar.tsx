@@ -4,7 +4,13 @@ import { ChevronLeft, Crown, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
-import { usePremium } from "@/lib/premium";
+import {
+  openManageSubscriptions,
+  purchasePremium,
+  restorePurchase,
+  usePremium,
+} from "@/lib/premium";
+
 
 const APP_STORE_REVIEW_URL =
   "https://apps.apple.com/app/id0000000000?action=write-review";
