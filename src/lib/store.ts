@@ -50,6 +50,24 @@ function write(key: string, value: unknown) {
   }
 }
 
+/** Event fired whenever entries or categories change (used to refresh the weekly notification). */
+export const DATA_CHANGED_EVENT = "donely:data-changed";
+
+function emitDataChanged() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(DATA_CHANGED_EVENT));
+}
+
+/** Synchronous read of the stored categories (non-React callers). */
+export function readStoredCategories(): Category[] {
+  return read<Category[]>(CATS_KEY, DEFAULT_CATEGORIES);
+}
+
+/** Synchronous read of the stored entries (non-React callers). */
+export function readStoredEntries(): Entry[] {
+  return read<Entry[]>(ENTRIES_KEY, []);
+}
+
 export function useCategories() {
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [hydrated, setHydrated] = useState(false);
@@ -76,6 +94,7 @@ export function useCategories() {
     setCategories((prev) => {
       const next = [...prev, category];
       write(CATS_KEY, next);
+      emitDataChanged();
       return next;
     });
     return category;
@@ -85,6 +104,7 @@ export function useCategories() {
     setCategories((prev) => {
       const next = prev.map((c) => (c.id === id ? { ...c, name: name.trim() } : c));
       write(CATS_KEY, next);
+      emitDataChanged();
       return next;
     });
   }, []);
@@ -93,6 +113,7 @@ export function useCategories() {
     setCategories((prev) => {
       const next = prev.filter((c) => c.id !== id);
       write(CATS_KEY, next);
+      emitDataChanged();
       return next;
     });
   }, []);
@@ -115,6 +136,7 @@ export function useEntries() {
         ...prev,
       ];
       write(ENTRIES_KEY, next);
+      emitDataChanged();
       return next;
     });
   }, []);
@@ -123,6 +145,7 @@ export function useEntries() {
     setEntries((prev) => {
       const next = prev.filter((e) => e.id !== id);
       write(ENTRIES_KEY, next);
+      emitDataChanged();
       return next;
     });
   }, []);
@@ -131,6 +154,7 @@ export function useEntries() {
     setEntries((prev) => {
       const next = prev.filter((e) => e.categoryId !== categoryId);
       write(ENTRIES_KEY, next);
+      emitDataChanged();
       return next;
     });
   }, []);
