@@ -22,7 +22,7 @@ export function Paywall({ onClose }: { onClose: () => void }) {
         </button>
 
         <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-card">
-          <Crown className="size-6" />
+          <Crown className="size-6 text-gold" fill="currentColor" />
         </div>
 
         <h2 className="mt-4 text-center text-[22px] font-bold leading-tight tracking-[-0.02em] text-primary">
