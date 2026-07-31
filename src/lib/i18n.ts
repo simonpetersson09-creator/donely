@@ -104,6 +104,9 @@ const sv = {
   getStarted: "Kom igång",
   languageGuideTitle: "Byt språk här.",
   languageGuideBody: "Donely finns på flera språk. Tryck här om du vill ändra språk.",
+  notFoundTitle: "Sidan hittades inte",
+  notFoundBody: "Sidan du letar efter finns inte eller har flyttats.",
+  goHome: "Till startsidan",
 };
 
 type Dict = typeof sv;
@@ -174,6 +177,9 @@ const en: Dict = {
   getStarted: "Get started",
   languageGuideTitle: "Change language here.",
   languageGuideBody: "Donely is available in several languages. Tap here to change.",
+  notFoundTitle: "Page not found",
+  notFoundBody: "The page you're looking for doesn't exist or has been moved.",
+  goHome: "Go to home",
 };
 
 const de: Dict = {
@@ -242,6 +248,9 @@ const de: Dict = {
   getStarted: "Loslegen",
   languageGuideTitle: "Sprache hier ändern",
   languageGuideBody: "Donely ist in mehreren Sprachen verfügbar. Tippe hier, um zu wechseln.",
+  notFoundTitle: "Seite nicht gefunden",
+  notFoundBody: "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+  goHome: "Zur Startseite",
 };
 
 const fr: Dict = {
@@ -310,6 +319,9 @@ const fr: Dict = {
   getStarted: "Commencer",
   languageGuideTitle: "Changez de langue ici.",
   languageGuideBody: "Donely est disponible en plusieurs langues. Appuyez ici pour en changer.",
+  notFoundTitle: "Page introuvable",
+  notFoundBody: "La page que vous cherchez n'existe pas ou a été déplacée.",
+  goHome: "Aller à l'accueil",
 };
 
 const es: Dict = {
@@ -378,6 +390,9 @@ const es: Dict = {
   getStarted: "Empezar",
   languageGuideTitle: "Cambia el idioma aquí.",
   languageGuideBody: "Donely está disponible en varios idiomas. Toca aquí para cambiar.",
+  notFoundTitle: "Página no encontrada",
+  notFoundBody: "La página que buscas no existe o se ha movido.",
+  goHome: "Ir al inicio",
 };
 
 const it: Dict = {
@@ -446,6 +461,9 @@ const it: Dict = {
   getStarted: "Inizia",
   languageGuideTitle: "Cambia lingua qui.",
   languageGuideBody: "Donely è disponibile in diverse lingue. Tocca qui per cambiare.",
+  notFoundTitle: "Pagina non trovata",
+  notFoundBody: "La pagina che cerchi non esiste o è stata spostata.",
+  goHome: "Vai alla home",
 };
 
 const ptBR: Dict = {
@@ -514,6 +532,9 @@ const ptBR: Dict = {
   getStarted: "Começar",
   languageGuideTitle: "Mude o idioma aqui.",
   languageGuideBody: "O Donely está disponível em vários idiomas. Toque aqui para alterar.",
+  notFoundTitle: "Página não encontrada",
+  notFoundBody: "A página que você procura não existe ou foi movida.",
+  goHome: "Ir para o início",
 };
 
 const nl: Dict = {
@@ -582,6 +603,9 @@ const nl: Dict = {
   getStarted: "Aan de slag",
   languageGuideTitle: "Wijzig hier je taal.",
   languageGuideBody: "Donely is beschikbaar in meerdere talen. Tik hier om te wijzigen.",
+  notFoundTitle: "Pagina niet gevonden",
+  notFoundBody: "De pagina die je zoekt bestaat niet of is verplaatst.",
+  goHome: "Naar de startpagina",
 };
 
 const pl: Dict = {
@@ -650,6 +674,9 @@ const pl: Dict = {
   getStarted: "Rozpocznij",
   languageGuideTitle: "Tutaj zmienisz język.",
   languageGuideBody: "Donely jest dostępne w wielu językach. Dotknij tutaj, aby zmienić język.",
+  notFoundTitle: "Nie znaleziono strony",
+  notFoundBody: "Strona, której szukasz, nie istnieje lub została przeniesiona.",
+  goHome: "Przejdź na stronę główną",
 };
 
 const da: Dict = {
@@ -718,6 +745,9 @@ const da: Dict = {
   getStarted: "Kom i gang",
   languageGuideTitle: "Skift sprog her.",
   languageGuideBody: "Donely findes på flere sprog. Tryk her for at skifte.",
+  notFoundTitle: "Siden blev ikke fundet",
+  notFoundBody: "Siden, du leder efter, findes ikke eller er blevet flyttet.",
+  goHome: "Gå til forsiden",
 };
 
 const no: Dict = {
@@ -786,6 +816,9 @@ const no: Dict = {
   getStarted: "Kom i gang",
   languageGuideTitle: "Bytt språk her.",
   languageGuideBody: "Donely er tilgjengelig på flere språk. Trykk her for å endre.",
+  notFoundTitle: "Fant ikke siden",
+  notFoundBody: "Siden du leter etter finnes ikke eller er flyttet.",
+  goHome: "Gå til forsiden",
 };
 
 const fi: Dict = {
@@ -854,6 +887,9 @@ const fi: Dict = {
   getStarted: "Aloita",
   languageGuideTitle: "Vaihda kieltä tästä.",
   languageGuideBody: "Donely on saatavilla useilla kielillä. Napauta tästä vaihtaaksesi.",
+  notFoundTitle: "Sivua ei löytynyt",
+  notFoundBody: "Etsimääsi sivua ei ole olemassa tai se on siirretty.",
+  goHome: "Siirry etusivulle",
 };
 
 const ja: Dict = {
@@ -922,6 +958,9 @@ const ja: Dict = {
   getStarted: "始める",
   languageGuideTitle: "ここで言語を変更",
   languageGuideBody: "Donely は複数の言語に対応しています。ここをタップして切り替えてください。",
+  notFoundTitle: "ページが見つかりません",
+  notFoundBody: "お探しのページは存在しないか、移動されました。",
+  goHome: "ホームに戻る",
 };
 
 const resources = {
