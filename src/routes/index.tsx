@@ -91,6 +91,9 @@ function Index() {
     });
   }
 
+  if (!onboardingHydrated) return null;
+  if (!onboardingSeen) return <Onboarding onStart={markOnboardingSeen} />;
+
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-1 items-center justify-center">
