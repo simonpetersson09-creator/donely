@@ -21,12 +21,14 @@ const CATS_KEY = "vr.categories.v1";
 const ENTRIES_KEY = "vr.entries.v1";
 
 export const DEFAULT_CATEGORIES: Category[] = [
+  { id: "p-traning", name: "Träning", area: "privat" },
+  { id: "p-promenad", name: "Promenad", area: "privat" },
+  { id: "p-meditation", name: "Meditation", area: "privat" },
   { id: "p-bocker", name: "Lästa böcker", area: "privat" },
-  { id: "p-traning", name: "Träningspass", area: "privat" },
-  { id: "p-armhavningar", name: "Armhävningar", area: "privat" },
-  { id: "j-samtal", name: "Nya samtal", area: "jobb" },
   { id: "j-moten", name: "Möten", area: "jobb" },
   { id: "j-avtal", name: "Avtal", area: "jobb" },
+  { id: "j-samtal", name: "Nya samtal", area: "jobb" },
+  { id: "j-admin", name: "Admin-uppgifter", area: "jobb" },
 ];
 
 function read<T>(key: string, fallback: T): T {
@@ -53,7 +55,15 @@ export function useCategories() {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setCategories(read<Category[]>(CATS_KEY, DEFAULT_CATEGORIES));
+    // Seed the default categories once, on the very first app start. After that the
+    // stored list is authoritative, so removed defaults never come back.
+    const stored = read<Category[] | null>(CATS_KEY, null);
+    if (stored === null) {
+      write(CATS_KEY, DEFAULT_CATEGORIES);
+      setCategories(DEFAULT_CATEGORIES);
+    } else {
+      setCategories(stored);
+    }
     setHydrated(true);
   }, []);
 
