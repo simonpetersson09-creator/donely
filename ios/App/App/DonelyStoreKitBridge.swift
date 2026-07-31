@@ -252,3 +252,78 @@ extension DonelyStoreKitBridge: WKScriptMessageHandler {
         }
     }
 }
+
+// MARK: - Local 7-day trial
+
+/// First-launch trial clock. The start date is written to the Keychain so the
+/// trial cannot be reset by deleting and reinstalling the app, with a
+/// UserDefaults mirror for fast reads.
+enum TrialClock {
+    static let trialDays = 7
+    private static let key = "app.donely.trial.start"
+
+    static func daysLeft() -> Int {
+        let start = startDate()
+        let end = start.addingTimeInterval(Double(trialDays) * 86_400)
+        let seconds = end.timeIntervalSinceNow
+        return max(0, Int(ceil(seconds / 86_400)))
+    }
+
+    private static func startDate() -> Date {
+        if let stored = readKeychain() ?? readDefaults() {
+            writeDefaults(stored)
+            writeKeychain(stored)
+            return stored
+        }
+        let now = Date()
+        writeDefaults(now)
+        writeKeychain(now)
+        return now
+    }
+
+    // UserDefaults mirror
+
+    private static func readDefaults() -> Date? {
+        let value = UserDefaults.standard.double(forKey: key)
+        return value > 0 ? Date(timeIntervalSince1970: value) : nil
+    }
+
+    private static func writeDefaults(_ date: Date) {
+        UserDefaults.standard.set(date.timeIntervalSince1970, forKey: key)
+    }
+
+    // Keychain (survives reinstall)
+
+    private static func query() -> [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "app.donely.mobile",
+            kSecAttrAccount as String: key,
+        ]
+    }
+
+    private static func readKeychain() -> Date? {
+        var q = query()
+        q[kSecReturnData as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        guard SecItemCopyMatching(q as CFDictionary, &item) == errSecSuccess,
+              let data = item as? Data,
+              let string = String(data: data, encoding: .utf8),
+              let seconds = Double(string) else { return nil }
+        return Date(timeIntervalSince1970: seconds)
+    }
+
+    private static func writeKeychain(_ date: Date) {
+        guard let data = String(date.timeIntervalSince1970).data(using: .utf8) else { return }
+        let q = query()
+        if SecItemCopyMatching(q as CFDictionary, nil) == errSecSuccess {
+            SecItemUpdate(q as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        } else {
+            var add = q
+            add[kSecValueData as String] = data
+            add[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+            SecItemAdd(add as CFDictionary, nil)
+        }
+    }
+}
