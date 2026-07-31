@@ -284,3 +284,49 @@ center.add(request)                  // samma id ⇒ ersätter, aldrig dubblette
 - Utan iOS-skal finns ingen riktig schemaläggning: JS beräknar och visar nästa
   fredag 17:00 lokalt och använder webbens `Notification` för testnotisen medan
   fliken är öppen. All faktisk leverans sker via StoreKit-oberoende `UNUserNotificationCenter` i Swift.
+
+## 10. Lokal datalagring – integritet, backup och migrering
+
+All användardata lagras i appens `localStorage` (WKWebView-lagringen för
+Donely-appen, dvs. inuti appens sandlåda och med i iCloud-/enhetsbackup).
+`src/lib/persistence.ts` är enda skrivaren.
+
+### Nycklar
+| Nyckel | Innehåll |
+| --- | --- |
+| `vr.categories.v1` | Kategorier (`id`, `name`, `area`) |
+| `vr.entries.v1` | Aktiviteter (`id`, `area`, `categoryId`, `categoryName`, `amount`, `createdAt`) |
+| `vr.goals.v1` | Årsmål, nyckel `${år}:${kategoriId}` |
+| `vr.onboarding.v1`, `vr.langGuide.v1`, `vr.reminderPrompt.v1` | Inställningsflaggor |
+| `vr.lang.v1` | Valt språk |
+| `vr.schemaVersion.v1` | Schemaversion (nu `1`) |
+| `vr.backups.v1` | De tre senaste snapshotarna |
+| `<nyckel>.writing` | Write-ahead-journal, finns bara under en pågående skrivning |
+| `vr.trial.v1`, `vr.premium.v1` | Premium/dev-fallback – ingår **aldrig** i backup eller export |
+
+### Skydd
+- **Ingen automatisk nollställning.** Standardkategorier skrivs bara när
+  kategorier, aktiviteter, mål, schemaversion och backuper alla saknas.
+  Tom array, `null`, `undefined` eller läsfel tolkas aldrig som återställning.
+- **Atomiska skrivningar.** Validering (zod) → journal → skrivning → återläsning
+  → journal bort. Misslyckas något återställs de tidigare byten.
+  `writeTransaction` commitar flera nycklar som en enhet med rollback.
+- **Migreringar.** `MIGRATIONS` är versionsstyrd, körs en gång i stigande
+  ordning, tar backup först, validerar resultatet och rullar tillbaka vid fel.
+  Migreringar får aldrig radera data eller byta id.
+- **Backup.** Snapshot (aktiviteter, kategorier, mål, inställningar,
+  schemaVersion, timestamp) tas före migrering, import, radering av kategori,
+  radering av aktivitet och "Ta bort all data". De tre senaste behålls.
+- **Startvalidering.** `initializeStorage()` körs en gång i `__root`; korrupt
+  data återställs från senaste giltiga backup, annars behålls de trasiga byten
+  och `DataIntegrityNotice` erbjuder export eller återställning.
+- **Import.** Hela filen valideras (inkl. att varje aktivitet pekar på en
+  befintlig kategori), backup tas, sedan commit; fel rullas tillbaka. Premium
+  ignoreras.
+- **Stabila id:n.** Id genereras en gång (`crypto.randomUUID()` / prefixat
+  kategori-id) och ändras aldrig vid start, import, migrering, namnbyte eller
+  språkbyte.
+- **Premium ≠ data.** Utgången eller overifierad premium låser bara redigering.
+
+### Tester
+`bun run test` (Vitest) – 24 tester i `src/lib/persistence.test.ts`.
