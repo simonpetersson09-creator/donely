@@ -153,6 +153,14 @@ function Statistik() {
         </p>
       </div>
 
+      <Link
+        to="/veckostatistik"
+        className="mt-2 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+      >
+        {t("weeklySummaryLink")}
+        <ChevronRight className="size-4 text-muted-foreground" />
+      </Link>
+
       <Section
         title={t("private")}
         icon={<Home className="size-5" />}
