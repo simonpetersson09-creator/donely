@@ -588,15 +588,17 @@ function LanguageGuideBubble({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   return (
+    // pointer-events-none so the bubble never blocks the primary Register button
+    // underneath it; only the × needs to be clickable.
     <div
       ref={ref}
-      className="absolute bottom-full right-0 z-50 mb-3 w-56 origin-bottom-right rounded-2xl border border-border bg-card p-3.5 shadow-card animate-in fade-in zoom-in-95 duration-200"
+      className="pointer-events-none absolute bottom-full right-0 z-50 mb-3 w-56 origin-bottom-right rounded-2xl border border-border bg-card p-3.5 shadow-card animate-in fade-in zoom-in-95 duration-200"
     >
       <button
         type="button"
         onClick={onClose}
         aria-label={t("close")}
-        className="absolute right-2 top-2 rounded-full p-1 text-card-foreground/50 transition-colors active:bg-secondary"
+        className="pointer-events-auto absolute right-2 top-2 rounded-full p-1 text-card-foreground/50 transition-colors active:bg-secondary"
       >
         <X className="size-3.5" />
       </button>
