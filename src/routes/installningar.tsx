@@ -178,13 +178,13 @@ function Installningar() {
                 toast.error(t("legalOpenError"));
               }
             }}
-            className="mb-2 flex w-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-3 shadow-card transition-colors active:bg-accent"
+            className="relative mb-2 flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 shadow-card transition-colors active:bg-accent"
           >
             <span className="flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary">
               <FileText className="size-[18px]" />
               {t("legalRow")}
             </span>
-            <ChevronRight className="size-4 text-muted-foreground" />
+            <ChevronRight className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           </button>
 
           <div className="grid grid-cols-2 gap-2">
