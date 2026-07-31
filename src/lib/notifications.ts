@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import i18n, { localeOf } from "@/lib/i18n";
+import { DATA_CHANGED_EVENT } from "@/lib/store";
+import { weeklyNotificationContent } from "@/lib/weekly-summary";
 
 /**
  * Weekly local reminder for Donely — Fridays 17:00 in the *device's* local
@@ -207,16 +209,20 @@ function parsePayload<T>(value: unknown): T | null {
 }
 
 // ---------------------------------------------------------------------------
-// notification text (always in the user's currently selected Donely language)
+// notification text
 // ---------------------------------------------------------------------------
 
+/**
+ * The notification body is a summary of the *current* week, so it is rebuilt
+ * from the stored entries every time we schedule. Written in the language the
+ * user has selected inside Donely.
+ */
 function notificationText(language: string) {
-  const fixed = i18n.getFixedT(language);
-  return {
-    title: fixed("reminderNotifTitle"),
-    body: fixed("reminderNotifBody"),
-  };
+  return weeklyNotificationContent(language);
 }
+
+/** Route the iOS shell should open when the user taps the reminder. */
+export const REMINDER_ROUTE = "/veckostatistik";
 
 // ---------------------------------------------------------------------------
 // persistence
@@ -333,6 +339,7 @@ export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
     body,
     language,
     timeZone,
+    route: REMINDER_ROUTE,
   });
 
   setState({
