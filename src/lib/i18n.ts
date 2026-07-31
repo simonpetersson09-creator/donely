@@ -23,7 +23,7 @@ export const LANGUAGES: { code: LanguageCode; label: string; flag: string; local
   { code: "fr", label: "Français", flag: "🇫🇷", locale: "fr-FR", short: "FR" },
   { code: "es", label: "Español", flag: "🇪🇸", locale: "es-ES", short: "ES" },
   { code: "it", label: "Italiano", flag: "🇮🇹", locale: "it-IT", short: "IT" },
-  { code: "pt-BR", label: "Português (Brasil)", flag: "🇵🇹", locale: "pt-BR", short: "BR" },
+  { code: "pt-BR", label: "Português (Brasil)", flag: "🇧🇷", locale: "pt-BR", short: "BR" },
   { code: "nl", label: "Nederlands", flag: "🇳🇱", locale: "nl-NL", short: "NL" },
   { code: "pl", label: "Polski", flag: "🇵🇱", locale: "pl-PL", short: "PL" },
   { code: "da", label: "Dansk", flag: "🇩🇰", locale: "da-DK", short: "DK" },

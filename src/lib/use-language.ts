@@ -9,7 +9,7 @@ import i18n, {
 } from "@/lib/i18n";
 import { DEFAULT_CATEGORIES } from "@/lib/store";
 
-const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
+const DEFAULT_NAMES = new Map(DEFAULT_CATEGORIES.map((c) => [c.id, c.name]));
 
 /** Applies the stored/device language after hydration and exposes the switcher API. */
 export function useLanguage() {
@@ -38,12 +38,18 @@ export function useLocale() {
   return localeOf(instance.language ?? "sv");
 }
 
-/** Default categories are translated; user-created ones keep their own name. */
+/**
+ * Default categories are translated; user-created ones — and defaults the user has
+ * renamed — keep their own name.
+ */
 export function categoryLabel(
   t: (key: string) => string,
   category: { id: string; name: string },
 ) {
-  return DEFAULT_IDS.has(category.id) ? t(`cat.${category.id}`) : category.name;
+  const original = DEFAULT_NAMES.get(category.id);
+  return original !== undefined && original === category.name
+    ? t(`cat.${category.id}`)
+    : category.name;
 }
 
 export { i18n };
