@@ -12,6 +12,11 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    // Emit dist/client/.vite/manifest.json so the Capacitor post-build step can
+    // generate a static index.html even if no server bundle is available.
+    build: { manifest: true },
+  },
 });
 
 
