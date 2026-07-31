@@ -227,9 +227,14 @@ function GoalCard({
             </span>
           )}
           {showGoalCta && (
-            <span className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary">
+            <button
+              type="button"
+              aria-label={`Ändra årsmål för ${category.name}`}
+              onClick={() => onSetGoal(category)}
+              className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
+            >
               <Pencil className="size-3" />
-            </span>
+            </button>
           )}
         </div>
       </div>
