@@ -85,29 +85,17 @@ function Installningar() {
           {(premium.subscribed || premium.inTrial) && (
             <div className="absolute -right-14 -top-14 z-10 rotate-[6deg]">
               <div className="relative rounded-full border border-primary bg-background px-4 py-3 shadow-card">
-                <p className="text-center text-[11px] font-semibold leading-[14px] text-primary">
+                <p className="max-w-[9rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
                   {premium.subscribed ? (
                     <span className="inline-flex items-center gap-1">
                       <Crown className="size-3 text-gold" fill="currentColor" />
                       {t("premiumActive")}
                     </span>
                   ) : (
-                    (() => {
-                      const text = t("trialLeft", { count: premium.trialDaysLeft });
-                      const parts = text.split(/kvar\s*/);
-                      if (parts.length === 2) {
-                        return (
-                          <>
-                            {parts[0]}kvar
-                            <br />
-                            {parts[1]}
-                          </>
-                        );
-                      }
-                      return text;
-                    })()
+                    t("trialLeft", { count: premium.trialDaysLeft })
                   )}
                 </p>
+
                 <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
               </div>
             </div>
