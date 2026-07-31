@@ -76,8 +76,8 @@ function Installningar() {
       <div className="flex flex-1 items-center justify-center py-6">
         <div className="relative">
           {!premium.subscribed && !premium.trialExpired && (
-            <div className="absolute -right-2 -top-20 z-10 rotate-[-6deg]">
-              <div className="relative rounded-full border border-border bg-card px-4 py-3 shadow-card">
+            <div className="absolute -right-1 -top-14 z-10 rotate-[6deg]">
+              <div className="relative rounded-full border border-primary bg-background px-4 py-3 shadow-card">
                 <p className="text-center text-[11px] font-semibold leading-[14px] text-primary">
                   {(() => {
                     const text = t("trialLeft", { count: premium.trialDaysLeft });
@@ -94,7 +94,7 @@ function Installningar() {
                     return text;
                   })()}
                 </p>
-                <div className="absolute -bottom-1.5 left-4 h-3 w-3 rotate-45 border-b border-right border-border bg-card" />
+                <div className="absolute -bottom-1.5 left-5 h-3 w-3 rotate-45 border-b border-r border-primary bg-background" />
               </div>
             </div>
           )}
