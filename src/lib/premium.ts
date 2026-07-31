@@ -220,6 +220,7 @@ export function setEntitlement(payload: EntitlementPayload | string) {
 
 /** Called by the iOS shell with the fetched StoreKit product (or null). */
 export function setProduct(product: StoreProduct | string | null) {
+  clearTimer("product");
   let data: Partial<StoreProduct> | null = null;
   if (typeof product === "string") {
     try {
