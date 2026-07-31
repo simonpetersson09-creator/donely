@@ -1,31 +1,89 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 
 /**
- * Subscription state for Donely.
+ * Central subscription state for Donely.
  *
- * The web/PWA build uses localStorage as a development fallback so the UI can be
- * tested without StoreKit. When the app runs inside the iOS shell, the native
- * bridge is the only source of truth: localStorage trial/premium keys are
- * ignored and the iOS side pushes the current entitlement via
- * `window.__donelySetEntitlement(...)`.
+ * SOURCE OF TRUTH
+ * ---------------
+ * In the iOS build, StoreKit 2 (through the native bridge) is the ONLY source
+ * of truth for trial, remaining trial days, price and subscription status.
+ * The app never grants or extends Premium on its own.
+ *
+ * The localStorage fallback exists purely so the UI can be exercised in the
+ * web preview / development build. It is compiled out unless
+ * `import.meta.env.DEV` is true or `VITE_ALLOW_LOCAL_PREMIUM=true` is set.
+ *
+ * NATIVE BRIDGE (implemented on the Swift side, see APPSTORE.md)
+ * -------------------------------------------------------------
+ * JS -> Swift (webkit.messageHandlers):
+ *   requestEntitlement  {}                                → send entitlement
+ *   requestProduct      {product}                          → send product info
+ *   purchasePremium     {product}                          → start StoreKit purchase
+ *   restorePurchase     {}                                 → AppStore.sync()
+ *   manageSubscription  {}                                 → showManageSubscriptions
+ *
+ * Swift -> JS (globals installed below):
+ *   window.__donelySetEntitlement({subscribed, inTrial, trialDaysLeft})
+ *   window.__donelySetProduct({displayPrice, id} | null)
+ *   window.__donelyPurchaseResult(status, message?)
  */
 
 const TRIAL_KEY = "vr.trial.v1";
 const PREMIUM_KEY = "vr.premium.v1";
 
 export const TRIAL_DAYS = 7;
-export const PRICE_LABEL = "29 kr/månad";
+export const PRODUCT_ID = "donely.premium.monthly";
+
+/** Fallback price shown only until StoreKit reports the real localized price. */
+export const FALLBACK_PRICE = "29 kr";
+
+/**
+ * The localStorage trial/premium fallback is development-only. In a production
+ * build it is disabled, so no user can grant themselves Premium locally.
+ */
+export const LOCAL_FALLBACK_ENABLED: boolean =
+  import.meta.env.DEV || import.meta.env.VITE_ALLOW_LOCAL_PREMIUM === "true";
+
+export type PremiumStatus = "loading" | "trial" | "subscribed" | "expired";
+
+export type PurchasePhase = "idle" | "loadingProduct" | "purchasing" | "restoring";
+
+export type PurchaseResultStatus =
+  | "success"
+  | "cancelled"
+  | "failed"
+  | "productUnavailable"
+  | "restored"
+  | "nothingToRestore"
+  | "pending";
+
+export type ProductStatus = "idle" | "loading" | "loaded" | "unavailable";
+
+export type StoreProduct = {
+  id: string;
+  /** StoreKit `product.displayPrice`, already localized with currency. */
+  displayPrice: string;
+};
 
 export type PremiumState = {
+  status: PremiumStatus;
+  /** True until StoreKit (or the dev fallback) has reported a status. */
+  loading: boolean;
   /** Registration and editing allowed. */
   active: boolean;
-  /** True while the free 7-day trial is running. */
   inTrial: boolean;
   trialDaysLeft: number;
   trialExpired: boolean;
-  /** Paid, auto-renewable subscription is active. */
   subscribed: boolean;
   hydrated: boolean;
+  /** Purchase / restore flow state. */
+  phase: PurchasePhase;
+  /** True while a purchase or restore is running — disable buy buttons. */
+  busy: boolean;
+  lastResult: PurchaseResultStatus | null;
+  lastMessage: string | null;
+  product: StoreProduct | null;
+  productStatus: ProductStatus;
 };
 
 export type EntitlementPayload = {
@@ -34,45 +92,60 @@ export type EntitlementPayload = {
   trialDaysLeft: number;
 };
 
-// --- local fallback (web/PWA development only) ---
+// ---------------------------------------------------------------------------
+// store
+// ---------------------------------------------------------------------------
 
-function trialStart(): number {
-  if (typeof window === "undefined") return Date.now();
-  const raw = window.localStorage.getItem(TRIAL_KEY);
-  const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN;
-  if (Number.isFinite(parsed)) return parsed;
-  const now = Date.now();
-  try {
-    window.localStorage.setItem(TRIAL_KEY, String(now));
-  } catch {
-    /* ignore */
-  }
-  return now;
+const initial: PremiumState = {
+  status: "loading",
+  loading: true,
+  active: false,
+  inTrial: false,
+  trialDaysLeft: 0,
+  trialExpired: false,
+  subscribed: false,
+  hydrated: false,
+  phase: "idle",
+  busy: false,
+  lastResult: null,
+  lastMessage: null,
+  product: null,
+  productStatus: "idle",
+};
+
+let state: PremiumState = initial;
+const listeners = new Set<() => void>();
+
+function setState(patch: Partial<PremiumState>) {
+  state = { ...state, ...patch };
+  for (const l of listeners) l();
 }
 
-function isSubscribedLocal(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.localStorage.getItem(PREMIUM_KEY) === "1";
+function getSnapshot() {
+  return state;
 }
 
-function daysLeft(start: number) {
-  const end = start + TRIAL_DAYS * 24 * 60 * 60 * 1000;
-  return Math.max(0, Math.ceil((end - Date.now()) / (24 * 60 * 60 * 1000)));
+function subscribe(cb: () => void) {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
 }
 
-function computeLocal(): Omit<PremiumState, "hydrated"> {
-  const left = daysLeft(trialStart());
-  const subscribed = isSubscribedLocal();
-  return {
-    subscribed,
-    inTrial: !subscribed && left > 0,
-    trialDaysLeft: left,
-    trialExpired: left === 0,
-    active: subscribed || left > 0,
-  };
+// purchase result events (for toasts)
+type PurchaseEvent = { status: PurchaseResultStatus; message?: string };
+const eventListeners = new Set<(e: PurchaseEvent) => void>();
+
+export function subscribePurchaseEvents(cb: (e: PurchaseEvent) => void) {
+  eventListeners.add(cb);
+  return () => eventListeners.delete(cb);
 }
 
-// --- native bridge ---
+function emitPurchaseEvent(e: PurchaseEvent) {
+  for (const l of eventListeners) l(e);
+}
+
+// ---------------------------------------------------------------------------
+// native bridge
+// ---------------------------------------------------------------------------
 
 type NativeBridge = {
   webkit?: {
@@ -85,171 +158,187 @@ function nativeHandler(name: string) {
   return (window as unknown as NativeBridge).webkit?.messageHandlers?.[name];
 }
 
-let nativeBridgeAvailable = false;
-let nativeEntitlement: EntitlementPayload | null = null;
+export function hasNativeBridge(): boolean {
+  return !!nativeHandler("purchasePremium");
+}
 
-function detectNativeBridge() {
-  nativeBridgeAvailable = !!nativeHandler("purchasePremium");
+function applyEntitlement(payload: EntitlementPayload) {
+  const subscribed = !!payload.subscribed;
+  const inTrial = !subscribed && !!payload.inTrial;
+  const trialDaysLeft = Math.max(0, Math.floor(payload.trialDaysLeft ?? 0));
+  const active = subscribed || inTrial;
+  setState({
+    subscribed,
+    inTrial,
+    trialDaysLeft,
+    trialExpired: !subscribed && !inTrial,
+    active,
+    hydrated: true,
+    loading: false,
+    status: subscribed ? "subscribed" : inTrial ? "trial" : "expired",
+  });
+}
+
+/** Called by the iOS shell with the current StoreKit entitlement. */
+export function setEntitlement(payload: EntitlementPayload) {
+  applyEntitlement(payload);
+}
+
+/** Called by the iOS shell with the fetched StoreKit product (or null). */
+export function setProduct(product: StoreProduct | null) {
+  setState({
+    product,
+    productStatus: product ? "loaded" : "unavailable",
+  });
 }
 
 /**
- * Called by the iOS shell to report the current StoreKit entitlement.
- * This is the single source of truth when the app runs as an iOS app.
+ * Called by the iOS shell when a purchase or restore finishes.
+ * `status` is one of PurchaseResultStatus; `message` is an optional
+ * already-localized detail from StoreKit.
  */
-export function setEntitlement(payload: EntitlementPayload) {
-  nativeBridgeAvailable = true;
-  nativeEntitlement = payload;
-  notify();
+export function reportPurchaseResult(status: PurchaseResultStatus, message?: string) {
+  if (status === "pending") {
+    setState({ phase: "idle", busy: false, lastResult: status, lastMessage: message ?? null });
+    emitPurchaseEvent({ status, message });
+    return;
+  }
+  setState({ phase: "idle", busy: false, lastResult: status, lastMessage: message ?? null });
+  emitPurchaseEvent({ status, message });
+  // Ask for a fresh entitlement after a successful purchase/restore.
+  if (status === "success" || status === "restored") requestEntitlement();
 }
 
 if (typeof window !== "undefined") {
-  (
-    window as unknown as { __donelySetEntitlement?: typeof setEntitlement }
-  ).__donelySetEntitlement = setEntitlement;
+  const w = window as unknown as {
+    __donelySetEntitlement?: typeof setEntitlement;
+    __donelySetProduct?: typeof setProduct;
+    __donelyPurchaseResult?: typeof reportPurchaseResult;
+  };
+  w.__donelySetEntitlement = setEntitlement;
+  w.__donelySetProduct = setProduct;
+  w.__donelyPurchaseResult = reportPurchaseResult;
 }
 
-// --- state computation ---
+// ---------------------------------------------------------------------------
+// development fallback (never active in production builds)
+// ---------------------------------------------------------------------------
 
-function compute(): Omit<PremiumState, "hydrated"> {
-  detectNativeBridge();
-
-  if (nativeBridgeAvailable) {
-    if (nativeEntitlement) {
-      return {
-        ...nativeEntitlement,
-        active: nativeEntitlement.subscribed || nativeEntitlement.inTrial,
-        trialExpired: nativeEntitlement.trialDaysLeft === 0,
-      };
-    }
-    // Waiting for the iOS shell to report StoreKit status. Stay locked.
-    return {
-      subscribed: false,
-      inTrial: false,
-      trialDaysLeft: 0,
-      trialExpired: true,
-      active: false,
-    };
-  }
-
-  // Web/PWA development fallback.
-  return computeLocal();
-}
-
-const listeners = new Set<() => void>();
-function notify() {
-  for (const l of listeners) l();
-}
-
-/**
- * Returns true when the user is allowed to perform mutating actions
- * (register, create/edit/rename categories, set/remove goals, delete data).
- * While the state is still hydrating we default to allowed so the UI
- * does not flash-lock on app start.
- */
-export function canMutate(state: PremiumState): boolean {
-  return !state.hydrated || state.active;
-}
-
-// --- local fallback helpers (not exported, only used when there is no iOS shell) ---
-
-function activateSubscriptionLocal() {
+function localTrialStart(): number {
+  const raw = window.localStorage.getItem(TRIAL_KEY);
+  const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN;
+  if (Number.isFinite(parsed)) return parsed;
+  const now = Date.now();
   try {
-    window.localStorage.setItem(PREMIUM_KEY, "1");
+    window.localStorage.setItem(TRIAL_KEY, String(now));
   } catch {
     /* ignore */
   }
-  notify();
+  return now;
 }
 
-function deactivateSubscriptionLocal() {
-  try {
-    window.localStorage.removeItem(PREMIUM_KEY);
-  } catch {
-    /* ignore */
+function localDaysLeft(start: number) {
+  const end = start + TRIAL_DAYS * 24 * 60 * 60 * 1000;
+  return Math.max(0, Math.ceil((end - Date.now()) / (24 * 60 * 60 * 1000)));
+}
+
+function refreshLocalFallback() {
+  const subscribed = window.localStorage.getItem(PREMIUM_KEY) === "1";
+  const left = localDaysLeft(localTrialStart());
+  applyEntitlement({ subscribed, inTrial: !subscribed && left > 0, trialDaysLeft: left });
+  if (state.productStatus === "idle") {
+    setProduct({ id: PRODUCT_ID, displayPrice: FALLBACK_PRICE });
   }
-  notify();
 }
 
-export function usePremium() {
-  const [state, setState] = useState<PremiumState>({
-    active: true,
-    inTrial: true,
-    trialDaysLeft: TRIAL_DAYS,
-    trialExpired: false,
-    subscribed: false,
-    hydrated: false,
-  });
+// ---------------------------------------------------------------------------
+// actions
+// ---------------------------------------------------------------------------
 
-  const refresh = useCallback(() => {
-    setState({ ...compute(), hydrated: true });
-  }, []);
+export function requestEntitlement() {
+  const handler = nativeHandler("requestEntitlement");
+  if (handler) {
+    handler.postMessage({});
+    return;
+  }
+  if (LOCAL_FALLBACK_ENABLED && typeof window !== "undefined") {
+    refreshLocalFallback();
+    return;
+  }
+  // Production web build without an iOS shell: nothing can be verified,
+  // so premium features stay locked.
+  applyEntitlement({ subscribed: false, inTrial: false, trialDaysLeft: 0 });
+}
 
-  useEffect(() => {
-    refresh();
-    listeners.add(refresh);
-    detectNativeBridge();
+/** Asks StoreKit for the product so the real localized price can be shown. */
+export function loadProduct() {
+  if (state.productStatus === "loading") return;
+  const handler = nativeHandler("requestProduct");
+  if (handler) {
+    setState({ productStatus: "loading", phase: "loadingProduct" });
+    handler.postMessage({ product: PRODUCT_ID });
+    // Swift replies with __donelySetProduct(...)
+    setState({ phase: "idle" });
+    return;
+  }
+  if (LOCAL_FALLBACK_ENABLED) {
+    setProduct({ id: PRODUCT_ID, displayPrice: FALLBACK_PRICE });
+    return;
+  }
+  setProduct(null);
+}
 
-    if (nativeBridgeAvailable) {
-      // Ask the iOS shell to send the current entitlement on mount.
-      const request = nativeHandler("requestEntitlement");
-      if (request) request.postMessage({});
-    } else {
-      // Web/PWA fallback: tick while the app is open so the countdown
-      // reaches 0 on its own.
-      const timer = window.setInterval(refresh, 60 * 1000);
-      const onVisible = () => {
-        if (document.visibilityState === "visible") refresh();
-      };
-      document.addEventListener("visibilitychange", onVisible);
-      window.addEventListener("focus", refresh);
-      window.addEventListener("storage", refresh);
-      return () => {
-        window.clearInterval(timer);
-        document.removeEventListener("visibilitychange", onVisible);
-        window.removeEventListener("focus", refresh);
-        window.removeEventListener("storage", refresh);
-        listeners.delete(refresh);
-      };
+/** Starts Apple's purchase flow. Never grants Premium by itself. */
+export function purchasePremium() {
+  if (state.busy) return;
+  const handler = nativeHandler("purchasePremium");
+  if (handler) {
+    if (state.productStatus === "unavailable") {
+      emitPurchaseEvent({ status: "productUnavailable" });
+      return;
     }
+    setState({ phase: "purchasing", busy: true, lastResult: null, lastMessage: null });
+    handler.postMessage({ product: PRODUCT_ID });
+    return;
+  }
+  if (LOCAL_FALLBACK_ENABLED) {
+    setState({ phase: "purchasing", busy: true });
+    try {
+      window.localStorage.setItem(PREMIUM_KEY, "1");
+    } catch {
+      /* ignore */
+    }
+    window.setTimeout(() => {
+      refreshLocalFallback();
+      reportPurchaseResult("success");
+    }, 400);
+    return;
+  }
+  emitPurchaseEvent({ status: "productUnavailable" });
+}
 
-    return () => {
-      listeners.delete(refresh);
-    };
-  }, [refresh]);
-
-  return { ...state, refresh };
+/** Syncs with Apple and verifies the entitlement. */
+export function restorePurchase() {
+  if (state.busy) return;
+  const handler = nativeHandler("restorePurchase");
+  if (handler) {
+    setState({ phase: "restoring", busy: true, lastResult: null, lastMessage: null });
+    handler.postMessage({});
+    return;
+  }
+  if (LOCAL_FALLBACK_ENABLED) {
+    setState({ phase: "restoring", busy: true });
+    window.setTimeout(() => {
+      const found = window.localStorage.getItem(PREMIUM_KEY) === "1";
+      refreshLocalFallback();
+      reportPurchaseResult(found ? "restored" : "nothingToRestore");
+    }, 400);
+    return;
+  }
+  emitPurchaseEvent({ status: "nothingToRestore" });
 }
 
 export const MANAGE_SUBSCRIPTIONS_URL = "https://apps.apple.com/account/subscriptions";
-
-/**
- * Starts the purchase flow. In the iOS shell this hands over to StoreKit 2
- * and the iOS side later calls `setEntitlement()` with the result. In the
- * web/PWA build the entitlement is granted locally so the UI can be tested.
- */
-export function purchasePremium(): boolean {
-  const handler = nativeHandler("purchasePremium");
-  if (handler) {
-    handler.postMessage({ product: "donely.premium.monthly" });
-    return false;
-  }
-  activateSubscriptionLocal();
-  return true;
-}
-
-/**
- * Restores a previous purchase. In the iOS shell this hands over to StoreKit 2.
- * In the web/PWA build it only checks the local fallback flag.
- */
-export function restorePurchase(): boolean {
-  const handler = nativeHandler("restorePurchase");
-  if (handler) {
-    handler.postMessage({});
-    return false;
-  }
-  notify();
-  return isSubscribedLocal();
-}
 
 /** Opens Apple's subscription management screen. */
 export function openManageSubscriptions() {
@@ -259,4 +348,71 @@ export function openManageSubscriptions() {
     return;
   }
   window.open(MANAGE_SUBSCRIPTIONS_URL, "_blank", "noopener");
+}
+
+// ---------------------------------------------------------------------------
+// access control
+// ---------------------------------------------------------------------------
+
+/**
+ * Single gate for every mutating action: registering activities, creating /
+ * renaming / deleting categories and setting or removing yearly goals.
+ * Reading history, statistics, navigation, rating, restore and subscription
+ * management are never gated.
+ *
+ * While the status is still loading this returns false, so nothing is granted
+ * before StoreKit has answered. Callers should check `state.loading` first and
+ * show the loading message instead of the paywall.
+ */
+export function canMutate(state: PremiumState): boolean {
+  return state.status === "trial" || state.status === "subscribed";
+}
+
+// ---------------------------------------------------------------------------
+// hook
+// ---------------------------------------------------------------------------
+
+export function usePremium() {
+  const snapshot = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+
+  const refresh = useCallback(() => {
+    requestEntitlement();
+  }, []);
+
+  useEffect(() => {
+    requestEntitlement();
+    if (state.productStatus === "idle") loadProduct();
+
+    if (hasNativeBridge()) {
+      const onVisible = () => {
+        if (document.visibilityState === "visible") requestEntitlement();
+      };
+      document.addEventListener("visibilitychange", onVisible);
+      return () => document.removeEventListener("visibilitychange", onVisible);
+    }
+
+    if (!LOCAL_FALLBACK_ENABLED) return;
+    // Dev fallback: tick so the trial countdown reaches 0 on its own.
+    const timer = window.setInterval(refreshLocalFallback, 60 * 1000);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refreshLocalFallback();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("focus", refreshLocalFallback);
+    window.addEventListener("storage", refreshLocalFallback);
+    return () => {
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("focus", refreshLocalFallback);
+      window.removeEventListener("storage", refreshLocalFallback);
+    };
+  }, []);
+
+  return { ...snapshot, refresh };
+}
+
+/** Price to interpolate into i18next strings as {{price}}. */
+export function usePrice(): string {
+  const { product } = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+  return product?.displayPrice ?? FALLBACK_PRICE;
 }
