@@ -342,7 +342,9 @@ export function restorePurchase() {
   if (LOCAL_FALLBACK_ENABLED) {
     setState({ phase: "restoring", busy: true });
     window.setTimeout(() => {
-      const found = window.localStorage.getItem(PREMIUM_KEY) === "1";
+      const found = bridgeControlled
+        ? state.subscribed
+        : window.localStorage.getItem(PREMIUM_KEY) === "1";
       refreshLocalFallback();
       reportPurchaseResult(found ? "restored" : "nothingToRestore");
     }, 400);
