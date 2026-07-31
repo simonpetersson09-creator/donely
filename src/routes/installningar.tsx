@@ -166,6 +166,21 @@ function Installningar() {
         </section>
 
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+            {t("aboutApp")}
+          </p>
+
+          <Link
+            to="/integritet"
+            className="mb-2 flex w-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-3 shadow-card transition-colors active:bg-accent"
+          >
+            <span className="flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary">
+              <FileText className="size-[18px]" />
+              {t("legalRow")}
+            </span>
+            <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
+
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
