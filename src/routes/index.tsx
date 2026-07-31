@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Bell,
   Briefcase,
   Check,
   ChevronDown,
@@ -21,6 +22,7 @@ import {
   useGoals,
   useOnboarding,
   useLanguageGuide,
+  useReminderPrompt,
   DEFAULT_CATEGORIES,
   type Area,
 } from "@/lib/store";
@@ -29,6 +31,7 @@ import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";
+import { useReminder } from "@/lib/notifications";
 
 const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
 
@@ -73,6 +76,13 @@ function Index() {
   } = useOnboarding();
   const premium = usePremium();
   const { seen: guideSeen, markSeen: markGuideSeen, hydrated: guideHydrated } = useLanguageGuide();
+  const {
+    answered: reminderPromptAnswered,
+    markAnswered: markReminderPromptAnswered,
+    hydrated: reminderPromptHydrated,
+  } = useReminderPrompt();
+  const reminder = useReminder();
+  const { language } = useLanguage();
 
   const areaCategories = useMemo(() => {
     const list = categories.filter((c) => c.area === area);
@@ -124,6 +134,10 @@ function Index() {
 
   if (!onboardingHydrated) return null;
   if (!onboardingSeen) return <Onboarding onStart={markOnboardingSeen} />;
+
+  // Donely's own explanation comes first — Apple's system prompt is only
+  // triggered when the user taps "Enable reminder".
+  const showReminderPrompt = reminderPromptHydrated && !reminderPromptAnswered;
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -322,6 +336,16 @@ function Index() {
       )}
 
       {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
+
+      {showReminderPrompt && (
+        <ReminderPrompt
+          onEnable={() => {
+            markReminderPromptAnswered();
+            void reminder.toggle(true, language);
+          }}
+          onLater={markReminderPromptAnswered}
+        />
+      )}
     </main>
   );
 }
@@ -622,6 +646,46 @@ function CategoryRow({
         <span className="truncate">{name}</span>
         {selected && !actionsOpen && <Check className="size-3.5 shrink-0 text-primary" />}
       </button>
+    </div>
+  );
+}
+
+function ReminderPrompt({
+  onEnable,
+  onLater,
+}: {
+  onEnable: () => void;
+  onLater: () => void;
+}) {
+  const { t } = useLanguage();
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
+      <div className="w-full max-w-[300px] overflow-hidden rounded-[16px] bg-card p-5 text-center shadow-xl">
+        <div className="mx-auto flex size-11 items-center justify-center rounded-full bg-secondary">
+          <Bell className="size-5 text-primary" />
+        </div>
+        <h2 className="mt-3 text-[16px] font-semibold leading-[21px] text-card-foreground">
+          {t("reminderPromptTitle")}
+        </h2>
+        <p className="mt-1.5 text-[13px] font-normal leading-[18px] text-muted-foreground">
+          {t("reminderPromptBody")}
+        </p>
+        <button
+          type="button"
+          onClick={onEnable}
+          className="mt-4 w-full rounded-xl bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-transform active:scale-[0.98]"
+        >
+          {t("reminderPromptEnable")}
+        </button>
+        <button
+          type="button"
+          onClick={onLater}
+          className="mt-2 w-full rounded-xl py-2.5 text-[15px] font-normal text-primary transition-colors active:bg-secondary"
+        >
+          {t("reminderPromptLater")}
+        </button>
+      </div>
     </div>
   );
 }

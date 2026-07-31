@@ -227,6 +227,30 @@ export function useLanguageGuide() {
   return { seen, markSeen, hydrated };
 }
 
+const REMINDER_PROMPT_KEY = "vr.reminderPrompt.v1";
+
+/**
+ * Tracks whether Donely's own explanatory notification dialog has been shown.
+ * It is shown exactly once, on the first run after the welcome screen, and the
+ * choice ("Enable reminder" / "Not now") is stored locally.
+ */
+export function useReminderPrompt() {
+  const [answered, setAnswered] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    setAnswered(read<boolean>(REMINDER_PROMPT_KEY, false));
+    setHydrated(true);
+  }, []);
+
+  const markAnswered = useCallback(() => {
+    write(REMINDER_PROMPT_KEY, true);
+    setAnswered(true);
+  }, []);
+
+  return { answered, markAnswered, hydrated };
+}
+
 /** Clears every locally stored entry, category and goal. Language stays untouched. */
 export function clearAllData() {
   if (typeof window === "undefined") return;

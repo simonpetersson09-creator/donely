@@ -151,8 +151,10 @@ const sv = {
   reminderOffToast: "Påminnelsen är av",
   reminderNotifTitle: "Dags att summera veckan",
   reminderNotifBody: "Vad har du fått gjort? Registrera veckans resultat i Donely.",
-  testNotification: "Testnotis (~90 s)",
-  testNotificationScheduled: "Testnotis schemalagd om cirka 90 sekunder.",
+  reminderPromptTitle: "Håll koll på dina framsteg",
+  reminderPromptBody: "Vill du få en påminnelse varje fredag kl. 17:00 om veckans framsteg?",
+  reminderPromptEnable: "Aktivera påminnelse",
+  reminderPromptLater: "Inte nu",
 };
 
 type Dict = typeof sv & Record<string, string>;
@@ -269,8 +271,10 @@ const en: Dict = {
   reminderOffToast: "Reminder turned off",
   reminderNotifTitle: "Time to wrap up your week",
   reminderNotifBody: "What did you get done? Log this week's results in Donely.",
-  testNotification: "Test notification (~90 s)",
-  testNotificationScheduled: "Test notification scheduled in about 90 seconds.",
+  reminderPromptTitle: "Keep track of your progress",
+  reminderPromptBody: "Want a reminder every Friday at 17:00 about the week's progress?",
+  reminderPromptEnable: "Enable reminder",
+  reminderPromptLater: "Not now",
 };
 
 const de: Dict = {
@@ -385,8 +389,10 @@ const de: Dict = {
   reminderOffToast: "Erinnerung deaktiviert",
   reminderNotifTitle: "Zeit, die Woche abzuschließen",
   reminderNotifBody: "Was hast du geschafft? Erfasse deine Wochenergebnisse in Donely.",
-  testNotification: "Testmitteilung (ca. 90 s)",
-  testNotificationScheduled: "Testmitteilung in etwa 90 Sekunden geplant.",
+  reminderPromptTitle: "Behalte deine Fortschritte im Blick",
+  reminderPromptBody: "Möchtest du jeden Freitag um 17:00 Uhr eine Erinnerung an deine Wochenfortschritte erhalten?",
+  reminderPromptEnable: "Erinnerung aktivieren",
+  reminderPromptLater: "Jetzt nicht",
 };
 
 const fr: Dict = {
@@ -503,8 +509,10 @@ const fr: Dict = {
   reminderOffToast: "Rappel désactivé",
   reminderNotifTitle: "C’est l’heure du bilan de la semaine",
   reminderNotifBody: "Qu’avez-vous accompli ? Enregistrez vos résultats de la semaine dans Donely.",
-  testNotification: "Notification test (~90 s)",
-  testNotificationScheduled: "Notification test programmée dans environ 90 secondes.",
+  reminderPromptTitle: "Suivez vos progrès",
+  reminderPromptBody: "Souhaitez-vous recevoir un rappel chaque vendredi à 17h00 sur vos progrès de la semaine ?",
+  reminderPromptEnable: "Activer le rappel",
+  reminderPromptLater: "Pas maintenant",
 };
 
 const es: Dict = {
@@ -621,8 +629,10 @@ const es: Dict = {
   reminderOffToast: "Recordatorio desactivado",
   reminderNotifTitle: "Hora de cerrar la semana",
   reminderNotifBody: "¿Qué has conseguido? Registra los resultados de la semana en Donely.",
-  testNotification: "Notificación de prueba (~90 s)",
-  testNotificationScheduled: "Notificación de prueba programada en unos 90 segundos.",
+  reminderPromptTitle: "Sigue tu progreso",
+  reminderPromptBody: "¿Quieres recibir un recordatorio cada viernes a las 17:00 sobre el progreso de la semana?",
+  reminderPromptEnable: "Activar recordatorio",
+  reminderPromptLater: "Ahora no",
 };
 
 const it: Dict = {
@@ -739,8 +749,10 @@ const it: Dict = {
   reminderOffToast: "Promemoria disattivato",
   reminderNotifTitle: "È ora di chiudere la settimana",
   reminderNotifBody: "Che cosa hai fatto? Registra i risultati della settimana in Donely.",
-  testNotification: "Notifica di prova (~90 s)",
-  testNotificationScheduled: "Notifica di prova programmata tra circa 90 secondi.",
+  reminderPromptTitle: "Tieni traccia dei tuoi progressi",
+  reminderPromptBody: "Vuoi ricevere un promemoria ogni venerdì alle 17:00 sui progressi della settimana?",
+  reminderPromptEnable: "Attiva promemoria",
+  reminderPromptLater: "Non ora",
 };
 
 const ptBR: Dict = {
@@ -857,8 +869,10 @@ const ptBR: Dict = {
   reminderOffToast: "Lembrete desativado",
   reminderNotifTitle: "Hora de fechar a semana",
   reminderNotifBody: "O que você concluiu? Registre os resultados da semana no Donely.",
-  testNotification: "Notificação de teste (~90 s)",
-  testNotificationScheduled: "Notificação de teste agendada em cerca de 90 segundos.",
+  reminderPromptTitle: "Acompanhe seu progresso",
+  reminderPromptBody: "Quer receber um lembrete toda sexta-feira às 17h sobre o progresso da semana?",
+  reminderPromptEnable: "Ativar lembrete",
+  reminderPromptLater: "Agora não",
 };
 
 const nl: Dict = {
@@ -973,8 +987,10 @@ const nl: Dict = {
   reminderOffToast: "Herinnering uitgeschakeld",
   reminderNotifTitle: "Tijd om je week af te ronden",
   reminderNotifBody: "Wat heb je gedaan? Registreer je resultaten van deze week in Donely.",
-  testNotification: "Testmelding (~90 s)",
-  testNotificationScheduled: "Testmelding over ongeveer 90 seconden gepland.",
+  reminderPromptTitle: "Houd je voortgang bij",
+  reminderPromptBody: "Wil je elke vrijdag om 17:00 uur een herinnering over je voortgang van de week?",
+  reminderPromptEnable: "Herinnering inschakelen",
+  reminderPromptLater: "Niet nu",
 };
 
 const pl: Dict = {
@@ -1091,8 +1107,10 @@ const pl: Dict = {
   reminderOffToast: "Przypomnienie wyłączone",
   reminderNotifTitle: "Czas podsumować tydzień",
   reminderNotifBody: "Co udało Ci się zrobić? Zapisz wyniki tygodnia w Donely.",
-  testNotification: "Powiadomienie testowe (~90 s)",
-  testNotificationScheduled: "Powiadomienie testowe zaplanowane za około 90 sekund.",
+  reminderPromptTitle: "Śledź swoje postępy",
+  reminderPromptBody: "Czy chcesz otrzymywać przypomnienie w każdy piątek o 17:00 o postępach tygodnia?",
+  reminderPromptEnable: "Włącz przypomnienie",
+  reminderPromptLater: "Nie teraz",
 };
 
 const da: Dict = {
@@ -1207,8 +1225,10 @@ const da: Dict = {
   reminderOffToast: "Påmindelsen er slået fra",
   reminderNotifTitle: "Tid til at gøre ugen op",
   reminderNotifBody: "Hvad har du nået? Registrér ugens resultater i Donely.",
-  testNotification: "Testnotifikation (~90 s)",
-  testNotificationScheduled: "Testnotifikation planlagt om cirka 90 sekunder.",
+  reminderPromptTitle: "Hold styr på dine fremskridt",
+  reminderPromptBody: "Vil du have en påmindelse hver fredag kl. 17.00 om ugens fremskridt?",
+  reminderPromptEnable: "Aktivér påmindelse",
+  reminderPromptLater: "Ikke nu",
 };
 
 const no: Dict = {
@@ -1323,8 +1343,10 @@ const no: Dict = {
   reminderOffToast: "Påminnelsen er av",
   reminderNotifTitle: "På tide å oppsummere uken",
   reminderNotifBody: "Hva har du fått gjort? Registrer ukens resultater i Donely.",
-  testNotification: "Testvarsel (~90 s)",
-  testNotificationScheduled: "Testvarsel planlagt om cirka 90 sekunder.",
+  reminderPromptTitle: "Hold oversikt over fremgangen din",
+  reminderPromptBody: "Vil du få en påminnelse hver fredag kl. 17.00 om ukens fremgang?",
+  reminderPromptEnable: "Aktiver påminnelse",
+  reminderPromptLater: "Ikke nå",
 };
 
 const fi: Dict = {
@@ -1439,8 +1461,10 @@ const fi: Dict = {
   reminderOffToast: "Muistutus on pois käytöstä",
   reminderNotifTitle: "Aika koota viikko yhteen",
   reminderNotifBody: "Mitä sait aikaan? Kirjaa viikon tulokset Donelyyn.",
-  testNotification: "Testi-ilmoitus (~90 s)",
-  testNotificationScheduled: "Testi-ilmoitus ajastettu noin 90 sekunnin päähän.",
+  reminderPromptTitle: "Pidä edistymisesi näkyvissä",
+  reminderPromptBody: "Haluatko muistutuksen joka perjantai klo 17.00 viikon edistymisestä?",
+  reminderPromptEnable: "Ota muistutus käyttöön",
+  reminderPromptLater: "Ei nyt",
 };
 
 const ja: Dict = {
@@ -1555,8 +1579,10 @@ const ja: Dict = {
   reminderOffToast: "リマインダーをオフにしました",
   reminderNotifTitle: "今週をふり返りましょう",
   reminderNotifBody: "何を達成しましたか？今週の結果を Donely に記録しましょう。",
-  testNotification: "テスト通知（約90秒）",
-  testNotificationScheduled: "約90秒後にテスト通知を予約しました。",
+  reminderPromptTitle: "進捗を記録しましょう",
+  reminderPromptBody: "毎週金曜日17:00に今週の進捗のリマインダーを受け取りますか？",
+  reminderPromptEnable: "リマインダーを有効にする",
+  reminderPromptLater: "今はしない",
 };
 
 const resources = {

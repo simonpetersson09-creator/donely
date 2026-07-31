@@ -6,13 +6,7 @@ import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
-import {
-  formatFireDate,
-  logReminderDiagnostics,
-  openNotificationSettings,
-  scheduleTestNotification,
-  useReminder,
-} from "@/lib/notifications";
+import { formatFireDate, openNotificationSettings, useReminder } from "@/lib/notifications";
 import {
   openManageSubscriptions,
   purchasePremium,
@@ -224,27 +218,6 @@ function Installningar() {
               </div>
             )}
 
-            {import.meta.env.DEV && (
-              <div className="mt-3 flex gap-2 border-t border-border pt-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    scheduleTestNotification(90);
-                    toast.message(t("testNotificationScheduled"));
-                  }}
-                  className="flex-1 rounded-lg border border-border px-3 py-2 text-[12px] font-semibold leading-[16px] text-primary active:bg-accent"
-                >
-                  {t("testNotification")}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => logReminderDiagnostics("manual")}
-                  className="rounded-lg border border-border px-3 py-2 text-[12px] font-semibold leading-[16px] text-muted-foreground active:bg-accent"
-                >
-                  Log
-                </button>
-              </div>
-            )}
           </div>
         </section>
 
