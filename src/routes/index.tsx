@@ -104,7 +104,7 @@ function Index() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
-      <TodayCard rows={todayRows} title={t("today")} empty={t("noEntriesToday")} />
+      <TodayCard rows={todayRows} title={t("todayTitle")} empty={t("noEntriesToday")} />
 
       <div className="flex flex-1 items-center justify-center">
         <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
