@@ -17,6 +17,7 @@
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
 		D0NE1Y0000000000000001 /* DonelyNotificationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */; };
 		D0NE1Y0000000000000002 /* DonelyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000012 /* DonelyViewController.swift */; };
+		D0NE1Y0000000000000003 /* DonelyStoreKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
 		D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyNotificationBridge.swift; sourceTree = "<group>"; };
 		D0NE1Y0000000000000012 /* DonelyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyViewController.swift; sourceTree = "<group>"; };
+		D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyStoreKitBridge.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */,
 				D0NE1Y0000000000000012 /* DonelyViewController.swift */,
+				D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -218,6 +221,7 @@
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				D0NE1Y0000000000000001 /* DonelyNotificationBridge.swift in Sources */,
 				D0NE1Y0000000000000002 /* DonelyViewController.swift in Sources */,
+				D0NE1Y0000000000000003 /* DonelyStoreKitBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
