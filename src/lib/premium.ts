@@ -367,6 +367,12 @@ export function requestEntitlement() {
   const handler = nativeHandler("requestEntitlement");
   if (handler) {
     handler.postMessage({});
+    // If the shell never answers, don't hang on "loading" forever — lock down.
+    if (!bridgeControlled) {
+      armTimer("entitlement", ENTITLEMENT_TIMEOUT_MS, () => {
+        if (!bridgeControlled) applyEntitlement({ subscribed: false, inTrial: false, trialDaysLeft: 0 });
+      });
+    }
     return;
   }
   if (LOCAL_FALLBACK_ENABLED && typeof window !== "undefined") {
@@ -383,10 +389,12 @@ export function loadProduct() {
   if (state.productStatus === "loading") return;
   const handler = nativeHandler("requestProduct");
   if (handler) {
-    setState({ productStatus: "loading", phase: "loadingProduct" });
+    setState({ productStatus: "loading" });
     handler.postMessage({ product: PRODUCT_ID });
     // Swift replies with __donelySetProduct(...)
-    setState({ phase: "idle" });
+    armTimer("product", PRODUCT_TIMEOUT_MS, () => {
+      if (state.productStatus === "loading") setState({ product: null, productStatus: "unavailable" });
+    });
     return;
   }
   if (LOCAL_FALLBACK_ENABLED) {
@@ -407,6 +415,7 @@ export function purchasePremium() {
     }
     setState({ phase: "purchasing", busy: true, lastResult: null, lastMessage: null });
     handler.postMessage({ product: PRODUCT_ID });
+    armTimer("purchase", PURCHASE_TIMEOUT_MS, () => reportPurchaseResult("failed"));
     return;
   }
   if (LOCAL_FALLBACK_ENABLED) {
@@ -432,6 +441,7 @@ export function restorePurchase() {
   if (handler) {
     setState({ phase: "restoring", busy: true, lastResult: null, lastMessage: null });
     handler.postMessage({});
+    armTimer("purchase", PURCHASE_TIMEOUT_MS, () => reportPurchaseResult("failed"));
     return;
   }
   if (LOCAL_FALLBACK_ENABLED) {
