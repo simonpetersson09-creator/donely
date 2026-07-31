@@ -144,7 +144,10 @@ function Installningar() {
           onClick={() => setConfirming(true)}
           className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[15px] font-semibold text-destructive shadow-card transition-colors active:bg-destructive/10"
         >
-          <span>{t("deleteAllDataRow")}</span>
+          <span className="flex items-center gap-2">
+            <Trash2 className="size-[18px]" />
+            {t("deleteAllDataRow")}
+          </span>
           <ChevronRight className="size-4 text-destructive" />
         </button>
       </section>
