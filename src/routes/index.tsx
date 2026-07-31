@@ -271,14 +271,25 @@ function Index() {
             setPickerOpen(false);
           }}
           onCreate={(name) => {
+            if (!canMutate(premium)) {
+              setPickerOpen(false);
+              setPaywallOpen(true);
+              return;
+            }
             const created = addCategory(name, area);
             setCategoryId(created.id);
             setPickerOpen(false);
           }}
-          onRename={renameCategory}
+          onRename={(id, name) => {
+            if (!canMutate(premium)) {
+              setPickerOpen(false);
+              setPaywallOpen(true);
+              return;
+            }
+            renameCategory(id, name);
+          }}
           onDelete={(id) => {
-            // Deleting a category also deletes activities — locked without Premium.
-            if (premium.hydrated && !premium.active) {
+            if (!canMutate(premium)) {
               setPickerOpen(false);
               setPaywallOpen(true);
               return;
