@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { ChevronLeft, ChevronRight, Check, X, Pencil, Home, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
