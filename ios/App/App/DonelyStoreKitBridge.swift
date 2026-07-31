@@ -22,6 +22,7 @@
 import Foundation
 import UIKit
 import StoreKit
+import Security
 import WebKit
 
 @available(iOS 15.0, *)
@@ -120,19 +121,18 @@ final class DonelyStoreKitBridge: NSObject {
             }
         }
 
-        // Not subscribed yet, but eligible for the 7-day introductory offer.
-        if !subscribed,
-           let product = await currentProduct(),
-           let subscription = product.subscription,
-           await subscription.isEligibleForIntroOffer,
-           let intro = subscription.introductoryOffer,
-           intro.paymentMode == .freeTrial {
-            inTrial = false
-            trialDaysLeft = 0
+        // Not subscribed: grant the 7-day free trial locally. Apple's own
+        // introductory offer only starts once the user buys, so without this
+        // the app would demand Premium from the very first launch.
+        if !subscribed {
+            let daysLeft = TrialClock.daysLeft()
+            inTrial = daysLeft > 0
+            trialDaysLeft = daysLeft
         }
 
         sendEntitlement(subscribed: subscribed, inTrial: inTrial, trialDaysLeft: trialDaysLeft)
     }
+
 
     private func purchase() async {
         guard let product = await currentProduct() else {
@@ -250,6 +250,81 @@ extension DonelyStoreKitBridge: WKScriptMessageHandler {
             Task { await manageSubscriptions() }
         default:
             break
+        }
+    }
+}
+
+// MARK: - Local 7-day trial
+
+/// First-launch trial clock. The start date is written to the Keychain so the
+/// trial cannot be reset by deleting and reinstalling the app, with a
+/// UserDefaults mirror for fast reads.
+enum TrialClock {
+    static let trialDays = 7
+    private static let key = "app.donely.trial.start"
+
+    static func daysLeft() -> Int {
+        let start = startDate()
+        let end = start.addingTimeInterval(Double(trialDays) * 86_400)
+        let seconds = end.timeIntervalSinceNow
+        return max(0, Int(ceil(seconds / 86_400)))
+    }
+
+    private static func startDate() -> Date {
+        if let stored = readKeychain() ?? readDefaults() {
+            writeDefaults(stored)
+            writeKeychain(stored)
+            return stored
+        }
+        let now = Date()
+        writeDefaults(now)
+        writeKeychain(now)
+        return now
+    }
+
+    // UserDefaults mirror
+
+    private static func readDefaults() -> Date? {
+        let value = UserDefaults.standard.double(forKey: key)
+        return value > 0 ? Date(timeIntervalSince1970: value) : nil
+    }
+
+    private static func writeDefaults(_ date: Date) {
+        UserDefaults.standard.set(date.timeIntervalSince1970, forKey: key)
+    }
+
+    // Keychain (survives reinstall)
+
+    private static func query() -> [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "app.donely.mobile",
+            kSecAttrAccount as String: key,
+        ]
+    }
+
+    private static func readKeychain() -> Date? {
+        var q = query()
+        q[kSecReturnData as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        guard SecItemCopyMatching(q as CFDictionary, &item) == errSecSuccess,
+              let data = item as? Data,
+              let string = String(data: data, encoding: .utf8),
+              let seconds = Double(string) else { return nil }
+        return Date(timeIntervalSince1970: seconds)
+    }
+
+    private static func writeKeychain(_ date: Date) {
+        guard let data = String(date.timeIntervalSince1970).data(using: .utf8) else { return }
+        let q = query()
+        if SecItemCopyMatching(q as CFDictionary, nil) == errSecSuccess {
+            SecItemUpdate(q as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        } else {
+            var add = q
+            add[kSecValueData as String] = data
+            add[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+            SecItemAdd(add as CFDictionary, nil)
         }
     }
 }

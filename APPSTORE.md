@@ -173,7 +173,7 @@ dev-tickern eller av återställning.
 
 ### StoreKit 2 i Swift – KLART (`ios/App/App/DonelyStoreKitBridge.swift`)
 - `Transaction.currentEntitlements` → `__donelySetEntitlement`. ✅
-- Trial härledd från `transaction.offerType == .introductory` + `expirationDate` → `inTrial` / `trialDaysLeft`. ✅
+- Provperiod: 7 dagar ges lokalt vid första start (`TrialClock`, startdatum i Keychain så den överlever ominstallation). Efter köp gäller Apples eget introduktionserbjudande via `offerType == .introductory`. ✅
 - `Product.products(for: ["donely.premium.monthly"])` → `__donelySetProduct({ id, displayPrice })`. ✅
 - `product.purchase()` med alla utfall → `__donelyPurchaseResult(status, message?)`. ✅
 - `AppStore.sync()` för återställning → `restored` / `nothingToRestore`. ✅
