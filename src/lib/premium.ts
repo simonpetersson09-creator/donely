@@ -169,7 +169,8 @@ export function hasNativeBridge(): boolean {
 function applyEntitlement(payload: EntitlementPayload) {
   const subscribed = !!payload.subscribed;
   const inTrial = !subscribed && !!payload.inTrial;
-  const trialDaysLeft = Math.max(0, Math.floor(payload.trialDaysLeft ?? 0));
+  const raw = Number(payload.trialDaysLeft);
+  const trialDaysLeft = Number.isFinite(raw) ? Math.max(0, Math.floor(raw)) : 0;
   const active = subscribed || inTrial;
   setState({
     subscribed,
@@ -189,19 +190,67 @@ function applyEntitlement(payload: EntitlementPayload) {
  */
 let bridgeControlled = false;
 
-/** Called by the iOS shell with the current StoreKit entitlement. */
-export function setEntitlement(payload: EntitlementPayload) {
+/** Bumped when the JS side of the contract changes; Swift can assert on it. */
+export const BRIDGE_VERSION = 1;
+
+/**
+ * Called by the iOS shell with the current StoreKit entitlement.
+ * Defensive: accepts a JSON string too, since `evaluateJavaScript` payloads
+ * are easy to stringify by mistake on the Swift side.
+ */
+export function setEntitlement(payload: EntitlementPayload | string) {
+  let data: Partial<EntitlementPayload> = {};
+  if (typeof payload === "string") {
+    try {
+      data = JSON.parse(payload) as Partial<EntitlementPayload>;
+    } catch {
+      data = {};
+    }
+  } else if (payload && typeof payload === "object") {
+    data = payload;
+  }
   bridgeControlled = true;
-  applyEntitlement(payload);
+  clearPendingTimeout();
+  applyEntitlement({
+    subscribed: !!data.subscribed,
+    inTrial: !!data.inTrial,
+    trialDaysLeft: Number(data.trialDaysLeft ?? 0),
+  });
 }
 
 /** Called by the iOS shell with the fetched StoreKit product (or null). */
-export function setProduct(product: StoreProduct | null) {
+export function setProduct(product: StoreProduct | string | null) {
+  clearTimer("product");
+  let data: Partial<StoreProduct> | null = null;
+  if (typeof product === "string") {
+    try {
+      data = JSON.parse(product) as Partial<StoreProduct>;
+    } catch {
+      data = null;
+    }
+  } else if (product && typeof product === "object") {
+    data = product;
+  }
+  const displayPrice = typeof data?.displayPrice === "string" ? data.displayPrice.trim() : "";
+  if (!displayPrice) {
+    setState({ product: null, productStatus: "unavailable" });
+    return;
+  }
   setState({
-    product,
-    productStatus: product ? "loaded" : "unavailable",
+    product: { id: typeof data?.id === "string" ? data.id : PRODUCT_ID, displayPrice },
+    productStatus: "loaded",
   });
 }
+
+const PURCHASE_RESULT_STATUSES: PurchaseResultStatus[] = [
+  "success",
+  "cancelled",
+  "failed",
+  "productUnavailable",
+  "restored",
+  "nothingToRestore",
+  "pending",
+];
 
 /**
  * Called by the iOS shell when a purchase or restore finishes.
@@ -209,27 +258,73 @@ export function setProduct(product: StoreProduct | null) {
  * already-localized detail from StoreKit.
  */
 export function reportPurchaseResult(status: PurchaseResultStatus, message?: string) {
-  if (status === "pending") {
-    setState({ phase: "idle", busy: false, lastResult: status, lastMessage: message ?? null });
-    emitPurchaseEvent({ status, message });
-    return;
-  }
-  setState({ phase: "idle", busy: false, lastResult: status, lastMessage: message ?? null });
-  emitPurchaseEvent({ status, message });
+  const safeStatus: PurchaseResultStatus = PURCHASE_RESULT_STATUSES.includes(status)
+    ? status
+    : "failed";
+  clearPendingTimeout();
+  setState({
+    phase: "idle",
+    busy: false,
+    lastResult: safeStatus,
+    lastMessage: typeof message === "string" && message ? message : null,
+  });
+  emitPurchaseEvent({ status: safeStatus, message });
   // Ask for a fresh entitlement after a successful purchase/restore.
-  if (status === "success" || status === "restored") requestEntitlement();
+  if (safeStatus === "success" || safeStatus === "restored") requestEntitlement();
+}
+
+// --- timeouts: never leave the UI stuck if Swift goes silent ---------------
+
+/** How long we wait for the shell to answer before falling back. */
+const ENTITLEMENT_TIMEOUT_MS = 8000;
+const PRODUCT_TIMEOUT_MS = 15000;
+/** Ask to Buy / SCA can take a while, but never forever. */
+const PURCHASE_TIMEOUT_MS = 180000;
+
+const timers: Record<"entitlement" | "product" | "purchase", number | null> = {
+  entitlement: null,
+  product: null,
+  purchase: null,
+};
+
+function clearTimer(key: keyof typeof timers) {
+  const id = timers[key];
+  if (id !== null && typeof window !== "undefined") window.clearTimeout(id);
+  timers[key] = null;
+}
+
+function armTimer(key: keyof typeof timers, ms: number, onTimeout: () => void) {
+  clearTimer(key);
+  if (typeof window === "undefined") return;
+  timers[key] = window.setTimeout(() => {
+    timers[key] = null;
+    onTimeout();
+  }, ms);
+}
+
+/** Cleared whenever the shell answers with an entitlement or a result. */
+function clearPendingTimeout() {
+  clearTimer("entitlement");
+  clearTimer("purchase");
+}
+
+
+/** Tells the shell that the web app is ready to receive entitlement/product. */
+export function notifyBridgeReady() {
+  nativeHandler("bridgeReady")?.postMessage({ version: BRIDGE_VERSION });
 }
 
 if (typeof window !== "undefined") {
-  const w = window as unknown as {
-    __donelySetEntitlement?: typeof setEntitlement;
-    __donelySetProduct?: typeof setProduct;
-    __donelyPurchaseResult?: typeof reportPurchaseResult;
-  };
+  const w = window as unknown as Record<string, unknown>;
   w.__donelySetEntitlement = setEntitlement;
   w.__donelySetProduct = setProduct;
   w.__donelyPurchaseResult = reportPurchaseResult;
+  w.__donelyBridgeVersion = BRIDGE_VERSION;
+  // Handshake: the shell may inject entitlement before or after this runs.
+  w.__donelyBridgeReady = true;
+  notifyBridgeReady();
 }
+
 
 // ---------------------------------------------------------------------------
 // development fallback (never active in production builds)
@@ -272,6 +367,12 @@ export function requestEntitlement() {
   const handler = nativeHandler("requestEntitlement");
   if (handler) {
     handler.postMessage({});
+    // If the shell never answers, don't hang on "loading" forever — lock down.
+    if (!bridgeControlled) {
+      armTimer("entitlement", ENTITLEMENT_TIMEOUT_MS, () => {
+        if (!bridgeControlled) applyEntitlement({ subscribed: false, inTrial: false, trialDaysLeft: 0 });
+      });
+    }
     return;
   }
   if (LOCAL_FALLBACK_ENABLED && typeof window !== "undefined") {
@@ -288,10 +389,12 @@ export function loadProduct() {
   if (state.productStatus === "loading") return;
   const handler = nativeHandler("requestProduct");
   if (handler) {
-    setState({ productStatus: "loading", phase: "loadingProduct" });
+    setState({ productStatus: "loading" });
     handler.postMessage({ product: PRODUCT_ID });
     // Swift replies with __donelySetProduct(...)
-    setState({ phase: "idle" });
+    armTimer("product", PRODUCT_TIMEOUT_MS, () => {
+      if (state.productStatus === "loading") setState({ product: null, productStatus: "unavailable" });
+    });
     return;
   }
   if (LOCAL_FALLBACK_ENABLED) {
@@ -312,6 +415,7 @@ export function purchasePremium() {
     }
     setState({ phase: "purchasing", busy: true, lastResult: null, lastMessage: null });
     handler.postMessage({ product: PRODUCT_ID });
+    armTimer("purchase", PURCHASE_TIMEOUT_MS, () => reportPurchaseResult("failed"));
     return;
   }
   if (LOCAL_FALLBACK_ENABLED) {
@@ -337,6 +441,7 @@ export function restorePurchase() {
   if (handler) {
     setState({ phase: "restoring", busy: true, lastResult: null, lastMessage: null });
     handler.postMessage({});
+    armTimer("purchase", PURCHASE_TIMEOUT_MS, () => reportPurchaseResult("failed"));
     return;
   }
   if (LOCAL_FALLBACK_ENABLED) {
