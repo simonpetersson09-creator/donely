@@ -252,12 +252,26 @@ function Index() {
         <div className="flex items-stretch gap-2">
           <button
             type="button"
-            disabled={!valid}
+            disabled={!valid && !locked}
             onClick={register}
-            className="flex-1 rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none"
+            aria-label={locked ? `${t("register")} — ${t("premiumRequired", { defaultValue: "Premium krävs" })}` : t("register")}
+            className={cn(
+              "relative flex-1 overflow-hidden rounded-xl py-3 text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
+              locked
+                ? "bg-primary/85 text-primary-foreground"
+                : "bg-primary text-primary-foreground",
+            )}
           >
-            {t("register")}
+            <span className="inline-flex items-center justify-center gap-2">
+              {locked && (
+                <span className="flex size-6 items-center justify-center rounded-full bg-primary-foreground/15 ring-1 ring-primary-foreground/25">
+                  <Lock className="size-3.5" />
+                </span>
+              )}
+              {t("register")}
+            </span>
           </button>
+
           <Link
             to="/installningar"
             aria-label={t("settings")}
