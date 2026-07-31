@@ -1,11 +1,9 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, ChevronLeft, RotateCcw, Trash2 } from "lucide-react";
+import { Crown, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { clearAllData, replayOnboarding } from "@/lib/store";
+import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
-import type { LanguageCode } from "@/lib/i18n";
 
 export const Route = createFileRoute("/installningar")({
   head: () => ({
@@ -14,12 +12,12 @@ export const Route = createFileRoute("/installningar")({
       {
         name: "description",
         content:
-          "Ställ in appspråk, visa introduktionen igen eller rensa alla registreringar, kategorier och årsmål i Donely.",
+          "Hantera premiumabonnemang eller rensa alla registreringar, kategorier och årsmål i Donely.",
       },
       { property: "og:title", content: "Inställningar – Donely" },
       {
         property: "og:description",
-        content: "Språk, introduktion och datahantering för Donely.",
+        content: "Premium och datahantering för Donely.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -29,14 +27,8 @@ export const Route = createFileRoute("/installningar")({
 });
 
 function Installningar() {
-  const { t, language, changeLanguage, languages } = useLanguage();
-  const router = useRouter();
+  const { t } = useLanguage();
   const [confirming, setConfirming] = useState(false);
-
-  const select = (code: LanguageCode) => {
-    changeLanguage(code);
-    navigator.vibrate?.(8);
-  };
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -57,50 +49,39 @@ function Installningar() {
 
       <section className="mt-6">
         <h2 className="mb-1.5 px-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
-          {t("appLanguage")}
+          {t("premium")}
         </h2>
-        <div className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
-          {languages.map((l, i) => {
-            const active = l.code === language;
-            return (
-              <button
-                key={l.code}
-                type="button"
-                onClick={() => select(l.code)}
-                className={cn(
-                  "flex w-full items-center gap-2.5 px-3.5 py-3 text-left text-[15px] text-card-foreground transition-colors active:bg-secondary",
-                  i > 0 && "border-t border-border",
-                  active && "font-semibold",
-                )}
-              >
-                <span className="text-[17px] leading-none">{l.flag}</span>
-                <span className="min-w-0 flex-1 truncate">{l.label}</span>
-                {active && <Check className="size-4 shrink-0 text-primary" />}
-              </button>
-            );
-          })}
+        <div className="space-y-2">
+          <button
+            type="button"
+            onClick={() => toast.message(t("premiumFlowComing"))}
+            className="w-full rounded-xl bg-primary px-3.5 py-3 text-left shadow-card transition-transform active:scale-[0.985]"
+          >
+            <span className="flex items-center gap-2 text-[15px] font-semibold text-primary-foreground">
+              <Crown className="size-4" />
+              {t("startPremium")}
+            </span>
+            <span className="mt-0.5 block text-[13px] text-primary-foreground/80">
+              {t("startPremiumDesc")}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => toast.message(t("premiumFlowComing"))}
+            className="w-full rounded-xl border border-border bg-card px-3.5 py-3 text-left shadow-card transition-colors active:bg-accent"
+          >
+            <span className="flex items-center gap-2 text-[15px] font-semibold text-primary">
+              {t("manageSubscription")}
+            </span>
+            <span className="mt-0.5 block text-[13px] text-muted-foreground">
+              {t("manageSubscriptionDesc")}
+            </span>
+          </button>
         </div>
       </section>
 
-      <section className="mt-8 space-y-2">
-        <button
-          type="button"
-          onClick={() => {
-            replayOnboarding();
-            toast.success(t("showIntroAgain"));
-            router.navigate({ to: "/" });
-          }}
-          className="w-full rounded-xl border border-border bg-card px-3.5 py-3 text-left shadow-card transition-colors active:bg-accent"
-        >
-          <span className="flex items-center gap-2 text-[15px] font-semibold text-primary">
-            <RotateCcw className="size-4" />
-            {t("showIntroAgain")}
-          </span>
-          <span className="mt-0.5 block text-[13px] text-muted-foreground">
-            {t("showIntroAgainDesc")}
-          </span>
-        </button>
-
+      <section className="mt-8">
         <div className="rounded-xl border border-destructive/30 bg-card px-3.5 py-3 shadow-card">
           <span className="flex items-center gap-2 text-[15px] font-semibold text-destructive">
             <Trash2 className="size-4" />
