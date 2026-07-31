@@ -336,6 +336,16 @@ function Index() {
       )}
 
       {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
+
+      {showReminderPrompt && (
+        <ReminderPrompt
+          onEnable={() => {
+            markReminderPromptAnswered();
+            void reminder.toggle(true, language);
+          }}
+          onLater={markReminderPromptAnswered}
+        />
+      )}
     </main>
   );
 }
