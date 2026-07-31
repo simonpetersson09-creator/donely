@@ -100,25 +100,28 @@ function Statistik() {
           <ChevronLeft className="size-4" />
           Tillbaka
         </Link>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            aria-label="Föregående år"
-            disabled={yearIndex >= years.length - 1}
-            onClick={() => setYear(years[yearIndex + 1])}
-            className="flex size-8 items-center justify-center rounded-full bg-card text-primary shadow-soft disabled:opacity-30"
-          >
-            <ChevronLeft className="size-4" />
-          </button>
-          <button
-            type="button"
-            aria-label="Nästa år"
-            disabled={yearIndex <= 0}
-            onClick={() => setYear(years[yearIndex - 1])}
-            className="flex size-8 items-center justify-center rounded-full bg-card text-primary shadow-soft disabled:opacity-30"
-          >
-            <ChevronRight className="size-4" />
-          </button>
+        <div className="flex items-center gap-2">
+          <span className="text-[12px] font-medium text-foreground/60">Byt år</span>
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              aria-label="Föregående år"
+              disabled={yearIndex >= years.length - 1}
+              onClick={() => setYear(years[yearIndex + 1])}
+              className="flex size-8 items-center justify-center rounded-full bg-primary text-white shadow-soft transition-transform active:scale-95 disabled:opacity-30"
+            >
+              <ChevronLeft className="size-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Nästa år"
+              disabled={yearIndex <= 0}
+              onClick={() => setYear(years[yearIndex - 1])}
+              className="flex size-8 items-center justify-center rounded-full bg-primary text-white shadow-soft transition-transform active:scale-95 disabled:opacity-30"
+            >
+              <ChevronRight className="size-4" />
+            </button>
+          </div>
         </div>
       </div>
 
