@@ -445,7 +445,7 @@ function installBridge() {
       writeEnabled(true);
       setState({ enabled: true });
       scheduleWeeklyReminder(language);
-    } else if (pendingEnable && (permission === "denied" || permission === "unsupported")) {
+    } else if (pendingEnable && permission === "denied") {
       pendingEnable = null;
       writeEnabled(false);
       setState({ enabled: false });
