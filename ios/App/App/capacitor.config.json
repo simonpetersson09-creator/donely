@@ -1,0 +1,14 @@
+{
+	"appId": "app.donely.mobile",
+	"appName": "Donely",
+	"webDir": "dist/client",
+	"ios": {
+		"contentInset": "always",
+		"limitsNavigationsToAppBoundDomains": true
+	},
+	"server": {
+		"androidScheme": "https",
+		"iosScheme": "capacitor"
+	},
+	"packageClassList": []
+}
