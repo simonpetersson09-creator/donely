@@ -127,7 +127,9 @@ function getSnapshot() {
 
 function subscribe(cb: () => void) {
   listeners.add(cb);
-  return () => listeners.delete(cb);
+  return () => {
+    listeners.delete(cb);
+  };
 }
 
 // purchase result events (for toasts)
@@ -136,7 +138,9 @@ const eventListeners = new Set<(e: PurchaseEvent) => void>();
 
 export function subscribePurchaseEvents(cb: (e: PurchaseEvent) => void) {
   eventListeners.add(cb);
-  return () => eventListeners.delete(cb);
+  return () => {
+    eventListeners.delete(cb);
+  };
 }
 
 function emitPurchaseEvent(e: PurchaseEvent) {

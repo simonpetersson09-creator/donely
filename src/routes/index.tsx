@@ -86,7 +86,11 @@ function Index() {
   function register() {
     if (!valid || !selected) return;
     // All mutating actions are gated through the same premium status.
-    if (!canMutate(premium)) {
+    if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
+            if (!canMutate(premium)) {
       navigator.vibrate?.(8);
       setPaywallOpen(true);
       return;
@@ -271,6 +275,10 @@ function Index() {
             setPickerOpen(false);
           }}
           onCreate={(name) => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
             if (!canMutate(premium)) {
               setPickerOpen(false);
               setPaywallOpen(true);
@@ -281,6 +289,10 @@ function Index() {
             setPickerOpen(false);
           }}
           onRename={(id, name) => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
             if (!canMutate(premium)) {
               setPickerOpen(false);
               setPaywallOpen(true);
@@ -289,6 +301,10 @@ function Index() {
             renameCategory(id, name);
           }}
           onDelete={(id) => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
             if (!canMutate(premium)) {
               setPickerOpen(false);
               setPaywallOpen(true);
