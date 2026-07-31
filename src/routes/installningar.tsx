@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { usePremium } from "@/lib/premium";
-import logoAsset from "@/assets/donely-logo.png.asset.json";
 
 const APP_STORE_REVIEW_URL =
   "https://apps.apple.com/app/id0000000000?action=write-review";
@@ -73,11 +72,9 @@ function Installningar() {
       </p>
 
       <div className="flex-shrink-0 mt-8 flex justify-center">
-        <img
-          src={logoAsset.url}
-          alt="Donely"
-          className="h-16 w-auto object-contain"
-        />
+        <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+          Donely
+        </h1>
       </div>
 
       <div className="flex-grow" />
