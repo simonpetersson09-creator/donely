@@ -76,8 +76,8 @@ function Installningar() {
           {t("donelyPremium")}
         </h2>
 
-        <div className="mb-2 rounded-xl border border-border bg-card px-3.5 py-2.5 text-center shadow-card">
-          <p className="text-[15px] font-semibold leading-[20px] text-primary">
+        <div className="mb-5 rounded-2xl border border-border bg-card px-5 py-5 text-center shadow-card">
+          <p className="text-[17px] font-semibold leading-[22px] text-primary">
             {premium.subscribed
               ? t("premiumActive")
               : premium.trialExpired
@@ -85,7 +85,7 @@ function Installningar() {
                 : t("trialLeft", { count: premium.trialDaysLeft })}
           </p>
           {!premium.subscribed && (
-            <p className="mt-1 text-[14px] font-normal leading-[19px] text-muted-foreground">
+            <p className="mt-1.5 text-[15px] font-normal leading-[20px] text-muted-foreground">
               {premium.trialExpired
                 ? t("premiumUnlockAll")
                 : `${t("freeTrialTitle")} · ${t("freeTrialThen")}`}
@@ -93,11 +93,11 @@ function Installningar() {
           )}
         </div>
 
-        <div className="space-y-2">
+        <div className="mt-5 space-y-3">
           <button
             type="button"
             onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl bg-primary px-3.5 py-2.5 text-center shadow-card transition-transform active:scale-[0.985]"
+            className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
           >
             <span className="inline-flex items-center gap-2 text-[15px] font-semibold leading-[20px] text-primary-foreground">
               <Crown className="size-4" />
