@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, Check, X, Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -37,6 +37,7 @@ type Row = {
   category: Category;
   total: number;
   goal: number | null;
+  lastAt: string | null;
 };
 
 function Statistik() {
@@ -52,10 +53,14 @@ function Statistik() {
 
   const rows = useMemo(() => {
     const totals = new Map<string, number>();
+    const lastAt = new Map<string, string>();
     for (const e of entries as Entry[]) {
       const d = new Date(e.createdAt);
-      if (d.getFullYear() !== year) continue;
-      totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
+      if (d.getFullYear() === year) {
+        totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
+      }
+      const prev = lastAt.get(e.categoryId);
+      if (!prev || d > new Date(prev)) lastAt.set(e.categoryId, e.createdAt);
     }
 
     const build = (area: Area): Row[] =>
@@ -65,6 +70,7 @@ function Statistik() {
           category: c,
           total: totals.get(c.id) ?? 0,
           goal: goals[goalKey(year, c.id)] ?? null,
+          lastAt: lastAt.get(c.id) ?? null,
         }))
         .filter((r) => r.total > 0 || r.goal !== null)
         .sort((a, b) => b.total - a.total);
@@ -202,9 +208,11 @@ function GoalCard({
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
 }) {
-  const { category, total, goal } = row;
+  const { category, total, goal, lastAt } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <article
@@ -226,6 +234,11 @@ function GoalCard({
               ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
               : `${total.toLocaleString("sv-SE")} hittills`}
           </p>
+          {lastAt && mounted && (
+            <p className="mt-0.5 text-[11px] text-card-foreground/50">
+              Senast {formatDate(lastAt)}
+            </p>
+          )}
         </Link>
         <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
