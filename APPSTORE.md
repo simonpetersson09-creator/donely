@@ -202,3 +202,71 @@ timeouts för entitlement/produkt/köp så att UI aldrig fastnar om skalet tystn
 **JavaScript-sidan är därmed färdig.** Återstående arbete är enbart Swift:
 registrera de sju message handlers, implementera StoreKit 2-anropen och pusha
 entitlement vid start, `bridgeReady`, `Transaction.updates` och när appen blir aktiv.
+
+## 9. Veckovis påminnelse (lokala notiser, fredag 17:00 lokal tid)
+
+JS-sidan är klar i `src/lib/notifications.ts`. Schemat uttrycks **alltid som
+kalenderkomponenter** (veckodag/timme/minut) – aldrig som ett fast UTC-klockslag.
+
+### Kontrakt JS → Swift (`webkit.messageHandlers`)
+| Handler | Payload | Swift ska göra |
+| --- | --- | --- |
+| `requestNotificationStatus` | `{}` | `getNotificationSettings` → svara med status |
+| `requestNotificationPermission` | `{}` | `requestAuthorization([.alert,.sound,.badge])` → svara med status |
+| `scheduleWeeklyReminder` | `{id, weekday, hour, minute, repeats, title, body, language, timeZone}` | Se koden nedan |
+| `cancelNotification` | `{id}` | `removePendingNotificationRequests(withIdentifiers: [id])` |
+| `scheduleTestNotification` | `{id, seconds, title, body, language}` | `UNTimeIntervalNotificationTrigger(timeInterval: seconds, repeats: false)` |
+| `openAppSettings` | `{}` | `UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)` |
+
+`weekday` skickas redan i iOS-format (söndag = 1 → **fredag = 6**).
+
+### Kontrakt Swift → JS (`evaluateJavaScript`)
+```js
+window.__donelySetNotificationPermission("granted" | "denied" | "notDetermined" | "provisional")
+window.__donelyNotificationScheduled({ id, nextFireDate /* ISO8601 */, language })
+window.__donelyNotificationError("meddelande")
+```
+
+### Swift-implementation (kärnan)
+```swift
+var comps = DateComponents()
+comps.weekday = payload.weekday      // 6 = fredag
+comps.hour    = payload.hour         // 17
+comps.minute  = payload.minute       // 0
+// Ingen timeZone sätts → Calendar.current + enhetens aktuella tidszon används.
+let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
+
+let content = UNMutableNotificationContent()
+content.title = payload.title        // redan översatt av JS till valt språk
+content.body  = payload.body
+content.sound = .default
+
+let request = UNNotificationRequest(identifier: payload.id, content: content, trigger: trigger)
+center.removePendingNotificationRequests(withIdentifiers: [payload.id])
+center.add(request)                  // samma id ⇒ ersätter, aldrig dubbletter
+```
+
+### Varför detta uppfyller kraven
+- **Lokal tid/kalender:** `UNCalendarNotificationTrigger` utan explicit `timeZone`
+  matchas mot `Calendar.current`, dvs. enhetens tidszon och kalender.
+- **Sommar-/vintertid:** iOS räknar om nästa träff vid varje DST-övergång – 17:00
+  förblir 17:00 i väggklockstid.
+- **Resa/byte av tidszon:** triggern följer enheten automatiskt. JS kontrollerar
+  dessutom `Intl…timeZone` vid `focus`/`visibilitychange` och schemalägger om.
+- **Inga dubbletter:** stabilt id `donely.reminder.weekly.friday`; JS avbokar före
+  varje ny schemaläggning och serialiserar anropen.
+- **Språk:** JS skickar redan översatt `title`/`body` och schemalägger om vid
+  `languageChanged`, så kommande notiser följer språket i Donely.
+- **Tillstånd:** begärs först när användaren själv slår på reglaget i Inställningar,
+  aldrig vid första start. Nekat läge visar förklaring + "Öppna inställningar".
+
+### Test och loggning
+- Utvecklingsknappen "Testnotis (~90 s)" (endast i dev-bygget) schemalägger
+  `donely.reminder.test`.
+- `logReminderDiagnostics()` loggar lokal tid, tidszon + UTC-offset, schema,
+  nästa planerade notis, språk och identifierare.
+
+### Mockat i webbversionen
+- Utan iOS-skal finns ingen riktig schemaläggning: JS beräknar och visar nästa
+  fredag 17:00 lokalt och använder webbens `Notification` för testnotisen medan
+  fliken är öppen. All faktisk leverans sker via StoreKit-oberoende `UNUserNotificationCenter` i Swift.

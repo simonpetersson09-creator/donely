@@ -1,10 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
+import { Bell, ChevronLeft, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
+import { Switch } from "@/components/ui/switch";
+import {
+  formatFireDate,
+  logReminderDiagnostics,
+  openNotificationSettings,
+  scheduleTestNotification,
+  useReminder,
+} from "@/lib/notifications";
 import {
   openManageSubscriptions,
   purchasePremium,
@@ -54,9 +62,10 @@ export const Route = createFileRoute("/installningar")({
 });
 
 function Installningar() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const premium = usePremium();
   const price = usePrice();
+  const reminder = useReminder();
   const [confirming, setConfirming] = useState(false);
 
   return (
@@ -154,7 +163,93 @@ function Installningar() {
           </div>
         </section>
 
+        <section className="mt-4">
+          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+            {t("remindersSection")}
+          </p>
+
+          <div className="rounded-xl border border-border bg-card px-3 py-3 shadow-card">
+            <div className="flex items-center gap-3">
+              <Bell className="size-[18px] shrink-0 text-primary" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-semibold leading-[18px] text-primary">
+                  {t("weeklyReminder")}
+                </p>
+                <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                  {t("weeklyReminderDesc")}
+                </p>
+              </div>
+              <Switch
+                checked={reminder.enabled}
+                disabled={reminder.busy}
+                aria-label={t("weeklyReminder")}
+                onCheckedChange={async (next) => {
+                  const result = await reminder.toggle(next, language);
+                  if (!next) {
+                    toast.success(t("reminderOffToast"));
+                    return;
+                  }
+                  if (result === "denied") toast.error(t("notifDenied"));
+                  else if (result === "unsupported") toast.error(t("notifUnsupported"));
+                  else if (result === "granted" || result === "provisional")
+                    toast.success(t("reminderOnToast"));
+                }}
+              />
+            </div>
+
+            {reminder.enabled && reminder.permission !== "denied" && (
+              <p className="mt-2 pl-[30px] text-[11px] font-normal leading-[15px] text-muted-foreground">
+                {t("nextReminder", {
+                  date: formatFireDate(reminder.nextFireDate, language),
+                })}
+              </p>
+            )}
+
+            {reminder.permission === "denied" && (
+              <div className="mt-3 rounded-lg bg-secondary px-3 py-2.5">
+                <p className="text-[11px] font-normal leading-[16px] text-muted-foreground">
+                  {t("notifDenied")}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!openNotificationSettings() && !openExternalUrl("app-settings:")) {
+                      toast.error(t("notifUnsupported"));
+                    }
+                  }}
+                  className="mt-2 text-[12px] font-semibold leading-[16px] text-primary underline-offset-2 active:underline"
+                >
+                  {t("openIosSettings")}
+                </button>
+              </div>
+            )}
+
+            {import.meta.env.DEV && (
+              <div className="mt-3 flex gap-2 border-t border-border pt-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    scheduleTestNotification(90);
+                    toast.message(t("testNotificationScheduled"));
+                  }}
+                  className="flex-1 rounded-lg border border-border px-3 py-2 text-[12px] font-semibold leading-[16px] text-primary active:bg-accent"
+                >
+                  {t("testNotification")}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => logReminderDiagnostics("manual")}
+                  className="rounded-lg border border-border px-3 py-2 text-[12px] font-semibold leading-[16px] text-muted-foreground active:bg-accent"
+                >
+                  Log
+                </button>
+              </div>
+            )}
+          </div>
+        </section>
+
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
           </p>
