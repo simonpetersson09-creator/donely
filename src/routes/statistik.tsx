@@ -11,6 +11,8 @@ import {
   type Category,
   type Entry,
 } from "@/lib/store";
+import { useTranslation } from "react-i18next";
+import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 
 export const Route = createFileRoute("/statistik")({
   head: () => ({
@@ -45,6 +47,8 @@ function Statistik() {
   const [year, setYear] = useState(currentYear);
   const [editing, setEditing] = useState<Category | null>(null);
 
+  const { t } = useLanguage();
+  const locale = useLocale();
   const { categories } = useCategories();
   const { entries } = useEntries();
   const { goals, setGoal, removeGoal } = useGoals();
@@ -104,14 +108,14 @@ function Statistik() {
           className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
         >
           <ChevronLeft className="size-4" />
-          Tillbaka
+          {t("back")}
         </Link>
         <div className="flex items-center gap-2">
-          <span className="text-[12px] font-medium text-foreground/60">Byt år</span>
+          <span className="text-[12px] font-medium text-foreground/60">{t("changeYear")}</span>
           <div className="flex items-center gap-1.5">
             <button
               type="button"
-              aria-label="Föregående år"
+              aria-label={t("prevYear")}
               disabled={yearIndex >= years.length - 1}
               onClick={() => setYear(years[yearIndex + 1])}
               className="flex size-8 items-center justify-center rounded-full bg-primary text-white shadow-soft transition-transform active:scale-95 disabled:opacity-30"
@@ -120,7 +124,7 @@ function Statistik() {
             </button>
             <button
               type="button"
-              aria-label="Nästa år"
+              aria-label={t("nextYear")}
               disabled={yearIndex <= 0}
               onClick={() => setYear(years[yearIndex - 1])}
               className="flex size-8 items-center justify-center rounded-full bg-primary text-white shadow-soft transition-transform active:scale-95 disabled:opacity-30"
@@ -132,24 +136,24 @@ function Statistik() {
       </div>
 
       <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {year} {isCurrentYear ? "hittills" : "– slutresultat"}
+        {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
       <div className="mt-3 rounded-xl border border-border bg-card px-3.5 py-2.5 text-card-foreground shadow-card">
         <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-card-foreground/60">
-          Totalt registrerade aktiviteter
+          {t("totalActivities")}
         </p>
         <p className="mt-0.5 text-[26px] font-bold leading-none tabular-nums">
-          {totalActivities.toLocaleString("sv-SE")}
+          {totalActivities.toLocaleString(locale)}
         </p>
       </div>
 
-      <Section title="Privat" rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
-      <Section title="Jobb" rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
+      <Section title={t("private")} rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
+      <Section title={t("work")} rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">
-          Inga registreringar {isCurrentYear ? "i år" : `${year}`} ännu.
+          {isCurrentYear ? t("noEntriesThisYear") : t("noEntriesYear", { year })}
         </p>
       )}
 
@@ -208,6 +212,8 @@ function GoalCard({
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
 }) {
+  const { t } = useTranslation();
+  const locale = useLocale();
   const { category, total, goal, lastAt } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
@@ -227,19 +233,19 @@ function GoalCard({
           className="min-w-0 flex-1 text-left"
         >
           <h3 className="truncate text-[12px] font-medium text-card-foreground/70">
-            {category.name}
+            {categoryLabel(t, category)}
           </h3>
         </Link>
         <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
-              <Check className="size-3" /> Uppnått
+              <Check className="size-3" /> {t("achieved")}
             </span>
           )}
           {showGoalCta && (
             <button
               type="button"
-              aria-label={`Ändra årsmål för ${category.name}`}
+              aria-label={t("changeGoalFor", { name: categoryLabel(t, category) })}
               onClick={() => onSetGoal(category)}
               className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
             >
@@ -252,12 +258,12 @@ function GoalCard({
       <div className="mt-0.5 flex items-center justify-between gap-2">
         <p className="min-w-0 truncate text-[20px] font-bold leading-tight tabular-nums">
           {goal !== null
-            ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
-            : `${total.toLocaleString("sv-SE")} hittills`}
+            ? t("ofGoal", { total: total.toLocaleString(locale), goal: goal.toLocaleString(locale) })
+            : t("soFarCount", { total: total.toLocaleString(locale) })}
         </p>
         {lastAt && mounted && (
           <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[12px] text-muted-foreground">
-            {formatRelativeDate(lastAt)}
+            {formatRelativeDate(lastAt, locale, t)}
           </span>
         )}
       </div>
@@ -274,7 +280,11 @@ function GoalCard({
   );
 }
 
-function formatRelativeDate(iso: string) {
+function formatRelativeDate(
+  iso: string,
+  locale: string,
+  t: (key: string, opts?: Record<string, unknown>) => string,
+) {
   const date = new Date(iso);
   const now = new Date();
   const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -282,13 +292,13 @@ function formatRelativeDate(iso: string) {
   const diffDays = Math.round(
     (startOfToday.getTime() - startOfDate.getTime()) / (1000 * 60 * 60 * 24),
   );
-  const time = date.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+  const time = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
 
-  if (diffDays === 0) return `Idag ${time}`;
-  if (diffDays === 1) return `Igår ${time}`;
-  if (diffDays >= 2 && diffDays <= 6) return `För ${diffDays} dagar sedan`;
+  if (diffDays === 0) return t("today", { time });
+  if (diffDays === 1) return t("yesterday", { time });
+  if (diffDays >= 2 && diffDays <= 6) return t("daysAgo", { count: diffDays });
 
-  return date.toLocaleDateString("sv-SE", {
+  return date.toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -311,6 +321,7 @@ function GoalSheet({
   onRemove: () => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const [value, setValue] = useState(current !== null ? String(current) : "");
   const parsed = Number.parseInt(value, 10);
   const valid = Number.isInteger(parsed) && parsed > 0;
@@ -318,7 +329,7 @@ function GoalSheet({
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       <button
-        aria-label="Stäng"
+        aria-label={t("close")}
         onClick={onClose}
         className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px] animate-in fade-in"
       />
@@ -331,12 +342,12 @@ function GoalSheet({
       >
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-[18px] font-bold">
-            Årsmål {year} · {category.name}
+            {t("yearGoal", { year, name: categoryLabel(t, category) })}
           </h2>
           <button
             type="button"
             onClick={onClose}
-            aria-label="Stäng"
+            aria-label={t("close")}
             className="flex size-9 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
           >
             <X className="size-4" />
@@ -349,8 +360,8 @@ function GoalSheet({
           pattern="[0-9]*"
           value={value}
           onChange={(e) => setValue(e.target.value.replace(/[^0-9]/g, "").slice(0, 7))}
-          placeholder="t.ex. 20"
-          aria-label="Årsmål"
+          placeholder={t("goalPlaceholder")}
+          aria-label={t("goalLabel")}
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-center text-[22px] font-semibold tabular-nums outline-none focus:border-ring"
         />
 
@@ -361,7 +372,7 @@ function GoalSheet({
               onClick={onRemove}
               className="flex-1 rounded-xl border border-border bg-card py-3 text-[15px] font-semibold text-primary"
             >
-              Ta bort mål
+              {t("removeGoal")}
             </button>
           )}
           <button
@@ -369,7 +380,7 @@ function GoalSheet({
             disabled={!valid}
             className="flex-1 rounded-xl bg-primary py-3 text-[15px] font-semibold text-primary-foreground disabled:opacity-40"
           >
-            Spara
+            {t("save")}
           </button>
         </div>
       </form>

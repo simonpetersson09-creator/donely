@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { goalKey, useCategories, useEntries, useGoals } from "@/lib/store";
+import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 
 export const Route = createFileRoute("/kategori/$id")({
   head: () => ({
@@ -27,6 +28,8 @@ export const Route = createFileRoute("/kategori/$id")({
 function CategoryDetail() {
   const { id } = Route.useParams();
   const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
+  const locale = useLocale();
   const { categories } = useCategories();
   const { entries } = useEntries();
   const { goals } = useGoals();
@@ -84,26 +87,26 @@ function CategoryDetail() {
           className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
         >
           <ChevronLeft className="size-4" />
-          Statistik
+          {t("statistics")}
         </Link>
       </div>
 
       <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {category ? category.name : "Kategori"}
+        {category ? categoryLabel(t, category) : t("categoryTitle")}
       </h1>
 
       <div className="mt-3 rounded-xl border border-border bg-card px-3.5 py-3 text-card-foreground shadow-card">
         <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-card-foreground/60">
-          {currentYear} hittills
+          {t("yearSoFar", { year: currentYear })}
         </p>
         <p className="mt-0.5 text-[26px] font-bold leading-none tabular-nums">
           {goal !== null
-            ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
-            : `${total.toLocaleString("sv-SE")} hittills`}
+            ? t("ofGoal", { total: total.toLocaleString(locale), goal: goal.toLocaleString(locale) })
+            : t("soFarCount", { total: total.toLocaleString(locale) })}
         </p>
         {lastAt && mounted && (
           <p className="mt-1 text-[11px] text-card-foreground/50">
-            Senast registrerat {formatDate(lastAt)}
+            {t("lastRegistered", { date: formatDate(lastAt, locale) })}
           </p>
         )}
         {pct !== null && (
@@ -118,7 +121,7 @@ function CategoryDetail() {
 
       <section className="mt-5">
         <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
-          Utveckling per år
+          {t("developmentPerYear")}
         </p>
         <div className="rounded-xl border border-border bg-card px-3 py-4 text-card-foreground shadow-card">
           <div className="flex h-64 items-end justify-between gap-2">
@@ -130,11 +133,11 @@ function CategoryDetail() {
                   key={b.year}
                   type="button"
                   onClick={() => setSelected(selected === b.year ? null : b.year)}
-                  aria-label={`${b.year}: ${b.total} registrerade`}
+                  aria-label={t("barA11y", { year: b.year, total: b.total })}
                   className="flex h-full flex-1 flex-col items-center justify-end gap-2"
                 >
                   <span className="text-[11px] font-semibold tabular-nums text-card-foreground/70">
-                    {b.total.toLocaleString("sv-SE")}
+                    {b.total.toLocaleString(locale)}
                   </span>
                   <span
                     style={{ height: `${h}%` }}
@@ -152,7 +155,7 @@ function CategoryDetail() {
                     {b.year}
                   </span>
                   <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-card-foreground/50">
-                    {isCurrent ? "Hittills" : "\u00A0"}
+                    {isCurrent ? t("soFarShort") : "\u00A0"}
                   </span>
                 </button>
               );
@@ -165,15 +168,17 @@ function CategoryDetail() {
         <div className="mt-3 rounded-xl border border-border bg-card px-3.5 py-3 text-card-foreground shadow-card">
           <p className="text-[15px] font-bold">{active.year}</p>
           <p className="mt-1 text-[14px]">
-            Registrerat: <span className="font-semibold tabular-nums">{active.total.toLocaleString("sv-SE")}</span>
+            {t("registeredCountLabel")}{" "}
+            <span className="font-semibold tabular-nums">{active.total.toLocaleString(locale)}</span>
           </p>
           {active.goal !== null && (
             <>
               <p className="text-[14px]">
-                Årsmål: <span className="font-semibold tabular-nums">{active.goal.toLocaleString("sv-SE")}</span>
+                {t("goalShort")}{" "}
+                <span className="font-semibold tabular-nums">{active.goal.toLocaleString(locale)}</span>
               </p>
               <p className="mt-1 text-[13px] text-card-foreground/70">
-                {active.total >= active.goal ? "Målet uppnåddes." : "Målet uppnåddes inte."}
+                {active.total >= active.goal ? t("goalReached") : t("goalNotReached")}
               </p>
             </>
           )}
@@ -183,8 +188,8 @@ function CategoryDetail() {
   );
 }
 
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("sv-SE", {
+function formatDate(iso: string, locale: string) {
+  return new Date(iso).toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",

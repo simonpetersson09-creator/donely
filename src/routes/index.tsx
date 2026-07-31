@@ -4,6 +4,9 @@ import { Check, ChevronDown, Minus, Pencil, Plus, Trash2, X } from "lucide-react
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useCategories, useEntries, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
+import { useTranslation } from "react-i18next";
+import { categoryLabel, useLanguage } from "@/lib/use-language";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
 
@@ -39,6 +42,7 @@ function Index() {
   const [flash, setFlash] = useState(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const { t } = useLanguage();
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { addEntry } = useEntries();
 
@@ -73,14 +77,15 @@ function Index() {
 
   function register() {
     if (!valid || !selected) return;
+    const name = categoryLabel(t, selected);
     addEntry({ area, categoryId: selected.id, categoryName: selected.name, amount: parsed });
     navigator.vibrate?.(12);
     setAmount("1");
     setFlash(true);
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => setFlash(false), 1100);
-    toast.success(`${parsed} ${selected.name} registrerat`, {
-      description: area === "jobb" ? "Jobb" : "Privat",
+    toast.success(t("registeredToast", { count: parsed, name }), {
+      description: area === "jobb" ? t("work") : t("private"),
     });
   }
 
@@ -98,27 +103,31 @@ function Index() {
           <AreaButton
             active={area === "jobb"}
             onClick={() => setArea("jobb")}
-            label="Jobb"
+            label={t("work")}
             tone="work"
           />
           <AreaButton
             active={area === "privat"}
             onClick={() => setArea("privat")}
-            label="Privat"
+            label={t("private")}
             tone="life"
           />
         </div>
 
         {/* Kategori */}
         <section>
-          <Label>Kategori</Label>
+          <Label>{t("category")}</Label>
           <button
             type="button"
             onClick={() => setPickerOpen(true)}
             className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2.5 text-left text-card-foreground shadow-card transition-transform active:scale-[0.985]"
           >
             <span className="text-[15px] font-medium">
-              {hydrated ? (selected?.name ?? "Skapa en kategori") : "Laddar…"}
+              {hydrated
+                ? selected
+                  ? categoryLabel(t, selected)
+                  : t("createCategory")
+                : t("loading")}
             </span>
             <ChevronDown className="size-3.5 text-card-foreground/60" />
           </button>
@@ -126,11 +135,11 @@ function Index() {
 
         {/* Antal */}
         <section>
-          <Label>Antal</Label>
+          <Label>{t("amount")}</Label>
           <div className="flex items-center gap-1.5 rounded-xl border border-border bg-card p-1 shadow-card">
             <StepButton
               onClick={() => setAmount(String(Math.max(1, (parsed || 1) - 1)))}
-              aria-label="Minska antal"
+              aria-label={t("decrease")}
             >
               <Minus className="size-3.5" />
             </StepButton>
@@ -140,12 +149,12 @@ function Index() {
               value={amount}
               onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, "").slice(0, 5))}
               onFocus={(e) => e.target.select()}
-              aria-label="Antal"
+              aria-label={t("amount")}
               className="min-w-0 flex-1 bg-transparent text-center text-[24px] font-semibold tabular-nums text-card-foreground outline-none"
             />
             <StepButton
               onClick={() => setAmount(String((parsed || 0) + 1))}
-              aria-label="Öka antal"
+              aria-label={t("increase")}
             >
               <Plus className="size-3.5" />
             </StepButton>
@@ -175,7 +184,7 @@ function Index() {
               flash ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0",
             )}
           >
-            <Check className="size-3.5" /> Registrerat
+            <Check className="size-3.5" /> {t("registered")}
           </span>
         </div>
         <button
@@ -184,14 +193,17 @@ function Index() {
           onClick={register}
           className="w-full rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-card transition-all duration-150 active:scale-[0.98] disabled:opacity-40 disabled:shadow-none"
         >
-          Registrera
+          {t("register")}
         </button>
-        <Link
-          to="/statistik"
-          className="flex w-full items-center justify-center rounded-xl border border-border bg-card py-3 text-[16px] font-semibold text-primary shadow-card transition-transform active:scale-[0.98]"
-        >
-          Statistik
-        </Link>
+        <div className="flex items-stretch gap-2">
+          <Link
+            to="/statistik"
+            className="flex h-12 flex-1 items-center justify-center rounded-xl border border-border bg-card text-[16px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+          >
+            {t("statistics")}
+          </Link>
+          <LanguageSwitcher />
+        </div>
       </div>
 
 
@@ -291,6 +303,7 @@ function CategorySheet({
   onDelete: (id: string) => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation();
   const [adding, setAdding] = useState(false);
   const [newName, setNewName] = useState("");
   const [openId, setOpenId] = useState<string | null>(null);
@@ -300,18 +313,18 @@ function CategorySheet({
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
       <button
-        aria-label="Stäng"
+        aria-label={t("close")}
         onClick={onClose}
         className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px] animate-in fade-in"
       />
       <div className="relative flex w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="text-[15px] font-bold">
-            {area === "jobb" ? "Jobb" : "Privat"}
+            {area === "jobb" ? t("work") : t("private")}
           </h2>
           <button
             onClick={onClose}
-            aria-label="Stäng"
+            aria-label={t("close")}
             className="flex size-7 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
           >
             <X className="size-3.5" />
@@ -334,7 +347,7 @@ function CategorySheet({
               autoFocus
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
-              placeholder="Namn på kategori"
+              placeholder={t("categoryName")}
               className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-[14px] outline-none placeholder:text-muted-foreground focus:border-ring"
             />
             <button
@@ -342,7 +355,7 @@ function CategorySheet({
               disabled={!newName.trim()}
               className="rounded-xl bg-primary px-3 text-[14px] font-semibold text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
             >
-              Spara
+              {t("save")}
             </button>
           </form>
         ) : (
@@ -352,7 +365,7 @@ function CategorySheet({
             className="mb-1.5 flex w-full items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
           >
             <Plus className="size-3.5" />
-            Lägg till kategori
+            {t("addCategory")}
           </button>
         )}
 
@@ -378,20 +391,20 @@ function CategorySheet({
                   type="submit"
                   className="rounded-xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground active:scale-95"
                 >
-                  Spara
+                  {t("save")}
                 </button>
               </form>
             ) : (
               <CategoryRow
                 key={c.id}
-                name={c.name}
+                name={categoryLabel(t, c)}
                 selected={c.id === selectedId}
                 actionsOpen={openId === c.id}
                 onOpenActions={() => setOpenId(c.id)}
                 onCloseActions={() => setOpenId(null)}
                 onSelect={() => onSelect(c.id)}
                 onRename={() => {
-                  setRenameValue(c.name);
+                  setRenameValue(categoryLabel(t, c));
                   setRenamingId(c.id);
                   setOpenId(null);
                 }}
@@ -427,6 +440,9 @@ function CategoryRow({
   onRename: () => void;
   onDelete: () => void;
 }) {
+  const { t } = useTranslation();
+  const renameLabel = t("rename");
+  const deleteLabel = t("delete");
   const startX = useRef(0);
   const moved = useRef(false);
   const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -442,7 +458,7 @@ function CategoryRow({
         <button
           type="button"
           onClick={onRename}
-          aria-label="Byt namn"
+          aria-label={renameLabel}
           className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary"
         >
           <Pencil className="size-3.5" />
@@ -450,7 +466,7 @@ function CategoryRow({
         <button
           type="button"
           onClick={onDelete}
-          aria-label="Ta bort"
+          aria-label={deleteLabel}
           className="flex size-8 items-center justify-center rounded-lg bg-destructive text-destructive-foreground"
         >
           <Trash2 className="size-3.5" />
