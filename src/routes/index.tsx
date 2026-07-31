@@ -568,4 +568,38 @@ function Onboarding({ onStart }: { onStart: () => void }) {
   );
 }
 
+function LanguageGuideBubble({ onClose }: { onClose: () => void }) {
+  const { t } = useLanguage();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onDown = (e: PointerEvent) => {
+      if (!ref.current?.contains(e.target as Node)) onClose();
+    };
+    document.addEventListener("pointerdown", onDown);
+    return () => document.removeEventListener("pointerdown", onDown);
+  }, [onClose]);
+
+  return (
+    <div
+      ref={ref}
+      className="absolute bottom-full right-0 z-50 mb-3 w-56 origin-bottom-right rounded-2xl border border-border bg-card p-3.5 shadow-card animate-in fade-in zoom-in-95 duration-200"
+    >
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label={t("close")}
+        className="absolute right-2 top-2 rounded-full p-1 text-card-foreground/50 transition-colors active:bg-secondary"
+      >
+        <X className="size-3.5" />
+      </button>
+      <p className="pr-5 text-[14px] font-semibold text-card-foreground">{t("languageGuideTitle")}</p>
+      <p className="mt-1 text-[12px] leading-snug text-muted-foreground">{t("languageGuideBody")}</p>
+      <div className="absolute -bottom-1.5 right-6 size-3 rotate-45 rounded-[2px] border-r border-b border-border bg-card" />
+    </div>
+  );
+}
+
+
+
 
