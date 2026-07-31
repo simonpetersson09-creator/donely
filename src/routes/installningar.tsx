@@ -119,39 +119,27 @@ function Installningar() {
 
       <div>
         <section className="space-y-3">
-          {!premium.subscribed && (
-            <button
-              type="button"
-              onClick={() => {
-                if (purchasePremium()) {
-                  premium.refresh();
-                  toast.success(t("premiumActive"));
-                } else {
-                  toast.message(t("premiumFlowComing"));
-                }
-              }}
-              className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
-            >
-              <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
-                <Crown className="size-4 text-gold" fill="currentColor" />
-                {t("startPremiumPrice")}
-              </span>
-            </button>
-          )}
-
-          {(premium.subscribed || premium.trialExpired) && (
-            <div className="rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
-              {premium.subscribed ? (
-                <p className="text-[15px] font-semibold leading-[20px] text-primary">
-                  {t("premiumActive")}
-                </p>
-              ) : (
-                <p className="text-[15px] font-semibold leading-[20px] text-primary">
-                  {t("premiumUnlockAll")}
-                </p>
-              )}
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => {
+              if (premium.subscribed) {
+                toast.message(t("premiumActive"));
+                return;
+              }
+              if (purchasePremium()) {
+                premium.refresh();
+                toast.success(t("premiumActive"));
+              } else {
+                toast.message(t("premiumFlowComing"));
+              }
+            }}
+            className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
+          >
+            <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
+              <Crown className="size-4 text-gold" fill="currentColor" />
+              {premium.subscribed ? t("premiumActive") : t("startPremiumPrice")}
+            </span>
+          </button>
 
           <div className="grid grid-cols-2 gap-2">
             <button
