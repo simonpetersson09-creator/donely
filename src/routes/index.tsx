@@ -116,7 +116,7 @@ function Index() {
                 <p className="text-center text-[10px] font-semibold leading-[13px] text-primary">
                   {premium.subscribed ? (
                     <span className="inline-flex items-center gap-1">
-                      <Crown className="size-3" />
+                      <Crown className="size-3 text-gold" fill="currentColor" />
                       {t("premiumActive")}
                     </span>
                   ) : (

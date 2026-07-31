@@ -87,7 +87,7 @@ function Installningar() {
                 <p className="text-center text-[11px] font-semibold leading-[14px] text-primary">
                   {premium.subscribed ? (
                     <span className="inline-flex items-center gap-1">
-                      <Crown className="size-3" />
+                      <Crown className="size-3 text-gold" fill="currentColor" />
                       {t("premiumActive")}
                     </span>
                   ) : (
@@ -133,7 +133,7 @@ function Installningar() {
               className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
             >
               <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
-                <Crown className="size-4" />
+                <Crown className="size-4 text-gold" fill="currentColor" />
                 {t("startPremiumPrice")}
               </span>
             </button>
