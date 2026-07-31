@@ -9,6 +9,7 @@ import {
   purchasePremium,
   restorePurchase,
   usePremium,
+  usePrice,
 } from "@/lib/premium";
 
 
@@ -56,6 +57,7 @@ export const Route = createFileRoute("/installningar")({
 function Installningar() {
   const { t } = useLanguage();
   const premium = usePremium();
+  const price = usePrice();
   const [confirming, setConfirming] = useState(false);
 
   return (
@@ -81,7 +83,7 @@ function Installningar() {
 
       <div className="flex flex-1 items-center justify-center py-6">
         <div className="relative">
-          {(premium.subscribed || !premium.trialExpired) && (
+          {(premium.subscribed || premium.inTrial) && (
             <div className="absolute -right-14 -top-14 z-10 rotate-[6deg]">
               <div className="relative rounded-full border border-primary bg-background px-4 py-3 shadow-card">
                 <p className="text-center text-[11px] font-semibold leading-[14px] text-primary">
