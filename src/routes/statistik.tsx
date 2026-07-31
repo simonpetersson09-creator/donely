@@ -170,6 +170,12 @@ function Statistik() {
             removeGoal(year, editing.id);
             setEditing(null);
           }}
+          onDelete={() => {
+            removeCategory(editing.id);
+            removeEntriesByCategory(editing.id);
+            removeGoalsByCategory(editing.id);
+            setEditing(null);
+          }}
           onClose={() => setEditing(null)}
         />
       )}
