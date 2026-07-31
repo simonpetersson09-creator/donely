@@ -127,3 +127,53 @@ export function usePremium() {
 
   return { ...state, refresh };
 }
+
+type NativeBridge = {
+  webkit?: {
+    messageHandlers?: Record<string, { postMessage: (v: unknown) => void } | undefined>;
+  };
+};
+
+function nativeHandler(name: string) {
+  if (typeof window === "undefined") return undefined;
+  return (window as unknown as NativeBridge).webkit?.messageHandlers?.[name];
+}
+
+export const MANAGE_SUBSCRIPTIONS_URL =
+  "https://apps.apple.com/account/subscriptions";
+
+/**
+ * Starts the purchase flow. In the iOS shell this hands over to StoreKit 2;
+ * on the web build the entitlement is granted locally so the UI can be used.
+ * Returns true when premium is active afterwards.
+ */
+export function purchasePremium(): boolean {
+  const handler = nativeHandler("purchasePremium");
+  if (handler) {
+    handler.postMessage({ product: "donely.premium.monthly" });
+    return false;
+  }
+  activateSubscription();
+  return true;
+}
+
+/** Restores a previous purchase. Returns true when an entitlement was found. */
+export function restorePurchase(): boolean {
+  const handler = nativeHandler("restorePurchase");
+  if (handler) {
+    handler.postMessage({});
+    return false;
+  }
+  notify();
+  return isSubscribed();
+}
+
+/** Opens Apple's subscription management screen. */
+export function openManageSubscriptions() {
+  const handler = nativeHandler("manageSubscription");
+  if (handler) {
+    handler.postMessage({});
+    return;
+  }
+  window.open(MANAGE_SUBSCRIPTIONS_URL, "_blank", "noopener");
+}
