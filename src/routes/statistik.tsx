@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Pencil } from "lucide-react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { ChevronLeft, ChevronRight, Check, X, Pencil, Home, Briefcase } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   goalKey,
@@ -148,8 +148,8 @@ function Statistik() {
         </p>
       </div>
 
-      <Section title={t("private")} rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
-      <Section title={t("work")} rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
+      <Section title={t("private")} icon={<Home className="size-5" />} rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
+      <Section title={t("work")} icon={<Briefcase className="size-5" />} rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">
@@ -185,11 +185,13 @@ function Statistik() {
 
 function Section({
   title,
+  icon,
   rows,
   showGoalCta,
   onSetGoal,
 }: {
   title: string;
+  icon: ReactNode;
   rows: Row[];
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
@@ -197,7 +199,8 @@ function Section({
   if (rows.length === 0) return null;
   return (
     <section className="mt-8">
-      <h2 className="mb-1 px-1 text-[13px] font-semibold tracking-[-0.01em] text-primary/80">
+      <h2 className="mb-2 flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
+        {icon}
         {title}
       </h2>
       <div className="space-y-1.5">
