@@ -206,7 +206,10 @@ function Index() {
             setCategoryId(created.id);
             setPickerOpen(false);
           }}
+          onRename={renameCategory}
+          onDelete={removeCategory}
           onClose={() => setPickerOpen(false)}
+
         />
       )}
     </main>
