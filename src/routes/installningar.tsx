@@ -139,20 +139,32 @@ function Installningar() {
       </p>
 
       <section className="mt-6 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
-        <div className="rounded-xl border border-destructive/30 bg-card px-3.5 py-3 shadow-card">
-          <span className="flex items-center gap-2 text-[15px] font-semibold text-destructive">
-            <Trash2 className="size-4" />
-            {t("deleteAllData")}
-          </span>
-          <span className="mt-0.5 block text-[13px] text-muted-foreground">
-            {t("deleteAllDataDesc")}
-          </span>
-          {confirming ? (
-            <div className="mt-3 flex gap-2">
+        <button
+          type="button"
+          onClick={() => setConfirming(true)}
+          className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[15px] font-semibold text-destructive shadow-card transition-colors active:bg-destructive/10"
+        >
+          <span>{t("deleteAllDataRow")}</span>
+          <ChevronRight className="size-4 text-destructive" />
+        </button>
+      </section>
+
+      {confirming && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
+          <div className="w-full max-w-[280px] overflow-hidden rounded-[14px] bg-card text-center shadow-xl">
+            <div className="px-4 pb-4 pt-5">
+              <p className="text-[17px] font-semibold text-foreground">
+                {t("deleteAllData")}
+              </p>
+              <p className="mt-1.5 text-[13px] leading-snug text-muted-foreground">
+                {t("deleteAllDataWarning")}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 border-t border-border">
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="flex-1 rounded-xl border border-border bg-card py-2.5 text-[15px] font-semibold text-primary"
+                className="border-r border-border py-2.5 text-[17px] text-primary transition-colors active:bg-accent"
               >
                 {t("cancel")}
               </button>
@@ -163,22 +175,15 @@ function Installningar() {
                   toast.success(t("allDataDeleted"));
                   window.location.href = "/";
                 }}
-                className="flex-1 rounded-xl bg-destructive py-2.5 text-[15px] font-semibold text-destructive-foreground"
+                className="py-2.5 text-[17px] font-semibold text-destructive transition-colors active:bg-destructive/10"
               >
-                {t("deleteAllConfirm")}
+                {t("deleteAllData")}
               </button>
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setConfirming(true)}
-              className="mt-3 w-full rounded-xl border border-destructive/30 bg-card py-2.5 text-[15px] font-semibold text-destructive transition-colors active:bg-destructive/10"
-            >
-              {t("deleteAllData")}
-            </button>
-          )}
+          </div>
         </div>
-      </section>
+      )}
     </main>
   );
+
 }
