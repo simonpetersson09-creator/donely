@@ -130,11 +130,9 @@ function CategoryDetail() {
                   <span className="text-[11px] font-medium tabular-nums text-card-foreground/70">
                     {b.year}
                   </span>
-                  {b.year === currentYear && (
-                    <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-card-foreground/50">
-                      Hittills
-                    </span>
-                  )}
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-card-foreground/50">
+                    {b.year === currentYear ? "Hittills" : "\u00A0"}
+                  </span>
                 </button>
               );
             })}
