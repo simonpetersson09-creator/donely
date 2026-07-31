@@ -102,7 +102,7 @@ function CategoryDetail() {
 
       <section className="mt-5">
         <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
-          Per år
+          Utveckling per år
         </p>
         <div className="rounded-xl border border-border bg-card px-3 py-4 text-card-foreground shadow-card">
           <div className="flex h-64 items-end justify-between gap-2">
