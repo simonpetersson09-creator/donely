@@ -140,6 +140,19 @@ const sv = {
   startPremiumPriceDynamic: "Starta Premium – {{price}}/mån",
   legalRow: "Integritetspolicy & Användarvillkor",
   legalOpenError: "Sidan kunde inte öppnas. Försök igen.",
+  remindersSection: "Påminnelser",
+  weeklyReminder: "Veckopåminnelse",
+  weeklyReminderDesc: "Varje fredag kl. 17:00, enligt tiden på din enhet.",
+  nextReminder: "Nästa påminnelse: {{date}}",
+  notifDenied: "Notiser är avstängda för Donely. Slå på dem i iOS-inställningarna för att få påminnelsen.",
+  openIosSettings: "Öppna inställningar",
+  notifUnsupported: "Notiser stöds inte här. Installera Donely på hemskärmen.",
+  reminderOnToast: "Påminnelsen är på",
+  reminderOffToast: "Påminnelsen är av",
+  reminderNotifTitle: "Dags att summera veckan",
+  reminderNotifBody: "Vad har du fått gjort? Registrera veckans resultat i Donely.",
+  testNotification: "Testnotis (~90 s)",
+  testNotificationScheduled: "Testnotis schemalagd om cirka 90 sekunder.",
 };
 
 type Dict = typeof sv & Record<string, string>;
@@ -245,6 +258,19 @@ const en: Dict = {
   startPremiumPriceDynamic: "Start Premium – {{price}}/mo",
   legalRow: "Privacy Policy & Terms of Use",
   legalOpenError: "The page could not be opened. Please try again.",
+  remindersSection: "Reminders",
+  weeklyReminder: "Weekly reminder",
+  weeklyReminderDesc: "Every Friday at 17:00, in your device's local time.",
+  nextReminder: "Next reminder: {{date}}",
+  notifDenied: "Notifications are turned off for Donely. Enable them in iOS Settings to get the reminder.",
+  openIosSettings: "Open Settings",
+  notifUnsupported: "Notifications aren't supported here. Install Donely on your Home Screen.",
+  reminderOnToast: "Reminder turned on",
+  reminderOffToast: "Reminder turned off",
+  reminderNotifTitle: "Time to wrap up your week",
+  reminderNotifBody: "What did you get done? Log this week's results in Donely.",
+  testNotification: "Test notification (~90 s)",
+  testNotificationScheduled: "Test notification scheduled in about 90 seconds.",
 };
 
 const de: Dict = {
@@ -348,6 +374,19 @@ const de: Dict = {
   startPremiumPriceDynamic: "Premium starten – {{price}}/Mon.",
   legalRow: "Datenschutz & Nutzungsbedingungen",
   legalOpenError: "Die Seite konnte nicht geöffnet werden. Bitte versuche es erneut.",
+  remindersSection: "Erinnerungen",
+  weeklyReminder: "Wöchentliche Erinnerung",
+  weeklyReminderDesc: "Jeden Freitag um 17:00 Uhr, in der Ortszeit deines Geräts.",
+  nextReminder: "Nächste Erinnerung: {{date}}",
+  notifDenied: "Mitteilungen sind für Donely deaktiviert. Aktiviere sie in den iOS-Einstellungen, um die Erinnerung zu erhalten.",
+  openIosSettings: "Einstellungen öffnen",
+  notifUnsupported: "Mitteilungen werden hier nicht unterstützt. Installiere Donely auf dem Home-Bildschirm.",
+  reminderOnToast: "Erinnerung aktiviert",
+  reminderOffToast: "Erinnerung deaktiviert",
+  reminderNotifTitle: "Zeit, die Woche abzuschließen",
+  reminderNotifBody: "Was hast du geschafft? Erfasse deine Wochenergebnisse in Donely.",
+  testNotification: "Testmitteilung (ca. 90 s)",
+  testNotificationScheduled: "Testmitteilung in etwa 90 Sekunden geplant.",
 };
 
 const fr: Dict = {
@@ -453,6 +492,19 @@ const fr: Dict = {
   startPremiumPriceDynamic: "Démarrer Premium – {{price}}/mois",
   legalRow: "Politique de confidentialité et Conditions d’utilisation",
   legalOpenError: "La page n’a pas pu s’ouvrir. Veuillez réessayer.",
+  remindersSection: "Rappels",
+  weeklyReminder: "Rappel hebdomadaire",
+  weeklyReminderDesc: "Chaque vendredi à 17h00, à l’heure locale de votre appareil.",
+  nextReminder: "Prochain rappel : {{date}}",
+  notifDenied: "Les notifications sont désactivées pour Donely. Activez-les dans les Réglages iOS pour recevoir le rappel.",
+  openIosSettings: "Ouvrir les Réglages",
+  notifUnsupported: "Les notifications ne sont pas prises en charge ici. Installez Donely sur l’écran d’accueil.",
+  reminderOnToast: "Rappel activé",
+  reminderOffToast: "Rappel désactivé",
+  reminderNotifTitle: "C’est l’heure du bilan de la semaine",
+  reminderNotifBody: "Qu’avez-vous accompli ? Enregistrez vos résultats de la semaine dans Donely.",
+  testNotification: "Notification test (~90 s)",
+  testNotificationScheduled: "Notification test programmée dans environ 90 secondes.",
 };
 
 const es: Dict = {
@@ -558,6 +610,19 @@ const es: Dict = {
   startPremiumPriceDynamic: "Empezar Premium – {{price}}/mes",
   legalRow: "Política de privacidad y Términos de uso",
   legalOpenError: "No se pudo abrir la página. Inténtalo de nuevo.",
+  remindersSection: "Recordatorios",
+  weeklyReminder: "Recordatorio semanal",
+  weeklyReminderDesc: "Cada viernes a las 17:00, según la hora local de tu dispositivo.",
+  nextReminder: "Próximo recordatorio: {{date}}",
+  notifDenied: "Las notificaciones están desactivadas para Donely. Actívalas en los Ajustes de iOS para recibir el recordatorio.",
+  openIosSettings: "Abrir Ajustes",
+  notifUnsupported: "Las notificaciones no son compatibles aquí. Instala Donely en la pantalla de inicio.",
+  reminderOnToast: "Recordatorio activado",
+  reminderOffToast: "Recordatorio desactivado",
+  reminderNotifTitle: "Hora de cerrar la semana",
+  reminderNotifBody: "¿Qué has conseguido? Registra los resultados de la semana en Donely.",
+  testNotification: "Notificación de prueba (~90 s)",
+  testNotificationScheduled: "Notificación de prueba programada en unos 90 segundos.",
 };
 
 const it: Dict = {
@@ -663,6 +728,19 @@ const it: Dict = {
   startPremiumPriceDynamic: "Inizia Premium – {{price}}/mese",
   legalRow: "Informativa sulla privacy e Condizioni d’uso",
   legalOpenError: "Impossibile aprire la pagina. Riprova.",
+  remindersSection: "Promemoria",
+  weeklyReminder: "Promemoria settimanale",
+  weeklyReminderDesc: "Ogni venerdì alle 17:00, secondo l’ora locale del dispositivo.",
+  nextReminder: "Prossimo promemoria: {{date}}",
+  notifDenied: "Le notifiche sono disattivate per Donely. Attivale in Impostazioni di iOS per ricevere il promemoria.",
+  openIosSettings: "Apri Impostazioni",
+  notifUnsupported: "Le notifiche non sono supportate qui. Installa Donely nella schermata Home.",
+  reminderOnToast: "Promemoria attivato",
+  reminderOffToast: "Promemoria disattivato",
+  reminderNotifTitle: "È ora di chiudere la settimana",
+  reminderNotifBody: "Che cosa hai fatto? Registra i risultati della settimana in Donely.",
+  testNotification: "Notifica di prova (~90 s)",
+  testNotificationScheduled: "Notifica di prova programmata tra circa 90 secondi.",
 };
 
 const ptBR: Dict = {
@@ -768,6 +846,19 @@ const ptBR: Dict = {
   startPremiumPriceDynamic: "Assinar Premium – {{price}}/mês",
   legalRow: "Política de Privacidade e Termos de Uso",
   legalOpenError: "Não foi possível abrir a página. Tente novamente.",
+  remindersSection: "Lembretes",
+  weeklyReminder: "Lembrete semanal",
+  weeklyReminderDesc: "Toda sexta-feira às 17:00, no horário local do seu aparelho.",
+  nextReminder: "Próximo lembrete: {{date}}",
+  notifDenied: "As notificações estão desativadas para o Donely. Ative-as nos Ajustes do iOS para receber o lembrete.",
+  openIosSettings: "Abrir Ajustes",
+  notifUnsupported: "As notificações não têm suporte aqui. Instale o Donely na tela de início.",
+  reminderOnToast: "Lembrete ativado",
+  reminderOffToast: "Lembrete desativado",
+  reminderNotifTitle: "Hora de fechar a semana",
+  reminderNotifBody: "O que você concluiu? Registre os resultados da semana no Donely.",
+  testNotification: "Notificação de teste (~90 s)",
+  testNotificationScheduled: "Notificação de teste agendada em cerca de 90 segundos.",
 };
 
 const nl: Dict = {
@@ -871,6 +962,19 @@ const nl: Dict = {
   startPremiumPriceDynamic: "Premium starten – {{price}}/mnd",
   legalRow: "Privacybeleid & Gebruiksvoorwaarden",
   legalOpenError: "De pagina kon niet worden geopend. Probeer het opnieuw.",
+  remindersSection: "Herinneringen",
+  weeklyReminder: "Wekelijkse herinnering",
+  weeklyReminderDesc: "Elke vrijdag om 17:00 uur, in de lokale tijd van je apparaat.",
+  nextReminder: "Volgende herinnering: {{date}}",
+  notifDenied: "Meldingen staan uit voor Donely. Zet ze aan in de iOS-instellingen om de herinnering te ontvangen.",
+  openIosSettings: "Instellingen openen",
+  notifUnsupported: "Meldingen worden hier niet ondersteund. Installeer Donely op je beginscherm.",
+  reminderOnToast: "Herinnering ingeschakeld",
+  reminderOffToast: "Herinnering uitgeschakeld",
+  reminderNotifTitle: "Tijd om je week af te ronden",
+  reminderNotifBody: "Wat heb je gedaan? Registreer je resultaten van deze week in Donely.",
+  testNotification: "Testmelding (~90 s)",
+  testNotificationScheduled: "Testmelding over ongeveer 90 seconden gepland.",
 };
 
 const pl: Dict = {
@@ -976,6 +1080,19 @@ const pl: Dict = {
   startPremiumPriceDynamic: "Uruchom Premium – {{price}}/mies.",
   legalRow: "Polityka prywatności i Warunki użytkowania",
   legalOpenError: "Nie można otworzyć strony. Spróbuj ponownie.",
+  remindersSection: "Przypomnienia",
+  weeklyReminder: "Cotygodniowe przypomnienie",
+  weeklyReminderDesc: "W każdy piątek o 17:00, według czasu lokalnego urządzenia.",
+  nextReminder: "Następne przypomnienie: {{date}}",
+  notifDenied: "Powiadomienia dla Donely są wyłączone. Włącz je w Ustawieniach iOS, aby otrzymywać przypomnienie.",
+  openIosSettings: "Otwórz Ustawienia",
+  notifUnsupported: "Powiadomienia nie są tutaj obsługiwane. Zainstaluj Donely na ekranie początkowym.",
+  reminderOnToast: "Przypomnienie włączone",
+  reminderOffToast: "Przypomnienie wyłączone",
+  reminderNotifTitle: "Czas podsumować tydzień",
+  reminderNotifBody: "Co udało Ci się zrobić? Zapisz wyniki tygodnia w Donely.",
+  testNotification: "Powiadomienie testowe (~90 s)",
+  testNotificationScheduled: "Powiadomienie testowe zaplanowane za około 90 sekund.",
 };
 
 const da: Dict = {
@@ -1079,6 +1196,19 @@ const da: Dict = {
   startPremiumPriceDynamic: "Start Premium – {{price}}/md.",
   legalRow: "Privatlivspolitik & Brugervilkår",
   legalOpenError: "Siden kunne ikke åbnes. Prøv igen.",
+  remindersSection: "Påmindelser",
+  weeklyReminder: "Ugentlig påmindelse",
+  weeklyReminderDesc: "Hver fredag kl. 17.00 efter enhedens lokale tid.",
+  nextReminder: "Næste påmindelse: {{date}}",
+  notifDenied: "Notifikationer er slået fra for Donely. Slå dem til i Indstillinger på iOS for at få påmindelsen.",
+  openIosSettings: "Åbn Indstillinger",
+  notifUnsupported: "Notifikationer understøttes ikke her. Installer Donely på hjemmeskærmen.",
+  reminderOnToast: "Påmindelsen er slået til",
+  reminderOffToast: "Påmindelsen er slået fra",
+  reminderNotifTitle: "Tid til at gøre ugen op",
+  reminderNotifBody: "Hvad har du nået? Registrér ugens resultater i Donely.",
+  testNotification: "Testnotifikation (~90 s)",
+  testNotificationScheduled: "Testnotifikation planlagt om cirka 90 sekunder.",
 };
 
 const no: Dict = {
@@ -1182,6 +1312,19 @@ const no: Dict = {
   startPremiumPriceDynamic: "Start Premium – {{price}}/mnd",
   legalRow: "Personvern og brukervilkår",
   legalOpenError: "Siden kunne ikke åpnes. Prøv igjen.",
+  remindersSection: "Påminnelser",
+  weeklyReminder: "Ukentlig påminnelse",
+  weeklyReminderDesc: "Hver fredag kl. 17.00 etter lokal tid på enheten din.",
+  nextReminder: "Neste påminnelse: {{date}}",
+  notifDenied: "Varsler er slått av for Donely. Slå dem på i Innstillinger på iOS for å få påminnelsen.",
+  openIosSettings: "Åpne Innstillinger",
+  notifUnsupported: "Varsler støttes ikke her. Installer Donely på hjemskjermen.",
+  reminderOnToast: "Påminnelsen er på",
+  reminderOffToast: "Påminnelsen er av",
+  reminderNotifTitle: "På tide å oppsummere uken",
+  reminderNotifBody: "Hva har du fått gjort? Registrer ukens resultater i Donely.",
+  testNotification: "Testvarsel (~90 s)",
+  testNotificationScheduled: "Testvarsel planlagt om cirka 90 sekunder.",
 };
 
 const fi: Dict = {
@@ -1285,6 +1428,19 @@ const fi: Dict = {
   startPremiumPriceDynamic: "Aloita Premium – {{price}}/kk",
   legalRow: "Tietosuojakäytäntö ja käyttöehdot",
   legalOpenError: "Sivua ei voitu avata. Yritä uudelleen.",
+  remindersSection: "Muistutukset",
+  weeklyReminder: "Viikoittainen muistutus",
+  weeklyReminderDesc: "Joka perjantai klo 17.00 laitteesi paikallista aikaa.",
+  nextReminder: "Seuraava muistutus: {{date}}",
+  notifDenied: "Ilmoitukset on poistettu käytöstä Donelylta. Ota ne käyttöön iOS-asetuksissa, niin saat muistutuksen.",
+  openIosSettings: "Avaa Asetukset",
+  notifUnsupported: "Ilmoituksia ei tueta tässä näkymässä. Asenna Donely Koti-valikkoon.",
+  reminderOnToast: "Muistutus on käytössä",
+  reminderOffToast: "Muistutus on pois käytöstä",
+  reminderNotifTitle: "Aika koota viikko yhteen",
+  reminderNotifBody: "Mitä sait aikaan? Kirjaa viikon tulokset Donelyyn.",
+  testNotification: "Testi-ilmoitus (~90 s)",
+  testNotificationScheduled: "Testi-ilmoitus ajastettu noin 90 sekunnin päähän.",
 };
 
 const ja: Dict = {
@@ -1388,6 +1544,19 @@ const ja: Dict = {
   startPremiumPriceDynamic: "プレミアムを開始 – {{price}}/月",
   legalRow: "プライバシーポリシーと利用規約",
   legalOpenError: "ページを開けませんでした。もう一度お試しください。",
+  remindersSection: "リマインダー",
+  weeklyReminder: "毎週のリマインダー",
+  weeklyReminderDesc: "毎週金曜日 17:00（端末のローカル時間）に通知します。",
+  nextReminder: "次回の通知：{{date}}",
+  notifDenied: "Donely の通知がオフになっています。iOS の「設定」でオンにするとリマインダーが届きます。",
+  openIosSettings: "設定を開く",
+  notifUnsupported: "この環境では通知に対応していません。Donely をホーム画面に追加してください。",
+  reminderOnToast: "リマインダーをオンにしました",
+  reminderOffToast: "リマインダーをオフにしました",
+  reminderNotifTitle: "今週をふり返りましょう",
+  reminderNotifBody: "何を達成しましたか？今週の結果を Donely に記録しましょう。",
+  testNotification: "テスト通知（約90秒）",
+  testNotificationScheduled: "約90秒後にテスト通知を予約しました。",
 };
 
 const resources = {
