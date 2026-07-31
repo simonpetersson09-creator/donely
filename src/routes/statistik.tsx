@@ -12,6 +12,8 @@ import {
   type Entry,
 } from "@/lib/store";
 import { useTranslation } from "react-i18next";
+import { Paywall } from "@/components/Paywall";
+import { usePremium } from "@/lib/premium";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 
 export const Route = createFileRoute("/statistik")({
@@ -171,6 +173,11 @@ function Statistik() {
             setEditing(null);
           }}
           onDelete={() => {
+            if (premium.hydrated && !premium.active) {
+              setEditing(null);
+              setPaywallOpen(true);
+              return;
+            }
             removeCategory(editing.id);
             removeEntriesByCategory(editing.id);
             removeGoalsByCategory(editing.id);

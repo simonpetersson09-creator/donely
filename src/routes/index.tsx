@@ -7,6 +7,8 @@ import { useCategories, useEntries, useGoals, useOnboarding, useLanguageGuide, D
 import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { Paywall } from "@/components/Paywall";
+import { usePremium } from "@/lib/premium";
 
 const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
 
@@ -40,6 +42,7 @@ function Index() {
   const [amount, setAmount] = useState("1");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [flash, setFlash] = useState(false);
+  const [paywallOpen, setPaywallOpen] = useState(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { t } = useLanguage();
@@ -47,6 +50,7 @@ function Index() {
   const { addEntry, removeEntriesByCategory } = useEntries();
   const { removeGoalsByCategory } = useGoals();
   const { seen: onboardingSeen, markSeen: markOnboardingSeen, hydrated: onboardingHydrated } = useOnboarding();
+  const premium = usePremium();
   const { seen: guideSeen, markSeen: markGuideSeen, hydrated: guideHydrated } = useLanguageGuide();
 
   const areaCategories = useMemo(() => {
@@ -81,6 +85,12 @@ function Index() {
 
   function register() {
     if (!valid || !selected) return;
+    // Trial over and no subscription: nothing is saved, the paywall takes over.
+    if (premium.hydrated && !premium.active) {
+      navigator.vibrate?.(8);
+      setPaywallOpen(true);
+      return;
+    }
     const name = categoryLabel(t, selected);
     addEntry({ area, categoryId: selected.id, categoryName: selected.name, amount: parsed });
     navigator.vibrate?.(12);
@@ -236,6 +246,12 @@ function Index() {
           }}
           onRename={renameCategory}
           onDelete={(id) => {
+            // Deleting a category also deletes activities — locked without Premium.
+            if (premium.hydrated && !premium.active) {
+              setPickerOpen(false);
+              setPaywallOpen(true);
+              return;
+            }
             // Remove the category together with its entries and goals, so no
             // orphan data keeps counting in the statistics totals.
             removeCategory(id);
@@ -246,6 +262,8 @@ function Index() {
 
         />
       )}
+
+      {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
     </main>
   );
 }
