@@ -67,13 +67,12 @@ export function readStoredEntries(): Entry[] {
   return readList<Entry>(ENTRIES_KEY, entriesSchema, []);
 }
 
+const SERVER_INTEGRITY = { state: "ok" } as ReturnType<typeof getIntegrityStatus>;
+const serverIntegrity = () => SERVER_INTEGRITY;
+
 /** Exposes the startup integrity result (corrupt data / restored from backup). */
 export function useDataIntegrity() {
-  return useSyncExternalStore(
-    subscribeIntegrity,
-    getIntegrityStatus,
-    () => ({ state: "ok" }) as ReturnType<typeof getIntegrityStatus>,
-  );
+  return useSyncExternalStore(subscribeIntegrity, getIntegrityStatus, serverIntegrity);
 }
 
 export function useCategories() {
