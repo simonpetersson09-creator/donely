@@ -1,10 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
+import { Bell, ChevronLeft, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
+import { Switch } from "@/components/ui/switch";
+import {
+  formatFireDate,
+  logReminderDiagnostics,
+  openNotificationSettings,
+  scheduleTestNotification,
+  useReminder,
+} from "@/lib/notifications";
 import {
   openManageSubscriptions,
   purchasePremium,
@@ -54,9 +62,10 @@ export const Route = createFileRoute("/installningar")({
 });
 
 function Installningar() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const premium = usePremium();
   const price = usePrice();
+  const reminder = useReminder();
   const [confirming, setConfirming] = useState(false);
 
   return (
