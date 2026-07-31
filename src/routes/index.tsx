@@ -79,6 +79,9 @@ function Index() {
     setFlash(true);
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => setFlash(false), 1100);
+    toast.success(`${parsed} ${selected.name} registrerat`, {
+      description: area === "jobb" ? "Jobb" : "Privat",
+    });
   }
 
   return (
