@@ -63,7 +63,7 @@ const entry = (id: string, categoryId = "p-traning"): Entry => ({
 function seedRealData() {
   writeKey(STORAGE_KEYS.categories, DEFAULT_CATEGORIES, categoriesSchema);
   writeKey(STORAGE_KEYS.entries, [entry("e1"), entry("e2")], entriesSchema);
-  writeKey(STORAGE_KEYS.schemaVersion, SCHEMA_VERSION, { parse: (v) => v, safeParse: (v) => ({ success: true, data: v }) } as never);
+  storage.setItem(STORAGE_KEYS.schemaVersion, String(SCHEMA_VERSION));
 }
 
 beforeEach(() => {
