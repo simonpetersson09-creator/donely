@@ -191,15 +191,25 @@ function Statistik() {
           year={year}
           current={goals[goalKey(year, editing.id)] ?? null}
           onSave={(target) => {
+            if (!canMutate(premium)) {
+              setEditing(null);
+              setPaywallOpen(true);
+              return;
+            }
             setGoal(year, editing.id, target);
             setEditing(null);
           }}
           onRemove={() => {
+            if (!canMutate(premium)) {
+              setEditing(null);
+              setPaywallOpen(true);
+              return;
+            }
             removeGoal(year, editing.id);
             setEditing(null);
           }}
           onDelete={() => {
-            if (premium.hydrated && !premium.active) {
+            if (!canMutate(premium)) {
               setEditing(null);
               setPaywallOpen(true);
               return;
