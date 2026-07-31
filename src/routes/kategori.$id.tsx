@@ -104,18 +104,18 @@ function CategoryDetail() {
         <p className="mb-2 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
           Per år
         </p>
-        <div className="rounded-xl border border-border bg-card px-3 py-3 text-card-foreground shadow-card">
-          <div className="flex h-44 items-end justify-between gap-2">
+        <div className="rounded-xl border border-border bg-card px-3 py-4 text-card-foreground shadow-card">
+          <div className="flex h-64 items-end justify-between gap-2">
             {bars.map((b) => {
               const h = Math.max(4, Math.round((b.total / max) * 100));
-              const isActive = selected === b.year;
+              const isCurrent = b.year === currentYear;
               return (
                 <button
                   key={b.year}
                   type="button"
-                  onClick={() => setSelected(isActive ? null : b.year)}
+                  onClick={() => setSelected(selected === b.year ? null : b.year)}
                   aria-label={`${b.year}: ${b.total} registrerade`}
-                  className="flex h-full flex-1 flex-col items-center justify-end gap-1.5"
+                  className="flex h-full flex-1 flex-col items-center justify-end gap-2"
                 >
                   <span className="text-[11px] font-semibold tabular-nums text-card-foreground/70">
                     {b.total.toLocaleString("sv-SE")}
@@ -124,14 +124,19 @@ function CategoryDetail() {
                     style={{ height: `${h}%` }}
                     className={
                       "w-full rounded-t-md transition-all duration-500 " +
-                      (isActive ? "bg-primary" : "bg-primary/50")
+                      (isCurrent ? "bg-primary" : "bg-muted")
                     }
                   />
-                  <span className="text-[11px] font-medium tabular-nums text-card-foreground/70">
+                  <span
+                    className={
+                      "text-[11px] font-medium tabular-nums " +
+                      (isCurrent ? "text-primary" : "text-card-foreground/70")
+                    }
+                  >
                     {b.year}
                   </span>
                   <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-card-foreground/50">
-                    {b.year === currentYear ? "Hittills" : "\u00A0"}
+                    {isCurrent ? "Hittills" : "\u00A0"}
                   </span>
                 </button>
               );
