@@ -87,12 +87,14 @@ const sv = {
   goalReached: "Målet uppnåddes.",
   goalNotReached: "Målet uppnåddes inte.",
   barA11y: "{{year}}: {{total}} registrerade",
+  "cat.p-traning": "Träning",
+  "cat.p-promenad": "Promenad",
+  "cat.p-meditation": "Meditation",
   "cat.p-bocker": "Lästa böcker",
-  "cat.p-traning": "Träningspass",
-  "cat.p-armhavningar": "Armhävningar",
-  "cat.j-samtal": "Nya samtal",
   "cat.j-moten": "Möten",
   "cat.j-avtal": "Avtal",
+  "cat.j-samtal": "Nya samtal",
+  "cat.j-admin": "Admin-uppgifter",
 };
 
 type Dict = typeof sv;
@@ -146,12 +148,14 @@ const en: Dict = {
   goalReached: "Goal reached.",
   goalNotReached: "Goal not reached.",
   barA11y: "{{year}}: {{total}} registered",
+  "cat.p-traning": "Exercise",
+  "cat.p-promenad": "Walk",
+  "cat.p-meditation": "Meditation",
   "cat.p-bocker": "Books read",
-  "cat.p-traning": "Workouts",
-  "cat.p-armhavningar": "Push-ups",
-  "cat.j-samtal": "New calls",
   "cat.j-moten": "Meetings",
   "cat.j-avtal": "Contracts",
+  "cat.j-samtal": "New calls",
+  "cat.j-admin": "Admin tasks",
 };
 
 const de: Dict = {
@@ -203,12 +207,14 @@ const de: Dict = {
   goalReached: "Ziel erreicht.",
   goalNotReached: "Ziel nicht erreicht.",
   barA11y: "{{year}}: {{total}} erfasst",
+  "cat.p-traning": "Training",
+  "cat.p-promenad": "Spaziergang",
+  "cat.p-meditation": "Meditation",
   "cat.p-bocker": "Gelesene Bücher",
-  "cat.p-traning": "Trainingseinheiten",
-  "cat.p-armhavningar": "Liegestütze",
-  "cat.j-samtal": "Neue Gespräche",
   "cat.j-moten": "Meetings",
   "cat.j-avtal": "Verträge",
+  "cat.j-samtal": "Neue Anrufe",
+  "cat.j-admin": "Admin-Aufgaben",
 };
 
 const fr: Dict = {
@@ -260,12 +266,14 @@ const fr: Dict = {
   goalReached: "Objectif atteint.",
   goalNotReached: "Objectif non atteint.",
   barA11y: "{{year}} : {{total}} enregistrés",
+  "cat.p-traning": "Sport",
+  "cat.p-promenad": "Marche",
+  "cat.p-meditation": "Méditation",
   "cat.p-bocker": "Livres lus",
-  "cat.p-traning": "Séances de sport",
-  "cat.p-armhavningar": "Pompes",
-  "cat.j-samtal": "Nouveaux appels",
   "cat.j-moten": "Réunions",
   "cat.j-avtal": "Contrats",
+  "cat.j-samtal": "Nouveaux appels",
+  "cat.j-admin": "Tâches admin",
 };
 
 const es: Dict = {
@@ -317,12 +325,14 @@ const es: Dict = {
   goalReached: "Meta alcanzada.",
   goalNotReached: "Meta no alcanzada.",
   barA11y: "{{year}}: {{total}} registrados",
+  "cat.p-traning": "Entrenamiento",
+  "cat.p-promenad": "Caminata",
+  "cat.p-meditation": "Meditación",
   "cat.p-bocker": "Libros leídos",
-  "cat.p-traning": "Entrenamientos",
-  "cat.p-armhavningar": "Flexiones",
-  "cat.j-samtal": "Llamadas nuevas",
   "cat.j-moten": "Reuniones",
   "cat.j-avtal": "Contratos",
+  "cat.j-samtal": "Nuevas llamadas",
+  "cat.j-admin": "Tareas admin",
 };
 
 const it: Dict = {
@@ -374,12 +384,14 @@ const it: Dict = {
   goalReached: "Obiettivo raggiunto.",
   goalNotReached: "Obiettivo non raggiunto.",
   barA11y: "{{year}}: {{total}} registrati",
+  "cat.p-traning": "Allenamento",
+  "cat.p-promenad": "Camminata",
+  "cat.p-meditation": "Meditazione",
   "cat.p-bocker": "Libri letti",
-  "cat.p-traning": "Allenamenti",
-  "cat.p-armhavningar": "Flessioni",
-  "cat.j-samtal": "Nuove chiamate",
   "cat.j-moten": "Riunioni",
   "cat.j-avtal": "Contratti",
+  "cat.j-samtal": "Nuove chiamate",
+  "cat.j-admin": "Attività admin",
 };
 
 const ptBR: Dict = {
@@ -431,12 +443,14 @@ const ptBR: Dict = {
   goalReached: "Meta alcançada.",
   goalNotReached: "Meta não alcançada.",
   barA11y: "{{year}}: {{total}} registrados",
+  "cat.p-traning": "Treino",
+  "cat.p-promenad": "Caminhada",
+  "cat.p-meditation": "Meditação",
   "cat.p-bocker": "Livros lidos",
-  "cat.p-traning": "Treinos",
-  "cat.p-armhavningar": "Flexões",
-  "cat.j-samtal": "Novas ligações",
   "cat.j-moten": "Reuniões",
   "cat.j-avtal": "Contratos",
+  "cat.j-samtal": "Novas chamadas",
+  "cat.j-admin": "Tarefas admin",
 };
 
 const nl: Dict = {
@@ -488,12 +502,14 @@ const nl: Dict = {
   goalReached: "Doel behaald.",
   goalNotReached: "Doel niet behaald.",
   barA11y: "{{year}}: {{total}} geregistreerd",
+  "cat.p-traning": "Training",
+  "cat.p-promenad": "Wandeling",
+  "cat.p-meditation": "Meditatie",
   "cat.p-bocker": "Gelezen boeken",
-  "cat.p-traning": "Trainingen",
-  "cat.p-armhavningar": "Push-ups",
-  "cat.j-samtal": "Nieuwe gesprekken",
   "cat.j-moten": "Vergaderingen",
   "cat.j-avtal": "Contracten",
+  "cat.j-samtal": "Nieuwe gesprekken",
+  "cat.j-admin": "Admintaken",
 };
 
 const pl: Dict = {
@@ -545,12 +561,14 @@ const pl: Dict = {
   goalReached: "Cel osiągnięty.",
   goalNotReached: "Cel nieosiągnięty.",
   barA11y: "{{year}}: {{total}} zarejestrowanych",
+  "cat.p-traning": "Trening",
+  "cat.p-promenad": "Spacer",
+  "cat.p-meditation": "Medytacja",
   "cat.p-bocker": "Przeczytane książki",
-  "cat.p-traning": "Treningi",
-  "cat.p-armhavningar": "Pompki",
-  "cat.j-samtal": "Nowe rozmowy",
   "cat.j-moten": "Spotkania",
   "cat.j-avtal": "Umowy",
+  "cat.j-samtal": "Nowe rozmowy",
+  "cat.j-admin": "Zadania administracyjne",
 };
 
 const da: Dict = {
@@ -602,12 +620,14 @@ const da: Dict = {
   goalReached: "Målet blev nået.",
   goalNotReached: "Målet blev ikke nået.",
   barA11y: "{{year}}: {{total}} registreret",
+  "cat.p-traning": "Træning",
+  "cat.p-promenad": "Gåtur",
+  "cat.p-meditation": "Meditation",
   "cat.p-bocker": "Læste bøger",
-  "cat.p-traning": "Træningspas",
-  "cat.p-armhavningar": "Armbøjninger",
-  "cat.j-samtal": "Nye samtaler",
   "cat.j-moten": "Møder",
-  "cat.j-avtal": "Aftaler",
+  "cat.j-avtal": "Kontrakter",
+  "cat.j-samtal": "Nye opkald",
+  "cat.j-admin": "Adminopgaver",
 };
 
 const no: Dict = {
@@ -659,12 +679,14 @@ const no: Dict = {
   goalReached: "Målet ble nådd.",
   goalNotReached: "Målet ble ikke nådd.",
   barA11y: "{{year}}: {{total}} registrert",
+  "cat.p-traning": "Trening",
+  "cat.p-promenad": "Gåtur",
+  "cat.p-meditation": "Meditasjon",
   "cat.p-bocker": "Leste bøker",
-  "cat.p-traning": "Treningsøkter",
-  "cat.p-armhavningar": "Push-ups",
-  "cat.j-samtal": "Nye samtaler",
   "cat.j-moten": "Møter",
-  "cat.j-avtal": "Avtaler",
+  "cat.j-avtal": "Kontrakter",
+  "cat.j-samtal": "Nye samtaler",
+  "cat.j-admin": "Adminoppgaver",
 };
 
 const fi: Dict = {
@@ -716,12 +738,14 @@ const fi: Dict = {
   goalReached: "Tavoite saavutettiin.",
   goalNotReached: "Tavoitetta ei saavutettu.",
   barA11y: "{{year}}: {{total}} kirjattu",
+  "cat.p-traning": "Treeni",
+  "cat.p-promenad": "Kävely",
+  "cat.p-meditation": "Meditaatio",
   "cat.p-bocker": "Luetut kirjat",
-  "cat.p-traning": "Treenit",
-  "cat.p-armhavningar": "Punnerrukset",
-  "cat.j-samtal": "Uudet puhelut",
   "cat.j-moten": "Palaverit",
   "cat.j-avtal": "Sopimukset",
+  "cat.j-samtal": "Uudet puhelut",
+  "cat.j-admin": "Hallintotehtävät",
 };
 
 const ja: Dict = {
@@ -773,12 +797,14 @@ const ja: Dict = {
   goalReached: "目標を達成しました。",
   goalNotReached: "目標は未達成です。",
   barA11y: "{{year}}年：{{total}} 件",
+  "cat.p-traning": "運動",
+  "cat.p-promenad": "散歩",
+  "cat.p-meditation": "瞑想",
   "cat.p-bocker": "読んだ本",
-  "cat.p-traning": "トレーニング",
-  "cat.p-armhavningar": "腕立て伏せ",
-  "cat.j-samtal": "新規商談",
-  "cat.j-moten": "ミーティング",
+  "cat.j-moten": "会議",
   "cat.j-avtal": "契約",
+  "cat.j-samtal": "新規架電",
+  "cat.j-admin": "管理業務",
 };
 
 const resources = {
