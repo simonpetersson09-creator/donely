@@ -79,12 +79,14 @@ function Installningar() {
             {premium.subscribed
               ? t("premiumActive")
               : premium.trialExpired
-                ? t("trialEnded")
+                ? t("donelyPremium")
                 : t("trialLeft", { count: premium.trialDaysLeft })}
           </p>
           {!premium.subscribed && (
             <p className="mt-0.5 text-[13px] text-muted-foreground">
-              {t("freeTrialTitle")} · {t("freeTrialThen")}
+              {premium.trialExpired
+                ? t("premiumUnlockAll")
+                : `${t("freeTrialTitle")} · ${t("freeTrialThen")}`}
             </p>
           )}
         </div>
@@ -101,25 +103,23 @@ function Installningar() {
             </span>
           </button>
 
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => toast.message(t("premiumFlowComing"))}
-              className="rounded-xl border border-border bg-card px-3 py-2.5 text-center text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
-            >
-              {t("manageSubscription")}
-            </button>
+          <button
+            type="button"
+            onClick={() => toast.message(t("premiumFlowComing"))}
+            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-center text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+          >
+            {t("manageSubscription")}
+          </button>
 
-            <button
-              type="button"
-              onClick={() => toast.message(t("purchasesRestored"))}
-              className="rounded-xl border border-border bg-card px-3 py-2.5 text-center text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
-            >
-              {t("restorePurchase")}
-            </button>
-          </div>
-
+          <button
+            type="button"
+            onClick={() => toast.message(t("purchasesRestored"))}
+            className="w-full rounded-lg px-3 py-1.5 text-center text-[13px] font-medium text-muted-foreground transition-colors active:bg-accent"
+          >
+            {t("restorePurchase")}
+          </button>
         </div>
+
       </section>
 
       <section className="mt-4">
@@ -144,7 +144,10 @@ function Installningar() {
           onClick={() => setConfirming(true)}
           className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[15px] font-semibold text-destructive shadow-card transition-colors active:bg-destructive/10"
         >
-          <span>{t("deleteAllDataRow")}</span>
+          <span className="flex items-center gap-2">
+            <Trash2 className="size-[18px]" />
+            {t("deleteAllDataRow")}
+          </span>
           <ChevronRight className="size-4 text-destructive" />
         </button>
       </section>
