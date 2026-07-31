@@ -183,8 +183,15 @@ function applyEntitlement(payload: EntitlementPayload) {
   });
 }
 
+/**
+ * True as soon as an entitlement has arrived over the bridge. From then on the
+ * dev localStorage fallback must never overwrite it (bridge = source of truth).
+ */
+let bridgeControlled = false;
+
 /** Called by the iOS shell with the current StoreKit entitlement. */
 export function setEntitlement(payload: EntitlementPayload) {
+  bridgeControlled = true;
   applyEntitlement(payload);
 }
 
