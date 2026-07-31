@@ -22,6 +22,7 @@
 import Foundation
 import UIKit
 import StoreKit
+import Security
 import WebKit
 
 @available(iOS 15.0, *)
