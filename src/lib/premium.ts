@@ -117,6 +117,7 @@ export function usePremium() {
     window.addEventListener("focus", refresh);
     window.addEventListener("storage", refresh);
     return () => {
+      window.clearInterval(timer);
       listeners.delete(refresh);
       document.removeEventListener("visibilitychange", onVisible);
       window.removeEventListener("focus", refresh);
