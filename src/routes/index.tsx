@@ -144,7 +144,7 @@ function Index() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
-      <div className="flex flex-[1.15] items-end justify-center pb-6">
+      <div className="flex flex-[1.1] items-end justify-center pb-3">
         <div className="relative">
           <div className="absolute -right-14 -top-14 z-10 rotate-[6deg] scale-100">
             <div className="relative rounded-full border border-primary bg-background px-4 py-2.5 shadow-card">
