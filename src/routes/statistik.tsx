@@ -318,6 +318,7 @@ function GoalSheet({
   current,
   onSave,
   onRemove,
+  onDelete,
   onClose,
 }: {
   category: Category;
@@ -325,6 +326,7 @@ function GoalSheet({
   current: number | null;
   onSave: (target: number) => void;
   onRemove: () => void;
+  onDelete: () => void;
   onClose: () => void;
 }) {
   const { t } = useTranslation();
