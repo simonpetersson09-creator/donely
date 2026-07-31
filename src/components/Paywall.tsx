@@ -1,10 +1,12 @@
 import { Crown, X } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { purchasePremium, restorePurchase, usePremium } from "@/lib/premium";
 
 /** Full-screen iOS-style paywall shown when the free trial has ended. */
 export function Paywall({ onClose }: { onClose: () => void }) {
   const { t } = useTranslation();
+  const premium = usePremium();
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-[2px]">
@@ -37,14 +39,31 @@ export function Paywall({ onClose }: { onClose: () => void }) {
         <div className="mt-4 space-y-2">
           <button
             type="button"
-            onClick={() => toast.message(t("premiumFlowComing"))}
+            onClick={() => {
+              if (purchasePremium()) {
+                premium.refresh();
+                toast.success(t("premiumActive"));
+                onClose();
+              } else {
+                toast.message(t("premiumFlowComing"));
+              }
+            }}
             className="w-full rounded-xl bg-primary py-3 text-[16px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-transform active:scale-[0.97]"
           >
             {t("startPremium")}
           </button>
           <button
             type="button"
-            onClick={() => toast.message(t("purchasesRestored"))}
+            onClick={() => {
+              const found = restorePurchase();
+              premium.refresh();
+              if (found) {
+                toast.success(t("premiumActive"));
+                onClose();
+              } else {
+                toast.message(t("purchasesRestored"));
+              }
+            }}
             className="w-full rounded-xl border border-border bg-card py-3 text-[15px] font-semibold text-primary transition-colors active:bg-accent"
           >
             {t("restorePurchase")}
