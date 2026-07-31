@@ -213,9 +213,8 @@ kalenderkomponenter** (veckodag/timme/minut) – aldrig som ett fast UTC-klocksl
 | --- | --- | --- |
 | `requestNotificationStatus` | `{}` | `getNotificationSettings` → svara med status |
 | `requestNotificationPermission` | `{}` | `requestAuthorization([.alert,.sound,.badge])` → svara med status |
-| `scheduleWeeklyReminder` | `{id, weekday, hour, minute, repeats, title, body, language, timeZone}` | Se koden nedan |
+| `scheduleWeeklyReminder` | `{id, weekday, hour, minute, repeats, title, body, language, timeZone, route}` | Se koden nedan. `body` är veckans sammanfattning (flera rader) och `route` är djuplänken (`/veckostatistik`) |
 | `cancelNotification` | `{id}` | `removePendingNotificationRequests(withIdentifiers: [id])` |
-| `scheduleTestNotification` | `{id, seconds, title, body, language}` | `UNTimeIntervalNotificationTrigger(timeInterval: seconds, repeats: false)` |
 | `openAppSettings` | `{}` | `UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)` |
 
 `weekday` skickas redan i iOS-format (söndag = 1 → **fredag = 6**).
@@ -225,7 +224,16 @@ kalenderkomponenter** (veckodag/timme/minut) – aldrig som ett fast UTC-klocksl
 window.__donelySetNotificationPermission("granted" | "denied" | "notDetermined" | "provisional")
 window.__donelyNotificationScheduled({ id, nextFireDate /* ISO8601 */, language })
 window.__donelyNotificationError("meddelande")
+window.__donelyOpenRoute("/veckostatistik")   // anropas när användaren trycker på notisen
 ```
+
+**Notisinnehåll:** JS bygger titeln (`Din vecka i Donely`) och en flerradig body
+med veckans aktiviteter per kategori (max 5 rader + "+ N fler kategorier") och
+alltid en totalrad. Bodyn byggs om och notisen schemaläggs om varje gång en
+aktivitet skapas, ändras eller tas bort, samt vid språkbyte. Swift ska sätta
+`content.userInfo["route"] = payload.route` och i
+`userNotificationCenter(_:didReceive:)` anropa `__donelyOpenRoute` med den rutten
+så appen öppnas direkt i veckostatistiken.
 
 ### Swift-implementation (kärnan)
 ```swift

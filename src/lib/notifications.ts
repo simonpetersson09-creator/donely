@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import i18n, { localeOf } from "@/lib/i18n";
+import { DATA_CHANGED_EVENT } from "@/lib/store";
+import { weeklyNotificationContent } from "@/lib/weekly-summary";
 
 /**
  * Weekly local reminder for Donely — Fridays 17:00 in the *device's* local
@@ -207,16 +209,20 @@ function parsePayload<T>(value: unknown): T | null {
 }
 
 // ---------------------------------------------------------------------------
-// notification text (always in the user's currently selected Donely language)
+// notification text
 // ---------------------------------------------------------------------------
 
+/**
+ * The notification body is a summary of the *current* week, so it is rebuilt
+ * from the stored entries every time we schedule. Written in the language the
+ * user has selected inside Donely.
+ */
 function notificationText(language: string) {
-  const fixed = i18n.getFixedT(language);
-  return {
-    title: fixed("reminderNotifTitle"),
-    body: fixed("reminderNotifBody"),
-  };
+  return weeklyNotificationContent(language);
 }
+
+/** Route the iOS shell should open when the user taps the reminder. */
+export const REMINDER_ROUTE = "/veckostatistik";
 
 // ---------------------------------------------------------------------------
 // persistence
@@ -333,6 +339,7 @@ export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
     body,
     language,
     timeZone,
+    route: REMINDER_ROUTE,
   });
 
   setState({
@@ -504,6 +511,29 @@ function installBridge() {
       setState({ nextFireDate: nextReminderDate().toISOString() });
     }
   };
+  // Whenever an activity is created, edited or deleted the pending Friday
+  // notification is rebuilt so its summary is never stale. Debounced so a burst
+  // of edits results in a single reschedule.
+  let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+  window.addEventListener(DATA_CHANGED_EVENT, () => {
+    if (!readEnabled()) return;
+    if (state.permission === "denied" || state.permission === "unsupported") return;
+    if (refreshTimer) clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => {
+      refreshTimer = null;
+      scheduleWeeklyReminder(state.scheduledLanguage ?? i18n.language ?? "sv");
+    }, 400);
+  });
+
+  // Swift calls this when the user taps the reminder, so Donely opens straight
+  // on the weekly summary the notification showed.
+  w.__donelyOpenRoute = (value: unknown) => {
+    const path =
+      typeof value === "string" ? value : (parsePayload<{ route?: string }>(value)?.route ?? REMINDER_ROUTE);
+    if (!path.startsWith("/")) return;
+    if (window.location.pathname !== path) window.location.assign(path);
+  };
+
   const onForeground = () => {
     // Re-check the iOS authorization status: the user may have changed it in
     // the system settings while Donely was in the background.

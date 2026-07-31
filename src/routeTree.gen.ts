@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstallningarRouteImport } from './routes/installningar'
 import { Route as StatistikRouteImport } from './routes/statistik'
+import { Route as VeckostatistikRouteImport } from './routes/veckostatistik'
 import { Route as KategoriIdRouteImport } from './routes/kategori.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const StatistikRoute = StatistikRouteImport.update({
   path: '/statistik',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VeckostatistikRoute = VeckostatistikRouteImport.update({
+  id: '/veckostatistik',
+  path: '/veckostatistik',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const KategoriIdRoute = KategoriIdRouteImport.update({
   id: '/kategori/$id',
   path: '/kategori/$id',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/installningar': typeof InstallningarRoute
   '/statistik': typeof StatistikRoute
+  '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/installningar': typeof InstallningarRoute
   '/statistik': typeof StatistikRoute
+  '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/installningar': typeof InstallningarRoute
   '/statistik': typeof StatistikRoute
+  '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/installningar' | '/statistik' | '/kategori/$id'
+  fullPaths:
+    '/' | '/installningar' | '/statistik' | '/veckostatistik' | '/kategori/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/installningar' | '/statistik' | '/kategori/$id'
-  id: '__root__' | '/' | '/installningar' | '/statistik' | '/kategori/$id'
+  to:
+    '/' | '/installningar' | '/statistik' | '/veckostatistik' | '/kategori/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/installningar'
+    | '/statistik'
+    | '/veckostatistik'
+    | '/kategori/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InstallningarRoute: typeof InstallningarRoute
   StatistikRoute: typeof StatistikRoute
+  VeckostatistikRoute: typeof VeckostatistikRoute
   KategoriIdRoute: typeof KategoriIdRoute
 }
 
@@ -92,6 +110,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatistikRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/veckostatistik': {
+      id: '/veckostatistik'
+      path: '/veckostatistik'
+      fullPath: '/veckostatistik'
+      preLoaderRoute: typeof VeckostatistikRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/kategori/$id': {
       id: '/kategori/$id'
       path: '/kategori/$id'
@@ -106,6 +131,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InstallningarRoute: InstallningarRoute,
   StatistikRoute: StatistikRoute,
+  VeckostatistikRoute: VeckostatistikRoute,
   KategoriIdRoute: KategoriIdRoute,
 }
 export const routeTree = rootRouteImport
