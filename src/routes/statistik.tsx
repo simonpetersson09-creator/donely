@@ -60,9 +60,8 @@ function Statistik() {
     const lastAt = new Map<string, string>();
     for (const e of entries as Entry[]) {
       const d = new Date(e.createdAt);
-      if (d.getFullYear() === year) {
-        totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
-      }
+      if (d.getFullYear() !== year) continue;
+      totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
       const prev = lastAt.get(e.categoryId);
       if (!prev || d > new Date(prev)) lastAt.set(e.categoryId, e.createdAt);
     }

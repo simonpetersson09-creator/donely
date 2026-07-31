@@ -226,7 +226,13 @@ function Index() {
             setPickerOpen(false);
           }}
           onRename={renameCategory}
-          onDelete={removeCategory}
+          onDelete={(id) => {
+            // Remove the category together with its entries and goals, so no
+            // orphan data keeps counting in the statistics totals.
+            removeCategory(id);
+            removeEntriesByCategory(id);
+            removeGoalsByCategory(id);
+          }}
           onClose={() => setPickerOpen(false)}
 
         />
