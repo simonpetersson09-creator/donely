@@ -12,6 +12,8 @@ import {
   type Entry,
 } from "@/lib/store";
 import { useTranslation } from "react-i18next";
+import { Paywall } from "@/components/Paywall";
+import { usePremium } from "@/lib/premium";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 
 export const Route = createFileRoute("/statistik")({
@@ -46,8 +48,10 @@ function Statistik() {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [editing, setEditing] = useState<Category | null>(null);
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
   const { t } = useLanguage();
+  const premium = usePremium();
   const locale = useLocale();
   const { categories, removeCategory } = useCategories();
   const { entries, removeEntriesByCategory } = useEntries();
@@ -171,6 +175,11 @@ function Statistik() {
             setEditing(null);
           }}
           onDelete={() => {
+            if (premium.hydrated && !premium.active) {
+              setEditing(null);
+              setPaywallOpen(true);
+              return;
+            }
             removeCategory(editing.id);
             removeEntriesByCategory(editing.id);
             removeGoalsByCategory(editing.id);
@@ -179,6 +188,8 @@ function Statistik() {
           onClose={() => setEditing(null)}
         />
       )}
+      {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
+
     </main>
   );
 }
