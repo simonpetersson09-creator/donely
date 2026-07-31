@@ -180,10 +180,10 @@ function Section({
 }) {
   if (rows.length === 0) return null;
   return (
-    <section className="mt-5">
-      <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-foreground/60">
+    <section className="mt-8">
+      <h2 className="mb-1 px-1 text-[13px] font-semibold tracking-[-0.01em] text-primary/80">
         {title}
-      </p>
+      </h2>
       <div className="space-y-1.5">
         {rows.map((row) => (
           <GoalCard key={row.category.id} row={row} showGoalCta={showGoalCta} onSetGoal={onSetGoal} />
