@@ -513,11 +513,10 @@ export function initializeStorage(): IntegrityStatus {
     return integrity;
   }
 
-  const corrupt = [
-    categories.status === "corrupt" ? STORAGE_KEYS.categories : null,
-    entries.status === "corrupt" ? STORAGE_KEYS.entries : null,
-    goals.status === "corrupt" ? STORAGE_KEYS.goals : null,
-  ].filter((k): k is string => k !== null);
+  const corrupt: string[] = [];
+  if (categories.status === "corrupt") corrupt.push(STORAGE_KEYS.categories);
+  if (entries.status === "corrupt") corrupt.push(STORAGE_KEYS.entries);
+  if (goals.status === "corrupt") corrupt.push(STORAGE_KEYS.goals);
 
   if (corrupt.length > 0) {
     const backup = latestValidBackup();
