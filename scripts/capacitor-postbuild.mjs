@@ -1,13 +1,14 @@
 // Post-build step for the native (Capacitor / iOS) workflow.
 //
-// 1. Makes sure dist/client/index.html exists so Capacitor has a static entry
-//    point (the TanStack Start build normally only emits a server bundle).
-//    Primary strategy: render the app shell with the built server bundle.
-//    Fallback: build a minimal shell from the Vite client manifest.
+// 1. Renders the app shell to dist/client/index.html so Capacitor has a static
+//    entry point (the TanStack Start build only emits a server bundle + assets).
 // 2. On macOS, creates the native iOS project (ios/App) if it does not exist
 //    yet, so `npx cap sync ios` works straight after a fresh `git pull`.
+//
+// The build output layout (dist/client + dist/server) is pinned in vite.config.ts
+// via the nitro `output` option, so this works identically on macOS, Linux and CI.
 import { existsSync, readdirSync, statSync } from "node:fs";
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile, cp } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,7 +17,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const clientDir = resolve(root, "dist/client");
 const outFile = resolve(clientDir, "index.html");
 
-/** Known locations a Nitro/TanStack Start server bundle can end up in. */
+/** Known locations a Nitro/TanStack Start build can end up in. */
 const serverEntryCandidates = [
   "dist/server/index.mjs",
   "dist/server/server/index.mjs",
@@ -28,7 +29,6 @@ function findServerEntry() {
   for (const candidate of serverEntryCandidates) {
     if (existsSync(candidate)) return candidate;
   }
-  // Last resort: shallow scan for an index.mjs inside dist/ or .output/
   for (const base of [resolve(root, "dist"), resolve(root, ".output")]) {
     const found = scanForIndexMjs(base, 3);
     if (found) return found;
@@ -49,7 +49,9 @@ function scanForIndexMjs(dir, depth) {
     if (statSync(file).isFile()) return file;
   }
   for (const entry of entries) {
-    if (entry === "client" || entry === "node_modules" || entry.startsWith(".")) continue;
+    if (entry === "client" || entry === "public" || entry === "node_modules" || entry.startsWith(".")) {
+      continue;
+    }
     const full = join(dir, entry);
     try {
       if (!statSync(full).isDirectory()) continue;
@@ -62,64 +64,53 @@ function scanForIndexMjs(dir, depth) {
   return null;
 }
 
-async function renderWithServerBundle() {
-  const serverEntry = findServerEntry();
-  if (!serverEntry) return null;
-  const mod = await import(`file://${serverEntry}`);
-  const handler = mod.default;
-  const fetchFn = typeof handler?.fetch === "function" ? handler.fetch.bind(handler) : null;
-  if (!fetchFn) return null;
-  const ctx = { waitUntil() {}, passThroughOnException() {} };
-  const res = await fetchFn(new Request("http://localhost/"), {}, ctx);
-  if (!res.ok) throw new Error(`app shell render returned HTTP ${res.status}`);
-  const html = await res.text();
-  if (!html.includes("<html")) throw new Error("app shell render returned no HTML document");
-  return html;
-}
-
-/** Minimal shell built from the Vite client manifest (no SSR markup). */
-async function shellFromManifest() {
-  const manifestPath = resolve(clientDir, ".vite/manifest.json");
-  if (!existsSync(manifestPath)) return null;
-  const manifest = JSON.parse(await readFile(manifestPath, "utf8"));
-  const entries = Object.values(manifest).filter((chunk) => chunk.isEntry && chunk.file?.endsWith(".js"));
-  if (entries.length === 0) return null;
-  const scripts = entries.map((e) => `<script type="module" src="/${e.file}"></script>`).join("");
-  const css = [...new Set(entries.flatMap((e) => e.css ?? []))]
-    .map((href) => `<link rel="stylesheet" href="/${href}">`)
-    .join("");
-  return `<!DOCTYPE html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Donely</title><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icon-180.png">${css}</head><body><div id="root"></div>${scripts}</body></html>`;
+/** If nitro wrote the static assets elsewhere (e.g. .output/public), mirror them into dist/client. */
+async function ensureClientDir() {
+  if (existsSync(clientDir)) return;
+  const alternatives = [".output/public", "dist/public", ".output/client"].map((p) => resolve(root, p));
+  for (const alt of alternatives) {
+    if (existsSync(alt)) {
+      await cp(alt, clientDir, { recursive: true });
+      console.log(`[capacitor] Copied web assets ${alt} -> dist/client`);
+      return;
+    }
+  }
+  throw new Error(
+    `Missing client build output. Expected ${clientDir} (produced by "vite build"). ` +
+      `Delete dist/ and .output/ and run "npm run build" again.`,
+  );
 }
 
 async function writeShell() {
-  if (!existsSync(clientDir)) {
+  await ensureClientDir();
+
+  const serverEntry = findServerEntry();
+  if (!serverEntry) {
     throw new Error(
-      `Missing client build output at ${clientDir}. Run "npm run build" (vite build) before this script.`,
+      "Could not find the built server bundle (expected dist/server/index.mjs). " +
+        'Run "npm run build" from the project root; if the problem persists, delete dist/, .output/ and node_modules/.vite and rebuild.',
     );
   }
 
-  let html = null;
-  try {
-    html = await renderWithServerBundle();
-  } catch (error) {
-    console.warn(`[capacitor] Could not render via server bundle (${error.message}). Using manifest fallback.`);
+  const mod = await import(`file://${serverEntry}`);
+  const handler = mod.default;
+  const fetchFn = typeof handler?.fetch === "function" ? handler.fetch.bind(handler) : null;
+  if (!fetchFn) {
+    throw new Error(`Server bundle at ${serverEntry} does not export a fetch handler.`);
   }
-
-  let source = "server bundle";
-  if (!html) {
-    html = await shellFromManifest();
-    source = "vite manifest";
+  const ctx = { waitUntil() {}, passThroughOnException() {} };
+  const res = await fetchFn(new Request("http://localhost/"), {}, ctx);
+  if (!res.ok) {
+    throw new Error(`Failed to render app shell: HTTP ${res.status}`);
   }
-
-  if (!html) {
-    throw new Error(
-      "Could not produce dist/client/index.html: no usable server bundle and no dist/client/.vite/manifest.json.",
-    );
+  const html = await res.text();
+  if (!html.includes("<html")) {
+    throw new Error("App shell render did not return an HTML document.");
   }
 
   await mkdir(clientDir, { recursive: true });
   await writeFile(outFile, html, "utf8");
-  console.log(`[capacitor] Wrote dist/client/index.html from ${source} (${html.length} bytes)`);
+  console.log(`[capacitor] Wrote static app shell -> dist/client/index.html (${html.length} bytes)`);
 }
 
 function ensureIosProject() {
