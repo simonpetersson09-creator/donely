@@ -72,11 +72,9 @@ function Installningar() {
       </p>
 
       <div className="flex-shrink-0 mt-8 flex justify-center">
-        <img
-          src={logoAsset.url}
-          alt="Donely"
-          className="h-16 w-auto object-contain"
-        />
+        <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+          Donely
+        </h1>
       </div>
 
       <div className="flex-grow" />
