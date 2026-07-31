@@ -169,7 +169,7 @@ function Installningar() {
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="border-r border-border py-2.5 text-[17px] text-primary transition-colors active:bg-accent"
+                className="border-r border-border py-2.5 text-[17px] font-normal leading-[22px] text-primary transition-colors active:bg-accent"
               >
                 {t("cancel")}
               </button>
@@ -180,7 +180,7 @@ function Installningar() {
                   toast.success(t("allDataDeleted"));
                   window.location.href = "/";
                 }}
-                className="py-2.5 text-[17px] font-semibold text-destructive transition-colors active:bg-destructive/10"
+                className="py-2.5 text-[17px] font-semibold leading-[22px] text-destructive transition-colors active:bg-destructive/10"
               >
                 {t("deleteAllData")}
               </button>
