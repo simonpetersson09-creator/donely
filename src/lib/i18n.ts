@@ -892,6 +892,10 @@ const ja: Dict = {
   "cat.j-avtal": "契約",
   "cat.j-samtal": "新規架電",
   "cat.j-admin": "管理業務",
+  welcomeTitle: "Donely へようこそ",
+  welcomeLine1: "実際に行ったことを記録します。",
+  welcomeLine2: "時間をかけて結果を確認します。",
+  getStarted: "始める",
 };
 
 const resources = {
