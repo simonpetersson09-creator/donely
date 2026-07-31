@@ -1,10 +1,30 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ChevronLeft, Crown, Trash2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Crown, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { usePremium } from "@/lib/premium";
+
+const APP_STORE_REVIEW_URL =
+  "https://apps.apple.com/app/id0000000000?action=write-review";
+
+/**
+ * Ber om Apples inbyggda betygsdialog (SKStoreReviewController / StoreKit 2
+ * AppStore.requestReview) via native-bryggan när appen körs i iOS-skalet.
+ * Faller tillbaka till App Store-recensionssidan på webben.
+ */
+function requestAppStoreReview() {
+  const w = window as unknown as {
+    webkit?: { messageHandlers?: { requestReview?: { postMessage: (v: unknown) => void } } };
+  };
+  const handler = w.webkit?.messageHandlers?.requestReview;
+  if (handler) {
+    handler.postMessage({});
+    return;
+  }
+  window.open(APP_STORE_REVIEW_URL, "_blank", "noopener");
+}
 
 export const Route = createFileRoute("/installningar")({
   head: () => ({
@@ -100,6 +120,17 @@ function Installningar() {
           </div>
 
         </div>
+      </section>
+
+      <section className="mt-4">
+        <button
+          type="button"
+          onClick={requestAppStoreReview}
+          className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[15px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+        >
+          <span>{t("rateDonely")}</span>
+          <ChevronRight className="size-4 text-primary" />
+        </button>
       </section>
 
 
