@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { Link } from "@tanstack/react-router";
 import { Crown, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import {
   purchasePremium,
   restorePurchase,
@@ -88,13 +88,20 @@ export function Paywall({ onClose }: { onClose: () => void }) {
         <p className="mt-3 text-center text-[12px] leading-relaxed text-muted-foreground">
           {t("paywallFootnote")}
         </p>
-        <Link
-          to="/integritet"
-          onClick={onClose}
+        <a
+          href={LEGAL_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={(e) => {
+            e.preventDefault();
+            if (openExternalUrl(LEGAL_URL)) {
+              onClose();
+            }
+          }}
           className="mt-2 block text-center text-[12px] font-semibold leading-relaxed text-primary underline underline-offset-2"
         >
           {t("legalRow")}
-        </Link>
+        </a>
       </div>
     </div>
   );

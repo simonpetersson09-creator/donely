@@ -1,6 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import { LEGAL } from "./legal-i18n";
+
 
 export type LanguageCode =
   | "sv"
@@ -160,6 +160,8 @@ const sv = {
   pricePerMonth: "{{price}}/månad",
   startPremiumDynamic: "Starta Premium – {{price}}/månad",
   startPremiumPriceDynamic: "Starta Premium – {{price}}/mån",
+  legalRow: "Integritetspolicy & Användarvillkor",
+  legalOpenError: "Sidan kunde inte öppnas. Försök igen.",
 };
 
 type Dict = typeof sv;
@@ -285,6 +287,8 @@ const en: Dict = {
   pricePerMonth: "{{price}}/month",
   startPremiumDynamic: "Start Premium – {{price}}/month",
   startPremiumPriceDynamic: "Start Premium – {{price}}/mo",
+  legalRow: "Privacy Policy & Terms of Use",
+  legalOpenError: "The page could not be opened. Please try again.",
 };
 
 const de: Dict = {
@@ -408,6 +412,8 @@ const de: Dict = {
   pricePerMonth: "{{price}}/Monat",
   startPremiumDynamic: "Premium starten – {{price}}/Monat",
   startPremiumPriceDynamic: "Premium starten – {{price}}/Mon.",
+  legalRow: "Datenschutz & Nutzungsbedingungen",
+  legalOpenError: "Die Seite konnte nicht geöffnet werden. Bitte versuche es erneut.",
 };
 
 const fr: Dict = {
@@ -531,6 +537,8 @@ const fr: Dict = {
   pricePerMonth: "{{price}}/mois",
   startPremiumDynamic: "Démarrer Premium – {{price}}/mois",
   startPremiumPriceDynamic: "Démarrer Premium – {{price}}/mois",
+  legalRow: "Confidentialité et conditions d'utilisation",
+  legalOpenError: "La page n'a pas pu s'ouvrir. Veuillez réessayer.",
 };
 
 const es: Dict = {
@@ -654,6 +662,8 @@ const es: Dict = {
   pricePerMonth: "{{price}}/mes",
   startPremiumDynamic: "Empezar Premium – {{price}}/mes",
   startPremiumPriceDynamic: "Empezar Premium – {{price}}/mes",
+  legalRow: "Política de privacidad y Términos de uso",
+  legalOpenError: "No se pudo abrir la página. Inténtalo de nuevo.",
 };
 
 const it: Dict = {
@@ -777,6 +787,8 @@ const it: Dict = {
   pricePerMonth: "{{price}}/mese",
   startPremiumDynamic: "Inizia Premium – {{price}}/mese",
   startPremiumPriceDynamic: "Inizia Premium – {{price}}/mese",
+  legalRow: "Privacy e Condizioni d'uso",
+  legalOpenError: "Impossibile aprire la pagina. Riprova.",
 };
 
 const ptBR: Dict = {
@@ -900,6 +912,8 @@ const ptBR: Dict = {
   pricePerMonth: "{{price}}/mês",
   startPremiumDynamic: "Assinar Premium – {{price}}/mês",
   startPremiumPriceDynamic: "Assinar Premium – {{price}}/mês",
+  legalRow: "Política de Privacidade e Termos de Uso",
+  legalOpenError: "Não foi possível abrir a página. Tente novamente.",
 };
 
 const nl: Dict = {
@@ -1023,6 +1037,8 @@ const nl: Dict = {
   pricePerMonth: "{{price}}/maand",
   startPremiumDynamic: "Premium starten – {{price}}/maand",
   startPremiumPriceDynamic: "Premium starten – {{price}}/mnd",
+  legalRow: "Privacybeleid & Gebruiksvoorwaarden",
+  legalOpenError: "De pagina kon niet worden geopend. Probeer het opnieuw.",
 };
 
 const pl: Dict = {
@@ -1146,6 +1162,8 @@ const pl: Dict = {
   pricePerMonth: "{{price}}/miesiąc",
   startPremiumDynamic: "Uruchom Premium – {{price}}/miesiąc",
   startPremiumPriceDynamic: "Uruchom Premium – {{price}}/mies.",
+  legalRow: "Polityka prywatności i Warunki użytkowania",
+  legalOpenError: "Nie można otworzyć strony. Spróbuj ponownie.",
 };
 
 const da: Dict = {
@@ -1269,6 +1287,8 @@ const da: Dict = {
   pricePerMonth: "{{price}}/måned",
   startPremiumDynamic: "Start Premium – {{price}}/måned",
   startPremiumPriceDynamic: "Start Premium – {{price}}/md.",
+  legalRow: "Privatlivspolitik & Brugervilkår",
+  legalOpenError: "Siden kunne ikke åbnes. Prøv igen.",
 };
 
 const no: Dict = {
@@ -1392,6 +1412,8 @@ const no: Dict = {
   pricePerMonth: "{{price}}/måned",
   startPremiumDynamic: "Start Premium – {{price}}/måned",
   startPremiumPriceDynamic: "Start Premium – {{price}}/mnd",
+  legalRow: "Personvern og brukervilkår",
+  legalOpenError: "Siden kunne ikke åpnes. Prøv igjen.",
 };
 
 const fi: Dict = {
@@ -1515,6 +1537,8 @@ const fi: Dict = {
   pricePerMonth: "{{price}}/kk",
   startPremiumDynamic: "Aloita Premium – {{price}}/kk",
   startPremiumPriceDynamic: "Aloita Premium – {{price}}/kk",
+  legalRow: "Tietosuojakäytäntö ja käyttöehdot",
+  legalOpenError: "Sivua ei voitu avata. Yritä uudelleen.",
 };
 
 const ja: Dict = {
@@ -1638,22 +1662,24 @@ const ja: Dict = {
   pricePerMonth: "{{price}}/月",
   startPremiumDynamic: "プレミアムを開始 – {{price}}/月",
   startPremiumPriceDynamic: "プレミアムを開始 – {{price}}/月",
+  legalRow: "プライバシーポリシーと利用規約",
+  legalOpenError: "ページを開けませんでした。もう一度お試しください。",
 };
 
 const resources = {
-  sv: { translation: { ...sv, ...LEGAL.sv } },
-  en: { translation: { ...en, ...LEGAL.en } },
-  de: { translation: { ...de, ...LEGAL.de } },
-  fr: { translation: { ...fr, ...LEGAL.fr } },
-  es: { translation: { ...es, ...LEGAL.es } },
-  it: { translation: { ...it, ...LEGAL.it } },
-  "pt-BR": { translation: { ...ptBR, ...LEGAL["pt-BR"] } },
-  nl: { translation: { ...nl, ...LEGAL.nl } },
-  pl: { translation: { ...pl, ...LEGAL.pl } },
-  da: { translation: { ...da, ...LEGAL.da } },
-  no: { translation: { ...no, ...LEGAL.no } },
-  fi: { translation: { ...fi, ...LEGAL.fi } },
-  ja: { translation: { ...ja, ...LEGAL.ja } },
+  sv: { translation: sv },
+  en: { translation: en },
+  de: { translation: de },
+  fr: { translation: fr },
+  es: { translation: es },
+  it: { translation: it },
+  "pt-BR": { translation: ptBR },
+  nl: { translation: nl },
+  pl: { translation: pl },
+  da: { translation: da },
+  no: { translation: no },
+  fi: { translation: fi },
+  ja: { translation: ja },
 };
 
 if (!i18n.isInitialized) {
