@@ -271,6 +271,14 @@ function GoalCard({
   );
 }
 
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("sv-SE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 
 function GoalSheet({
   category,
