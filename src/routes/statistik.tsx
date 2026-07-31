@@ -60,9 +60,8 @@ function Statistik() {
     const lastAt = new Map<string, string>();
     for (const e of entries as Entry[]) {
       const d = new Date(e.createdAt);
-      if (d.getFullYear() === year) {
-        totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
-      }
+      if (d.getFullYear() !== year) continue;
+      totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
       const prev = lastAt.get(e.categoryId);
       if (!prev || d > new Date(prev)) lastAt.set(e.categoryId, e.createdAt);
     }
@@ -91,13 +90,14 @@ function Statistik() {
 
   const yearIndex = years.indexOf(year);
 
-  const totalActivities = useMemo(
-    () =>
-      entries
-        .filter((e) => new Date(e.createdAt).getFullYear() === year)
-        .reduce((sum, e) => sum + e.amount, 0),
-    [entries, year],
-  );
+  const totalActivities = useMemo(() => {
+    // Ignore entries whose category no longer exists, so the total always matches
+    // the cards below it.
+    const known = new Set(categories.map((c) => c.id));
+    return entries
+      .filter((e) => known.has(e.categoryId) && new Date(e.createdAt).getFullYear() === year)
+      .reduce((sum, e) => sum + e.amount, 0);
+  }, [categories, entries, year]);
 
 
   return (

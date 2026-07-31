@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, Minus, Pencil, Plus, Trash2, X } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useCategories, useEntries, useOnboarding, useLanguageGuide, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
+import { useCategories, useEntries, useGoals, useOnboarding, useLanguageGuide, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
 import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -44,7 +44,8 @@ function Index() {
 
   const { t } = useLanguage();
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
-  const { entries, addEntry } = useEntries();
+  const { addEntry, removeEntriesByCategory } = useEntries();
+  const { removeGoalsByCategory } = useGoals();
   const { seen: onboardingSeen, markSeen: markOnboardingSeen, hydrated: onboardingHydrated } = useOnboarding();
   const { seen: guideSeen, markSeen: markGuideSeen, hydrated: guideHydrated } = useLanguageGuide();
 
@@ -225,7 +226,13 @@ function Index() {
             setPickerOpen(false);
           }}
           onRename={renameCategory}
-          onDelete={removeCategory}
+          onDelete={(id) => {
+            // Remove the category together with its entries and goals, so no
+            // orphan data keeps counting in the statistics totals.
+            removeCategory(id);
+            removeEntriesByCategory(id);
+            removeGoalsByCategory(id);
+          }}
           onClose={() => setPickerOpen(false)}
 
         />
@@ -581,15 +588,17 @@ function LanguageGuideBubble({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   return (
+    // pointer-events-none so the bubble never blocks the primary Register button
+    // underneath it; only the × needs to be clickable.
     <div
       ref={ref}
-      className="absolute bottom-full right-0 z-50 mb-3 w-56 origin-bottom-right rounded-2xl border border-border bg-card p-3.5 shadow-card animate-in fade-in zoom-in-95 duration-200"
+      className="pointer-events-none absolute bottom-full right-0 z-50 mb-3 w-56 origin-bottom-right rounded-2xl border border-border bg-card p-3.5 shadow-card animate-in fade-in zoom-in-95 duration-200"
     >
       <button
         type="button"
         onClick={onClose}
         aria-label={t("close")}
-        className="absolute right-2 top-2 rounded-full p-1 text-card-foreground/50 transition-colors active:bg-secondary"
+        className="pointer-events-auto absolute right-2 top-2 rounded-full p-1 text-card-foreground/50 transition-colors active:bg-secondary"
       >
         <X className="size-3.5" />
       </button>
