@@ -14,6 +14,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { PurchaseFeedback } from "@/components/PurchaseFeedback";
+import { DataIntegrityNotice } from "@/components/DataIntegrityNotice";
+import { initializeStorage } from "@/lib/persistence";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -146,11 +148,17 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  // Validate / recover the local database once, before any screen reads it.
+  useEffect(() => {
+    initializeStorage();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <PurchaseFeedback />
+      <DataIntegrityNotice />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );
