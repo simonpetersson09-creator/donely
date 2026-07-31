@@ -1640,19 +1640,19 @@ const ja: Dict = {
 };
 
 const resources = {
-  sv: { translation: sv },
-  en: { translation: en },
-  de: { translation: de },
-  fr: { translation: fr },
-  es: { translation: es },
-  it: { translation: it },
-  "pt-BR": { translation: ptBR },
-  nl: { translation: nl },
-  pl: { translation: pl },
-  da: { translation: da },
-  no: { translation: no },
-  fi: { translation: fi },
-  ja: { translation: ja },
+  sv: { translation: { ...sv, ...LEGAL.sv } },
+  en: { translation: { ...en, ...LEGAL.en } },
+  de: { translation: { ...de, ...LEGAL.de } },
+  fr: { translation: { ...fr, ...LEGAL.fr } },
+  es: { translation: { ...es, ...LEGAL.es } },
+  it: { translation: { ...it, ...LEGAL.it } },
+  "pt-BR": { translation: { ...ptBR, ...LEGAL["pt-BR"] } },
+  nl: { translation: { ...nl, ...LEGAL.nl } },
+  pl: { translation: { ...pl, ...LEGAL.pl } },
+  da: { translation: { ...da, ...LEGAL.da } },
+  no: { translation: { ...no, ...LEGAL.no } },
+  fi: { translation: { ...fi, ...LEGAL.fi } },
+  ja: { translation: { ...ja, ...LEGAL.ja } },
 };
 
 if (!i18n.isInitialized) {
