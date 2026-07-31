@@ -74,9 +74,21 @@ function Installningar() {
       </div>
 
       <div className="flex flex-1 items-center justify-center py-6">
-        <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
-          Donely
-        </h1>
+        <div className="relative">
+          {!premium.subscribed && !premium.trialExpired && (
+            <div className="absolute -right-2 -top-[calc(100%+0.25rem)] z-10 translate-x-1/4 rotate-[-6deg]">
+              <div className="relative rounded-2xl border border-border bg-card px-3 py-2 shadow-card">
+                <p className="whitespace-nowrap text-[11px] font-semibold leading-[14px] text-primary">
+                  {t("trialLeft", { count: premium.trialDaysLeft })}
+                </p>
+                <div className="absolute -bottom-1.5 left-4 h-3 w-3 rotate-45 border-b border-r border-border bg-card" />
+              </div>
+            </div>
+          )}
+          <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+            Donely
+          </h1>
+        </div>
       </div>
 
       <div>
@@ -92,27 +104,19 @@ function Installningar() {
             </span>
           </button>
 
-          <div className="rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
-            {premium.subscribed && (
-              <p className="text-[15px] font-semibold leading-[20px] text-primary">
-                {t("premiumActive")}
-              </p>
-            )}
-            {!premium.subscribed && (
-              <>
-                {!premium.trialExpired && (
-                  <p className="text-[15px] font-semibold leading-[20px] text-primary">
-                    {t("trialLeft", { count: premium.trialDaysLeft })}
-                  </p>
-                )}
-                <p className="mt-1.5 text-[13px] font-normal leading-[18px] text-muted-foreground">
-                  {premium.trialExpired
-                    ? t("premiumUnlockAll")
-                    : `${t("freeTrialTitle")} · ${t("freeTrialThen")}`}
+          {(premium.subscribed || premium.trialExpired) && (
+            <div className="rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
+              {premium.subscribed ? (
+                <p className="text-[15px] font-semibold leading-[20px] text-primary">
+                  {t("premiumActive")}
                 </p>
-              </>
-            )}
-          </div>
+              ) : (
+                <p className="text-[15px] font-semibold leading-[20px] text-primary">
+                  {t("premiumUnlockAll")}
+                </p>
+              )}
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-2">
             <button
