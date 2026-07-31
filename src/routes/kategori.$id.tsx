@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { goalKey, useCategories, useEntries, useGoals } from "@/lib/store";
 
@@ -58,12 +58,23 @@ function CategoryDetail() {
       }));
   }, [entries, goals, id, currentYear]);
 
+  const lastAt = useMemo(() => {
+    let max: string | null = null;
+    for (const e of entries) {
+      if (e.categoryId !== id) continue;
+      if (!max || new Date(e.createdAt) > new Date(max)) max = e.createdAt;
+    }
+    return max;
+  }, [entries, id]);
+
   const thisYear = bars.find((b) => b.year === currentYear);
   const total = thisYear?.total ?? 0;
   const goal = thisYear?.goal ?? null;
   const pct = goal && goal > 0 ? Math.min(100, Math.round((total / goal) * 100)) : null;
   const max = Math.max(1, ...bars.map((b) => b.total));
   const active = bars.find((b) => b.year === selected) ?? null;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -90,6 +101,11 @@ function CategoryDetail() {
             ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
             : `${total.toLocaleString("sv-SE")} hittills`}
         </p>
+        {lastAt && mounted && (
+          <p className="mt-1 text-[11px] text-card-foreground/50">
+            Senast registrerat {formatDate(lastAt)}
+          </p>
+        )}
         {pct !== null && (
           <div className="mt-2.5 h-2.5 w-full overflow-hidden rounded-full bg-accent">
             <div
@@ -165,4 +181,12 @@ function CategoryDetail() {
       )}
     </main>
   );
+}
+
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("sv-SE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
