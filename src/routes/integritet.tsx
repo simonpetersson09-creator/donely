@@ -1,110 +1,106 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
+import { useLanguage } from "@/lib/use-language";
 
 export const Route = createFileRoute("/integritet")({
   head: () => ({
     meta: [
-      { title: "Integritetspolicy – Donely" },
+      { title: "Integritetspolicy & Användarvillkor – Donely" },
       {
         name: "description",
         content:
-          "Donely lagrar all data lokalt på din enhet. Inga konton, ingen molnsynk, ingen delning mellan användare.",
+          "Donelys integritetspolicy och användarvillkor på samma sida: lokal datalagring, inga konton och villkor för Premium-abonnemanget.",
       },
-      { property: "og:title", content: "Integritetspolicy – Donely" },
+      { property: "og:title", content: "Integritetspolicy & Användarvillkor – Donely" },
       {
         property: "og:description",
-        content: "All data i Donely stannar lokalt på din enhet.",
+        content: "All data i Donely stannar lokalt på din enhet. Läs policy och villkor.",
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: Privacy,
+  component: Legal,
 });
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ id, title, body }: { id?: string; title: string; body: string }) {
   return (
-    <section className="mt-6">
-      <h2 className="text-[15px] font-semibold text-primary">{title}</h2>
-      <div className="mt-2 space-y-2 text-[13px] leading-relaxed text-muted-foreground">
-        {children}
-      </div>
+    <section id={id} className="mt-5 scroll-mt-6">
+      <h3 className="text-[15px] font-semibold leading-[20px] text-foreground">{title}</h3>
+      <p className="mt-1.5 text-[13px] font-normal leading-[19px] text-muted-foreground">{body}</p>
     </section>
   );
 }
 
-function Privacy() {
+function Legal() {
+  const { t } = useLanguage();
+
   return (
-    <main className="mx-auto min-h-screen w-full max-w-md bg-background px-5 pb-16 pt-6">
-      <Link
-        to="/installningar"
-        className="inline-flex items-center gap-1 text-[13px] font-semibold text-primary"
-      >
-        <ChevronLeft className="h-4 w-4" />
-        Tillbaka
-      </Link>
+    <main className="mx-auto min-h-dvh w-full max-w-2xl px-4 pb-[calc(env(safe-area-inset-bottom)+2.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)] md:px-8">
+      <div className="py-2">
+        <Link
+          to="/installningar"
+          className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-secondary"
+        >
+          <ChevronLeft className="size-4" />
+          {t("back")}
+        </Link>
+      </div>
 
-      <h1 className="mt-4 text-[26px] font-bold tracking-tight text-foreground">
-        Integritetspolicy
+      <h1 className="px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary md:text-[32px] md:leading-[38px]">
+        {t("legalPageTitle")}
       </h1>
-      <p className="mt-1 text-[12px] text-muted-foreground">Senast uppdaterad: 2026-07-31</p>
+      <p className="mt-1 px-1 text-[12px] font-normal leading-[17px] text-muted-foreground">
+        {t("legalUpdated")}
+      </p>
+      <p className="mt-3 px-1 text-[13px] font-normal leading-[19px] text-muted-foreground">
+        {t("legalIntro")}
+      </p>
 
-      <Section title="All data stannar på din enhet">
-        <p>
-          Donely sparar dina kategorier, registreringar, antal, årsmål och inställningar enbart
-          lokalt i appens lagring på din enhet. Det finns inget användarkonto, ingen inloggning och
-          ingen server som tar emot din data.
+      <nav className="mt-5 rounded-2xl border border-border bg-card p-4 shadow-card">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+          {t("legalTocTitle")}
         </p>
-        <p>
-          Det innebär att ingen annan användare kan se dina kategorier, siffror eller statistik –
-          data lämnar aldrig enheten.
-        </p>
-      </Section>
+        <div className="mt-2 flex flex-col gap-1.5">
+          <a href="#privacy" className="text-[14px] font-semibold leading-[19px] text-primary">
+            1. {t("legalPrivacyTitle")}
+          </a>
+          <a href="#terms" className="text-[14px] font-semibold leading-[19px] text-primary">
+            2. {t("legalTermsTitle")}
+          </a>
+        </div>
+      </nav>
 
-      <Section title="Vad vi inte samlar in">
-        <p>
-          Vi samlar inte in namn, e-post, plats, kontakter, annonsidentifierare eller analysdata.
-          Vi säljer eller delar ingen data med tredje part.
-        </p>
-      </Section>
-
-      <Section title="Köp i appen">
-        <p>
-          Premium hanteras av Apple via App Store. Betalningsuppgifter behandlas av Apple och delas
-          aldrig med oss. Vi lagrar endast lokalt om ett köp är aktivt.
-        </p>
-      </Section>
-
-      <Section title="Radera din data">
-        <p>
-          Du kan när som helst radera allt permanent via Inställningar → Ta bort all data. Att
-          avinstallera appen tar också bort all lokal data.
-        </p>
-      </Section>
-
-      <Section title="Kontakt">
-        <p>Frågor om integritet: support@donely.app</p>
-      </Section>
+      <div id="privacy" className="mt-8 scroll-mt-6">
+        <h2 className="text-[20px] font-bold leading-[26px] tracking-[-0.02em] text-primary">
+          {t("legalPrivacyTitle")}
+        </h2>
+        <Section title={t("p1t")} body={t("p1b")} />
+        <Section title={t("p2t")} body={t("p2b")} />
+        <Section title={t("p3t")} body={t("p3b")} />
+        <Section title={t("p4t")} body={t("p4b")} />
+        <Section title={t("p5t")} body={t("p5b")} />
+      </div>
 
       <hr className="my-8 border-border" />
 
-      <h2 className="text-[15px] font-semibold text-primary">Privacy Policy (English)</h2>
-      <div className="mt-2 space-y-2 text-[13px] leading-relaxed text-muted-foreground">
-        <p>
-          Donely stores all your categories, entries, amounts, yearly goals and settings only in
-          local storage on your device. There is no account, no login and no server receiving your
-          data, so no other user can ever see your data.
-        </p>
-        <p>
-          We collect no personal data, no analytics and no advertising identifiers, and we never
-          share or sell data. Premium purchases are handled by Apple; only the entitlement status is
-          stored locally.
-        </p>
-        <p>
-          You can permanently delete everything at any time via Settings → Delete all data, or by
-          uninstalling the app. Questions: support@donely.app
-        </p>
+      <div id="terms" className="scroll-mt-6">
+        <h2 className="text-[20px] font-bold leading-[26px] tracking-[-0.02em] text-primary">
+          {t("legalTermsTitle")}
+        </h2>
+        <Section title={t("t1t")} body={t("t1b")} />
+        <Section title={t("t2t")} body={t("t2b")} />
+        <Section title={t("t3t")} body={t("t3b")} />
+        <Section title={t("t4t")} body={t("t4b")} />
+        <Section title={t("t5t")} body={t("t5b")} />
       </div>
+
+      <p className="mt-8 text-[12px] font-normal leading-[17px] text-muted-foreground">
+        {t("legalContactNote")}
+      </p>
+      <p className="mt-2 text-[9px] font-normal leading-[13px] text-muted-foreground/80">
+        Donely · {t("version")} 1.0
+      </p>
     </main>
   );
 }
