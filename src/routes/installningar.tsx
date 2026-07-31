@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
+import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import {
   openManageSubscriptions,
   purchasePremium,
@@ -170,8 +171,13 @@ function Installningar() {
             {t("aboutApp")}
           </p>
 
-          <Link
-            to="/integritet"
+          <button
+            type="button"
+            onClick={() => {
+              if (!openExternalUrl(LEGAL_URL)) {
+                toast.error(t("legalOpenError"));
+              }
+            }}
             className="mb-2 flex w-full items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-3 shadow-card transition-colors active:bg-accent"
           >
             <span className="flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary">
@@ -179,7 +185,7 @@ function Installningar() {
               {t("legalRow")}
             </span>
             <ChevronRight className="size-4 text-muted-foreground" />
-          </Link>
+          </button>
 
           <div className="grid grid-cols-2 gap-2">
             <button
