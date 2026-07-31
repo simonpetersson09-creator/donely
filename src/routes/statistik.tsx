@@ -185,11 +185,13 @@ function Statistik() {
 
 function Section({
   title,
+  icon,
   rows,
   showGoalCta,
   onSetGoal,
 }: {
   title: string;
+  icon: ReactNode;
   rows: Row[];
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
@@ -197,7 +199,8 @@ function Section({
   if (rows.length === 0) return null;
   return (
     <section className="mt-8">
-      <h2 className="mb-1 px-1 text-[13px] font-semibold tracking-[-0.01em] text-primary/80">
+      <h2 className="mb-2 flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
+        {icon}
         {title}
       </h2>
       <div className="space-y-1.5">
