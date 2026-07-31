@@ -11,6 +11,7 @@ import {
   type Category,
   type Entry,
 } from "@/lib/store";
+import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";
@@ -28,7 +29,8 @@ export const Route = createFileRoute("/statistik")({
       { property: "og:title", content: "Statistik – Donely" },
       {
         property: "og:description",
-        content: "Resultat hittills i år per kategori, med årsmål och progress för privat och jobb.",
+        content:
+          "Resultat hittills i år per kategori, med årsmål och progress för privat och jobb.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -103,7 +105,6 @@ function Statistik() {
       .reduce((sum, e) => sum + e.amount, 0);
   }, [categories, entries, year]);
 
-
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex items-center justify-between py-2">
@@ -158,6 +159,10 @@ function Statistik() {
         rows={rows.privat}
         showGoalCta={isCurrentYear}
         onSetGoal={(c) => {
+          if (premium.loading) {
+            toast.message(t("premiumLoading"));
+            return;
+          }
           if (!canMutate(premium)) {
             setPaywallOpen(true);
             return;
@@ -171,6 +176,10 @@ function Statistik() {
         rows={rows.jobb}
         showGoalCta={isCurrentYear}
         onSetGoal={(c) => {
+          if (premium.loading) {
+            toast.message(t("premiumLoading"));
+            return;
+          }
           if (!canMutate(premium)) {
             setPaywallOpen(true);
             return;
@@ -191,6 +200,10 @@ function Statistik() {
           year={year}
           current={goals[goalKey(year, editing.id)] ?? null}
           onSave={(target) => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
             if (!canMutate(premium)) {
               setEditing(null);
               setPaywallOpen(true);
@@ -200,6 +213,10 @@ function Statistik() {
             setEditing(null);
           }}
           onRemove={() => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
             if (!canMutate(premium)) {
               setEditing(null);
               setPaywallOpen(true);
@@ -209,6 +226,10 @@ function Statistik() {
             setEditing(null);
           }}
           onDelete={() => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
             if (!canMutate(premium)) {
               setEditing(null);
               setPaywallOpen(true);
@@ -223,7 +244,6 @@ function Statistik() {
         />
       )}
       {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
-
     </main>
   );
 }
@@ -250,7 +270,12 @@ function Section({
       </h2>
       <div className="space-y-1.5">
         {rows.map((row) => (
-          <GoalCard key={row.category.id} row={row} showGoalCta={showGoalCta} onSetGoal={onSetGoal} />
+          <GoalCard
+            key={row.category.id}
+            row={row}
+            showGoalCta={showGoalCta}
+            onSetGoal={onSetGoal}
+          />
         ))}
       </div>
     </section>
@@ -312,7 +337,10 @@ function GoalCard({
       <div className="mt-0.5 flex items-center justify-between gap-2">
         <p className="min-w-0 truncate text-[20px] font-bold leading-tight tabular-nums">
           {goal !== null
-            ? t("ofGoal", { total: total.toLocaleString(locale), goal: goal.toLocaleString(locale) })
+            ? t("ofGoal", {
+                total: total.toLocaleString(locale),
+                goal: goal.toLocaleString(locale),
+              })
             : t("soFarCount", { total: total.toLocaleString(locale) })}
         </p>
         {lastAt && mounted && (
@@ -358,7 +386,6 @@ function formatRelativeDate(
     year: "numeric",
   });
 }
-
 
 function GoalSheet({
   category,

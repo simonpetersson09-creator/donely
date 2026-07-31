@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { PurchaseFeedback } from "@/components/PurchaseFeedback";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -79,10 +80,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Donely" },
-      { name: "description", content: "Dokumentera vad du faktiskt har åstadkommit – jobb och privat, på fem sekunder." },
+      {
+        name: "description",
+        content: "Dokumentera vad du faktiskt har åstadkommit – jobb och privat, på fem sekunder.",
+      },
       { name: "author", content: "Donely" },
       { property: "og:title", content: "Donely" },
-      { property: "og:description", content: "Dokumentera vad du faktiskt har åstadkommit – jobb och privat, på fem sekunder." },
+      {
+        property: "og:description",
+        content: "Dokumentera vad du faktiskt har åstadkommit – jobb och privat, på fem sekunder.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@donely" },
@@ -143,6 +150,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <PurchaseFeedback />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );
