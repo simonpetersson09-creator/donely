@@ -113,16 +113,25 @@ function Installningar() {
 
       <div>
         <section className="space-y-3">
-          <button
-            type="button"
-            onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
-          >
-            <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
-              <Crown className="size-4" />
-              {t("startPremiumPrice")}
-            </span>
-          </button>
+          {!premium.subscribed && (
+            <button
+              type="button"
+              onClick={() => {
+                if (purchasePremium()) {
+                  premium.refresh();
+                  toast.success(t("premiumActive"));
+                } else {
+                  toast.message(t("premiumFlowComing"));
+                }
+              }}
+              className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
+            >
+              <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
+                <Crown className="size-4" />
+                {t("startPremiumPrice")}
+              </span>
+            </button>
+          )}
 
           {(premium.subscribed || premium.trialExpired) && (
             <div className="rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
@@ -141,7 +150,7 @@ function Installningar() {
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => toast.message(t("premiumFlowComing"))}
+              onClick={openManageSubscriptions}
               className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
             >
               {t("manageSubscription")}
@@ -149,13 +158,18 @@ function Installningar() {
 
             <button
               type="button"
-              onClick={() => toast.message(t("purchasesRestored"))}
+              onClick={() => {
+                const found = restorePurchase();
+                premium.refresh();
+                toast.message(found ? t("premiumActive") : t("purchasesRestored"));
+              }}
               className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
             >
               {t("restorePurchase")}
             </button>
           </div>
         </section>
+
 
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <div className="grid grid-cols-2 gap-2">
