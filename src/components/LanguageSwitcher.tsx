@@ -6,6 +6,7 @@ import type { LanguageCode } from "@/lib/i18n";
 
 export function LanguageSwitcher() {
   const { t, language, changeLanguage, languages } = useLanguage();
+  const short = languages.find((l) => l.code === language)?.short ?? "EN";
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
 
@@ -67,9 +68,10 @@ export function LanguageSwitcher() {
         aria-label={t("language")}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-card transition-transform duration-200 active:scale-[0.95]"
+        className="flex h-12 w-12 flex-col items-center justify-center gap-0.5 rounded-full bg-primary text-primary-foreground shadow-card transition-transform duration-200 active:scale-[0.95]"
       >
-        <Globe className="size-5" />
+        <Globe className="size-[18px]" />
+        <span className="text-[9px] font-bold leading-none tracking-[0.08em]">{short}</span>
       </button>
     </div>
   );
