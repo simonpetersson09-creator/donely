@@ -62,18 +62,6 @@ function Index() {
     }
   }, [areaCategories, categoryId]);
 
-  const todayRows = useMemo(() => {
-    const key = new Date().toDateString();
-    const totals = new Map<string, { name: string; total: number }>();
-    for (const e of entries) {
-      if (new Date(e.createdAt).toDateString() !== key) continue;
-      const cat = categories.find((c) => c.id === e.categoryId);
-      const name = cat ? categoryLabel(t, cat) : e.categoryName;
-      const prev = totals.get(e.categoryId);
-      totals.set(e.categoryId, { name, total: (prev?.total ?? 0) + e.amount });
-    }
-    return [...totals.values()].sort((a, b) => b.total - a.total);
-  }, [entries, categories, t]);
 
   useEffect(() => {
     return () => {
@@ -104,9 +92,8 @@ function Index() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
-      <TodayCard rows={todayRows} title={t("todayTitle")} empty={t("noEntriesToday")} />
-
       <div className="flex flex-1 items-center justify-center">
+
         <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
           Donely
         </h1>
@@ -263,35 +250,7 @@ function StepButton({
 }
 
 
-function TodayCard({
-  rows,
-  title,
-  empty,
-}: {
-  rows: { name: string; total: number }[];
-  title: string;
-  empty: string;
-}) {
-  return (
-    <section className="rounded-2xl border border-border bg-card px-3.5 py-2.5 shadow-card">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-card-foreground/50">
-        {title}
-      </p>
-      {rows.length === 0 ? (
-        <p className="mt-1 text-[13px] text-card-foreground/60">{empty}</p>
-      ) : (
-        <ul className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
-          {rows.map((r) => (
-            <li key={r.name} className="text-[13px] font-medium text-card-foreground">
-              {r.name} <span className="text-card-foreground/40">•</span>{" "}
-              <span className="tabular-nums font-semibold">{r.total}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
-  );
-}
+
 
 function AreaSegmented({
   area,
