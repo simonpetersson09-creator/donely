@@ -66,7 +66,23 @@ som aldrig beviljar åtkomst själv i produktionsbygget.
 "köp" simuleras lokalt). Den är automatiskt på i `import.meta.env.DEV` och
 **måste vara avstängd i produktionsbygget** – utan iOS-skal är appen då låst.
 
-### Bridge-kontrakt
+### Bridge-kontrakt (version 1)
+
+Kontraktsversionen exponeras som `window.__donelyBridgeVersion` (= 1) och skickas
+med i `bridgeReady`. Swift bör logga/asserta att versionen är den förväntade.
+
+**Handshake:** så snart `src/lib/premium.ts` laddats sätts
+`window.__donelyBridgeReady = true` och `bridgeReady` postas till skalet. Swift
+ska skicka entitlement + produkt när `bridgeReady` tas emot (och får gärna även
+pusha direkt vid `didFinish navigation` – dubbla anrop är ofarliga).
+
+**Robusthet på JS-sidan:** alla callbacks accepterar både objekt och
+JSON-sträng, `trialDaysLeft` tvingas till ett icke-negativt heltal, okänd
+`status` behandlas som `"failed"`, tomt/ogiltigt `displayPrice` ger
+`productUnavailable`. JS har egna timeouts så UI aldrig fastnar: entitlement
+8 s (låser appen), produkt 15 s (→ pris otillgängligt), köp/återställning
+180 s (→ `failed`).
+
 
 JS → Swift (`WKScriptMessageHandler`, `webkit.messageHandlers`):
 
