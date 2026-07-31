@@ -48,8 +48,10 @@ function Statistik() {
   const currentYear = new Date().getFullYear();
   const [year, setYear] = useState(currentYear);
   const [editing, setEditing] = useState<Category | null>(null);
+  const [paywallOpen, setPaywallOpen] = useState(false);
 
   const { t } = useLanguage();
+  const premium = usePremium();
   const locale = useLocale();
   const { categories, removeCategory } = useCategories();
   const { entries, removeEntriesByCategory } = useEntries();
@@ -186,6 +188,8 @@ function Statistik() {
           onClose={() => setEditing(null)}
         />
       )}
+      {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
+
     </main>
   );
 }
