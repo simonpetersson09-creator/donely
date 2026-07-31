@@ -826,6 +826,10 @@ const fi: Dict = {
   "cat.j-avtal": "Sopimukset",
   "cat.j-samtal": "Uudet puhelut",
   "cat.j-admin": "Hallintotehtävät",
+  welcomeTitle: "Tervetuloa Donelyyn",
+  welcomeLine1: "Kirjaa mitä oikeasti teet.",
+  welcomeLine2: "Seuraa tuloksiasi ajan mittaan.",
+  getStarted: "Aloita",
 };
 
 const ja: Dict = {
