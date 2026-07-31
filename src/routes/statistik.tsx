@@ -205,22 +205,8 @@ function GoalCard({
 
   return (
     <article
-      role={showGoalCta ? "button" : undefined}
-      tabIndex={showGoalCta ? 0 : undefined}
-      onClick={showGoalCta ? () => onSetGoal(category) : undefined}
-      onKeyDown={
-        showGoalCta
-          ? (e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                onSetGoal(category);
-              }
-            }
-          : undefined
-      }
       className={cn(
         "rounded-xl border border-border bg-card px-3.5 py-2.5 text-card-foreground shadow-card",
-        showGoalCta && "cursor-pointer transition-colors active:bg-secondary",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -241,9 +227,14 @@ function GoalCard({
             </span>
           )}
           {showGoalCta && (
-            <span className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary">
+            <button
+              type="button"
+              aria-label={`Ändra årsmål för ${category.name}`}
+              onClick={() => onSetGoal(category)}
+              className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
+            >
               <Pencil className="size-3" />
-            </span>
+            </button>
           )}
         </div>
       </div>
