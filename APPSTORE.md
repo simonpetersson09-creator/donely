@@ -54,3 +54,54 @@ I iOS-skalet: implementera `WKScriptMessageHandler` för namnen ovan och skicka 
 - [ ] Beskrivning, nyckelord, supportlänk, integritetspolicy-URL
 - [ ] Åldersgräns 4+
 - [ ] Testa köpflödet i Sandbox
+
+## StoreKit 2 – vad som återstår i Swift
+
+Webbdelen är nu helt förberedd. All Premium-status läses från `src/lib/premium.ts`,
+som aldrig beviljar åtkomst själv i produktionsbygget.
+
+### Env-flagga
+
+`VITE_ALLOW_LOCAL_PREMIUM=true` aktiverar localStorage-fallbacken (provperiod och
+"köp" simuleras lokalt). Den är automatiskt på i `import.meta.env.DEV` och
+**måste vara avstängd i produktionsbygget** – utan iOS-skal är appen då låst.
+
+### Bridge-kontrakt
+
+JS → Swift (`WKScriptMessageHandler`, `webkit.messageHandlers`):
+
+| Handler | Payload | Swift ska göra |
+| --- | --- | --- |
+| `requestEntitlement` | `{}` | Läs `Transaction.currentEntitlements` och svara med entitlement |
+| `requestProduct` | `{ product: "donely.premium.monthly" }` | `Product.products(for:)` och svara med `displayPrice` |
+| `purchasePremium` | `{ product: "donely.premium.monthly" }` | `product.purchase()` |
+| `restorePurchase` | `{}` | `try await AppStore.sync()` + verifiera entitlement |
+| `manageSubscription` | `{}` | `showManageSubscriptions(in:)` |
+| `requestReview` | `{}` | `AppStore.requestReview(in:)` |
+
+Swift → JS (kör via `webView.evaluateJavaScript`):
+
+```js
+window.__donelySetEntitlement({ subscribed: Bool, inTrial: Bool, trialDaysLeft: Int })
+window.__donelySetProduct({ id: "donely.premium.monthly", displayPrice: "29 kr" }) // eller null
+window.__donelyPurchaseResult(status, message?)
+```
+
+`status` måste vara ett av:
+`"success" | "cancelled" | "failed" | "productUnavailable" | "restored" | "nothingToRestore" | "pending"`.
+`message` är valfritt och ska vara redan lokaliserat (t.ex. StoreKit-felbeskrivning);
+utelämnas det används appens egna översättningar.
+
+### Krav på Swift-implementationen
+
+1. **Provperioden får aldrig startas av appen.** `inTrial` ska härledas från
+   `Product.SubscriptionInfo.Status` / `RenewalInfo` respektive
+   `Transaction.offer` (introductory offer, 7 dagar) – inte från något lokalt datum.
+2. `trialDaysLeft` beräknas från transaktionens `expirationDate`.
+3. Skicka entitlement vid appstart, vid `requestEntitlement`, vid
+   `Transaction.updates` och när appen blir aktiv igen.
+4. Skicka `pending` för `.pending` (Ask to Buy) och `cancelled` för `.userCancelled`.
+5. Verifiera alltid `VerificationResult` innan entitlement rapporteras.
+6. Konfigurera produkten `donely.premium.monthly` i App Store Connect med ett
+   7-dagars introduktionserbjudande (gratis provperiod).
+7. Priset i UI kommer enbart från `displayPrice` – inga hårdkodade belopp.
