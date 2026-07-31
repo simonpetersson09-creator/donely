@@ -1,0 +1,8 @@
+# Capacitor / Xcode
+App/build
+App/Pods
+App/output
+App/App/public
+DerivedData
+xcuserdata
+Podfile.lock
