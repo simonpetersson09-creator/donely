@@ -12,9 +12,7 @@ import {
   usePrice,
 } from "@/lib/premium";
 
-
-const APP_STORE_REVIEW_URL =
-  "https://apps.apple.com/app/id0000000000?action=write-review";
+const APP_STORE_REVIEW_URL = "https://apps.apple.com/app/id0000000000?action=write-review";
 
 /**
  * Ber om Apples inbyggda betygsdialog (SKStoreReviewController / StoreKit 2
@@ -165,9 +163,7 @@ function Installningar() {
               {premium.phase === "restoring" ? t("restoring") : t("restorePurchase")}
             </button>
           </div>
-
         </section>
-
 
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <div className="grid grid-cols-2 gap-2">

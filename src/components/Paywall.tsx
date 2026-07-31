@@ -26,7 +26,12 @@ export function Paywall({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40 backdrop-blur-[2px]">
-      <button type="button" aria-label={t("close")} className="absolute inset-0" onClick={onClose} />
+      <button
+        type="button"
+        aria-label={t("close")}
+        className="absolute inset-0"
+        onClick={onClose}
+      />
       <div className="relative mx-auto w-full max-w-md animate-in slide-in-from-bottom duration-300 rounded-t-3xl border-t border-border bg-card px-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] pt-5 shadow-card">
         <button
           type="button"

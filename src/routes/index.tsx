@@ -1,9 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Briefcase, Check, ChevronDown, Crown, Home, Minus, Pencil, Plus, Settings, Trash2, X } from "lucide-react";
+import {
+  Briefcase,
+  Check,
+  ChevronDown,
+  Crown,
+  Home,
+  Minus,
+  Pencil,
+  Plus,
+  Settings,
+  Trash2,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { useCategories, useEntries, useGoals, useOnboarding, useLanguageGuide, DEFAULT_CATEGORIES, type Area } from "@/lib/store";
+import {
+  useCategories,
+  useEntries,
+  useGoals,
+  useOnboarding,
+  useLanguageGuide,
+  DEFAULT_CATEGORIES,
+  type Area,
+} from "@/lib/store";
 import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -11,9 +31,6 @@ import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";
 
 const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
-
-
-
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -49,19 +66,19 @@ function Index() {
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { addEntry, removeEntriesByCategory } = useEntries();
   const { removeGoalsByCategory } = useGoals();
-  const { seen: onboardingSeen, markSeen: markOnboardingSeen, hydrated: onboardingHydrated } = useOnboarding();
+  const {
+    seen: onboardingSeen,
+    markSeen: markOnboardingSeen,
+    hydrated: onboardingHydrated,
+  } = useOnboarding();
   const premium = usePremium();
   const { seen: guideSeen, markSeen: markGuideSeen, hydrated: guideHydrated } = useLanguageGuide();
 
   const areaCategories = useMemo(() => {
     const list = categories.filter((c) => c.area === area);
     const isStd = (id: string) => DEFAULT_IDS.has(id);
-    return [
-      ...list.filter((c) => isStd(c.id)),
-      ...list.filter((c) => !isStd(c.id)),
-    ];
+    return [...list.filter((c) => isStd(c.id)), ...list.filter((c) => !isStd(c.id))];
   }, [categories, area]);
-
 
   useEffect(() => {
     if (!areaCategories.some((c) => c.id === categoryId)) {
@@ -69,13 +86,11 @@ function Index() {
     }
   }, [areaCategories, categoryId]);
 
-
   useEffect(() => {
     return () => {
       if (flashTimer.current) clearTimeout(flashTimer.current);
     };
   }, []);
-
 
   const selected = areaCategories.find((c) => c.id === categoryId);
   const parsed = Number.parseInt(amount, 10);
@@ -87,10 +102,10 @@ function Index() {
     if (!valid || !selected) return;
     // All mutating actions are gated through the same premium status.
     if (premium.loading) {
-              toast.message(t("premiumLoading"));
-              return;
-            }
-            if (!canMutate(premium)) {
+      toast.message(t("premiumLoading"));
+      return;
+    }
+    if (!canMutate(premium)) {
       navigator.vibrate?.(8);
       setPaywallOpen(true);
       return;
@@ -263,8 +278,6 @@ function Index() {
         </div>
       </div>
 
-
-
       {pickerOpen && (
         <CategorySheet
           area={area}
@@ -317,7 +330,6 @@ function Index() {
             removeGoalsByCategory(id);
           }}
           onClose={() => setPickerOpen(false)}
-
         />
       )}
 
@@ -334,10 +346,7 @@ function Label({ children }: { children: React.ReactNode }) {
   );
 }
 
-function StepButton({
-  children,
-  ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+function StepButton({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       type="button"
@@ -348,9 +357,6 @@ function StepButton({
     </button>
   );
 }
-
-
-
 
 function AreaSegmented({
   area,
@@ -645,12 +651,8 @@ function Onboarding({ onStart }: { onStart: () => void }) {
           {t("welcomeTitle")}
         </p>
         <div className="mt-4 space-y-1.5">
-          <p className="text-[17px] leading-relaxed text-muted-foreground">
-            {t("welcomeLine1")}
-          </p>
-          <p className="text-[17px] leading-relaxed text-muted-foreground">
-            {t("welcomeLine2")}
-          </p>
+          <p className="text-[17px] leading-relaxed text-muted-foreground">{t("welcomeLine1")}</p>
+          <p className="text-[17px] leading-relaxed text-muted-foreground">{t("welcomeLine2")}</p>
         </div>
       </div>
 
@@ -692,13 +694,13 @@ function LanguageGuideBubble({ onClose }: { onClose: () => void }) {
       >
         <X className="size-3.5" />
       </button>
-      <p className="pr-5 text-[14px] font-semibold text-card-foreground">{t("languageGuideTitle")}</p>
-      <p className="mt-1 text-[12px] leading-snug text-muted-foreground">{t("languageGuideBody")}</p>
+      <p className="pr-5 text-[14px] font-semibold text-card-foreground">
+        {t("languageGuideTitle")}
+      </p>
+      <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
+        {t("languageGuideBody")}
+      </p>
       <div className="absolute -bottom-1.5 right-6 size-3 rotate-45 rounded-[2px] border-r border-b border-border bg-card" />
     </div>
   );
 }
-
-
-
-
