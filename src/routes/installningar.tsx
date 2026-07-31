@@ -186,13 +186,6 @@ function Installningar() {
             </button>
           </div>
 
-          <Link
-            to="/integritet"
-            className="mt-3 block text-center text-[11px] font-medium leading-[15px] text-primary"
-          >
-            Integritetspolicy
-          </Link>
-
           <p className="mt-2 text-center text-[9px] font-normal leading-[13px] text-muted-foreground/80">
             Donely · {t("version")} 1.0
           </p>
