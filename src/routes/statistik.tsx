@@ -391,6 +391,13 @@ function GoalSheet({
             {t("save")}
           </button>
         </div>
+        <button
+          type="button"
+          onClick={onDelete}
+          className="mt-2 w-full rounded-xl border border-destructive/30 bg-card py-3 text-[15px] font-semibold text-destructive transition-colors active:bg-destructive/10"
+        >
+          {t("deleteCategoryAndStats")}
+        </button>
       </form>
     </div>
   );
