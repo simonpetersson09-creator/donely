@@ -49,9 +49,9 @@ function Statistik() {
 
   const { t } = useLanguage();
   const locale = useLocale();
-  const { categories } = useCategories();
-  const { entries } = useEntries();
-  const { goals, setGoal, removeGoal } = useGoals();
+  const { categories, removeCategory } = useCategories();
+  const { entries, removeEntriesByCategory } = useEntries();
+  const { goals, setGoal, removeGoal, removeGoalsByCategory } = useGoals();
 
   const isCurrentYear = year === currentYear;
 
