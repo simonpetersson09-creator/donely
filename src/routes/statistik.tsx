@@ -213,7 +213,11 @@ function GoalCard({
       )}
     >
       <div className="flex items-start justify-between gap-3">
-        <div className="min-w-0">
+        <Link
+          to="/kategori/$id"
+          params={{ id: category.id }}
+          className="min-w-0 flex-1 text-left"
+        >
           <h3 className="truncate text-[12px] font-medium text-card-foreground/70">
             {category.name}
           </h3>
@@ -222,7 +226,7 @@ function GoalCard({
               ? `${total.toLocaleString("sv-SE")} av ${goal.toLocaleString("sv-SE")}`
               : `${total.toLocaleString("sv-SE")} hittills`}
           </p>
-        </div>
+        </Link>
         <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
             <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-1 text-[11px] font-semibold text-primary-foreground">
