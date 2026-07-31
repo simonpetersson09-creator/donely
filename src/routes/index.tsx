@@ -129,7 +129,7 @@ function Index() {
                   : t("createCategory")
                 : t("loading")}
             </span>
-            <ChevronDown className="size-3.5 text-card-foreground/60" />
+            <ChevronDown className="size-3.5 text-primary" />
           </button>
         </section>
 
