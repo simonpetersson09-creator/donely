@@ -77,11 +77,24 @@ function Installningar() {
         <div className="relative">
           {!premium.subscribed && !premium.trialExpired && (
             <div className="absolute -right-2 -top-[calc(100%+0.25rem)] z-10 translate-x-1/4 rotate-[-6deg]">
-              <div className="relative rounded-2xl border border-border bg-card px-3 py-2 shadow-card">
-                <p className="whitespace-nowrap text-[11px] font-semibold leading-[14px] text-primary">
-                  {t("trialLeft", { count: premium.trialDaysLeft })}
+              <div className="relative rounded-full border border-border bg-card px-4 py-3 shadow-card">
+                <p className="text-center text-[11px] font-semibold leading-[14px] text-primary">
+                  {(() => {
+                    const text = t("trialLeft", { count: premium.trialDaysLeft });
+                    const parts = text.split(/kvar\s*/);
+                    if (parts.length === 2) {
+                      return (
+                        <>
+                          {parts[0]}kvar
+                          <br />
+                          {parts[1]}
+                        </>
+                      );
+                    }
+                    return text;
+                  })()}
                 </p>
-                <div className="absolute -bottom-1.5 left-4 h-3 w-3 rotate-45 border-b border-r border-border bg-card" />
+                <div className="absolute -bottom-1.5 left-4 h-3 w-3 rotate-45 border-b border-right border-border bg-card" />
               </div>
             </div>
           )}
