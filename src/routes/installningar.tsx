@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Crown, Trash2 } from "lucide-react";
+import { ChevronLeft, Crown, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
@@ -108,7 +108,7 @@ function Installningar() {
           <button
             type="button"
             onClick={() => toast.message(t("premiumFlowComing"))}
-            className="w-full rounded-xl border border-border bg-card px-3.5 py-2.5 text-center text-[17px] font-semibold leading-[22px] text-primary shadow-card transition-colors active:bg-accent"
+            className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3.5 py-3 text-[17px] font-semibold leading-[22px] text-primary shadow-card transition-colors active:bg-accent"
           >
             {t("manageSubscription")}
           </button>
@@ -116,43 +116,38 @@ function Installningar() {
           <button
             type="button"
             onClick={() => toast.message(t("purchasesRestored"))}
-            className="w-full rounded-lg px-3 py-1.5 text-center text-[15px] font-normal leading-[20px] text-muted-foreground transition-colors active:bg-accent"
+            className="w-full px-3 py-1.5 text-center text-[15px] font-normal leading-[20px] text-system-blue transition-opacity active:opacity-60"
           >
             {t("restorePurchase")}
           </button>
         </div>
-
       </section>
 
-      <section className="mt-4">
-        <button
-          type="button"
-          onClick={requestAppStoreReview}
-          className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[17px] font-semibold leading-[22px] text-primary shadow-card transition-colors active:bg-accent"
-        >
-          <span>{t("rateDonely")}</span>
-          <ChevronRight className="size-4 text-primary" />
-        </button>
-      </section>
+      <div className="mt-auto pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={requestAppStoreReview}
+            className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[17px] font-semibold leading-[22px] text-primary shadow-card transition-colors active:bg-accent"
+          >
+            <Star className="size-[18px]" />
+            <span>{t("rateDonely")}</span>
+          </button>
 
-
-      <p className="mt-auto pt-8 text-center text-[13px] font-normal leading-[18px] text-muted-foreground">
-        Donely · {t("version")} 1.0
-      </p>
-
-      <section className="mt-6 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
-        <button
-          type="button"
-          onClick={() => setConfirming(true)}
-          className="flex w-full items-center justify-between rounded-xl border border-destructive/30 bg-card px-3.5 py-3 text-[17px] font-semibold leading-[22px] text-destructive shadow-card transition-colors active:bg-destructive/10"
-        >
-          <span className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setConfirming(true)}
+            className="flex items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-card px-3 py-3 text-[17px] font-semibold leading-[22px] text-destructive shadow-card transition-colors active:bg-destructive/10"
+          >
             <Trash2 className="size-[18px]" />
-            {t("deleteAllDataRow")}
-          </span>
-          <ChevronRight className="size-4 text-destructive" />
-        </button>
-      </section>
+            <span>{t("deleteAllDataRow")}</span>
+          </button>
+        </div>
+
+        <p className="mt-2 text-center text-[12px] font-normal leading-[16px] text-muted-foreground/80">
+          Donely · {t("version")} 1.0
+        </p>
+      </div>
 
       {confirming && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
@@ -190,5 +185,4 @@ function Installningar() {
       )}
     </main>
   );
-
 }
