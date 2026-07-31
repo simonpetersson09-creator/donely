@@ -531,3 +531,37 @@ function CategoryRow({
   );
 }
 
+function Onboarding({ onStart }: { onStart: () => void }) {
+  const { t } = useTranslation();
+
+  return (
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+      <div className="flex flex-1 flex-col items-center justify-center text-center">
+        <h1 className="select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+          Donely
+        </h1>
+        <p className="mt-6 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-foreground">
+          {t("welcomeTitle")}
+        </p>
+        <div className="mt-4 space-y-1.5">
+          <p className="text-[17px] leading-relaxed text-muted-foreground">
+            {t("welcomeLine1")}
+          </p>
+          <p className="text-[17px] leading-relaxed text-muted-foreground">
+            {t("welcomeLine2")}
+          </p>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        onClick={onStart}
+        className="w-full rounded-xl bg-primary py-3.5 text-[17px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96]"
+      >
+        {t("getStarted")}
+      </button>
+    </main>
+  );
+}
+
+
