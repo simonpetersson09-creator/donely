@@ -171,14 +171,16 @@ dev-tickern eller av återställning.
 - Pris: `FALLBACK_PRICE` ("29 kr") i stället för `product.displayPrice`.
 - `openManageSubscriptions()` öppnar apps.apple.com i ny flik.
 
-### Väntar på riktig StoreKit 2 (Swift)
-- `Transaction.currentEntitlements` → `__donelySetEntitlement`.
-- Trial härledd från `Transaction.offer` (introduktionserbjudande) → `inTrial` / `trialDaysLeft`.
-- `Product.products(for:)` → `__donelySetProduct({ id, displayPrice })`.
-- `product.purchase()` med alla utfall → `__donelyPurchaseResult(status, message?)`.
-- `AppStore.sync()` för återställning.
-- `showManageSubscriptions(in:)` för abonnemangshantering.
-- `Transaction.updates`-lyssnare som pushar nytt entitlement när prenumerationen förnyas eller avslutas.
+### StoreKit 2 i Swift – KLART (`ios/App/App/DonelyStoreKitBridge.swift`)
+- `Transaction.currentEntitlements` → `__donelySetEntitlement`. ✅
+- Trial härledd från `transaction.offerType == .introductory` + `expirationDate` → `inTrial` / `trialDaysLeft`. ✅
+- `Product.products(for: ["donely.premium.monthly"])` → `__donelySetProduct({ id, displayPrice })`. ✅
+- `product.purchase()` med alla utfall → `__donelyPurchaseResult(status, message?)`. ✅
+- `AppStore.sync()` för återställning → `restored` / `nothingToRestore`. ✅
+- `AppStore.showManageSubscriptions(in:)` för abonnemangshantering. ✅
+- `Transaction.updates`-lyssnare som pushar nytt entitlement vid förnyelse/avslut. ✅
+- Alla sex message handlers registreras av `DonelyViewController`; filen ingår i target App i `App.xcodeproj`. ✅
+
 
 ## Kontraktsgranskning – 2026-07-31
 
