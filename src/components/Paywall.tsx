@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Link } from "@tanstack/react-router";
 import { Crown, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import {
@@ -87,6 +88,13 @@ export function Paywall({ onClose }: { onClose: () => void }) {
         <p className="mt-3 text-center text-[12px] leading-relaxed text-muted-foreground">
           {t("paywallFootnote")}
         </p>
+        <Link
+          to="/integritet"
+          onClick={onClose}
+          className="mt-2 block text-center text-[12px] font-semibold leading-relaxed text-primary underline underline-offset-2"
+        >
+          {t("legalRow")}
+        </Link>
       </div>
     </div>
   );
