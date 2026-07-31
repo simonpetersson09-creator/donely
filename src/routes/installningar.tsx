@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { usePremium } from "@/lib/premium";
+import logoAsset from "@/assets/donely-logo.png.asset.json";
 
 const APP_STORE_REVIEW_URL =
   "https://apps.apple.com/app/id0000000000?action=write-review";
@@ -54,7 +55,7 @@ function Installningar() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
-      <div className="py-2">
+      <div className="flex-shrink-0 py-2">
         <Link
           to="/"
           className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-secondary"
@@ -64,14 +65,24 @@ function Installningar() {
         </Link>
       </div>
 
-      <h1 className="px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary">
+      <h1 className="flex-shrink-0 px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary">
         {t("settings")}
       </h1>
-      <p className="mt-1 px-1 text-[12px] font-normal leading-[17px] text-muted-foreground">
+      <p className="flex-shrink-0 mt-1 px-1 text-[12px] font-normal leading-[17px] text-muted-foreground">
         {t("settingsSubtitle")}
       </p>
 
-      <section className="mt-6">
+      <div className="flex-shrink-0 mt-8 flex justify-center">
+        <img
+          src={logoAsset.url}
+          alt="Donely"
+          className="h-16 w-auto object-contain"
+        />
+      </div>
+
+      <div className="flex-grow" />
+
+      <section className="flex-shrink-0">
         <div className="mb-5 rounded-full border border-border bg-card px-5 py-5 text-center shadow-card">
           {premium.subscribed && (
             <p className="text-[15px] font-semibold leading-[20px] text-primary">
@@ -100,7 +111,7 @@ function Installningar() {
             onClick={() => toast.message(t("premiumFlowComing"))}
             className="w-full rounded-xl bg-primary px-3.5 py-3 text-center shadow-card transition-transform active:scale-[0.985]"
           >
-            <span className="inline-flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
+            <span className="inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[18px] text-primary-foreground">
               <Crown className="size-4" />
               {t("startPremiumPrice")}
             </span>
@@ -126,7 +137,7 @@ function Installningar() {
         </div>
       </section>
 
-      <div className="mt-auto pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+      <div className="flex-shrink-0 mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
         <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
