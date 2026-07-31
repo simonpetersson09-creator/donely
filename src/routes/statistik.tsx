@@ -148,8 +148,8 @@ function Statistik() {
         </p>
       </div>
 
-      <Section title={t("private")} rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
-      <Section title={t("work")} rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
+      <Section title={t("private")} icon={<Home className="size-5" />} rows={rows.privat} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
+      <Section title={t("work")} icon={<Briefcase className="size-5" />} rows={rows.jobb} showGoalCta={isCurrentYear} onSetGoal={setEditing} />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">
