@@ -3,18 +3,18 @@ import { useCallback, useEffect, useState } from "react";
 /**
  * Subscription state for Donely.
  *
- * The app runs as a web/PWA build, so there is no StoreKit runtime available here.
- * All state is kept locally (mirroring how a StoreKit 2 entitlement would be cached
- * and re-validated on every app start), behind a small API surface —
- * `startPremium()` / `restorePurchase()` — that maps 1:1 to the native purchase and
- * restore calls when the project is wrapped in an iOS shell.
+ * The web/PWA build uses localStorage as a development fallback so the UI can be
+ * tested without StoreKit. When the app runs inside the iOS shell, the native
+ * bridge is the only source of truth: localStorage trial/premium keys are
+ * ignored and the iOS side pushes the current entitlement via
+ * `window.__donelySetEntitlement(...)`.
  */
 
 const TRIAL_KEY = "vr.trial.v1";
 const PREMIUM_KEY = "vr.premium.v1";
 
 export const TRIAL_DAYS = 7;
-export const PRICE_LABEL = "29 kr/mån";
+export const PRICE_LABEL = "29 kr/månad";
 
 export type PremiumState = {
   /** Registration and editing allowed. */
@@ -27,6 +27,14 @@ export type PremiumState = {
   subscribed: boolean;
   hydrated: boolean;
 };
+
+export type EntitlementPayload = {
+  subscribed: boolean;
+  inTrial: boolean;
+  trialDaysLeft: number;
+};
+
+// --- local fallback (web/PWA development only) ---
 
 function trialStart(): number {
   if (typeof window === "undefined") return Date.now();
@@ -42,7 +50,7 @@ function trialStart(): number {
   return now;
 }
 
-function isSubscribed(): boolean {
+function isSubscribedLocal(): boolean {
   if (typeof window === "undefined") return false;
   return window.localStorage.getItem(PREMIUM_KEY) === "1";
 }
@@ -52,9 +60,9 @@ function daysLeft(start: number) {
   return Math.max(0, Math.ceil((end - Date.now()) / (24 * 60 * 60 * 1000)));
 }
 
-function compute(): Omit<PremiumState, "hydrated"> {
+function computeLocal(): Omit<PremiumState, "hydrated"> {
   const left = daysLeft(trialStart());
-  const subscribed = isSubscribed();
+  const subscribed = isSubscribedLocal();
   return {
     subscribed,
     inTrial: !subscribed && left > 0,
@@ -62,6 +70,69 @@ function compute(): Omit<PremiumState, "hydrated"> {
     trialExpired: left === 0,
     active: subscribed || left > 0,
   };
+}
+
+// --- native bridge ---
+
+type NativeBridge = {
+  webkit?: {
+    messageHandlers?: Record<string, { postMessage: (v: unknown) => void } | undefined>;
+  };
+};
+
+function nativeHandler(name: string) {
+  if (typeof window === "undefined") return undefined;
+  return (window as unknown as NativeBridge).webkit?.messageHandlers?.[name];
+}
+
+let nativeBridgeAvailable = false;
+let nativeEntitlement: EntitlementPayload | null = null;
+
+function detectNativeBridge() {
+  nativeBridgeAvailable = !!nativeHandler("purchasePremium");
+}
+
+/**
+ * Called by the iOS shell to report the current StoreKit entitlement.
+ * This is the single source of truth when the app runs as an iOS app.
+ */
+export function setEntitlement(payload: EntitlementPayload) {
+  nativeBridgeAvailable = true;
+  nativeEntitlement = payload;
+  notify();
+}
+
+if (typeof window !== "undefined") {
+  (
+    window as unknown as { __donelySetEntitlement?: typeof setEntitlement }
+  ).__donelySetEntitlement = setEntitlement;
+}
+
+// --- state computation ---
+
+function compute(): Omit<PremiumState, "hydrated"> {
+  detectNativeBridge();
+
+  if (nativeBridgeAvailable) {
+    if (nativeEntitlement) {
+      return {
+        ...nativeEntitlement,
+        active: nativeEntitlement.subscribed || nativeEntitlement.inTrial,
+        trialExpired: nativeEntitlement.trialDaysLeft === 0,
+      };
+    }
+    // Waiting for the iOS shell to report StoreKit status. Stay locked.
+    return {
+      subscribed: false,
+      inTrial: false,
+      trialDaysLeft: 0,
+      trialExpired: true,
+      active: false,
+    };
+  }
+
+  // Web/PWA development fallback.
+  return computeLocal();
 }
 
 const listeners = new Set<() => void>();
@@ -79,8 +150,9 @@ export function canMutate(state: PremiumState): boolean {
   return !state.hydrated || state.active;
 }
 
-/** Marks the auto-renewable subscription as active (StoreKit purchase succeeded). */
-export function activateSubscription() {
+// --- local fallback helpers (not exported, only used when there is no iOS shell) ---
+
+function activateSubscriptionLocal() {
   try {
     window.localStorage.setItem(PREMIUM_KEY, "1");
   } catch {
@@ -89,8 +161,7 @@ export function activateSubscription() {
   notify();
 }
 
-/** Clears the entitlement — subscription expired or was cancelled. */
-export function deactivateSubscription() {
+function deactivateSubscriptionLocal() {
   try {
     window.localStorage.removeItem(PREMIUM_KEY);
   } catch {
@@ -114,48 +185,47 @@ export function usePremium() {
   }, []);
 
   useEffect(() => {
-    // Validate on app start, when returning to the app, and on storage changes,
-    // so an expired subscription re-locks registration automatically.
     refresh();
     listeners.add(refresh);
-    // Tick while the app is open so the countdown reaches 0 on its own.
-    const timer = window.setInterval(refresh, 60 * 1000);
-    const onVisible = () => {
-      if (document.visibilityState === "visible") refresh();
-    };
-    document.addEventListener("visibilitychange", onVisible);
-    window.addEventListener("focus", refresh);
-    window.addEventListener("storage", refresh);
+    detectNativeBridge();
+
+    if (nativeBridgeAvailable) {
+      // Ask the iOS shell to send the current entitlement on mount.
+      const request = nativeHandler("requestEntitlement");
+      if (request) request.postMessage({});
+    } else {
+      // Web/PWA fallback: tick while the app is open so the countdown
+      // reaches 0 on its own.
+      const timer = window.setInterval(refresh, 60 * 1000);
+      const onVisible = () => {
+        if (document.visibilityState === "visible") refresh();
+      };
+      document.addEventListener("visibilitychange", onVisible);
+      window.addEventListener("focus", refresh);
+      window.addEventListener("storage", refresh);
+      return () => {
+        window.clearInterval(timer);
+        document.removeEventListener("visibilitychange", onVisible);
+        window.removeEventListener("focus", refresh);
+        window.removeEventListener("storage", refresh);
+        listeners.delete(refresh);
+      };
+    }
+
     return () => {
-      window.clearInterval(timer);
       listeners.delete(refresh);
-      document.removeEventListener("visibilitychange", onVisible);
-      window.removeEventListener("focus", refresh);
-      window.removeEventListener("storage", refresh);
     };
   }, [refresh]);
 
   return { ...state, refresh };
 }
 
-type NativeBridge = {
-  webkit?: {
-    messageHandlers?: Record<string, { postMessage: (v: unknown) => void } | undefined>;
-  };
-};
-
-function nativeHandler(name: string) {
-  if (typeof window === "undefined") return undefined;
-  return (window as unknown as NativeBridge).webkit?.messageHandlers?.[name];
-}
-
-export const MANAGE_SUBSCRIPTIONS_URL =
-  "https://apps.apple.com/account/subscriptions";
+export const MANAGE_SUBSCRIPTIONS_URL = "https://apps.apple.com/account/subscriptions";
 
 /**
- * Starts the purchase flow. In the iOS shell this hands over to StoreKit 2;
- * on the web build the entitlement is granted locally so the UI can be used.
- * Returns true when premium is active afterwards.
+ * Starts the purchase flow. In the iOS shell this hands over to StoreKit 2
+ * and the iOS side later calls `setEntitlement()` with the result. In the
+ * web/PWA build the entitlement is granted locally so the UI can be tested.
  */
 export function purchasePremium(): boolean {
   const handler = nativeHandler("purchasePremium");
@@ -163,11 +233,14 @@ export function purchasePremium(): boolean {
     handler.postMessage({ product: "donely.premium.monthly" });
     return false;
   }
-  activateSubscription();
+  activateSubscriptionLocal();
   return true;
 }
 
-/** Restores a previous purchase. Returns true when an entitlement was found. */
+/**
+ * Restores a previous purchase. In the iOS shell this hands over to StoreKit 2.
+ * In the web/PWA build it only checks the local fallback flag.
+ */
 export function restorePurchase(): boolean {
   const handler = nativeHandler("restorePurchase");
   if (handler) {
@@ -175,7 +248,7 @@ export function restorePurchase(): boolean {
     return false;
   }
   notify();
-  return isSubscribed();
+  return isSubscribedLocal();
 }
 
 /** Opens Apple's subscription management screen. */
