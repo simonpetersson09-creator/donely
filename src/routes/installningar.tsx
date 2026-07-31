@@ -102,6 +102,17 @@ function Installningar() {
         </div>
       </section>
 
+      <section className="mt-4">
+        <button
+          type="button"
+          onClick={requestAppStoreReview}
+          className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[15px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+        >
+          <span>{t("rateDonely")}</span>
+          <ChevronRight className="size-4 text-primary" />
+        </button>
+      </section>
+
 
       <p className="mt-auto pt-8 text-center text-[12px] text-muted-foreground">
         Donely · {t("version")} 1.0
