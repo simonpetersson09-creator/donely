@@ -272,6 +272,27 @@ function Index() {
             ))}
           </div>
         </section>
+
+        {/* Km och minuter — visas bara för träningsliknande privata kategorier */}
+        {showMetrics && (
+          <section>
+            <Label>{t("metricsHint")}</Label>
+            <div className="flex gap-2">
+              <MetricField
+                label={t("distanceKm")}
+                value={distance}
+                onChange={setDistance}
+                suffix="km"
+              />
+              <MetricField
+                label={t("durationMin")}
+                value={duration}
+                onChange={setDuration}
+                suffix="min"
+              />
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Registrera + Statistik — fasta längst ner */}
