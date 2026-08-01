@@ -64,6 +64,8 @@ function Installningar() {
   const { entries, removeEntry } = useEntries();
   const recent = entries.slice(0, 10);
   const [confirming, setConfirming] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-between px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
