@@ -311,7 +311,7 @@ function Installningar() {
             </button>
           </div>
 
-          {isDevEnvironment() && (
+          {mounted && isDevEnvironment() && (
             <button
               type="button"
               onClick={() => {
