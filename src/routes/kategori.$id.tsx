@@ -60,6 +60,19 @@ function CategoryDetail() {
         goal: goals[goalKey(year, id)] ?? null,
       }));
   }, [entries, goals, id, currentYear]);
+  // Optional workout metrics, summed for the current year only.
+  const metrics = useMemo(() => {
+    let km = 0;
+    let min = 0;
+    for (const e of entries) {
+      if (e.categoryId !== id) continue;
+      if (new Date(e.createdAt).getFullYear() !== currentYear) continue;
+      km += e.distanceKm ?? 0;
+      min += e.durationMin ?? 0;
+    }
+    return { km, min };
+  }, [entries, id, currentYear]);
+
 
   const lastAt = useMemo(() => {
     let max: string | null = null;
