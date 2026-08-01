@@ -16,6 +16,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { PurchaseFeedback } from "@/components/PurchaseFeedback";
 import { DataIntegrityNotice } from "@/components/DataIntegrityNotice";
 import { initializeStorage } from "@/lib/persistence";
+import { EdgeSwipeBack } from "@/components/EdgeSwipeBack";
+
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -156,10 +158,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <EdgeSwipeBack>
+        <Outlet />
+      </EdgeSwipeBack>
       <PurchaseFeedback />
       <DataIntegrityNotice />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );
+
 }
