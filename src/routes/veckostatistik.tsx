@@ -77,12 +77,6 @@ function Veckostatistik() {
         </p>
       </div>
 
-      <Link
-        to="/statistik"
-        className="mt-4 rounded-xl border border-border bg-card px-3.5 py-3 text-center text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
-      >
-        {t("statistics")}
-      </Link>
     </main>
   );
 }
