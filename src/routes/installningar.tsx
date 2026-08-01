@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Bell, ChevronLeft, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
@@ -66,13 +67,7 @@ function Installningar() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-between px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div>
         <div className="py-2">
-          <Link
-            to="/"
-            className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-secondary"
-          >
-            <ChevronLeft className="size-4" />
-            {t("back")}
-          </Link>
+          <BackButton fallbackTo="/" className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-secondary">{t("back")}</BackButton>
         </div>
 
         <h1 className="px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary">
