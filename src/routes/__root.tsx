@@ -11,13 +11,15 @@ import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
+// Initializes i18next for every route — without this the root-level 404 and
+// error screens render raw translation keys (no i18next instance in context).
+import "@/lib/i18n";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { PurchaseFeedback } from "@/components/PurchaseFeedback";
 import { DataIntegrityNotice } from "@/components/DataIntegrityNotice";
 import { initializeStorage } from "@/lib/persistence";
 import { EdgeSwipeBack } from "@/components/EdgeSwipeBack";
-
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -82,7 +84,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
+      {
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover",
+      },
       { title: "Donely" },
       {
         name: "description",
@@ -163,5 +169,4 @@ function RootComponent() {
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );
-
 }

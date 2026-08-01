@@ -112,8 +112,9 @@ function Index() {
   const accentText = "text-primary";
 
   function register() {
-    if (!valid || !selected) return;
-    // All mutating actions are gated through the same premium status.
+    // All mutating actions are gated through the same premium status. The gate
+    // is checked before validity so a locked button always explains itself
+    // instead of silently doing nothing when no category is selected.
     if (premium.loading) {
       toast.message(t("premiumLoading"));
       return;
@@ -123,6 +124,7 @@ function Index() {
       setPaywallOpen(true);
       return;
     }
+    if (!valid || !selected) return;
     const name = categoryLabel(t, selected);
     addEntry({ area, categoryId: selected.id, categoryName: selected.name, amount: parsed });
     navigator.vibrate?.(12);
@@ -255,7 +257,11 @@ function Index() {
             type="button"
             disabled={!valid && !locked}
             onClick={register}
-            aria-label={locked ? `${t("register")} — ${t("premiumRequired", { defaultValue: "Premium krävs" })}` : t("register")}
+            aria-label={
+              locked
+                ? `${t("register")} — ${t("premiumRequired", { defaultValue: "Premium krävs" })}`
+                : t("register")
+            }
             className={cn(
               "relative flex-1 overflow-hidden rounded-xl py-3 text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
               locked
@@ -665,13 +671,7 @@ function CategoryRow({
   );
 }
 
-function ReminderPrompt({
-  onEnable,
-  onLater,
-}: {
-  onEnable: () => void;
-  onLater: () => void;
-}) {
+function ReminderPrompt({ onEnable, onLater }: { onEnable: () => void; onLater: () => void }) {
   const { t } = useLanguage();
 
   return (

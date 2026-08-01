@@ -109,7 +109,12 @@ function Statistik() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex items-center justify-between py-2">
-        <BackButton fallbackTo="/" className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary">{t("back")}</BackButton>
+        <BackButton
+          fallbackTo="/"
+          className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
+        >
+          {t("back")}
+        </BackButton>
         <div className="flex items-center gap-2">
           <span className="text-[12px] font-medium text-foreground/60">{t("changeYear")}</span>
           <div className="flex items-center gap-1.5">

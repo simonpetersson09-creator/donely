@@ -131,7 +131,11 @@ describe("atomic writes", () => {
   it("rolls the whole transaction back when one key fails", () => {
     seedRealData();
     const beforeCats = storage.getItem(STORAGE_KEYS.categories);
-    const spy = vi.spyOn(storage, "setItem").mockImplementation(function (this: Storage, key: string, value: string) {
+    const spy = vi.spyOn(storage, "setItem").mockImplementation(function (
+      this: Storage,
+      key: string,
+      value: string,
+    ) {
       if (key === STORAGE_KEYS.entries) throw new Error("fail");
       MemoryStorage.prototype.setItem.call(storage, key, value);
     });
@@ -308,10 +312,14 @@ describe("data survives unrelated app events", () => {
 
   it("renaming a category keeps ids and entry relations", () => {
     seedRealData();
-    const renamed = DEFAULT_CATEGORIES.map((c) => (c.id === "p-traning" ? { ...c, name: "Gym" } : c));
+    const renamed = DEFAULT_CATEGORIES.map((c) =>
+      c.id === "p-traning" ? { ...c, name: "Gym" } : c,
+    );
     writeKey(STORAGE_KEYS.categories, renamed, categoriesSchema);
     const entries = readKey(STORAGE_KEYS.entries, entriesSchema);
-    expect(entries.status === "ok" && entries.value.every((e) => e.categoryId === "p-traning")).toBe(true);
+    expect(
+      entries.status === "ok" && entries.value.every((e) => e.categoryId === "p-traning"),
+    ).toBe(true);
     const cats = readKey(STORAGE_KEYS.categories, categoriesSchema);
     expect(cats.status === "ok" && cats.value.find((c) => c.id === "p-traning")?.name).toBe("Gym");
   });
@@ -320,7 +328,11 @@ describe("data survives unrelated app events", () => {
     seedRealData();
     const current = readKey(STORAGE_KEYS.entries, entriesSchema);
     const list = current.status === "ok" ? current.value : [];
-    writeKey(STORAGE_KEYS.entries, list.filter((e) => e.id !== "e1"), entriesSchema);
+    writeKey(
+      STORAGE_KEYS.entries,
+      list.filter((e) => e.id !== "e1"),
+      entriesSchema,
+    );
     const after = readKey(STORAGE_KEYS.entries, entriesSchema);
     expect(after.status === "ok" && after.value.map((e) => e.id)).toEqual(["e2"]);
   });

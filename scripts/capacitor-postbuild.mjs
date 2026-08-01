@@ -49,7 +49,12 @@ function scanForIndexMjs(dir, depth) {
     if (statSync(file).isFile()) return file;
   }
   for (const entry of entries) {
-    if (entry === "client" || entry === "public" || entry === "node_modules" || entry.startsWith(".")) {
+    if (
+      entry === "client" ||
+      entry === "public" ||
+      entry === "node_modules" ||
+      entry.startsWith(".")
+    ) {
       continue;
     }
     const full = join(dir, entry);
@@ -67,7 +72,9 @@ function scanForIndexMjs(dir, depth) {
 /** If nitro wrote the static assets elsewhere (e.g. .output/public), mirror them into dist/client. */
 async function ensureClientDir() {
   if (existsSync(clientDir)) return;
-  const alternatives = [".output/public", "dist/public", ".output/client"].map((p) => resolve(root, p));
+  const alternatives = [".output/public", "dist/public", ".output/client"].map((p) =>
+    resolve(root, p),
+  );
   for (const alt of alternatives) {
     if (existsSync(alt)) {
       await cp(alt, clientDir, { recursive: true });
@@ -110,7 +117,9 @@ async function writeShell() {
 
   await mkdir(clientDir, { recursive: true });
   await writeFile(outFile, html, "utf8");
-  console.log(`[capacitor] Wrote static app shell -> dist/client/index.html (${html.length} bytes)`);
+  console.log(
+    `[capacitor] Wrote static app shell -> dist/client/index.html (${html.length} bytes)`,
+  );
 }
 
 function ensureIosProject() {

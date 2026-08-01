@@ -135,9 +135,7 @@ function log(message: string, detail?: unknown) {
 }
 
 export type ReadResult<T> =
-  | { status: "ok"; value: T }
-  | { status: "missing" }
-  | { status: "corrupt"; raw: string };
+  { status: "ok"; value: T } | { status: "missing" } | { status: "corrupt"; raw: string };
 
 /** Reads and validates a single key. Never throws, never writes. */
 export function readKey<T>(key: string, schema: z.ZodType<T>): ReadResult<T> {
@@ -211,7 +209,9 @@ export function writeKey<T>(key: string, value: T, schema: z.ZodType<T>): boolea
  * Commits several keys as one unit. Either all of them land or none of them do,
  * so a half-updated database cannot happen.
  */
-export function writeTransaction(entries: Array<{ key: string; value: unknown; schema: z.ZodType<unknown> }>): boolean {
+export function writeTransaction(
+  entries: Array<{ key: string; value: unknown; schema: z.ZodType<unknown> }>,
+): boolean {
   const store = storage();
   if (!store) return false;
 
@@ -360,11 +360,31 @@ export function restoreSnapshot(snapshot: Snapshot): boolean {
   }
   const s = parsed.data;
   return writeTransaction([
-    { key: STORAGE_KEYS.categories, value: s.categories, schema: categoriesSchema as unknown as z.ZodType<unknown> },
-    { key: STORAGE_KEYS.entries, value: s.entries, schema: entriesSchema as unknown as z.ZodType<unknown> },
-    { key: STORAGE_KEYS.goals, value: s.goals, schema: goalsSchema as unknown as z.ZodType<unknown> },
-    { key: STORAGE_KEYS.onboarding, value: s.settings.onboarding, schema: flagSchema as unknown as z.ZodType<unknown> },
-    { key: STORAGE_KEYS.langGuide, value: s.settings.langGuide, schema: flagSchema as unknown as z.ZodType<unknown> },
+    {
+      key: STORAGE_KEYS.categories,
+      value: s.categories,
+      schema: categoriesSchema as unknown as z.ZodType<unknown>,
+    },
+    {
+      key: STORAGE_KEYS.entries,
+      value: s.entries,
+      schema: entriesSchema as unknown as z.ZodType<unknown>,
+    },
+    {
+      key: STORAGE_KEYS.goals,
+      value: s.goals,
+      schema: goalsSchema as unknown as z.ZodType<unknown>,
+    },
+    {
+      key: STORAGE_KEYS.onboarding,
+      value: s.settings.onboarding,
+      schema: flagSchema as unknown as z.ZodType<unknown>,
+    },
+    {
+      key: STORAGE_KEYS.langGuide,
+      value: s.settings.langGuide,
+      schema: flagSchema as unknown as z.ZodType<unknown>,
+    },
     {
       key: STORAGE_KEYS.reminderPrompt,
       value: s.settings.reminderPrompt,
@@ -573,7 +593,10 @@ export function importData(json: string): ImportOutcome {
 
   const parsed = snapshotSchema.safeParse(candidate);
   if (!parsed.success) {
-    return { status: "invalid", error: parsed.error.issues.map((i) => i.path.join(".")).join(", ") };
+    return {
+      status: "invalid",
+      error: parsed.error.issues.map((i) => i.path.join(".")).join(", "),
+    };
   }
   const snapshot = parsed.data;
 

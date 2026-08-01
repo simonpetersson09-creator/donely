@@ -67,7 +67,12 @@ function Installningar() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-between px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div>
         <div className="py-2">
-          <BackButton fallbackTo="/" className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-secondary">{t("back")}</BackButton>
+          <BackButton
+            fallbackTo="/"
+            className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-secondary"
+          >
+            {t("back")}
+          </BackButton>
         </div>
 
         <h1 className="px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary">
@@ -210,12 +215,10 @@ function Installningar() {
                 </button>
               </div>
             )}
-
           </div>
         </section>
 
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
-
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
           </p>
