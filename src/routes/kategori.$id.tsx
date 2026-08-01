@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 import { goalKey, useCategories, useEntries, useGoals } from "@/lib/store";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 
@@ -82,13 +82,7 @@ function CategoryDetail() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="py-2">
-        <Link
-          to="/statistik"
-          className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
-        >
-          <ChevronLeft className="size-4" />
-          {t("statistics")}
-        </Link>
+        <BackButton fallbackTo="/statistik" className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary">{t("statistics")}</BackButton>
       </div>
 
       <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
