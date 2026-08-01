@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Pencil, Home, Briefcase, MapPin, Timer } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  X,
+  Pencil,
+  Home,
+  Briefcase,
+  MapPin,
+  Timer,
+} from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import {
@@ -93,7 +103,6 @@ function Statistik() {
         }))
         .filter((r) => r.total > 0 || r.goal !== null)
         .sort((a, b) => b.total - a.total);
-
 
     return { privat: build("privat"), jobb: build("jobb") };
   }, [categories, entries, goals, year]);
@@ -390,8 +399,6 @@ function GoalCard({
           )}
         </div>
       )}
-
-
 
       {pct !== null && (
         <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">

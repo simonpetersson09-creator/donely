@@ -46,9 +46,7 @@ function SenasteRegistreringar() {
       <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {t("recentSection")}
       </h1>
-      <p className="mt-1 px-1 text-[13px] text-muted-foreground">
-        {t("settingsSubtitle")}
-      </p>
+      <p className="mt-1 px-1 text-[13px] text-muted-foreground">{t("settingsSubtitle")}</p>
 
       <div className="mt-4 overflow-hidden rounded-xl border border-border bg-card shadow-card">
         {recent.length === 0 ? (
@@ -67,17 +65,19 @@ function SenasteRegistreringar() {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
                     {entry.categoryName}
-                    <span className="ml-1 font-normal text-muted-foreground">
-                      ×{entry.amount}
-                    </span>
+                    <span className="ml-1 font-normal text-muted-foreground">×{entry.amount}</span>
                   </p>
                   <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
                     {new Date(entry.createdAt).toLocaleDateString(language, {
                       day: "numeric",
                       month: "short",
                     })}
-                    {entry.distanceKm ? ` · ${entry.distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km` : ""}
-                    {entry.durationMin ? ` · ${hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}` : ""}
+                    {entry.distanceKm
+                      ? ` · ${entry.distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km`
+                      : ""}
+                    {entry.durationMin
+                      ? ` · ${hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}`
+                      : ""}
                   </p>
                 </div>
                 <button
