@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as InstallningarRouteImport } from './routes/installningar'
+import { Route as SenasteRegistreringarRouteImport } from './routes/senaste-registreringar'
 import { Route as StatistikRouteImport } from './routes/statistik'
 import { Route as VeckostatistikRouteImport } from './routes/veckostatistik'
 import { Route as KategoriIdRouteImport } from './routes/kategori.$id'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const InstallningarRoute = InstallningarRouteImport.update({
   id: '/installningar',
   path: '/installningar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SenasteRegistreringarRoute = SenasteRegistreringarRouteImport.update({
+  id: '/senaste-registreringar',
+  path: '/senaste-registreringar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StatistikRoute = StatistikRouteImport.update({
@@ -44,6 +50,7 @@ const KategoriIdRoute = KategoriIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/installningar': typeof InstallningarRoute
+  '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/installningar': typeof InstallningarRoute
+  '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/installningar': typeof InstallningarRoute
+  '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
@@ -66,14 +75,25 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/installningar' | '/statistik' | '/veckostatistik' | '/kategori/$id'
+    | '/'
+    | '/installningar'
+    | '/senaste-registreringar'
+    | '/statistik'
+    | '/veckostatistik'
+    | '/kategori/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
-    '/' | '/installningar' | '/statistik' | '/veckostatistik' | '/kategori/$id'
+    | '/'
+    | '/installningar'
+    | '/senaste-registreringar'
+    | '/statistik'
+    | '/veckostatistik'
+    | '/kategori/$id'
   id:
     | '__root__'
     | '/'
     | '/installningar'
+    | '/senaste-registreringar'
     | '/statistik'
     | '/veckostatistik'
     | '/kategori/$id'
@@ -82,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   InstallningarRoute: typeof InstallningarRoute
+  SenasteRegistreringarRoute: typeof SenasteRegistreringarRoute
   StatistikRoute: typeof StatistikRoute
   VeckostatistikRoute: typeof VeckostatistikRoute
   KategoriIdRoute: typeof KategoriIdRoute
@@ -101,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/installningar'
       fullPath: '/installningar'
       preLoaderRoute: typeof InstallningarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/senaste-registreringar': {
+      id: '/senaste-registreringar'
+      path: '/senaste-registreringar'
+      fullPath: '/senaste-registreringar'
+      preLoaderRoute: typeof SenasteRegistreringarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/statistik': {
@@ -130,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   InstallningarRoute: InstallningarRoute,
+  SenasteRegistreringarRoute: SenasteRegistreringarRoute,
   StatistikRoute: StatistikRoute,
   VeckostatistikRoute: VeckostatistikRoute,
   KategoriIdRoute: KategoriIdRoute,

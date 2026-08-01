@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MapPin, Timer, Trash2 } from "lucide-react";
-import { BackButton } from "@components/BackButton";
+import { Trash2 } from "lucide-react";
+import { BackButton } from "@/components/BackButton";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { useEntries } from "@/lib/store";
 import { toast } from "sonner";
