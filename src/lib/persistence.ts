@@ -65,6 +65,10 @@ export const entrySchema = z.object({
   categoryId: z.string().min(1),
   categoryName: z.string(),
   amount: z.number().finite(),
+  // Optional workout metrics. Only written for activity-style categories, so
+  // every existing entry stays valid without migration.
+  distanceKm: z.number().finite().positive().optional(),
+  durationMin: z.number().finite().positive().optional(),
   createdAt: z.string().min(1),
 });
 
