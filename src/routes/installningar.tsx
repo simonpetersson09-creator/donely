@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Bell, ChevronLeft, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
+import { Bell, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
 import { clearAllData } from "@/lib/store";

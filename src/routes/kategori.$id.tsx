@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { goalKey, useCategories, useEntries, useGoals } from "@/lib/store";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
