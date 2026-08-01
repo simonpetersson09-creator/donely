@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, ChevronRight, Crown, FileText, FlaskConical, Star, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
