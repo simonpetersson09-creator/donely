@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Pencil, Home, Briefcase } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, X, Pencil, Home, Briefcase, MapPin, Timer } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import {
@@ -375,7 +375,7 @@ function GoalCard({
         <div className="mt-1 flex flex-wrap items-center gap-1.5">
           {distanceKm > 0 && (
             <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
-              <Route className="size-3 text-primary" />
+              <MapPin className="size-3 text-primary" />
               {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
             </span>
           )}
