@@ -22,7 +22,22 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        applyAppBackgroundColor()
         installNotificationBridge()
+    }
+
+    /// Matches the web app background so the safe-area strips (status bar /
+    /// home indicator) never show through as black.
+    private func applyAppBackgroundColor() {
+        let light = UIColor(red: 0.686, green: 0.663, blue: 0.651, alpha: 1) // #afa9a6
+        let dark = UIColor(red: 0.055, green: 0.071, blue: 0.090, alpha: 1)  // #0e1217
+        let color = UIColor { traits in
+            traits.userInterfaceStyle == .dark ? dark : light
+        }
+        view.backgroundColor = color
+        webView?.backgroundColor = color
+        webView?.isOpaque = false
+        webView?.scrollView.backgroundColor = color
     }
 
     override func capacitorDidLoad() {
