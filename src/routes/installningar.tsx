@@ -61,8 +61,6 @@ function Installningar() {
   const premium = usePremium();
   const price = usePrice();
   const reminder = useReminder();
-  const { entries } = useEntries();
-  const hasEntries = entries.length > 0;
 
   const [confirming, setConfirming] = useState(false);
   const [mounted, setMounted] = useState(false);
