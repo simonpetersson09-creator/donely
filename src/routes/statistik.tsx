@@ -45,6 +45,8 @@ type Row = {
   total: number;
   goal: number | null;
   lastAt: string | null;
+  distanceKm: number;
+  durationMin: number;
 };
 
 function Statistik() {
