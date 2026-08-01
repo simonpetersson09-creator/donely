@@ -63,6 +63,7 @@ function Installningar() {
   const reminder = useReminder();
   const { entries } = useEntries();
   const hasEntries = entries.length > 0;
+
   const [confirming, setConfirming] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
