@@ -168,6 +168,7 @@ const sv = {
   weeklySummaryMore_one: "+ {{count}} fler kategori",
   weeklySummaryMore_other: "+ {{count}} fler kategorier",
   weeklySummaryLink: "Din vecka",
+  weeklyHeading: "Vecka",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -309,6 +310,7 @@ const en: Dict = {
   weeklySummaryMore_one: "+ {{count}} more category",
   weeklySummaryMore_other: "+ {{count}} more categories",
   weeklySummaryLink: "Your week",
+  weeklyHeading: "Week",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -450,6 +452,7 @@ const de: Dict = {
   weeklySummaryMore_one: "+ {{count}} weitere Kategorie",
   weeklySummaryMore_other: "+ {{count}} weitere Kategorien",
   weeklySummaryLink: "Deine Woche",
+  weeklyHeading: "Woche",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -593,6 +596,7 @@ const fr: Dict = {
   weeklySummaryMore_one: "+ {{count}} autre catégorie",
   weeklySummaryMore_other: "+ {{count}} autres catégories",
   weeklySummaryLink: "Votre semaine",
+  weeklyHeading: "Semaine",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -736,6 +740,7 @@ const es: Dict = {
   weeklySummaryMore_one: "+ {{count}} categoría más",
   weeklySummaryMore_other: "+ {{count}} categorías más",
   weeklySummaryLink: "Tu semana",
+  weeklyHeading: "Semana",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -878,6 +883,7 @@ const it: Dict = {
   weeklySummaryMore_one: "+ {{count}} altra categoria",
   weeklySummaryMore_other: "+ {{count}} altre categorie",
   weeklySummaryLink: "La tua settimana",
+  weeklyHeading: "Settimana",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -1020,6 +1026,7 @@ const ptBR: Dict = {
   weeklySummaryMore_one: "+ {{count}} outra categoria",
   weeklySummaryMore_other: "+ {{count}} outras categorias",
   weeklySummaryLink: "Sua semana",
+  weeklyHeading: "Semana",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -1160,6 +1167,7 @@ const nl: Dict = {
   weeklySummaryMore_one: "+ {{count}} andere categorie",
   weeklySummaryMore_other: "+ {{count}} andere categorieën",
   weeklySummaryLink: "Jouw week",
+  weeklyHeading: "Week",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -1307,6 +1315,7 @@ const pl: Dict = {
   weeklySummaryMore_many: "+ {{count}} innych kategorii",
   weeklySummaryMore_other: "+ {{count}} innych kategorii",
   weeklySummaryLink: "Twój tydzień",
+  weeklyHeading: "Tydzień",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -1446,6 +1455,7 @@ const da: Dict = {
   weeklySummaryMore_one: "+ {{count}} kategori mere",
   weeklySummaryMore_other: "+ {{count}} kategorier mere",
   weeklySummaryLink: "Din uge",
+  weeklyHeading: "Uge",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -1585,6 +1595,7 @@ const no: Dict = {
   weeklySummaryMore_one: "+ {{count}} kategori til",
   weeklySummaryMore_other: "+ {{count}} kategorier til",
   weeklySummaryLink: "Uken din",
+  weeklyHeading: "Uke",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -1724,6 +1735,7 @@ const fi: Dict = {
   weeklySummaryMore_one: "+ {{count}} muu kategoria",
   weeklySummaryMore_other: "+ {{count}} muuta kategoriaa",
   weeklySummaryLink: "Viikkosi",
+  weeklyHeading: "Viikko",
   weeklySummaryRange: "{{range}}",
 };
 
@@ -1863,6 +1875,7 @@ const ja: Dict = {
   weeklySummaryMore_one: "ほか {{count}} 件のカテゴリ",
   weeklySummaryMore_other: "ほか {{count}} 件のカテゴリ",
   weeklySummaryLink: "今週",
+  weeklyHeading: "週",
   weeklySummaryRange: "{{range}}",
 };
 
