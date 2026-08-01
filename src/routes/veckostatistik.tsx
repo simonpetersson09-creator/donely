@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { BackButton } from "@/components/BackButton";
 import { useCategories, useEntries } from "@/lib/store";
