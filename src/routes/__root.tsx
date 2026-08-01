@@ -16,6 +16,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { PurchaseFeedback } from "@/components/PurchaseFeedback";
 import { DataIntegrityNotice } from "@/components/DataIntegrityNotice";
 import { initializeStorage } from "@/lib/persistence";
+import { EdgeSwipeBack } from "@/components/EdgeSwipeBack";
+
 
 function NotFoundComponent() {
   const { t } = useTranslation();
