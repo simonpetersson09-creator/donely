@@ -19,7 +19,8 @@ export function BackButton({
 
   const handleBack = () => {
     const canGoBack =
-      typeof window !== "undefined" && (router.history.canGoBack?.() ?? window.history.length > 1);
+      typeof window !== "undefined" &&
+      (router.history.canGoBack?.() === true || window.history.length > 1);
     if (canGoBack) {
       router.history.back();
     } else {
