@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 import appCss from "../styles.css?url";
+// Initializes i18next for every route — without this the root-level 404 and
+// error screens render raw translation keys (no i18next instance in context).
+import "@/lib/i18n";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { PurchaseFeedback } from "@/components/PurchaseFeedback";
