@@ -311,9 +311,12 @@ function GoalCard({
 }) {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { category, total, goal, lastAt } = row;
+  const { category, total, goal, lastAt, distanceKm, durationMin } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
+  const hasMetrics = distanceKm > 0 || durationMin > 0;
+  const hours = Math.floor(durationMin / 60);
+  const mins = Math.round(durationMin % 60);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
