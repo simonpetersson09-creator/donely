@@ -56,17 +56,33 @@ export function buildWeeklySummary(
   const end = weekEnd(from);
   const known = new Map(categories.map((c) => [c.id, c]));
   const totals = new Map<string, number>();
+  const km = new Map<string, number>();
+  const minutes = new Map<string, number>();
 
   for (const e of entries) {
     const at = new Date(e.createdAt).getTime();
     if (at < start.getTime() || at > end.getTime()) continue;
-    if (!known.has(e.categoryId)) continue;
+    const category = known.get(e.categoryId);
+    if (!category) continue;
     totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
+    const activity = supportsMetrics(category);
+    if (activity && e.distanceKm) {
+      km.set(e.categoryId, (km.get(e.categoryId) ?? 0) + e.distanceKm);
+    }
+    if (activity && e.durationMin) {
+      minutes.set(e.categoryId, (minutes.get(e.categoryId) ?? 0) + e.durationMin);
+    }
   }
 
   const rows: WeeklyRow[] = [...totals.entries()]
     .filter(([, total]) => total > 0)
-    .map(([id, total]) => ({ id, label: categoryLabel(t, known.get(id)!), total }))
+    .map(([id, total]) => ({
+      id,
+      label: categoryLabel(t, known.get(id)!),
+      total,
+      distanceKm: km.get(id) ?? 0,
+      durationMin: minutes.get(id) ?? 0,
+    }))
     .sort((a, b) => b.total - a.total || a.label.localeCompare(b.label));
 
   return { rows, total: rows.reduce((sum, r) => sum + r.total, 0), start, end };
