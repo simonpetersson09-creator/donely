@@ -1,13 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Bell, ChevronRight, Crown, FileText, FlaskConical, Star, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Bell,
+  ChevronRight,
+  Crown,
+  Download,
+  FileText,
+  FlaskConical,
+  Star,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
-import { clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
+import { DATA_CHANGED_EVENT, clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
+import { exportData, importData } from "@/lib/persistence";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
 import { formatFireDate, openNotificationSettings, useReminder } from "@/lib/notifications";
+
 import {
   openManageSubscriptions,
   purchasePremium,
@@ -65,6 +77,37 @@ function Installningar() {
   const [confirming, setConfirming] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [pendingImport, setPendingImport] = useState<string | null>(null);
+
+  const handleExport = () => {
+    try {
+      const blob = new Blob([exportData()], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `donely-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success(t("exportDone"));
+    } catch {
+      toast.error(t("importFailed"));
+    }
+  };
+
+  const runImport = (json: string) => {
+    const result = importData(json);
+    if (result.status === "ok") {
+      window.dispatchEvent(new CustomEvent(DATA_CHANGED_EVENT));
+      toast.success(
+        t("importDone", { entries: result.entries, categories: result.categories }),
+      );
+      return;
+    }
+    toast.error(result.status === "invalid" ? t("importInvalid") : t("importFailed"));
+  };
+
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-between px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -238,6 +281,51 @@ function Installningar() {
           </Link>
         </section>
 
+        <section className="mt-4">
+          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+            {t("backupSection")}
+          </p>
+
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={handleExport}
+              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+            >
+              <Download className="size-[18px]" />
+              <span>{t("exportBackup")}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => fileInput.current?.click()}
+              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+            >
+              <Upload className="size-[18px]" />
+              <span>{t("importBackup")}</span>
+            </button>
+          </div>
+
+          <input
+            ref={fileInput}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={async (event) => {
+              const file = event.target.files?.[0];
+              event.target.value = "";
+              if (!file) return;
+              try {
+                setPendingImport(await file.text());
+              } catch {
+                toast.error(t("importInvalid"));
+              }
+            }}
+          />
+        </section>
+
+
+
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
@@ -305,6 +393,43 @@ function Installningar() {
           </p>
         </div>
       </div>
+
+      {pendingImport !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
+          <div className="w-full max-w-[280px] overflow-hidden rounded-[14px] bg-card text-center shadow-xl">
+            <div className="px-4 pb-4 pt-5">
+              <p className="text-[13px] font-semibold leading-[18px] text-foreground">
+                {t("importTitle")}
+              </p>
+              <p className="mt-1.5 text-[11px] font-normal leading-[16px] text-muted-foreground">
+                {t("importBody")}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setPendingImport(null)}
+                className="border-r border-border py-2.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-accent"
+              >
+                {t("cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const json = pendingImport;
+                  setPendingImport(null);
+                  runImport(json);
+                }}
+                className="py-2.5 text-[13px] font-semibold leading-[18px] text-primary transition-colors active:bg-accent"
+              >
+                {t("importConfirm")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
 
       {confirming && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
