@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Bell, ChevronRight, Crown, FileText, Star, Trash2 } from "lucide-react";
+import { Bell, ChevronRight, Crown, FileText, FlaskConical, Star, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
-import { clearAllData } from "@/lib/store";
+import { clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
@@ -258,6 +258,25 @@ function Installningar() {
               <span>{t("deleteAllDataRow")}</span>
             </button>
           </div>
+
+          {isDevEnvironment() && (
+            <button
+              type="button"
+              onClick={() => {
+                const count = seedDemoEntries();
+                if (count === 0) {
+                  toast.error("Kunde inte skapa exempeldata");
+                  return;
+                }
+                toast.success(`${count} exempelaktiviteter tillagda`);
+                window.location.href = "/statistik";
+              }}
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground transition-colors active:bg-accent"
+            >
+              <FlaskConical className="size-[18px]" />
+              <span>Fyll på med exempeldata (endast utveckling)</span>
+            </button>
+          )}
 
           <p className="mt-2 text-center text-[9px] font-normal leading-[13px] text-muted-foreground/80">
             Donely · {t("version")} 1.0
