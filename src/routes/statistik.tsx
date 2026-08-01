@@ -150,9 +150,12 @@ function Statistik() {
         </div>
       </div>
 
+      <h2 className="px-1 text-[13px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+        {t("weeklyHeading")}
+      </h2>
       <Link
         to="/veckostatistik"
-        className="flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+        className="mt-1.5 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
       >
         {t("weeklySummaryLink")}
         <ChevronRight className="size-4 text-muted-foreground" />
