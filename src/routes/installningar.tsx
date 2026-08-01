@@ -227,48 +227,16 @@ function Installningar() {
             {t("recentSection")}
           </p>
 
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
-            {recent.length === 0 ? (
-              <p className="px-3 py-4 text-center text-[12px] font-normal leading-[16px] text-muted-foreground">
-                {t("recentEmpty")}
-              </p>
-            ) : (
-              recent.map((entry, index) => (
-                <div
-                  key={entry.id}
-                  className={`flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
-                      {entry.categoryName}
-                      <span className="ml-1 font-normal text-muted-foreground">
-                        ×{entry.amount}
-                      </span>
-                    </p>
-                    <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
-                      {new Date(entry.createdAt).toLocaleDateString(language, {
-                        day: "numeric",
-                        month: "short",
-                      })}
-                      {entry.distanceKm ? ` · ${entry.distanceKm} km` : ""}
-                      {entry.durationMin ? ` · ${entry.durationMin} min` : ""}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    aria-label={t("recentDeleted")}
-                    onClick={() => {
-                      removeEntry(entry.id);
-                      toast.success(t("recentDeleted"));
-                    }}
-                    className="shrink-0 rounded-lg p-2 text-destructive transition-colors active:bg-destructive/10"
-                  >
-                    <Trash2 className="size-[16px]" />
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
+          <Link
+            to="/senaste-registreringar"
+            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+          >
+            <span className="flex items-center gap-2">
+              <Trash2 className="size-[18px]" />
+              {t("recentSection")}
+            </span>
+            <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
         </section>
 
 
