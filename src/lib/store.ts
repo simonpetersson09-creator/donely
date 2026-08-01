@@ -140,12 +140,22 @@ function readFlagSeeded(): Category[] {
 export function useEntries() {
   const [entries, setEntries] = useState<Entry[]>([]);
 
-  useEffect(() => {
+  const readFromStorage = useCallback(() => {
     ready();
     const stored = readKey(ENTRIES_KEY, entriesSchema);
     if (stored.status === "ok") setEntries(stored.value);
     // missing → empty list (nothing written), corrupt → left untouched.
   }, []);
+
+  useEffect(() => {
+    readFromStorage();
+  }, [readFromStorage]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.addEventListener(DATA_CHANGED_EVENT, readFromStorage);
+    return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
+  }, [readFromStorage]);
 
   const commit = useCallback((next: Entry[]) => {
     writeKey(ENTRIES_KEY, next, entriesSchema);
