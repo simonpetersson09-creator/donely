@@ -150,7 +150,7 @@ function Statistik() {
         </div>
       </div>
 
-      <h2 className="px-1 text-[13px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+      <h2 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {t("weeklyHeading")}
       </h2>
       <Link
