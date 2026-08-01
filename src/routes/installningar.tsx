@@ -218,6 +218,56 @@ function Installningar() {
           </div>
         </section>
 
+        <section className="mt-4">
+          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+            {t("recentSection")}
+          </p>
+
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            {recent.length === 0 ? (
+              <p className="px-3 py-4 text-center text-[12px] font-normal leading-[16px] text-muted-foreground">
+                {t("recentEmpty")}
+              </p>
+            ) : (
+              recent.map((entry, index) => (
+                <div
+                  key={entry.id}
+                  className={`flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
+                      {entry.categoryName}
+                      <span className="ml-1 font-normal text-muted-foreground">
+                        ×{entry.amount}
+                      </span>
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                      {new Date(entry.createdAt).toLocaleDateString(language, {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                      {entry.distanceKm ? ` · ${entry.distanceKm} km` : ""}
+                      {entry.durationMin ? ` · ${entry.durationMin} min` : ""}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label={t("recentDeleted")}
+                    onClick={() => {
+                      removeEntry(entry.id);
+                      toast.success(t("recentDeleted"));
+                    }}
+                    className="shrink-0 rounded-lg p-2 text-destructive transition-colors active:bg-destructive/10"
+                  >
+                    <Trash2 className="size-[16px]" />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
+
+
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
