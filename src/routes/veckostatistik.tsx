@@ -63,17 +63,40 @@ function Veckostatistik() {
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("weeklySummaryEmpty")}</p>
       ) : (
         <div className="mt-4 space-y-1.5">
-          {summary.rows.map((row) => (
-            <div
-              key={row.id}
-              className="flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-card-foreground shadow-card"
-            >
-              <span className="truncate pr-3 text-[15px] font-medium">{row.label}</span>
-              <span className="text-[17px] font-bold tabular-nums">
-                {row.total.toLocaleString(locale)}
-              </span>
-            </div>
-          ))}
+          {summary.rows.map((row) => {
+            const hasMetrics = row.distanceKm > 0 || row.durationMin > 0;
+            const hours = Math.floor(row.durationMin / 60);
+            const mins = Math.round(row.durationMin % 60);
+            return (
+              <div
+                key={row.id}
+                className="rounded-xl border border-border bg-card px-3.5 py-3 text-card-foreground shadow-card"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="truncate text-[15px] font-medium">{row.label}</span>
+                  <span className="shrink-0 text-[17px] font-bold tabular-nums">
+                    {row.total.toLocaleString(locale)}
+                  </span>
+                </div>
+                {hasMetrics && (
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                    {row.distanceKm > 0 && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+                        <MapPin className="size-3 text-primary" />
+                        {row.distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
+                      </span>
+                    )}
+                    {row.durationMin > 0 && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+                        <Timer className="size-3 text-primary" />
+                        {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
