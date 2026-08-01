@@ -96,7 +96,7 @@ function Installningar() {
               <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
             </div>
           </div>
-          <h1 className="select-none font-['Inter',system-ui,-apple-system,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+          <h1 className="select-none font-['Futura','Futura PT','Trebuchet MS',Arial,sans-serif] text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
         </div>
