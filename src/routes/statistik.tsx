@@ -150,7 +150,15 @@ function Statistik() {
         </div>
       </div>
 
-      <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
+      <Link
+        to="/veckostatistik"
+        className="flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+      >
+        {t("weeklySummaryLink")}
+        <ChevronRight className="size-4 text-muted-foreground" />
+      </Link>
+
+      <h1 className="mt-3 px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
@@ -162,14 +170,6 @@ function Statistik() {
           {totalActivities.toLocaleString(locale)}
         </p>
       </div>
-
-      <Link
-        to="/veckostatistik"
-        className="mt-2 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
-      >
-        {t("weeklySummaryLink")}
-        <ChevronRight className="size-4 text-muted-foreground" />
-      </Link>
 
       <Section
         title={t("private")}
