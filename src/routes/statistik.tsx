@@ -67,10 +67,15 @@ function Statistik() {
   const rows = useMemo(() => {
     const totals = new Map<string, number>();
     const lastAt = new Map<string, string>();
+    const km = new Map<string, number>();
+    const minutes = new Map<string, number>();
     for (const e of entries as Entry[]) {
       const d = new Date(e.createdAt);
       if (d.getFullYear() !== year) continue;
       totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
+      if (e.distanceKm) km.set(e.categoryId, (km.get(e.categoryId) ?? 0) + e.distanceKm);
+      if (e.durationMin)
+        minutes.set(e.categoryId, (minutes.get(e.categoryId) ?? 0) + e.durationMin);
       const prev = lastAt.get(e.categoryId);
       if (!prev || d > new Date(prev)) lastAt.set(e.categoryId, e.createdAt);
     }
@@ -83,9 +88,12 @@ function Statistik() {
           total: totals.get(c.id) ?? 0,
           goal: goals[goalKey(year, c.id)] ?? null,
           lastAt: lastAt.get(c.id) ?? null,
+          distanceKm: km.get(c.id) ?? 0,
+          durationMin: minutes.get(c.id) ?? 0,
         }))
         .filter((r) => r.total > 0 || r.goal !== null)
         .sort((a, b) => b.total - a.total);
+
 
     return { privat: build("privat"), jobb: build("jobb") };
   }, [categories, entries, goals, year]);
