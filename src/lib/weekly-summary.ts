@@ -11,7 +11,13 @@ import { supportsMetrics } from "@/lib/activity-metrics";
 /** Maximum number of category lines shown inside a notification. */
 export const MAX_NOTIFICATION_ROWS = 5;
 
-export type WeeklyRow = { id: string; label: string; total: number };
+export type WeeklyRow = {
+  id: string;
+  label: string;
+  total: number;
+  distanceKm: number;
+  durationMin: number;
+};
 
 export type WeeklySummary = {
   rows: WeeklyRow[];
