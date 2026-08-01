@@ -213,12 +213,22 @@ export function useGoals() {
   const [goals, setGoals] = useState<Goals>({});
   const [hydrated, setHydrated] = useState(false);
 
-  useEffect(() => {
+  const readFromStorage = useCallback(() => {
     ready();
     const stored = readKey(GOALS_KEY, goalsSchema);
     if (stored.status === "ok") setGoals(stored.value);
     setHydrated(true);
   }, []);
+
+  useEffect(() => {
+    readFromStorage();
+  }, [readFromStorage]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.addEventListener(DATA_CHANGED_EVENT, readFromStorage);
+    return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
+  }, [readFromStorage]);
 
   const commit = useCallback((next: Goals) => {
     writeKey(GOALS_KEY, next, goalsSchema);
