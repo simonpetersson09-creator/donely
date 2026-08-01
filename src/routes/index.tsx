@@ -110,6 +110,19 @@ function Index() {
   const selected = areaCategories.find((c) => c.id === categoryId);
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
+  // Distance/duration only make sense for private activity categories.
+  const showMetrics = !!selected && supportsMetrics(selected);
+  const distanceKm = showMetrics ? parseMetric(distance) : undefined;
+  const durationMin = showMetrics ? parseMetric(duration) : undefined;
+
+  // Clearing the fields when switching away keeps stale km/min from following
+  // the user to a category where they are not shown.
+  useEffect(() => {
+    if (!showMetrics) {
+      setDistance("");
+      setDuration("");
+    }
+  }, [showMetrics, categoryId]);
 
   const accentText = "text-primary";
 
@@ -128,14 +141,27 @@ function Index() {
     }
     if (!valid || !selected) return;
     const name = categoryLabel(t, selected);
-    addEntry({ area, categoryId: selected.id, categoryName: selected.name, amount: parsed });
+    addEntry({
+      area,
+      categoryId: selected.id,
+      categoryName: selected.name,
+      amount: parsed,
+      ...(distanceKm !== undefined ? { distanceKm } : {}),
+      ...(durationMin !== undefined ? { durationMin } : {}),
+    });
     navigator.vibrate?.(12);
     setAmount("1");
+    setDistance("");
+    setDuration("");
     setFlash(true);
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => setFlash(false), 1100);
+    const extras = [
+      distanceKm !== undefined ? `${formatKm(distanceKm, locale)} km` : null,
+      durationMin !== undefined ? formatMinutes(durationMin, locale) : null,
+    ].filter(Boolean);
     toast.success(t("registeredToast", { count: parsed, name }), {
-      description: area === "jobb" ? t("work") : t("private"),
+      description: [area === "jobb" ? t("work") : t("private"), ...extras].join(" · "),
     });
   }
 
