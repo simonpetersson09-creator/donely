@@ -324,8 +324,7 @@ export function seedDemoEntries(): number {
   const existing = readStoredEntries();
   if (categories.length === 0) return 0;
 
-  const pick = (idPart: string) =>
-    categories.find((c) => c.id.includes(idPart)) ?? categories[0];
+  const pick = (idPart: string) => categories.find((c) => c.id.includes(idPart)) ?? categories[0];
 
   const plan: { category: Category; amount: number; daysAgo: number; km?: number; min?: number }[] =
     [

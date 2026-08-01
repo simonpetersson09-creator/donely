@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Bell, ChevronRight, Crown, FileText, FlaskConical, Star, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
-import { clearAllData, isDevEnvironment, seedDemoEntries, useEntries } from "@/lib/store";
+import { clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
@@ -61,8 +61,7 @@ function Installningar() {
   const premium = usePremium();
   const price = usePrice();
   const reminder = useReminder();
-  const { entries, removeEntry } = useEntries();
-  const recent = entries.slice(0, 10);
+
   const [confirming, setConfirming] = useState(false);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -227,50 +226,17 @@ function Installningar() {
             {t("recentSection")}
           </p>
 
-          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
-            {recent.length === 0 ? (
-              <p className="px-3 py-4 text-center text-[12px] font-normal leading-[16px] text-muted-foreground">
-                {t("recentEmpty")}
-              </p>
-            ) : (
-              recent.map((entry, index) => (
-                <div
-                  key={entry.id}
-                  className={`flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
-                      {entry.categoryName}
-                      <span className="ml-1 font-normal text-muted-foreground">
-                        ×{entry.amount}
-                      </span>
-                    </p>
-                    <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
-                      {new Date(entry.createdAt).toLocaleDateString(language, {
-                        day: "numeric",
-                        month: "short",
-                      })}
-                      {entry.distanceKm ? ` · ${entry.distanceKm} km` : ""}
-                      {entry.durationMin ? ` · ${entry.durationMin} min` : ""}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    aria-label={t("recentDeleted")}
-                    onClick={() => {
-                      removeEntry(entry.id);
-                      toast.success(t("recentDeleted"));
-                    }}
-                    className="shrink-0 rounded-lg p-2 text-destructive transition-colors active:bg-destructive/10"
-                  >
-                    <Trash2 className="size-[16px]" />
-                  </button>
-                </div>
-              ))
-            )}
-          </div>
+          <Link
+            to="/senaste-registreringar"
+            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+          >
+            <span className="flex items-center gap-2">
+              <Trash2 className="size-[18px]" />
+              {t("recentSection")}
+            </span>
+            <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
         </section>
-
 
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
@@ -313,24 +279,26 @@ function Installningar() {
             </button>
           </div>
 
-          {mounted && isDevEnvironment() && (
-            <button
-              type="button"
-              onClick={() => {
-                const count = seedDemoEntries();
-                if (count === 0) {
-                  toast.error("Kunde inte skapa exempeldata");
-                  return;
-                }
-                toast.success(`${count} exempelaktiviteter tillagda`);
-                window.location.href = "/statistik";
-              }}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground transition-colors active:bg-accent"
-            >
-              <FlaskConical className="size-[18px]" />
-              <span>Fyll på med exempeldata (endast utveckling)</span>
-            </button>
-          )}
+          <div className="mt-2">
+            {mounted && isDevEnvironment() && (
+              <button
+                type="button"
+                onClick={() => {
+                  const count = seedDemoEntries();
+                  if (count === 0) {
+                    toast.error("Kunde inte skapa exempeldata");
+                    return;
+                  }
+                  toast.success(`${count} exempelaktiviteter tillagda`);
+                  window.location.href = "/statistik";
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground transition-colors active:bg-accent"
+              >
+                <FlaskConical className="size-[18px]" />
+                <span>Fyll på med exempeldata (endast utveckling)</span>
+              </button>
+            )}
+          </div>
 
           <p className="mt-2 text-center text-[9px] font-normal leading-[13px] text-muted-foreground/80">
             Donely · {t("version")} 1.0
