@@ -42,6 +42,7 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
+        applyAppBackgroundColor()
         installNotificationBridge()
     }
 
