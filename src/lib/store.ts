@@ -114,7 +114,9 @@ export function useCategories() {
     (id: string, name: string) => {
       // Only the label changes — the id (and therefore every entry relation)
       // is preserved.
-      setCategories((prev) => commit(prev.map((c) => (c.id === id ? { ...c, name: name.trim() } : c))));
+      setCategories((prev) =>
+        commit(prev.map((c) => (c.id === id ? { ...c, name: name.trim() } : c))),
+      );
     },
     [commit],
   );
@@ -154,7 +156,10 @@ export function useEntries() {
   const addEntry = useCallback(
     (entry: Omit<Entry, "id" | "createdAt">) => {
       setEntries((prev) =>
-        commit([{ ...entry, id: crypto.randomUUID(), createdAt: new Date().toISOString() }, ...prev]),
+        commit([
+          { ...entry, id: crypto.randomUUID(), createdAt: new Date().toISOString() },
+          ...prev,
+        ]),
       );
     },
     [commit],

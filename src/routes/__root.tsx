@@ -21,7 +21,6 @@ import { DataIntegrityNotice } from "@/components/DataIntegrityNotice";
 import { initializeStorage } from "@/lib/persistence";
 import { EdgeSwipeBack } from "@/components/EdgeSwipeBack";
 
-
 function NotFoundComponent() {
   const { t } = useTranslation();
   return (
@@ -85,7 +84,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" },
+      {
+        name: "viewport",
+        content:
+          "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover",
+      },
       { title: "Donely" },
       {
         name: "description",
@@ -166,5 +169,4 @@ function RootComponent() {
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );
-
 }

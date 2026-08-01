@@ -308,7 +308,6 @@ function clearPendingTimeout() {
   clearTimer("purchase");
 }
 
-
 /** Tells the shell that the web app is ready to receive entitlement/product. */
 export function notifyBridgeReady() {
   nativeHandler("bridgeReady")?.postMessage({ version: BRIDGE_VERSION });
@@ -324,7 +323,6 @@ if (typeof window !== "undefined") {
   w.__donelyBridgeReady = true;
   notifyBridgeReady();
 }
-
 
 // ---------------------------------------------------------------------------
 // development fallback (never active in production builds)
@@ -370,7 +368,8 @@ export function requestEntitlement() {
     // If the shell never answers, don't hang on "loading" forever — lock down.
     if (!bridgeControlled) {
       armTimer("entitlement", ENTITLEMENT_TIMEOUT_MS, () => {
-        if (!bridgeControlled) applyEntitlement({ subscribed: false, inTrial: false, trialDaysLeft: 0 });
+        if (!bridgeControlled)
+          applyEntitlement({ subscribed: false, inTrial: false, trialDaysLeft: 0 });
       });
     }
     return;
@@ -393,7 +392,8 @@ export function loadProduct() {
     handler.postMessage({ product: PRODUCT_ID });
     // Swift replies with __donelySetProduct(...)
     armTimer("product", PRODUCT_TIMEOUT_MS, () => {
-      if (state.productStatus === "loading") setState({ product: null, productStatus: "unavailable" });
+      if (state.productStatus === "loading")
+        setState({ product: null, productStatus: "unavailable" });
     });
     return;
   }

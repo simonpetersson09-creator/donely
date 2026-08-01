@@ -82,7 +82,12 @@ function CategoryDetail() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="py-2">
-        <BackButton fallbackTo="/statistik" className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary">{t("statistics")}</BackButton>
+        <BackButton
+          fallbackTo="/statistik"
+          className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
+        >
+          {t("statistics")}
+        </BackButton>
       </div>
 
       <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
@@ -95,7 +100,10 @@ function CategoryDetail() {
         </p>
         <p className="mt-0.5 text-[26px] font-bold leading-none tabular-nums">
           {goal !== null
-            ? t("ofGoal", { total: total.toLocaleString(locale), goal: goal.toLocaleString(locale) })
+            ? t("ofGoal", {
+                total: total.toLocaleString(locale),
+                goal: goal.toLocaleString(locale),
+              })
             : t("soFarCount", { total: total.toLocaleString(locale) })}
         </p>
         {lastAt && mounted && (
@@ -163,13 +171,17 @@ function CategoryDetail() {
           <p className="text-[15px] font-bold">{active.year}</p>
           <p className="mt-1 text-[14px]">
             {t("registeredCountLabel")}{" "}
-            <span className="font-semibold tabular-nums">{active.total.toLocaleString(locale)}</span>
+            <span className="font-semibold tabular-nums">
+              {active.total.toLocaleString(locale)}
+            </span>
           </p>
           {active.goal !== null && (
             <>
               <p className="text-[14px]">
                 {t("goalShort")}{" "}
-                <span className="font-semibold tabular-nums">{active.goal.toLocaleString(locale)}</span>
+                <span className="font-semibold tabular-nums">
+                  {active.goal.toLocaleString(locale)}
+                </span>
               </p>
               <p className="mt-1 text-[13px] text-card-foreground/70">
                 {active.total >= active.goal ? t("goalReached") : t("goalNotReached")}

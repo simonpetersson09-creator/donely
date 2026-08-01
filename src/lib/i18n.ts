@@ -1,23 +1,16 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-
 export type LanguageCode =
-  | "sv"
-  | "en"
-  | "de"
-  | "fr"
-  | "es"
-  | "it"
-  | "pt-BR"
-  | "nl"
-  | "pl"
-  | "da"
-  | "no"
-  | "fi"
-  | "ja";
+  "sv" | "en" | "de" | "fr" | "es" | "it" | "pt-BR" | "nl" | "pl" | "da" | "no" | "fi" | "ja";
 
-export const LANGUAGES: { code: LanguageCode; label: string; flag: string; locale: string; short: string }[] = [
+export const LANGUAGES: {
+  code: LanguageCode;
+  label: string;
+  flag: string;
+  locale: string;
+  short: string;
+}[] = [
   { code: "sv", label: "Svenska", flag: "🇸🇪", locale: "sv-SE", short: "SE" },
   { code: "en", label: "English", flag: "🇬🇧", locale: "en-GB", short: "EN" },
   { code: "de", label: "Deutsch", flag: "🇩🇪", locale: "de-DE", short: "DE" },
@@ -52,7 +45,8 @@ const sv = {
   cancel: "Avbryt",
   allDataDeleted: "All data har raderats",
   dataIssueTitle: "Problem med sparad data",
-  dataIssueBody: "En del av din sparade data kunde inte läsas. Ingenting har raderats. Du kan exportera datan eller återställa den senaste säkerhetskopian.",
+  dataIssueBody:
+    "En del av din sparade data kunde inte läsas. Ingenting har raderats. Du kan exportera datan eller återställa den senaste säkerhetskopian.",
   dataIssueExport: "Exportera data",
   dataIssueRestore: "Återställ säkerhetskopia",
   dataIssueDismiss: "Fortsätt ändå",
@@ -120,11 +114,13 @@ const sv = {
   notFoundBody: "Sidan du letar efter finns inte eller har flyttats.",
   goHome: "Till startsidan",
   paywallTitle: "Fortsätt registrera dina framsteg",
-  paywallBody: "Din kostnadsfria provperiod har gått ut. Prenumerera på Donely Premium för att fortsätta registrera aktiviteter och bygga vidare på din historik.",
+  paywallBody:
+    "Din kostnadsfria provperiod har gått ut. Prenumerera på Donely Premium för att fortsätta registrera aktiviteter och bygga vidare på din historik.",
   restorePurchase: "Återställ köp",
   rateDonely: "Betygsätt Donely",
   deleteAllDataRow: "Ta bort all data",
-  deleteAllDataWarning: "Är du säker på att du vill ta bort all data? Detta raderar permanent all historik, alla registreringar, kategorier och årsmål. Åtgärden kan inte ångras.",
+  deleteAllDataWarning:
+    "Är du säker på att du vill ta bort all data? Detta raderar permanent all historik, alla registreringar, kategorier och årsmål. Åtgärden kan inte ångras.",
   paywallFootnote: "Du kan fortfarande se all tidigare statistik och historik.",
   trialLeft_one: "{{count}} dag kvar av provperioden",
   trialLeft_other: "{{count}} dagar kvar av provperioden",
@@ -149,7 +145,8 @@ const sv = {
   weeklyReminder: "Veckopåminnelse",
   weeklyReminderDesc: "Varje fredag kl. 17:00, enligt tiden på din enhet.",
   nextReminder: "Nästa påminnelse: {{date}}",
-  notifDenied: "Notiser är avstängda för Donely. Slå på dem i iOS-inställningarna för att få påminnelsen.",
+  notifDenied:
+    "Notiser är avstängda för Donely. Slå på dem i iOS-inställningarna för att få påminnelsen.",
   openIosSettings: "Öppna inställningar",
   notifUnsupported: "Notiser stöds inte här. Installera Donely på hemskärmen.",
   reminderOnToast: "Påminnelsen är på",
@@ -184,7 +181,8 @@ const en: Dict = {
   cancel: "Cancel",
   allDataDeleted: "All data has been deleted",
   dataIssueTitle: "Problem with saved data",
-  dataIssueBody: "Some of your saved data could not be read. Nothing has been deleted. You can export the data or restore the most recent backup.",
+  dataIssueBody:
+    "Some of your saved data could not be read. Nothing has been deleted. You can export the data or restore the most recent backup.",
   dataIssueExport: "Export data",
   dataIssueRestore: "Restore backup",
   dataIssueDismiss: "Continue anyway",
@@ -252,11 +250,13 @@ const en: Dict = {
   notFoundBody: "The page you're looking for doesn't exist or has been moved.",
   goHome: "Go to home",
   paywallTitle: "Keep tracking your progress",
-  paywallBody: "Your free trial has ended. Subscribe to Donely Premium to keep registering activities and building on your history.",
+  paywallBody:
+    "Your free trial has ended. Subscribe to Donely Premium to keep registering activities and building on your history.",
   restorePurchase: "Restore purchase",
   rateDonely: "Rate Donely",
   deleteAllDataRow: "Delete all data",
-  deleteAllDataWarning: "Are you sure you want to delete all data? This permanently erases all history, entries, categories and yearly goals. This action cannot be undone.",
+  deleteAllDataWarning:
+    "Are you sure you want to delete all data? This permanently erases all history, entries, categories and yearly goals. This action cannot be undone.",
   paywallFootnote: "You can still view all your past statistics and history.",
   trialLeft_one: "{{count}} day left of your trial",
   trialLeft_other: "{{count}} days left of your trial",
@@ -281,7 +281,8 @@ const en: Dict = {
   weeklyReminder: "Weekly reminder",
   weeklyReminderDesc: "Every Friday at 17:00, in your device's local time.",
   nextReminder: "Next reminder: {{date}}",
-  notifDenied: "Notifications are turned off for Donely. Enable them in iOS Settings to get the reminder.",
+  notifDenied:
+    "Notifications are turned off for Donely. Enable them in iOS Settings to get the reminder.",
   openIosSettings: "Open Settings",
   notifUnsupported: "Notifications aren't supported here. Install Donely on your Home Screen.",
   reminderOnToast: "Reminder turned on",
@@ -314,7 +315,8 @@ const de: Dict = {
   cancel: "Abbrechen",
   allDataDeleted: "Alle Daten wurden gelöscht",
   dataIssueTitle: "Problem mit gespeicherten Daten",
-  dataIssueBody: "Ein Teil deiner gespeicherten Daten konnte nicht gelesen werden. Es wurde nichts gelöscht. Du kannst die Daten exportieren oder die letzte Sicherung wiederherstellen.",
+  dataIssueBody:
+    "Ein Teil deiner gespeicherten Daten konnte nicht gelesen werden. Es wurde nichts gelöscht. Du kannst die Daten exportieren oder die letzte Sicherung wiederherstellen.",
   dataIssueExport: "Daten exportieren",
   dataIssueRestore: "Sicherung wiederherstellen",
   dataIssueDismiss: "Trotzdem fortfahren",
@@ -382,11 +384,13 @@ const de: Dict = {
   notFoundBody: "Die gesuchte Seite existiert nicht oder wurde verschoben.",
   goHome: "Zur Startseite",
   paywallTitle: "Halte deine Fortschritte weiter fest",
-  paywallBody: "Deine kostenlose Testphase ist abgelaufen. Abonniere Donely Premium, um weiter Aktivitäten zu erfassen und deine Historie auszubauen.",
+  paywallBody:
+    "Deine kostenlose Testphase ist abgelaufen. Abonniere Donely Premium, um weiter Aktivitäten zu erfassen und deine Historie auszubauen.",
   restorePurchase: "Kauf wiederherstellen",
   rateDonely: "Donely bewerten",
   deleteAllDataRow: "Alle Daten löschen",
-  deleteAllDataWarning: "Möchtest du wirklich alle Daten löschen? Dadurch werden der gesamte Verlauf, alle Einträge, Kategorien und Jahresziele dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
+  deleteAllDataWarning:
+    "Möchtest du wirklich alle Daten löschen? Dadurch werden der gesamte Verlauf, alle Einträge, Kategorien und Jahresziele dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
   paywallFootnote: "Deine bisherigen Statistiken und dein Verlauf bleiben weiterhin sichtbar.",
   trialLeft_one: "Noch {{count}} Tag Testphase",
   trialLeft_other: "Noch {{count}} Tage Testphase",
@@ -411,14 +415,17 @@ const de: Dict = {
   weeklyReminder: "Wöchentliche Erinnerung",
   weeklyReminderDesc: "Jeden Freitag um 17:00 Uhr, in der Ortszeit deines Geräts.",
   nextReminder: "Nächste Erinnerung: {{date}}",
-  notifDenied: "Mitteilungen sind für Donely deaktiviert. Aktiviere sie in den iOS-Einstellungen, um die Erinnerung zu erhalten.",
+  notifDenied:
+    "Mitteilungen sind für Donely deaktiviert. Aktiviere sie in den iOS-Einstellungen, um die Erinnerung zu erhalten.",
   openIosSettings: "Einstellungen öffnen",
-  notifUnsupported: "Mitteilungen werden hier nicht unterstützt. Installiere Donely auf dem Home-Bildschirm.",
+  notifUnsupported:
+    "Mitteilungen werden hier nicht unterstützt. Installiere Donely auf dem Home-Bildschirm.",
   reminderOnToast: "Erinnerung aktiviert",
   reminderOffToast: "Erinnerung deaktiviert",
   reminderNotifTitle: "Deine Woche in Donely",
   reminderPromptTitle: "Behalte deine Fortschritte im Blick",
-  reminderPromptBody: "Möchtest du jeden Freitag um 17:00 Uhr eine Erinnerung an deine Wochenfortschritte erhalten?",
+  reminderPromptBody:
+    "Möchtest du jeden Freitag um 17:00 Uhr eine Erinnerung an deine Wochenfortschritte erhalten?",
   reminderPromptEnable: "Erinnerung aktivieren",
   reminderPromptLater: "Jetzt nicht",
   weeklySummaryTitle: "Deine Woche in Donely",
@@ -444,7 +451,8 @@ const fr: Dict = {
   cancel: "Annuler",
   allDataDeleted: "Toutes les données ont été supprimées",
   dataIssueTitle: "Problème avec les données enregistrées",
-  dataIssueBody: "Certaines de vos données n’ont pas pu être lues. Rien n’a été supprimé. Vous pouvez exporter les données ou restaurer la dernière sauvegarde.",
+  dataIssueBody:
+    "Certaines de vos données n’ont pas pu être lues. Rien n’a été supprimé. Vous pouvez exporter les données ou restaurer la dernière sauvegarde.",
   dataIssueExport: "Exporter les données",
   dataIssueRestore: "Restaurer la sauvegarde",
   dataIssueDismiss: "Continuer quand même",
@@ -514,11 +522,13 @@ const fr: Dict = {
   notFoundBody: "La page que vous cherchez n’existe pas ou a été déplacée.",
   goHome: "Aller à l’accueil",
   paywallTitle: "Continuez à enregistrer vos progrès",
-  paywallBody: "Votre période d’essai gratuite est terminée. Abonnez-vous à Donely Premium pour continuer à enregistrer vos activités et enrichir votre historique.",
+  paywallBody:
+    "Votre période d’essai gratuite est terminée. Abonnez-vous à Donely Premium pour continuer à enregistrer vos activités et enrichir votre historique.",
   restorePurchase: "Restaurer l’achat",
   rateDonely: "Noter Donely",
   deleteAllDataRow: "Supprimer toutes les données",
-  deleteAllDataWarning: "Voulez-vous vraiment supprimer toutes les données ? Cela efface définitivement tout l’historique, les enregistrements, les catégories et les objectifs annuels. Cette action est irréversible.",
+  deleteAllDataWarning:
+    "Voulez-vous vraiment supprimer toutes les données ? Cela efface définitivement tout l’historique, les enregistrements, les catégories et les objectifs annuels. Cette action est irréversible.",
   paywallFootnote: "Vous pouvez toujours consulter toutes vos statistiques et votre historique.",
   trialLeft_one: "Il reste {{count}} jour d’essai",
   trialLeft_other: "Il reste {{count}} jours d’essai",
@@ -543,14 +553,17 @@ const fr: Dict = {
   weeklyReminder: "Rappel hebdomadaire",
   weeklyReminderDesc: "Chaque vendredi à 17h00, à l’heure locale de votre appareil.",
   nextReminder: "Prochain rappel : {{date}}",
-  notifDenied: "Les notifications sont désactivées pour Donely. Activez-les dans les Réglages iOS pour recevoir le rappel.",
+  notifDenied:
+    "Les notifications sont désactivées pour Donely. Activez-les dans les Réglages iOS pour recevoir le rappel.",
   openIosSettings: "Ouvrir les Réglages",
-  notifUnsupported: "Les notifications ne sont pas prises en charge ici. Installez Donely sur l’écran d’accueil.",
+  notifUnsupported:
+    "Les notifications ne sont pas prises en charge ici. Installez Donely sur l’écran d’accueil.",
   reminderOnToast: "Rappel activé",
   reminderOffToast: "Rappel désactivé",
   reminderNotifTitle: "Votre semaine dans Donely",
   reminderPromptTitle: "Suivez vos progrès",
-  reminderPromptBody: "Souhaitez-vous recevoir un rappel chaque vendredi à 17h00 sur vos progrès de la semaine ?",
+  reminderPromptBody:
+    "Souhaitez-vous recevoir un rappel chaque vendredi à 17h00 sur vos progrès de la semaine ?",
   reminderPromptEnable: "Activer le rappel",
   reminderPromptLater: "Pas maintenant",
   weeklySummaryTitle: "Votre semaine dans Donely",
@@ -576,7 +589,8 @@ const es: Dict = {
   cancel: "Cancelar",
   allDataDeleted: "Se han borrado todos los datos",
   dataIssueTitle: "Problema con los datos guardados",
-  dataIssueBody: "Algunos de tus datos guardados no se pudieron leer. No se ha eliminado nada. Puedes exportar los datos o restaurar la última copia de seguridad.",
+  dataIssueBody:
+    "Algunos de tus datos guardados no se pudieron leer. No se ha eliminado nada. Puedes exportar los datos o restaurar la última copia de seguridad.",
   dataIssueExport: "Exportar datos",
   dataIssueRestore: "Restaurar copia de seguridad",
   dataIssueDismiss: "Continuar de todos modos",
@@ -646,11 +660,13 @@ const es: Dict = {
   notFoundBody: "La página que buscas no existe o se ha movido.",
   goHome: "Ir al inicio",
   paywallTitle: "Sigue registrando tus progresos",
-  paywallBody: "Tu prueba gratuita ha terminado. Suscríbete a Donely Premium para seguir registrando actividades y ampliando tu historial.",
+  paywallBody:
+    "Tu prueba gratuita ha terminado. Suscríbete a Donely Premium para seguir registrando actividades y ampliando tu historial.",
   restorePurchase: "Restaurar compra",
   rateDonely: "Valorar Donely",
   deleteAllDataRow: "Eliminar todos los datos",
-  deleteAllDataWarning: "¿Seguro que quieres eliminar todos los datos? Se borrarán permanentemente todo el historial, los registros, las categorías y las metas anuales. Esta acción no se puede deshacer.",
+  deleteAllDataWarning:
+    "¿Seguro que quieres eliminar todos los datos? Se borrarán permanentemente todo el historial, los registros, las categorías y las metas anuales. Esta acción no se puede deshacer.",
   paywallFootnote: "Puedes seguir viendo todas tus estadísticas e historial.",
   trialLeft_one: "Queda {{count}} día de prueba",
   trialLeft_other: "Quedan {{count}} días de prueba",
@@ -675,14 +691,17 @@ const es: Dict = {
   weeklyReminder: "Recordatorio semanal",
   weeklyReminderDesc: "Cada viernes a las 17:00, según la hora local de tu dispositivo.",
   nextReminder: "Próximo recordatorio: {{date}}",
-  notifDenied: "Las notificaciones están desactivadas para Donely. Actívalas en los Ajustes de iOS para recibir el recordatorio.",
+  notifDenied:
+    "Las notificaciones están desactivadas para Donely. Actívalas en los Ajustes de iOS para recibir el recordatorio.",
   openIosSettings: "Abrir Ajustes",
-  notifUnsupported: "Las notificaciones no son compatibles aquí. Instala Donely en la pantalla de inicio.",
+  notifUnsupported:
+    "Las notificaciones no son compatibles aquí. Instala Donely en la pantalla de inicio.",
   reminderOnToast: "Recordatorio activado",
   reminderOffToast: "Recordatorio desactivado",
   reminderNotifTitle: "Tu semana en Donely",
   reminderPromptTitle: "Sigue tu progreso",
-  reminderPromptBody: "¿Quieres recibir un recordatorio cada viernes a las 17:00 sobre el progreso de la semana?",
+  reminderPromptBody:
+    "¿Quieres recibir un recordatorio cada viernes a las 17:00 sobre el progreso de la semana?",
   reminderPromptEnable: "Activar recordatorio",
   reminderPromptLater: "Ahora no",
   weeklySummaryTitle: "Tu semana en Donely",
@@ -708,7 +727,8 @@ const it: Dict = {
   cancel: "Annulla",
   allDataDeleted: "Tutti i dati sono stati eliminati",
   dataIssueTitle: "Problema con i dati salvati",
-  dataIssueBody: "Alcuni dati salvati non sono stati letti. Non è stato eliminato nulla. Puoi esportare i dati o ripristinare l’ultimo backup.",
+  dataIssueBody:
+    "Alcuni dati salvati non sono stati letti. Non è stato eliminato nulla. Puoi esportare i dati o ripristinare l’ultimo backup.",
   dataIssueExport: "Esporta dati",
   dataIssueRestore: "Ripristina backup",
   dataIssueDismiss: "Continua comunque",
@@ -778,11 +798,13 @@ const it: Dict = {
   notFoundBody: "La pagina che cerchi non esiste o è stata spostata.",
   goHome: "Vai alla home",
   paywallTitle: "Continua a registrare i tuoi progressi",
-  paywallBody: "La tua prova gratuita è terminata. Abbonati a Donely Premium per continuare a registrare attività e ampliare il tuo storico.",
+  paywallBody:
+    "La tua prova gratuita è terminata. Abbonati a Donely Premium per continuare a registrare attività e ampliare il tuo storico.",
   restorePurchase: "Ripristina acquisto",
   rateDonely: "Valuta Donely",
   deleteAllDataRow: "Elimina tutti i dati",
-  deleteAllDataWarning: "Vuoi davvero eliminare tutti i dati? Questa operazione cancella definitivamente cronologia, registrazioni, categorie e obiettivi annuali. L’azione non può essere annullata.",
+  deleteAllDataWarning:
+    "Vuoi davvero eliminare tutti i dati? Questa operazione cancella definitivamente cronologia, registrazioni, categorie e obiettivi annuali. L’azione non può essere annullata.",
   paywallFootnote: "Puoi comunque consultare tutte le statistiche e lo storico.",
   trialLeft_one: "Manca {{count}} giorno di prova",
   trialLeft_other: "Mancano {{count}} giorni di prova",
@@ -807,14 +829,16 @@ const it: Dict = {
   weeklyReminder: "Promemoria settimanale",
   weeklyReminderDesc: "Ogni venerdì alle 17:00, secondo l’ora locale del dispositivo.",
   nextReminder: "Prossimo promemoria: {{date}}",
-  notifDenied: "Le notifiche sono disattivate per Donely. Attivale in Impostazioni di iOS per ricevere il promemoria.",
+  notifDenied:
+    "Le notifiche sono disattivate per Donely. Attivale in Impostazioni di iOS per ricevere il promemoria.",
   openIosSettings: "Apri Impostazioni",
   notifUnsupported: "Le notifiche non sono supportate qui. Installa Donely nella schermata Home.",
   reminderOnToast: "Promemoria attivato",
   reminderOffToast: "Promemoria disattivato",
   reminderNotifTitle: "La tua settimana in Donely",
   reminderPromptTitle: "Tieni traccia dei tuoi progressi",
-  reminderPromptBody: "Vuoi ricevere un promemoria ogni venerdì alle 17:00 sui progressi della settimana?",
+  reminderPromptBody:
+    "Vuoi ricevere un promemoria ogni venerdì alle 17:00 sui progressi della settimana?",
   reminderPromptEnable: "Attiva promemoria",
   reminderPromptLater: "Non ora",
   weeklySummaryTitle: "La tua settimana in Donely",
@@ -840,7 +864,8 @@ const ptBR: Dict = {
   cancel: "Cancelar",
   allDataDeleted: "Todos os dados foram excluídos",
   dataIssueTitle: "Problema com os dados salvos",
-  dataIssueBody: "Alguns dos seus dados salvos não puderam ser lidos. Nada foi excluído. Você pode exportar os dados ou restaurar o backup mais recente.",
+  dataIssueBody:
+    "Alguns dos seus dados salvos não puderam ser lidos. Nada foi excluído. Você pode exportar os dados ou restaurar o backup mais recente.",
   dataIssueExport: "Exportar dados",
   dataIssueRestore: "Restaurar backup",
   dataIssueDismiss: "Continuar mesmo assim",
@@ -910,11 +935,13 @@ const ptBR: Dict = {
   notFoundBody: "A página que você procura não existe ou foi movida.",
   goHome: "Ir para o início",
   paywallTitle: "Continue registrando seu progresso",
-  paywallBody: "Seu período de teste gratuito acabou. Assine o Donely Premium para continuar registrando atividades e ampliando seu histórico.",
+  paywallBody:
+    "Seu período de teste gratuito acabou. Assine o Donely Premium para continuar registrando atividades e ampliando seu histórico.",
   restorePurchase: "Restaurar compra",
   rateDonely: "Avaliar o Donely",
   deleteAllDataRow: "Excluir todos os dados",
-  deleteAllDataWarning: "Tem certeza de que deseja excluir todos os dados? Isso apaga permanentemente todo o histórico, os registros, as categorias e as metas anuais. Esta ação não pode ser desfeita.",
+  deleteAllDataWarning:
+    "Tem certeza de que deseja excluir todos os dados? Isso apaga permanentemente todo o histórico, os registros, as categorias e as metas anuais. Esta ação não pode ser desfeita.",
   paywallFootnote: "Você continua podendo ver todas as estatísticas e o histórico.",
   trialLeft_one: "Resta {{count}} dia de teste",
   trialLeft_other: "Restam {{count}} dias de teste",
@@ -939,14 +966,16 @@ const ptBR: Dict = {
   weeklyReminder: "Lembrete semanal",
   weeklyReminderDesc: "Toda sexta-feira às 17:00, no horário local do seu aparelho.",
   nextReminder: "Próximo lembrete: {{date}}",
-  notifDenied: "As notificações estão desativadas para o Donely. Ative-as nos Ajustes do iOS para receber o lembrete.",
+  notifDenied:
+    "As notificações estão desativadas para o Donely. Ative-as nos Ajustes do iOS para receber o lembrete.",
   openIosSettings: "Abrir Ajustes",
   notifUnsupported: "As notificações não têm suporte aqui. Instale o Donely na tela de início.",
   reminderOnToast: "Lembrete ativado",
   reminderOffToast: "Lembrete desativado",
   reminderNotifTitle: "Sua semana no Donely",
   reminderPromptTitle: "Acompanhe seu progresso",
-  reminderPromptBody: "Quer receber um lembrete toda sexta-feira às 17h sobre o progresso da semana?",
+  reminderPromptBody:
+    "Quer receber um lembrete toda sexta-feira às 17h sobre o progresso da semana?",
   reminderPromptEnable: "Ativar lembrete",
   reminderPromptLater: "Agora não",
   weeklySummaryTitle: "Sua semana no Donely",
@@ -972,7 +1001,8 @@ const nl: Dict = {
   cancel: "Annuleren",
   allDataDeleted: "Alle gegevens zijn verwijderd",
   dataIssueTitle: "Probleem met opgeslagen gegevens",
-  dataIssueBody: "Sommige van je opgeslagen gegevens konden niet worden gelezen. Er is niets verwijderd. Je kunt de gegevens exporteren of de laatste back-up terugzetten.",
+  dataIssueBody:
+    "Sommige van je opgeslagen gegevens konden niet worden gelezen. Er is niets verwijderd. Je kunt de gegevens exporteren of de laatste back-up terugzetten.",
   dataIssueExport: "Gegevens exporteren",
   dataIssueRestore: "Back-up terugzetten",
   dataIssueDismiss: "Toch doorgaan",
@@ -1040,11 +1070,13 @@ const nl: Dict = {
   notFoundBody: "De pagina die je zoekt bestaat niet of is verplaatst.",
   goHome: "Naar de startpagina",
   paywallTitle: "Blijf je voortgang vastleggen",
-  paywallBody: "Je gratis proefperiode is afgelopen. Neem Donely Premium om activiteiten te blijven registreren en je historie verder op te bouwen.",
+  paywallBody:
+    "Je gratis proefperiode is afgelopen. Neem Donely Premium om activiteiten te blijven registreren en je historie verder op te bouwen.",
   restorePurchase: "Aankoop herstellen",
   rateDonely: "Donely beoordelen",
   deleteAllDataRow: "Alle gegevens verwijderen",
-  deleteAllDataWarning: "Weet je zeker dat je alle gegevens wilt verwijderen? Hiermee worden alle geschiedenis, registraties, categorieën en jaardoelen permanent gewist. Dit kan niet ongedaan worden gemaakt.",
+  deleteAllDataWarning:
+    "Weet je zeker dat je alle gegevens wilt verwijderen? Hiermee worden alle geschiedenis, registraties, categorieën en jaardoelen permanent gewist. Dit kan niet ongedaan worden gemaakt.",
   paywallFootnote: "Je kunt al je eerdere statistieken en historie nog steeds bekijken.",
   trialLeft_one: "Nog {{count}} dag proefperiode",
   trialLeft_other: "Nog {{count}} dagen proefperiode",
@@ -1069,14 +1101,16 @@ const nl: Dict = {
   weeklyReminder: "Wekelijkse herinnering",
   weeklyReminderDesc: "Elke vrijdag om 17:00 uur, in de lokale tijd van je apparaat.",
   nextReminder: "Volgende herinnering: {{date}}",
-  notifDenied: "Meldingen staan uit voor Donely. Zet ze aan in de iOS-instellingen om de herinnering te ontvangen.",
+  notifDenied:
+    "Meldingen staan uit voor Donely. Zet ze aan in de iOS-instellingen om de herinnering te ontvangen.",
   openIosSettings: "Instellingen openen",
   notifUnsupported: "Meldingen worden hier niet ondersteund. Installeer Donely op je beginscherm.",
   reminderOnToast: "Herinnering ingeschakeld",
   reminderOffToast: "Herinnering uitgeschakeld",
   reminderNotifTitle: "Jouw week in Donely",
   reminderPromptTitle: "Houd je voortgang bij",
-  reminderPromptBody: "Wil je elke vrijdag om 17:00 uur een herinnering over je voortgang van de week?",
+  reminderPromptBody:
+    "Wil je elke vrijdag om 17:00 uur een herinnering over je voortgang van de week?",
   reminderPromptEnable: "Herinnering inschakelen",
   reminderPromptLater: "Niet nu",
   weeklySummaryTitle: "Jouw week in Donely",
@@ -1102,7 +1136,8 @@ const pl: Dict = {
   cancel: "Anuluj",
   allDataDeleted: "Wszystkie dane zostały usunięte",
   dataIssueTitle: "Problem z zapisanymi danymi",
-  dataIssueBody: "Nie udało się odczytać części zapisanych danych. Nic nie zostało usunięte. Możesz wyeksportować dane lub przywrócić ostatnią kopię zapasową.",
+  dataIssueBody:
+    "Nie udało się odczytać części zapisanych danych. Nic nie zostało usunięte. Możesz wyeksportować dane lub przywrócić ostatnią kopię zapasową.",
   dataIssueExport: "Eksportuj dane",
   dataIssueRestore: "Przywróć kopię zapasową",
   dataIssueDismiss: "Kontynuuj mimo to",
@@ -1170,11 +1205,13 @@ const pl: Dict = {
   notFoundBody: "Strona, której szukasz, nie istnieje lub została przeniesiona.",
   goHome: "Przejdź na stronę główną",
   paywallTitle: "Rejestruj swoje postępy dalej",
-  paywallBody: "Twój bezpłatny okres próbny się skończył. Wykup Donely Premium, aby dalej rejestrować aktywności i rozbudowywać swoją historię.",
+  paywallBody:
+    "Twój bezpłatny okres próbny się skończył. Wykup Donely Premium, aby dalej rejestrować aktywności i rozbudowywać swoją historię.",
   restorePurchase: "Przywróć zakup",
   rateDonely: "Oceń Donely",
   deleteAllDataRow: "Usuń wszystkie dane",
-  deleteAllDataWarning: "Czy na pewno chcesz usunąć wszystkie dane? Spowoduje to trwałe usunięcie całej historii, wszystkich wpisów, kategorii i celów rocznych. Tej operacji nie można cofnąć.",
+  deleteAllDataWarning:
+    "Czy na pewno chcesz usunąć wszystkie dane? Spowoduje to trwałe usunięcie całej historii, wszystkich wpisów, kategorii i celów rocznych. Tej operacji nie można cofnąć.",
   paywallFootnote: "Nadal możesz przeglądać wszystkie statystyki i historię.",
   trialLeft_one: "Pozostał {{count}} dzień okresu próbnego",
   trialLeft_few: "Pozostały {{count}} dni okresu próbnego",
@@ -1201,14 +1238,17 @@ const pl: Dict = {
   weeklyReminder: "Cotygodniowe przypomnienie",
   weeklyReminderDesc: "W każdy piątek o 17:00, według czasu lokalnego urządzenia.",
   nextReminder: "Następne przypomnienie: {{date}}",
-  notifDenied: "Powiadomienia dla Donely są wyłączone. Włącz je w Ustawieniach iOS, aby otrzymywać przypomnienie.",
+  notifDenied:
+    "Powiadomienia dla Donely są wyłączone. Włącz je w Ustawieniach iOS, aby otrzymywać przypomnienie.",
   openIosSettings: "Otwórz Ustawienia",
-  notifUnsupported: "Powiadomienia nie są tutaj obsługiwane. Zainstaluj Donely na ekranie początkowym.",
+  notifUnsupported:
+    "Powiadomienia nie są tutaj obsługiwane. Zainstaluj Donely na ekranie początkowym.",
   reminderOnToast: "Przypomnienie włączone",
   reminderOffToast: "Przypomnienie wyłączone",
   reminderNotifTitle: "Twój tydzień w Donely",
   reminderPromptTitle: "Śledź swoje postępy",
-  reminderPromptBody: "Czy chcesz otrzymywać przypomnienie w każdy piątek o 17:00 o postępach tygodnia?",
+  reminderPromptBody:
+    "Czy chcesz otrzymywać przypomnienie w każdy piątek o 17:00 o postępach tygodnia?",
   reminderPromptEnable: "Włącz przypomnienie",
   reminderPromptLater: "Nie teraz",
   weeklySummaryTitle: "Twój tydzień w Donely",
@@ -1238,7 +1278,8 @@ const da: Dict = {
   cancel: "Annuller",
   allDataDeleted: "Alle data er slettet",
   dataIssueTitle: "Problem med gemte data",
-  dataIssueBody: "Nogle af dine gemte data kunne ikke læses. Intet er blevet slettet. Du kan eksportere dataene eller gendanne den seneste sikkerhedskopi.",
+  dataIssueBody:
+    "Nogle af dine gemte data kunne ikke læses. Intet er blevet slettet. Du kan eksportere dataene eller gendanne den seneste sikkerhedskopi.",
   dataIssueExport: "Eksportér data",
   dataIssueRestore: "Gendan sikkerhedskopi",
   dataIssueDismiss: "Fortsæt alligevel",
@@ -1306,11 +1347,13 @@ const da: Dict = {
   notFoundBody: "Siden, du leder efter, findes ikke eller er blevet flyttet.",
   goHome: "Gå til forsiden",
   paywallTitle: "Bliv ved med at registrere dine fremskridt",
-  paywallBody: "Din gratis prøveperiode er udløbet. Tegn Donely Premium for at blive ved med at registrere aktiviteter og bygge videre på din historik.",
+  paywallBody:
+    "Din gratis prøveperiode er udløbet. Tegn Donely Premium for at blive ved med at registrere aktiviteter og bygge videre på din historik.",
   restorePurchase: "Gendan køb",
   rateDonely: "Bedøm Donely",
   deleteAllDataRow: "Slet alle data",
-  deleteAllDataWarning: "Er du sikker på, at du vil slette alle data? Det sletter permanent al historik, alle registreringer, kategorier og årsmål. Handlingen kan ikke fortrydes.",
+  deleteAllDataWarning:
+    "Er du sikker på, at du vil slette alle data? Det sletter permanent al historik, alle registreringer, kategorier og årsmål. Handlingen kan ikke fortrydes.",
   paywallFootnote: "Du kan stadig se al tidligere statistik og historik.",
   trialLeft_one: "{{count}} dag tilbage af prøveperioden",
   trialLeft_other: "{{count}} dage tilbage af prøveperioden",
@@ -1335,7 +1378,8 @@ const da: Dict = {
   weeklyReminder: "Ugentlig påmindelse",
   weeklyReminderDesc: "Hver fredag kl. 17.00 efter enhedens lokale tid.",
   nextReminder: "Næste påmindelse: {{date}}",
-  notifDenied: "Notifikationer er slået fra for Donely. Slå dem til i Indstillinger på iOS for at få påmindelsen.",
+  notifDenied:
+    "Notifikationer er slået fra for Donely. Slå dem til i Indstillinger på iOS for at få påmindelsen.",
   openIosSettings: "Åbn Indstillinger",
   notifUnsupported: "Notifikationer understøttes ikke her. Installer Donely på hjemmeskærmen.",
   reminderOnToast: "Påmindelsen er slået til",
@@ -1368,7 +1412,8 @@ const no: Dict = {
   cancel: "Avbryt",
   allDataDeleted: "Alle data er slettet",
   dataIssueTitle: "Problem med lagrede data",
-  dataIssueBody: "Noen av dine lagrede data kunne ikke leses. Ingenting er slettet. Du kan eksportere dataene eller gjenopprette den siste sikkerhetskopien.",
+  dataIssueBody:
+    "Noen av dine lagrede data kunne ikke leses. Ingenting er slettet. Du kan eksportere dataene eller gjenopprette den siste sikkerhetskopien.",
   dataIssueExport: "Eksporter data",
   dataIssueRestore: "Gjenopprett sikkerhetskopi",
   dataIssueDismiss: "Fortsett likevel",
@@ -1436,11 +1481,13 @@ const no: Dict = {
   notFoundBody: "Siden du leter etter finnes ikke eller er flyttet.",
   goHome: "Gå til forsiden",
   paywallTitle: "Fortsett å registrere fremgangen din",
-  paywallBody: "Den gratis prøveperioden er over. Abonner på Donely Premium for å fortsette å registrere aktiviteter og bygge videre på historikken din.",
+  paywallBody:
+    "Den gratis prøveperioden er over. Abonner på Donely Premium for å fortsette å registrere aktiviteter og bygge videre på historikken din.",
   restorePurchase: "Gjenopprett kjøp",
   rateDonely: "Vurder Donely",
   deleteAllDataRow: "Slett alle data",
-  deleteAllDataWarning: "Er du sikker på at du vil slette alle data? Dette sletter permanent all historikk, alle registreringer, kategorier og årsmål. Handlingen kan ikke angres.",
+  deleteAllDataWarning:
+    "Er du sikker på at du vil slette alle data? Dette sletter permanent all historikk, alle registreringer, kategorier og årsmål. Handlingen kan ikke angres.",
   paywallFootnote: "Du kan fortsatt se all tidligere statistikk og historikk.",
   trialLeft_one: "{{count}} dag igjen av prøveperioden",
   trialLeft_other: "{{count}} dager igjen av prøveperioden",
@@ -1465,7 +1512,8 @@ const no: Dict = {
   weeklyReminder: "Ukentlig påminnelse",
   weeklyReminderDesc: "Hver fredag kl. 17.00 etter lokal tid på enheten din.",
   nextReminder: "Neste påminnelse: {{date}}",
-  notifDenied: "Varsler er slått av for Donely. Slå dem på i Innstillinger på iOS for å få påminnelsen.",
+  notifDenied:
+    "Varsler er slått av for Donely. Slå dem på i Innstillinger på iOS for å få påminnelsen.",
   openIosSettings: "Åpne Innstillinger",
   notifUnsupported: "Varsler støttes ikke her. Installer Donely på hjemskjermen.",
   reminderOnToast: "Påminnelsen er på",
@@ -1498,7 +1546,8 @@ const fi: Dict = {
   cancel: "Peruuta",
   allDataDeleted: "Kaikki tiedot on poistettu",
   dataIssueTitle: "Tallennettujen tietojen ongelma",
-  dataIssueBody: "Osaa tallennetuista tiedoistasi ei voitu lukea. Mitään ei ole poistettu. Voit viedä tiedot tai palauttaa viimeisimmän varmuuskopion.",
+  dataIssueBody:
+    "Osaa tallennetuista tiedoistasi ei voitu lukea. Mitään ei ole poistettu. Voit viedä tiedot tai palauttaa viimeisimmän varmuuskopion.",
   dataIssueExport: "Vie tiedot",
   dataIssueRestore: "Palauta varmuuskopio",
   dataIssueDismiss: "Jatka silti",
@@ -1566,11 +1615,13 @@ const fi: Dict = {
   notFoundBody: "Etsimääsi sivua ei ole olemassa tai se on siirretty.",
   goHome: "Siirry etusivulle",
   paywallTitle: "Jatka edistymisesi kirjaamista",
-  paywallBody: "Ilmainen kokeilujaksosi on päättynyt. Tilaa Donely Premium, niin voit jatkaa suoritusten kirjaamista ja kartuttaa historiaasi.",
+  paywallBody:
+    "Ilmainen kokeilujaksosi on päättynyt. Tilaa Donely Premium, niin voit jatkaa suoritusten kirjaamista ja kartuttaa historiaasi.",
   restorePurchase: "Palauta ostos",
   rateDonely: "Arvioi Donely",
   deleteAllDataRow: "Poista kaikki tiedot",
-  deleteAllDataWarning: "Haluatko varmasti poistaa kaikki tiedot? Tämä poistaa pysyvästi koko historian, kaikki merkinnät, kategoriat ja vuositavoitteet. Toimintoa ei voi kumota.",
+  deleteAllDataWarning:
+    "Haluatko varmasti poistaa kaikki tiedot? Tämä poistaa pysyvästi koko historian, kaikki merkinnät, kategoriat ja vuositavoitteet. Toimintoa ei voi kumota.",
   paywallFootnote: "Näet edelleen kaikki aiemmat tilastot ja historian.",
   trialLeft_one: "Kokeilua jäljellä {{count}} päivä",
   trialLeft_other: "Kokeilua jäljellä {{count}} päivää",
@@ -1595,7 +1646,8 @@ const fi: Dict = {
   weeklyReminder: "Viikoittainen muistutus",
   weeklyReminderDesc: "Joka perjantai klo 17.00 laitteesi paikallista aikaa.",
   nextReminder: "Seuraava muistutus: {{date}}",
-  notifDenied: "Ilmoitukset on poistettu käytöstä Donelylta. Ota ne käyttöön iOS-asetuksissa, niin saat muistutuksen.",
+  notifDenied:
+    "Ilmoitukset on poistettu käytöstä Donelylta. Ota ne käyttöön iOS-asetuksissa, niin saat muistutuksen.",
   openIosSettings: "Avaa Asetukset",
   notifUnsupported: "Ilmoituksia ei tueta tässä näkymässä. Asenna Donely Koti-valikkoon.",
   reminderOnToast: "Muistutus on käytössä",
@@ -1628,7 +1680,8 @@ const ja: Dict = {
   cancel: "キャンセル",
   allDataDeleted: "すべてのデータを削除しました",
   dataIssueTitle: "保存データに問題があります",
-  dataIssueBody: "保存されたデータの一部を読み取れませんでした。データは削除されていません。データを書き出すか、最新のバックアップを復元できます。",
+  dataIssueBody:
+    "保存されたデータの一部を読み取れませんでした。データは削除されていません。データを書き出すか、最新のバックアップを復元できます。",
   dataIssueExport: "データを書き出す",
   dataIssueRestore: "バックアップを復元",
   dataIssueDismiss: "このまま続ける",
@@ -1696,11 +1749,13 @@ const ja: Dict = {
   notFoundBody: "お探しのページは存在しないか、移動されました。",
   goHome: "ホームに戻る",
   paywallTitle: "記録を続けましょう",
-  paywallBody: "無料トライアルが終了しました。Donely プレミアムに登録すると、引き続き活動を記録して履歴を積み重ねられます。",
+  paywallBody:
+    "無料トライアルが終了しました。Donely プレミアムに登録すると、引き続き活動を記録して履歴を積み重ねられます。",
   restorePurchase: "購入を復元",
   rateDonely: "Donely を評価",
   deleteAllDataRow: "すべてのデータを削除",
-  deleteAllDataWarning: "すべてのデータを削除してもよろしいですか？履歴、記録、カテゴリー、年間目標がすべて完全に削除されます。この操作は元に戻せません。",
+  deleteAllDataWarning:
+    "すべてのデータを削除してもよろしいですか？履歴、記録、カテゴリー、年間目標がすべて完全に削除されます。この操作は元に戻せません。",
   paywallFootnote: "これまでの統計と履歴はいつでも見られます。",
   trialLeft_one: "トライアル残り {{count}} 日",
   trialLeft_other: "トライアル残り {{count}} 日",
@@ -1725,7 +1780,8 @@ const ja: Dict = {
   weeklyReminder: "毎週のリマインダー",
   weeklyReminderDesc: "毎週金曜日 17:00（端末のローカル時間）に通知します。",
   nextReminder: "次回の通知：{{date}}",
-  notifDenied: "Donely の通知がオフになっています。iOS の「設定」でオンにするとリマインダーが届きます。",
+  notifDenied:
+    "Donely の通知がオフになっています。iOS の「設定」でオンにするとリマインダーが届きます。",
   openIosSettings: "設定を開く",
   notifUnsupported: "この環境では通知に対応していません。Donely をホーム画面に追加してください。",
   reminderOnToast: "リマインダーをオンにしました",
@@ -1780,7 +1836,8 @@ export function detectLanguage(): LanguageCode {
   } catch {
     /* ignore */
   }
-  const navLangs = typeof navigator !== "undefined" ? navigator.languages ?? [navigator.language] : [];
+  const navLangs =
+    typeof navigator !== "undefined" ? (navigator.languages ?? [navigator.language]) : [];
   for (const raw of navLangs) {
     if (!raw) continue;
     const exact = LANGUAGES.find((l) => l.code.toLowerCase() === raw.toLowerCase());

@@ -42,10 +42,7 @@ export function useLocale() {
  * Default categories are translated; user-created ones — and defaults the user has
  * renamed — keep their own name.
  */
-export function categoryLabel(
-  t: (key: string) => string,
-  category: { id: string; name: string },
-) {
+export function categoryLabel(t: (key: string) => string, category: { id: string; name: string }) {
   const original = DEFAULT_NAMES.get(category.id);
   return original !== undefined && original === category.name
     ? t(`cat.${category.id}`)

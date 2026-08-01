@@ -28,7 +28,9 @@ export function EdgeSwipeBack({ children }: { children: ReactNode }) {
     if (!surface) return;
 
     const setTransform = (x: number, animate: boolean) => {
-      surface.style.transition = animate ? "transform 220ms cubic-bezier(0.32, 0.72, 0, 1)" : "none";
+      surface.style.transition = animate
+        ? "transform 220ms cubic-bezier(0.32, 0.72, 0, 1)"
+        : "none";
       surface.style.transform = x === 0 ? "" : `translate3d(${x}px, 0, 0)`;
     };
 

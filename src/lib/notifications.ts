@@ -60,12 +60,7 @@ const TZ_KEY = "vr.reminder.tz.v1";
 const INTENT_KEY = "vr.reminder.intent.v1";
 
 export type PermissionStatus =
-  | "unknown"
-  | "notDetermined"
-  | "granted"
-  | "provisional"
-  | "denied"
-  | "unsupported";
+  "unknown" | "notDetermined" | "granted" | "provisional" | "denied" | "unsupported";
 
 export type ReminderState = {
   enabled: boolean;
@@ -98,7 +93,15 @@ export function currentTimeZone(): string {
  * components, so a DST shift between now and then does not move the hour.
  */
 export function nextReminderDate(from: Date = new Date()): Date {
-  const d = new Date(from.getFullYear(), from.getMonth(), from.getDate(), REMINDER_HOUR, REMINDER_MINUTE, 0, 0);
+  const d = new Date(
+    from.getFullYear(),
+    from.getMonth(),
+    from.getDate(),
+    REMINDER_HOUR,
+    REMINDER_MINUTE,
+    0,
+    0,
+  );
   let delta = (REMINDER_WEEKDAY - d.getDay() + 7) % 7;
   if (delta === 0 && d.getTime() <= from.getTime()) delta = 7;
   d.setDate(d.getDate() + delta);
@@ -123,7 +126,9 @@ export function reminderScheduleLabel(language: string): string {
   const locale = localeOf(language);
   const sample = nextReminderDate();
   const weekday = new Intl.DateTimeFormat(locale, { weekday: "long" }).format(sample);
-  const time = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" }).format(sample);
+  const time = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" }).format(
+    sample,
+  );
   return `${weekday.charAt(0).toLocaleUpperCase(locale)}${weekday.slice(1)} ${time}`;
 }
 
@@ -360,7 +365,9 @@ export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
 }
 
 /** Turns the reminder on. Asks for permission first if needed. */
-export async function enableWeeklyReminder(language = i18n.language || "sv"): Promise<PermissionStatus> {
+export async function enableWeeklyReminder(
+  language = i18n.language || "sv",
+): Promise<PermissionStatus> {
   writeIntent(true);
   let permission = state.permission;
   if (permission === "unknown" || permission === "notDetermined") {
@@ -400,7 +407,7 @@ export function openNotificationSettings(): boolean {
 export function logReminderDiagnostics(reason = "status"): void {
   const now = new Date();
   const language = state.scheduledLanguage ?? i18n.language ?? "sv";
-  // eslint-disable-next-line no-console
+
   console.info("[Donely] weekly reminder", {
     reason,
     identifier: WEEKLY_REMINDER_ID,
@@ -411,7 +418,10 @@ export function logReminderDiagnostics(reason = "status"): void {
     timeZone: currentTimeZone(),
     utcOffsetMinutes: -now.getTimezoneOffset(),
     schedule: `weekday=${REMINDER_WEEKDAY + 1} (Friday) ${String(REMINDER_HOUR).padStart(2, "0")}:${String(REMINDER_MINUTE).padStart(2, "0")} local`,
-    nextFireDate: (state.nextFireDate ? new Date(state.nextFireDate) : nextReminderDate()).toString(),
+    nextFireDate: (state.nextFireDate
+      ? new Date(state.nextFireDate)
+      : nextReminderDate()
+    ).toString(),
     language,
     native: hasNotificationBridge(),
   });
@@ -431,7 +441,10 @@ function installBridge() {
   const w = window as unknown as Record<string, unknown>;
 
   w.__donelySetNotificationPermission = (value: unknown) => {
-    const raw = typeof value === "string" ? value : ((parsePayload<{ status?: string }>(value)?.status ?? "") as string);
+    const raw =
+      typeof value === "string"
+        ? value
+        : ((parsePayload<{ status?: string }>(value)?.status ?? "") as string);
     const permission: PermissionStatus =
       raw === "granted" || raw === "authorized"
         ? "granted"
@@ -474,7 +487,7 @@ function installBridge() {
   w.__donelyNotificationError = (value: unknown) => {
     const message = typeof value === "string" ? value : JSON.stringify(value);
     setState({ lastError: message, busy: false });
-    // eslint-disable-next-line no-console
+
     console.warn("[Donely] notification error", message);
   };
 
@@ -530,7 +543,9 @@ function installBridge() {
   // on the weekly summary the notification showed.
   w.__donelyOpenRoute = (value: unknown) => {
     const path =
-      typeof value === "string" ? value : (parsePayload<{ route?: string }>(value)?.route ?? REMINDER_ROUTE);
+      typeof value === "string"
+        ? value
+        : (parsePayload<{ route?: string }>(value)?.route ?? REMINDER_ROUTE);
     if (!path.startsWith("/")) return;
     if (window.location.pathname !== path) window.location.assign(path);
   };
