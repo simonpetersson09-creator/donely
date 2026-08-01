@@ -79,7 +79,7 @@ export function useCategories() {
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [hydrated, setHydrated] = useState(false);
 
-  useEffect(() => {
+  const readFromStorage = useCallback(() => {
     ready();
     // The stored list is always authoritative. Defaults are seeded once by
     // initializeStorage() on a truly empty install — never here.
@@ -89,6 +89,16 @@ export function useCategories() {
     // "corrupt" → keep whatever is on screen, do not write anything.
     setHydrated(true);
   }, []);
+
+  useEffect(() => {
+    readFromStorage();
+  }, [readFromStorage]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.addEventListener(DATA_CHANGED_EVENT, readFromStorage);
+    return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
+  }, [readFromStorage]);
 
   const commit = useCallback((next: Category[]) => {
     writeKey(CATS_KEY, next, categoriesSchema);
