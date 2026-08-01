@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { ChevronLeft, ChevronRight, Check, X, Pencil, Home, Briefcase } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check, X, Pencil, Home, Briefcase, MapPin, Timer } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import {
@@ -45,6 +45,8 @@ type Row = {
   total: number;
   goal: number | null;
   lastAt: string | null;
+  distanceKm: number;
+  durationMin: number;
 };
 
 function Statistik() {
@@ -65,10 +67,15 @@ function Statistik() {
   const rows = useMemo(() => {
     const totals = new Map<string, number>();
     const lastAt = new Map<string, string>();
+    const km = new Map<string, number>();
+    const minutes = new Map<string, number>();
     for (const e of entries as Entry[]) {
       const d = new Date(e.createdAt);
       if (d.getFullYear() !== year) continue;
       totals.set(e.categoryId, (totals.get(e.categoryId) ?? 0) + e.amount);
+      if (e.distanceKm) km.set(e.categoryId, (km.get(e.categoryId) ?? 0) + e.distanceKm);
+      if (e.durationMin)
+        minutes.set(e.categoryId, (minutes.get(e.categoryId) ?? 0) + e.durationMin);
       const prev = lastAt.get(e.categoryId);
       if (!prev || d > new Date(prev)) lastAt.set(e.categoryId, e.createdAt);
     }
@@ -81,9 +88,12 @@ function Statistik() {
           total: totals.get(c.id) ?? 0,
           goal: goals[goalKey(year, c.id)] ?? null,
           lastAt: lastAt.get(c.id) ?? null,
+          distanceKm: km.get(c.id) ?? 0,
+          durationMin: minutes.get(c.id) ?? 0,
         }))
         .filter((r) => r.total > 0 || r.goal !== null)
         .sort((a, b) => b.total - a.total);
+
 
     return { privat: build("privat"), jobb: build("jobb") };
   }, [categories, entries, goals, year]);
@@ -301,9 +311,12 @@ function GoalCard({
 }) {
   const { t } = useTranslation();
   const locale = useLocale();
-  const { category, total, goal, lastAt } = row;
+  const { category, total, goal, lastAt, distanceKm, durationMin } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
+  const hasMetrics = distanceKm > 0 || durationMin > 0;
+  const hours = Math.floor(durationMin / 60);
+  const mins = Math.round(durationMin % 60);
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
@@ -357,6 +370,25 @@ function GoalCard({
           </span>
         )}
       </div>
+
+      {hasMetrics && (
+        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+          {distanceKm > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+              <MapPin className="size-3 text-primary" />
+              {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
+            </span>
+          )}
+          {durationMin > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+              <Timer className="size-3 text-primary" />
+              {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
+            </span>
+          )}
+        </div>
+      )}
+
+
 
       {pct !== null && (
         <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">
