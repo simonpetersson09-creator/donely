@@ -29,12 +29,7 @@ import {
 } from "@/lib/store";
 import { useTranslation } from "react-i18next";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
-import {
-  formatKm,
-  formatMinutes,
-  parseMetric,
-  supportsMetrics,
-} from "@/lib/activity-metrics";
+import { formatKm, formatMinutes, parseMetric, supportsMetrics } from "@/lib/activity-metrics";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";

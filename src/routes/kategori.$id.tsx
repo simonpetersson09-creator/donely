@@ -74,7 +74,6 @@ function CategoryDetail() {
     return { km, min };
   }, [entries, id, currentYear]);
 
-
   const lastAt = useMemo(() => {
     let max: string | null = null;
     for (const e of entries) {
