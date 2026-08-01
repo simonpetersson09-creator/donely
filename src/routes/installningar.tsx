@@ -61,6 +61,8 @@ function Installningar() {
   const premium = usePremium();
   const price = usePrice();
   const reminder = useReminder();
+  const { entries, removeEntry } = useEntries();
+  const recent = entries.slice(0, 10);
   const [confirming, setConfirming] = useState(false);
 
   return (
