@@ -480,11 +480,16 @@ export function openManageSubscriptions() {
  * Reading history, statistics, navigation, rating, restore and subscription
  * management are never gated.
  *
+ * In development builds the gate is always open so the app can be exercised
+ * without a StoreKit sandbox. In production iOS builds StoreKit is the only
+ * source of truth.
+ *
  * While the status is still loading this returns false, so nothing is granted
  * before StoreKit has answered. Callers should check `state.loading` first and
  * show the loading message instead of the paywall.
  */
 export function canMutate(state: PremiumState): boolean {
+  if (import.meta.env.DEV) return true;
   return state.status === "trial" || state.status === "subscribed";
 }
 
