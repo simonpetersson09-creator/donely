@@ -393,6 +393,43 @@ function Installningar() {
         </div>
       </div>
 
+      {pendingImport !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
+          <div className="w-full max-w-[280px] overflow-hidden rounded-[14px] bg-card text-center shadow-xl">
+            <div className="px-4 pb-4 pt-5">
+              <p className="text-[13px] font-semibold leading-[18px] text-foreground">
+                {t("importTitle")}
+              </p>
+              <p className="mt-1.5 text-[11px] font-normal leading-[16px] text-muted-foreground">
+                {t("importBody")}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 border-t border-border">
+              <button
+                type="button"
+                onClick={() => setPendingImport(null)}
+                className="border-r border-border py-2.5 text-[13px] font-normal leading-[18px] text-primary transition-colors active:bg-accent"
+              >
+                {t("cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const json = pendingImport;
+                  setPendingImport(null);
+                  runImport(json);
+                }}
+                className="py-2.5 text-[13px] font-semibold leading-[18px] text-primary transition-colors active:bg-accent"
+              >
+                {t("importConfirm")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
       {confirming && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
           <div className="w-full max-w-[280px] overflow-hidden rounded-[14px] bg-card text-center shadow-xl">
