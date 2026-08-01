@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { BackButton } from "@/components/BackButton";
 import { goalKey, useCategories, useEntries, useGoals } from "@/lib/store";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
+import { formatKm, formatMinutes } from "@/lib/activity-metrics";
 
 export const Route = createFileRoute("/kategori/$id")({
   head: () => ({
@@ -60,6 +61,18 @@ function CategoryDetail() {
         goal: goals[goalKey(year, id)] ?? null,
       }));
   }, [entries, goals, id, currentYear]);
+  // Optional workout metrics, summed for the current year only.
+  const metrics = useMemo(() => {
+    let km = 0;
+    let min = 0;
+    for (const e of entries) {
+      if (e.categoryId !== id) continue;
+      if (new Date(e.createdAt).getFullYear() !== currentYear) continue;
+      km += e.distanceKm ?? 0;
+      min += e.durationMin ?? 0;
+    }
+    return { km, min };
+  }, [entries, id, currentYear]);
 
   const lastAt = useMemo(() => {
     let max: string | null = null;
@@ -110,6 +123,30 @@ function CategoryDetail() {
           <p className="mt-1 text-[11px] text-card-foreground/50">
             {t("lastRegistered", { date: formatDate(lastAt, locale) })}
           </p>
+        )}
+        {(metrics.km > 0 || metrics.min > 0) && (
+          <div className="mt-2.5 flex gap-2">
+            {metrics.km > 0 && (
+              <div className="flex-1 rounded-lg bg-accent px-2.5 py-1.5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-card-foreground/60">
+                  {t("distanceLabel")}
+                </p>
+                <p className="text-[15px] font-bold tabular-nums">
+                  {formatKm(metrics.km, locale)} km
+                </p>
+              </div>
+            )}
+            {metrics.min > 0 && (
+              <div className="flex-1 rounded-lg bg-accent px-2.5 py-1.5">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-card-foreground/60">
+                  {t("durationLabel")}
+                </p>
+                <p className="text-[15px] font-bold tabular-nums">
+                  {formatMinutes(metrics.min, locale)}
+                </p>
+              </div>
+            )}
+          </div>
         )}
         {pct !== null && (
           <div className="mt-2.5 h-2.5 w-full overflow-hidden rounded-full bg-accent">

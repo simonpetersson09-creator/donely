@@ -28,7 +28,8 @@ import {
   type Area,
 } from "@/lib/store";
 import { useTranslation } from "react-i18next";
-import { categoryLabel, useLanguage } from "@/lib/use-language";
+import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
+import { formatKm, formatMinutes, parseMetric, supportsMetrics } from "@/lib/activity-metrics";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";
@@ -61,12 +62,15 @@ function Index() {
   const [area, setArea] = useState<Area>("jobb");
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [amount, setAmount] = useState("1");
+  const [distance, setDistance] = useState("");
+  const [duration, setDuration] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const [paywallOpen, setPaywallOpen] = useState(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { t } = useLanguage();
+  const locale = useLocale();
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { addEntry, removeEntriesByCategory } = useEntries();
   const { removeGoalsByCategory } = useGoals();
@@ -108,6 +112,19 @@ function Index() {
   const selected = areaCategories.find((c) => c.id === categoryId);
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
+  // Distance/duration only make sense for private activity categories.
+  const showMetrics = !!selected && supportsMetrics(selected);
+  const distanceKm = showMetrics ? parseMetric(distance) : undefined;
+  const durationMin = showMetrics ? parseMetric(duration) : undefined;
+
+  // Clearing the fields when switching away keeps stale km/min from following
+  // the user to a category where they are not shown.
+  useEffect(() => {
+    if (!showMetrics) {
+      setDistance("");
+      setDuration("");
+    }
+  }, [showMetrics, categoryId]);
 
   const accentText = "text-primary";
 
@@ -126,14 +143,27 @@ function Index() {
     }
     if (!valid || !selected) return;
     const name = categoryLabel(t, selected);
-    addEntry({ area, categoryId: selected.id, categoryName: selected.name, amount: parsed });
+    addEntry({
+      area,
+      categoryId: selected.id,
+      categoryName: selected.name,
+      amount: parsed,
+      ...(distanceKm !== undefined ? { distanceKm } : {}),
+      ...(durationMin !== undefined ? { durationMin } : {}),
+    });
     navigator.vibrate?.(12);
     setAmount("1");
+    setDistance("");
+    setDuration("");
     setFlash(true);
     if (flashTimer.current) clearTimeout(flashTimer.current);
     flashTimer.current = setTimeout(() => setFlash(false), 1100);
+    const extras = [
+      distanceKm !== undefined ? `${formatKm(distanceKm, locale)} km` : null,
+      durationMin !== undefined ? formatMinutes(durationMin, locale) : null,
+    ].filter(Boolean);
     toast.success(t("registeredToast", { count: parsed, name }), {
-      description: area === "jobb" ? t("work") : t("private"),
+      description: [area === "jobb" ? t("work") : t("private"), ...extras].join(" · "),
     });
   }
 
@@ -237,6 +267,27 @@ function Index() {
             ))}
           </div>
         </section>
+
+        {/* Km och minuter — visas bara för träningsliknande privata kategorier */}
+        {showMetrics && (
+          <section>
+            <Label>{t("metricsHint")}</Label>
+            <div className="flex gap-2">
+              <MetricField
+                label={t("distanceKm")}
+                value={distance}
+                onChange={setDistance}
+                suffix="km"
+              />
+              <MetricField
+                label={t("durationMin")}
+                value={duration}
+                onChange={setDuration}
+                suffix="min"
+              />
+            </div>
+          </section>
+        )}
       </div>
 
       {/* Registrera + Statistik — fasta längst ner */}
@@ -368,6 +419,34 @@ function Index() {
         />
       )}
     </main>
+  );
+}
+
+/** Optional numeric field (km / minutes) shown for workout categories. */
+function MetricField({
+  label,
+  value,
+  onChange,
+  suffix,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  suffix: string;
+}) {
+  return (
+    <label className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card">
+      <input
+        inputMode="decimal"
+        value={value}
+        placeholder="0"
+        onChange={(e) => onChange(e.target.value.replace(/[^0-9.,]/g, "").slice(0, 6))}
+        onFocus={(e) => e.target.select()}
+        aria-label={label}
+        className="min-w-0 flex-1 bg-transparent text-[16px] font-semibold tabular-nums text-card-foreground outline-none placeholder:text-card-foreground/30"
+      />
+      <span className="text-[12px] font-semibold text-card-foreground/50">{suffix}</span>
+    </label>
   );
 }
 
