@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { BackButton } from "@/components/BackButton";
 import { goalKey, useCategories, useEntries, useGoals } from "@/lib/store";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
+import { formatKm, formatMinutes } from "@/lib/activity-metrics";
 
 export const Route = createFileRoute("/kategori/$id")({
   head: () => ({
