@@ -280,6 +280,51 @@ function Installningar() {
           </Link>
         </section>
 
+        <section className="mt-4">
+          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+            {t("backupSection")}
+          </p>
+
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={handleExport}
+              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+            >
+              <Download className="size-[18px]" />
+              <span>{t("exportBackup")}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => fileInput.current?.click()}
+              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+            >
+              <Upload className="size-[18px]" />
+              <span>{t("importBackup")}</span>
+            </button>
+          </div>
+
+          <input
+            ref={fileInput}
+            type="file"
+            accept="application/json,.json"
+            className="hidden"
+            onChange={async (event) => {
+              const file = event.target.files?.[0];
+              event.target.value = "";
+              if (!file) return;
+              try {
+                setPendingImport(await file.text());
+              } catch {
+                toast.error(t("importInvalid"));
+              }
+            }}
+          />
+        </section>
+
+
+
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
