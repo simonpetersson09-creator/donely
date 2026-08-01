@@ -1,13 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Bell, ChevronRight, Crown, FileText, FlaskConical, Star, Trash2 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  Bell,
+  ChevronRight,
+  Crown,
+  Download,
+  FileText,
+  FlaskConical,
+  Star,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
 import { clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
+import { exportData, importData } from "@/lib/persistence";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
 import { formatFireDate, openNotificationSettings, useReminder } from "@/lib/notifications";
+
 import {
   openManageSubscriptions,
   purchasePremium,
