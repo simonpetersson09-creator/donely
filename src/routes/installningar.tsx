@@ -78,6 +78,36 @@ function Installningar() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  const fileInput = useRef<HTMLInputElement>(null);
+  const [pendingImport, setPendingImport] = useState<string | null>(null);
+
+  const handleExport = () => {
+    try {
+      const blob = new Blob([exportData()], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `donely-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+      toast.success(t("exportDone"));
+    } catch {
+      toast.error(t("importFailed"));
+    }
+  };
+
+  const runImport = (json: string) => {
+    const result = importData(json);
+    if (result.status === "ok") {
+      toast.success(
+        t("importDone", { entries: result.entries, categories: result.categories }),
+      );
+      return;
+    }
+    toast.error(result.status === "invalid" ? t("importInvalid") : t("importFailed"));
+  };
+
+
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-between px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div>
