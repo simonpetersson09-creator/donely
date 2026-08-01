@@ -371,6 +371,25 @@ function GoalCard({
         )}
       </div>
 
+      {hasMetrics && (
+        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+          {distanceKm > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+              <Route className="size-3 text-primary" />
+              {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
+            </span>
+          )}
+          {durationMin > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+              <Timer className="size-3 text-primary" />
+              {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
+            </span>
+          )}
+        </div>
+      )}
+
+
+
       {pct !== null && (
         <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">
           <div
