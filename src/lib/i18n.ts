@@ -124,6 +124,9 @@ const sv = {
   restorePurchase: "Återställ köp",
   rateDonely: "Betygsätt Donely",
   deleteAllDataRow: "Ta bort all data",
+  recentSection: "Senaste registreringar",
+  recentEmpty: "Inga registreringar ännu",
+  recentDeleted: "Registrering borttagen",
   deleteAllDataWarning:
     "Är du säker på att du vill ta bort all data? Detta raderar permanent all historik, alla registreringar, kategorier och årsmål. Åtgärden kan inte ångras.",
   paywallFootnote: "Du kan fortfarande se all tidigare statistik och historik.",
@@ -266,6 +269,9 @@ const en: Dict = {
   restorePurchase: "Restore purchase",
   rateDonely: "Rate Donely",
   deleteAllDataRow: "Delete all data",
+  recentSection: "Recent entries",
+  recentEmpty: "No entries yet",
+  recentDeleted: "Entry deleted",
   deleteAllDataWarning:
     "Are you sure you want to delete all data? This permanently erases all history, entries, categories and yearly goals. This action cannot be undone.",
   paywallFootnote: "You can still view all your past statistics and history.",
@@ -406,6 +412,9 @@ const de: Dict = {
   restorePurchase: "Kauf wiederherstellen",
   rateDonely: "Donely bewerten",
   deleteAllDataRow: "Alle Daten löschen",
+  recentSection: "Letzte Einträge",
+  recentEmpty: "Noch keine Einträge",
+  recentDeleted: "Eintrag gelöscht",
   deleteAllDataWarning:
     "Möchtest du wirklich alle Daten löschen? Dadurch werden der gesamte Verlauf, alle Einträge, Kategorien und Jahresziele dauerhaft gelöscht. Dies kann nicht rückgängig gemacht werden.",
   paywallFootnote: "Deine bisherigen Statistiken und dein Verlauf bleiben weiterhin sichtbar.",
@@ -550,6 +559,9 @@ const fr: Dict = {
   restorePurchase: "Restaurer l’achat",
   rateDonely: "Noter Donely",
   deleteAllDataRow: "Supprimer toutes les données",
+  recentSection: "Dernières entrées",
+  recentEmpty: "Aucune entrée pour l'instant",
+  recentDeleted: "Entrée supprimée",
   deleteAllDataWarning:
     "Voulez-vous vraiment supprimer toutes les données ? Cela efface définitivement tout l’historique, les enregistrements, les catégories et les objectifs annuels. Cette action est irréversible.",
   paywallFootnote: "Vous pouvez toujours consulter toutes vos statistiques et votre historique.",
@@ -694,6 +706,9 @@ const es: Dict = {
   restorePurchase: "Restaurar compra",
   rateDonely: "Valorar Donely",
   deleteAllDataRow: "Eliminar todos los datos",
+  recentSection: "Últimos registros",
+  recentEmpty: "Aún no hay registros",
+  recentDeleted: "Registro eliminado",
   deleteAllDataWarning:
     "¿Seguro que quieres eliminar todos los datos? Se borrarán permanentemente todo el historial, los registros, las categorías y las metas anuales. Esta acción no se puede deshacer.",
   paywallFootnote: "Puedes seguir viendo todas tus estadísticas e historial.",
@@ -838,6 +853,9 @@ const it: Dict = {
   restorePurchase: "Ripristina acquisto",
   rateDonely: "Valuta Donely",
   deleteAllDataRow: "Elimina tutti i dati",
+  recentSection: "Ultime registrazioni",
+  recentEmpty: "Nessuna registrazione",
+  recentDeleted: "Registrazione eliminata",
   deleteAllDataWarning:
     "Vuoi davvero eliminare tutti i dati? Questa operazione cancella definitivamente cronologia, registrazioni, categorie e obiettivi annuali. L’azione non può essere annullata.",
   paywallFootnote: "Puoi comunque consultare tutte le statistiche e lo storico.",
@@ -981,6 +999,9 @@ const ptBR: Dict = {
   restorePurchase: "Restaurar compra",
   rateDonely: "Avaliar o Donely",
   deleteAllDataRow: "Excluir todos os dados",
+  recentSection: "Registros recentes",
+  recentEmpty: "Ainda não há registros",
+  recentDeleted: "Registro excluído",
   deleteAllDataWarning:
     "Tem certeza de que deseja excluir todos os dados? Isso apaga permanentemente todo o histórico, os registros, as categorias e as metas anuais. Esta ação não pode ser desfeita.",
   paywallFootnote: "Você continua podendo ver todas as estatísticas e o histórico.",
@@ -1122,6 +1143,9 @@ const nl: Dict = {
   restorePurchase: "Aankoop herstellen",
   rateDonely: "Donely beoordelen",
   deleteAllDataRow: "Alle gegevens verwijderen",
+  recentSection: "Recente registraties",
+  recentEmpty: "Nog geen registraties",
+  recentDeleted: "Registratie verwijderd",
   deleteAllDataWarning:
     "Weet je zeker dat je alle gegevens wilt verwijderen? Hiermee worden alle geschiedenis, registraties, categorieën en jaardoelen permanent gewist. Dit kan niet ongedaan worden gemaakt.",
   paywallFootnote: "Je kunt al je eerdere statistieken en historie nog steeds bekijken.",
@@ -1263,6 +1287,9 @@ const pl: Dict = {
   restorePurchase: "Przywróć zakup",
   rateDonely: "Oceń Donely",
   deleteAllDataRow: "Usuń wszystkie dane",
+  recentSection: "Ostatnie wpisy",
+  recentEmpty: "Brak wpisów",
+  recentDeleted: "Wpis usunięty",
   deleteAllDataWarning:
     "Czy na pewno chcesz usunąć wszystkie dane? Spowoduje to trwałe usunięcie całej historii, wszystkich wpisów, kategorii i celów rocznych. Tej operacji nie można cofnąć.",
   paywallFootnote: "Nadal możesz przeglądać wszystkie statystyki i historię.",
@@ -1411,6 +1438,9 @@ const da: Dict = {
   restorePurchase: "Gendan køb",
   rateDonely: "Bedøm Donely",
   deleteAllDataRow: "Slet alle data",
+  recentSection: "Seneste registreringer",
+  recentEmpty: "Ingen registreringer endnu",
+  recentDeleted: "Registrering slettet",
   deleteAllDataWarning:
     "Er du sikker på, at du vil slette alle data? Det sletter permanent al historik, alle registreringer, kategorier og årsmål. Handlingen kan ikke fortrydes.",
   paywallFootnote: "Du kan stadig se al tidligere statistik og historik.",
@@ -1551,6 +1581,9 @@ const no: Dict = {
   restorePurchase: "Gjenopprett kjøp",
   rateDonely: "Vurder Donely",
   deleteAllDataRow: "Slett alle data",
+  recentSection: "Siste registreringer",
+  recentEmpty: "Ingen registreringer ennå",
+  recentDeleted: "Registrering slettet",
   deleteAllDataWarning:
     "Er du sikker på at du vil slette alle data? Dette sletter permanent all historikk, alle registreringer, kategorier og årsmål. Handlingen kan ikke angres.",
   paywallFootnote: "Du kan fortsatt se all tidligere statistikk og historikk.",
@@ -1691,6 +1724,9 @@ const fi: Dict = {
   restorePurchase: "Palauta ostos",
   rateDonely: "Arvioi Donely",
   deleteAllDataRow: "Poista kaikki tiedot",
+  recentSection: "Viimeisimmät merkinnät",
+  recentEmpty: "Ei vielä merkintöjä",
+  recentDeleted: "Merkintä poistettu",
   deleteAllDataWarning:
     "Haluatko varmasti poistaa kaikki tiedot? Tämä poistaa pysyvästi koko historian, kaikki merkinnät, kategoriat ja vuositavoitteet. Toimintoa ei voi kumota.",
   paywallFootnote: "Näet edelleen kaikki aiemmat tilastot ja historian.",
@@ -1831,6 +1867,9 @@ const ja: Dict = {
   restorePurchase: "購入を復元",
   rateDonely: "Donely を評価",
   deleteAllDataRow: "すべてのデータを削除",
+  recentSection: "最近の記録",
+  recentEmpty: "まだ記録がありません",
+  recentDeleted: "記録を削除しました",
   deleteAllDataWarning:
     "すべてのデータを削除してもよろしいですか？履歴、記録、カテゴリー、年間目標がすべて完全に削除されます。この操作は元に戻せません。",
   paywallFootnote: "これまでの統計と履歴はいつでも見られます。",

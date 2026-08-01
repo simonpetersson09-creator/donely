@@ -1,9 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, ChevronRight, Crown, FileText, FlaskConical, Star, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
-import { clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
+import { clearAllData, isDevEnvironment, seedDemoEntries, useEntries } from "@/lib/store";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
@@ -61,7 +61,11 @@ function Installningar() {
   const premium = usePremium();
   const price = usePrice();
   const reminder = useReminder();
+  const { entries, removeEntry } = useEntries();
+  const recent = entries.slice(0, 10);
   const [confirming, setConfirming] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-between px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -218,6 +222,56 @@ function Installningar() {
           </div>
         </section>
 
+        <section className="mt-4">
+          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+            {t("recentSection")}
+          </p>
+
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
+            {recent.length === 0 ? (
+              <p className="px-3 py-4 text-center text-[12px] font-normal leading-[16px] text-muted-foreground">
+                {t("recentEmpty")}
+              </p>
+            ) : (
+              recent.map((entry, index) => (
+                <div
+                  key={entry.id}
+                  className={`flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
+                      {entry.categoryName}
+                      <span className="ml-1 font-normal text-muted-foreground">
+                        ×{entry.amount}
+                      </span>
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                      {new Date(entry.createdAt).toLocaleDateString(language, {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                      {entry.distanceKm ? ` · ${entry.distanceKm} km` : ""}
+                      {entry.durationMin ? ` · ${entry.durationMin} min` : ""}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label={t("recentDeleted")}
+                    onClick={() => {
+                      removeEntry(entry.id);
+                      toast.success(t("recentDeleted"));
+                    }}
+                    className="shrink-0 rounded-lg p-2 text-destructive transition-colors active:bg-destructive/10"
+                  >
+                    <Trash2 className="size-[16px]" />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </section>
+
+
         <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
@@ -259,7 +313,7 @@ function Installningar() {
             </button>
           </div>
 
-          {isDevEnvironment() && (
+          {mounted && isDevEnvironment() && (
             <button
               type="button"
               onClick={() => {
