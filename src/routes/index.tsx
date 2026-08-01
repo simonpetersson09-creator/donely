@@ -146,12 +146,12 @@ function Index() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-[1.1] items-end justify-center pb-3">
         <div className="relative">
-          <div className="absolute -right-14 -top-14 z-10 rotate-[6deg] scale-100">
-            <div className="relative rounded-full border border-primary bg-background px-4 py-2.5 shadow-card">
-              <p className="max-w-[9rem] text-balance text-center text-xs font-semibold leading-[15px] text-primary">
+          <div className="absolute -right-12 -top-11 z-10 rotate-[6deg] scale-100">
+            <div className="relative rounded-full border border-primary bg-background px-3.5 py-2 shadow-card">
+              <p className="max-w-[8.5rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
-                    <Crown className="size-3.5 text-gold" fill="currentColor" />
+                    <Crown className="size-3 text-gold" fill="currentColor" />
                     {t("premiumActive")}
                   </span>
                 ) : (
@@ -162,7 +162,7 @@ function Index() {
               <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
             </div>
           </div>
-          <h1 className="font-logo select-none text-[48px] font-bold leading-none tracking-[-0.04em] text-primary">
+          <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
         </div>
