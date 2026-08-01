@@ -714,7 +714,10 @@ function Onboarding({ onStart }: { onStart: () => void }) {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-1 flex-col items-center justify-center text-center">
-        <h1 className="select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+        <h1
+          className="select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary"
+          style={{ fontFamily: "'Futura', 'Futura PT', 'Twentieth Century', system-ui, sans-serif" }}
+        >
           Donely
         </h1>
         <p className="mt-6 text-[22px] font-semibold leading-tight tracking-[-0.02em] text-foreground">
