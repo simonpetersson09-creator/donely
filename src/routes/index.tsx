@@ -427,6 +427,34 @@ function Index() {
   );
 }
 
+/** Optional numeric field (km / minutes) shown for workout categories. */
+function MetricField({
+  label,
+  value,
+  onChange,
+  suffix,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  suffix: string;
+}) {
+  return (
+    <label className="flex flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card">
+      <input
+        inputMode="decimal"
+        value={value}
+        placeholder="0"
+        onChange={(e) => onChange(e.target.value.replace(/[^0-9.,]/g, "").slice(0, 6))}
+        onFocus={(e) => e.target.select()}
+        aria-label={label}
+        className="min-w-0 flex-1 bg-transparent text-[16px] font-semibold tabular-nums text-card-foreground outline-none placeholder:text-card-foreground/30"
+      />
+      <span className="text-[12px] font-semibold text-card-foreground/50">{suffix}</span>
+    </label>
+  );
+}
+
 function Label({ children }: { children: React.ReactNode }) {
   return (
     <p className="mb-1 px-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary">
