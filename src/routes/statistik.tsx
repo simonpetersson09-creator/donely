@@ -175,7 +175,7 @@ function Statistik() {
       </div>
 
       <Section
-        title={t("private")}
+        title={`${t("private")} (${year})`}
         icon={<Home className="size-5" />}
         rows={rows.privat}
         showGoalCta={isCurrentYear}
@@ -192,7 +192,7 @@ function Statistik() {
         }}
       />
       <Section
-        title={t("work")}
+        title={`${t("work")} (${year})`}
         icon={<Briefcase className="size-5" />}
         rows={rows.jobb}
         showGoalCta={isCurrentYear}
