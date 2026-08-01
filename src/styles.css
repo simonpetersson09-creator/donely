@@ -203,3 +203,7 @@
 @utility bg-gradient-gold {
   background-image: var(--gradient-gold);
 }
+
+@utility font-logo {
+  font-family: Futura, "Futura PT", "Trebuchet MS", Arial, sans-serif;
+}
