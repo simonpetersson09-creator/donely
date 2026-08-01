@@ -80,7 +80,6 @@ const ACTIVITY_WORDS = [
   "intervall",
   "interval",
   "motion",
-  "步",
 ];
 
 function normalize(value: string) {
