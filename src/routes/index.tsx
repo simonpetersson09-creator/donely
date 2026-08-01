@@ -112,8 +112,9 @@ function Index() {
   const accentText = "text-primary";
 
   function register() {
-    if (!valid || !selected) return;
-    // All mutating actions are gated through the same premium status.
+    // All mutating actions are gated through the same premium status. The gate
+    // is checked before validity so a locked button always explains itself
+    // instead of silently doing nothing when no category is selected.
     if (premium.loading) {
       toast.message(t("premiumLoading"));
       return;
@@ -123,6 +124,7 @@ function Index() {
       setPaywallOpen(true);
       return;
     }
+    if (!valid || !selected) return;
     const name = categoryLabel(t, selected);
     addEntry({ area, categoryId: selected.id, categoryName: selected.name, amount: parsed });
     navigator.vibrate?.(12);
