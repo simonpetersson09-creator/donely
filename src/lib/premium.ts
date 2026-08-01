@@ -489,7 +489,16 @@ export function openManageSubscriptions() {
  * show the loading message instead of the paywall.
  */
 export function canMutate(state: PremiumState): boolean {
-  if (import.meta.env.DEV) return true;
+  if (import.meta.env.DEV || LOCAL_FALLBACK_ENABLED) return true;
+  if (typeof window !== "undefined") {
+    const hostname = window.location.hostname;
+    const isDevelopmentPreview =
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname.includes("-preview--") ||
+      hostname.endsWith("-dev.lovable.app");
+    if (isDevelopmentPreview) return true;
+  }
   return state.status === "trial" || state.status === "subscribed";
 }
 
