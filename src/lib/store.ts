@@ -295,6 +295,76 @@ export function clearAllData() {
   emitDataChanged();
 }
 
+/**
+ * True in local development and in the Lovable preview, where the browser
+ * storage can be wiped between builds. Never true in the shipped iOS app.
+ */
+export function isDevEnvironment() {
+  if (import.meta.env.DEV) return true;
+  if (typeof window === "undefined") return false;
+  const host = window.location.hostname;
+  return (
+    host === "localhost" ||
+    host === "127.0.0.1" ||
+    host.includes("-preview--") ||
+    host.endsWith("-dev.lovable.app")
+  );
+}
+
+/**
+ * Development helper: fills the app with a handful of realistic activities
+ * spread over the last few weeks, so the statistics and weekly views have
+ * something to show after the preview storage has been cleared.
+ * Existing entries are kept — the demo rows are simply added on top.
+ */
+export function seedDemoEntries(): number {
+  if (typeof window === "undefined") return 0;
+  ready();
+  const categories = readStoredCategories();
+  const existing = readStoredEntries();
+  if (categories.length === 0) return 0;
+
+  const pick = (idPart: string) =>
+    categories.find((c) => c.id.includes(idPart)) ?? categories[0];
+
+  const plan: { category: Category; amount: number; daysAgo: number; km?: number; min?: number }[] =
+    [
+      { category: pick("traning"), amount: 1, daysAgo: 0, km: 5.2, min: 32 },
+      { category: pick("traning"), amount: 1, daysAgo: 2, km: 8, min: 47 },
+      { category: pick("traning"), amount: 1, daysAgo: 9, km: 3.4, min: 21 },
+      { category: pick("promenad"), amount: 1, daysAgo: 1, km: 2.1, min: 25 },
+      { category: pick("promenad"), amount: 1, daysAgo: 4, km: 4, min: 40 },
+      { category: pick("meditation"), amount: 1, daysAgo: 3, min: 15 },
+      { category: pick("bocker"), amount: 1, daysAgo: 12 },
+      { category: pick("moten"), amount: 3, daysAgo: 0 },
+      { category: pick("moten"), amount: 2, daysAgo: 5 },
+      { category: pick("samtal"), amount: 7, daysAgo: 1 },
+      { category: pick("avtal"), amount: 1, daysAgo: 6 },
+      { category: pick("admin"), amount: 4, daysAgo: 8 },
+    ];
+
+  const demo: Entry[] = plan.map((row, index) => {
+    const date = new Date();
+    date.setDate(date.getDate() - row.daysAgo);
+    date.setHours(9 + (index % 8), 15, 0, 0);
+    return {
+      id: crypto.randomUUID(),
+      area: row.category.area,
+      categoryId: row.category.id,
+      categoryName: row.category.name,
+      amount: row.amount,
+      ...(row.km ? { distanceKm: row.km } : {}),
+      ...(row.min ? { durationMin: row.min } : {}),
+      createdAt: date.toISOString(),
+    };
+  });
+
+  createBackup("seed-demo-entries");
+  writeKey(ENTRIES_KEY, [...demo, ...existing], entriesSchema);
+  emitDataChanged();
+  return demo.length;
+}
+
 /** Makes the welcome screen and the language guide show up again on next start. */
 export function replayOnboarding() {
   if (typeof window === "undefined") return;
