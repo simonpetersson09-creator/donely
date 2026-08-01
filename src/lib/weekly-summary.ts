@@ -1,6 +1,7 @@
 import i18n from "@/lib/i18n";
 import { readStoredCategories, readStoredEntries, type Category, type Entry } from "@/lib/store";
 import { categoryLabel } from "@/lib/use-language";
+import { supportsMetrics } from "@/lib/activity-metrics";
 
 /**
  * Shared weekly summary used both for the Friday notification body and for the
