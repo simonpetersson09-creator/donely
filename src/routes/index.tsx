@@ -61,6 +61,8 @@ function Index() {
   const [area, setArea] = useState<Area>("jobb");
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [amount, setAmount] = useState("1");
+  const [distance, setDistance] = useState("");
+  const [duration, setDuration] = useState("");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const [paywallOpen, setPaywallOpen] = useState(false);
