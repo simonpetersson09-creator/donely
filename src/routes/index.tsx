@@ -503,7 +503,7 @@ function CategorySheet({
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               placeholder={t("categoryName")}
-              className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-[14px] outline-none placeholder:text-muted-foreground focus:border-ring"
+              className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-[16px] outline-none placeholder:text-muted-foreground focus:border-ring"
             />
             <button
               type="submit"
@@ -540,7 +540,7 @@ function CategorySheet({
                   autoFocus
                   value={renameValue}
                   onChange={(e) => setRenameValue(e.target.value)}
-                  className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[15px] outline-none focus:border-ring"
+                  className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[16px] outline-none focus:border-ring"
                 />
                 <button
                   type="submit"
