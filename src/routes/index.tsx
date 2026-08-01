@@ -75,6 +75,7 @@ function Index() {
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { t } = useLanguage();
+  const locale = useLocale();
   const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
   const { addEntry, removeEntriesByCategory } = useEntries();
   const { removeGoalsByCategory } = useGoals();
