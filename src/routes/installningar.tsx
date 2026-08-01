@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
-import { clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
+import { DATA_CHANGED_EVENT, clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
 import { exportData, importData } from "@/lib/persistence";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
@@ -99,6 +99,7 @@ function Installningar() {
   const runImport = (json: string) => {
     const result = importData(json);
     if (result.status === "ok") {
+      window.dispatchEvent(new CustomEvent(DATA_CHANGED_EVENT));
       toast.success(
         t("importDone", { entries: result.entries, categories: result.categories }),
       );
