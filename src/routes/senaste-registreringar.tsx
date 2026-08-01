@@ -46,7 +46,6 @@ function SenasteRegistreringar() {
       <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {t("recentSection")}
       </h1>
-      <p className="mt-1 px-1 text-[13px] text-muted-foreground">{t("settingsSubtitle")}</p>
 
       <div className="mt-4 overflow-hidden rounded-xl border border-border bg-card shadow-card">
         {recent.length === 0 ? (
