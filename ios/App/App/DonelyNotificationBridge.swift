@@ -26,13 +26,14 @@ private struct WeeklyReminderPayload: Decodable {
     let minute: Int
     let repeats: Bool
     let title: String         // already localized by JS
+    let subtitle: String?     // week number + total, already localized by JS
     let body: String          // already localized by JS, may contain "\n"
     let bodyLines: [String]?  // same body, pre-split
     let language: String?
     let timeZone: String?
     let route: String?
 
-    /// Multi-line body: one line per category, an empty line, then the total.
+    /// Multi-line body: one line per category, plus an overflow line.
     var resolvedBody: String {
         if let lines = bodyLines, !lines.isEmpty {
             return lines.joined(separator: "\n")
