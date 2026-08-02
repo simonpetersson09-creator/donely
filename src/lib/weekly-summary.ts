@@ -1,7 +1,7 @@
-import i18n from "@/lib/i18n";
+import i18n, { localeOf } from "@/lib/i18n";
 import { readStoredCategories, readStoredEntries, type Category, type Entry } from "@/lib/store";
 import { categoryLabel } from "@/lib/use-language";
-import { supportsMetrics } from "@/lib/activity-metrics";
+import { formatKm, formatMinutes, supportsMetrics } from "@/lib/activity-metrics";
 
 /**
  * Shared weekly summary used both for the Friday notification body and for the
@@ -9,7 +9,7 @@ import { supportsMetrics } from "@/lib/activity-metrics";
  */
 
 /** Maximum number of category lines shown inside a notification. */
-export const MAX_NOTIFICATION_ROWS = 5;
+export const MAX_NOTIFICATION_ROWS = 10;
 
 export type WeeklyRow = {
   id: string;
@@ -100,13 +100,21 @@ export function currentWeeklySummary(language = i18n.language || "sv"): WeeklySu
  */
 export function formatWeeklyBody(summary: WeeklySummary, language = i18n.language || "sv"): string {
   const fixed = i18n.getFixedT(language);
+  const locale = localeOf(language);
   const lines: string[] = [];
 
   if (summary.rows.length === 0) {
     lines.push(fixed("weeklySummaryEmpty") as string);
   } else {
     const shown = summary.rows.slice(0, MAX_NOTIFICATION_ROWS);
-    for (const row of shown) lines.push(`${row.label}: ${row.total}`);
+    for (const row of shown) {
+      let line = `${row.label}: ${row.total}`;
+      const metricParts: string[] = [];
+      if (row.distanceKm > 0) metricParts.push(`${formatKm(row.distanceKm, locale)} km`);
+      if (row.durationMin > 0) metricParts.push(formatMinutes(row.durationMin, locale));
+      if (metricParts.length > 0) line += ` • ${metricParts.join(" • ")}`;
+      lines.push(line);
+    }
     const rest = summary.rows.length - shown.length;
     if (rest > 0) lines.push(fixed("weeklySummaryMore", { count: rest }) as string);
   }
