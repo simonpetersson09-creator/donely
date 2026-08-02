@@ -14,7 +14,8 @@ import {
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
 import { DATA_CHANGED_EVENT, clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
-import { exportData, importData } from "@/lib/persistence";
+import { importData } from "@/lib/persistence";
+import { readBackupFile, saveBackupFile } from "@/lib/backup-file";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
