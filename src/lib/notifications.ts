@@ -223,7 +223,8 @@ function parsePayload<T>(value: unknown): T | null {
  * user has selected inside Donely.
  */
 function notificationText(language: string) {
-  return weeklyNotificationContent(language);
+  const { title, subtitle, body, bodyLines } = weeklyNotificationContent(language);
+  return { title, subtitle, body, bodyLines };
 }
 
 /** Route the iOS shell should open when the user taps the reminder. */
