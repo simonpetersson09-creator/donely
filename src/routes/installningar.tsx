@@ -14,7 +14,8 @@ import {
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
 import { DATA_CHANGED_EVENT, clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
-import { exportData, importData } from "@/lib/persistence";
+import { importData } from "@/lib/persistence";
+import { readBackupFile, saveBackupFile } from "@/lib/backup-file";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
@@ -81,20 +82,23 @@ function Installningar() {
   const fileInput = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<string | null>(null);
 
-  const handleExport = () => {
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    if (exporting) return;
+    setExporting(true);
     try {
-      const blob = new Blob([exportData()], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `donely-${new Date().toISOString().slice(0, 10)}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
-      toast.success(t("exportDone"));
-    } catch {
-      toast.error(t("importFailed"));
+      const result = await saveBackupFile();
+      if (result === "downloaded") toast.success(t("exportDone"));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      // User dismissed the iOS share sheet — not an error worth surfacing.
+      if (!/cancel/i.test(message)) toast.error(t("importFailed"));
+    } finally {
+      setExporting(false);
     }
   };
+
 
   const runImport = (json: string) => {
     const result = importData(json);
@@ -290,7 +294,8 @@ function Installningar() {
             <button
               type="button"
               onClick={handleExport}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              disabled={exporting}
+              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent disabled:opacity-60"
             >
               <Download className="size-[18px]" />
               <span>{t("exportBackup")}</span>
@@ -309,19 +314,19 @@ function Installningar() {
           <input
             ref={fileInput}
             type="file"
-            accept="application/json,.json"
             className="hidden"
             onChange={async (event) => {
               const file = event.target.files?.[0];
               event.target.value = "";
               if (!file) return;
               try {
-                setPendingImport(await file.text());
+                setPendingImport(await readBackupFile(file));
               } catch {
                 toast.error(t("importInvalid"));
               }
             }}
           />
+
         </section>
 
 
