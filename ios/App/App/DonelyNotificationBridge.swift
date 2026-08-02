@@ -124,7 +124,8 @@ final class DonelyNotificationBridge: NSObject {
     private func schedule(_ payload: WeeklyReminderPayload) {
         let content = UNMutableNotificationContent()
         content.title = payload.title           // "Din vecka i Donely"
-        content.body = payload.resolvedBody     // multi-line summary
+        content.subtitle = payload.subtitle ?? "" // "Vecka 31 · Totalt: 10 aktiviteter"
+        content.body = payload.resolvedBody     // multi-line category list
         content.sound = .default
         content.userInfo["route"] = payload.route ?? DonelyNotificationBridge.defaultRoute
 
