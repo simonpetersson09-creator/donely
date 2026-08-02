@@ -294,7 +294,8 @@ function Installningar() {
             <button
               type="button"
               onClick={handleExport}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              disabled={exporting}
+              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent disabled:opacity-60"
             >
               <Download className="size-[18px]" />
               <span>{t("exportBackup")}</span>
@@ -313,19 +314,19 @@ function Installningar() {
           <input
             ref={fileInput}
             type="file"
-            accept="application/json,.json"
             className="hidden"
             onChange={async (event) => {
               const file = event.target.files?.[0];
               event.target.value = "";
               if (!file) return;
               try {
-                setPendingImport(await file.text());
+                setPendingImport(await readBackupFile(file));
               } catch {
                 toast.error(t("importInvalid"));
               }
             }}
           />
+
         </section>
 
 
