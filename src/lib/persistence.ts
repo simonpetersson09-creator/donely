@@ -111,6 +111,7 @@ export const snapshotSchema = z.object({
 
 export const DEFAULT_CATEGORIES: Category[] = [
   { id: "p-traning", name: "Träningspass", area: "privat" },
+  { id: "p-lopning", name: "Löpning", area: "privat" },
   { id: "p-promenad", name: "Promenad", area: "privat" },
   { id: "p-meditation", name: "Meditation", area: "privat" },
   { id: "p-bocker", name: "Lästa böcker", area: "privat" },
