@@ -81,20 +81,23 @@ function Installningar() {
   const fileInput = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<string | null>(null);
 
-  const handleExport = () => {
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async () => {
+    if (exporting) return;
+    setExporting(true);
     try {
-      const blob = new Blob([exportData()], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `donely-${new Date().toISOString().slice(0, 10)}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
-      toast.success(t("exportDone"));
-    } catch {
-      toast.error(t("importFailed"));
+      const result = await saveBackupFile();
+      if (result === "downloaded") toast.success(t("exportDone"));
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "";
+      // User dismissed the iOS share sheet — not an error worth surfacing.
+      if (!/cancel/i.test(message)) toast.error(t("importFailed"));
+    } finally {
+      setExporting(false);
     }
   };
+
 
   const runImport = (json: string) => {
     const result = importData(json);
