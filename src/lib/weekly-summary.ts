@@ -11,6 +11,15 @@ import { formatKm, formatMinutes, supportsMetrics } from "@/lib/activity-metrics
 /** Maximum number of category lines shown inside a notification. */
 export const MAX_NOTIFICATION_ROWS = 10;
 
+/** ISO week number for the given date (Monday-based, 1–53). */
+export function isoWeek(date: Date): number {
+  const tmp = new Date(date.getTime());
+  tmp.setHours(0, 0, 0, 0);
+  tmp.setDate(tmp.getDate() + 4 - (tmp.getDay() || 7));
+  const yearStart = new Date(tmp.getFullYear(), 0, 1);
+  return Math.ceil((((tmp.getTime() - yearStart.getTime()) / 86_400_000) + 1) / 7);
+}
+
 export type WeeklyRow = {
   id: string;
   label: string;
@@ -95,8 +104,8 @@ export function currentWeeklySummary(language = i18n.language || "sv"): WeeklySu
 }
 
 /**
- * Notification body: one line per category (top five), an overflow line when
- * there are more, and always the total on the last line.
+ * Notification body: one line per category (largest first). Metrics for
+ * workouts are grouped in parentheses so the line is easier to scan.
  */
 export function formatWeeklyBody(summary: WeeklySummary, language = i18n.language || "sv"): string {
   const fixed = i18n.getFixedT(language);
@@ -112,28 +121,33 @@ export function formatWeeklyBody(summary: WeeklySummary, language = i18n.languag
       const metricParts: string[] = [];
       if (row.distanceKm > 0) metricParts.push(`${formatKm(row.distanceKm, locale)} km`);
       if (row.durationMin > 0) metricParts.push(formatMinutes(row.durationMin, locale));
-      if (metricParts.length > 0) line += ` • ${metricParts.join(" • ")}`;
+      if (metricParts.length > 0) line += ` (${metricParts.join(" · ")})`;
       lines.push(line);
     }
     const rest = summary.rows.length - shown.length;
     if (rest > 0) lines.push(fixed("weeklySummaryMore", { count: rest }) as string);
   }
 
-  lines.push("");
-  lines.push(fixed("weeklySummaryTotal", { count: summary.total }) as string);
   return lines.join("\n");
 }
 
 /**
- * Title + body for the weekly notification, in the given language.
- * `bodyLines` is the same text pre-split, so the native shell can rebuild the
- * multi-line body without depending on how newlines survive the bridge.
+ * Title + subtitle + body for the weekly notification, in the given language.
+ * The subtitle carries the week number and total, so the body can stay as a
+ * clean category list. `bodyLines` is the same body pre-split, so the native
+ * shell can rebuild the multi-line body without depending on how newlines
+ * survive the bridge.
  */
 export function weeklyNotificationContent(language = i18n.language || "sv") {
   const fixed = i18n.getFixedT(language);
-  const body = formatWeeklyBody(currentWeeklySummary(language), language);
+  const summary = currentWeeklySummary(language);
+  const body = formatWeeklyBody(summary, language);
+  const weekNo = isoWeek(summary.end);
+  const totalText = fixed("weeklySummaryTotal", { count: summary.total }) as string;
+  const subtitle = `${fixed("weeklyHeading")} ${weekNo} · ${totalText}`;
   return {
     title: fixed("weeklySummaryTitle") as string,
+    subtitle,
     body,
     bodyLines: body.split("\n"),
   };

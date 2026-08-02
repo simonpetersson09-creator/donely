@@ -223,7 +223,8 @@ function parsePayload<T>(value: unknown): T | null {
  * user has selected inside Donely.
  */
 function notificationText(language: string) {
-  return weeklyNotificationContent(language);
+  const { title, subtitle, body, bodyLines } = weeklyNotificationContent(language);
+  return { title, subtitle, body, bodyLines };
 }
 
 /** Route the iOS shell should open when the user taps the reminder. */
@@ -327,7 +328,7 @@ export async function requestPermission(): Promise<PermissionStatus> {
 
 /** (Re)schedules the weekly reminder with the given language. Idempotent. */
 export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
-  const { title, body, bodyLines } = notificationText(language);
+  const { title, subtitle, body, bodyLines } = notificationText(language);
   const timeZone = currentTimeZone();
   const next = nextReminderDate();
 
@@ -341,6 +342,7 @@ export function scheduleWeeklyReminder(language = i18n.language || "sv"): void {
     minute: REMINDER_MINUTE,
     repeats: true,
     title,
+    subtitle,
     body,
     bodyLines,
     language,
