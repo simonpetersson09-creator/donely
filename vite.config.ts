@@ -11,7 +11,14 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // The native (Capacitor) app ships a static bundle with no server. SPA mode
+    // emits a client-only shell that hydrates without an SSR payload — a
+    // streamed SSR document saved to a file breaks hydration ("Invariant failed"
+    // => black screen in the WKWebView).
+    spa: { enabled: true },
+    pages: [{ path: "/", prerender: { enabled: true } }],
   },
+
   // Pin the build output layout so it is identical on every machine (Lovable sandbox,
   // macOS, CI). Without this, nitro writes to `.output/` outside the sandbox, which
   // breaks the Capacitor flow (`webDir: dist/client`).
