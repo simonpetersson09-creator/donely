@@ -15,11 +15,6 @@ export default defineConfig({
     // emits a client-only shell that hydrates without an SSR payload — a
     // streamed SSR document saved to a file breaks hydration ("Invariant failed"
     // => black screen in the WKWebView).
-    spa: { enabled: true },
-  },
-
-  // Pin the build output layout so it is identical on every machine (Lovable sandbox,
-  // macOS, CI). Without this, nitro writes to `.output/` outside the sandbox, which
   // breaks the Capacitor flow (`webDir: dist/client`).
   nitro: {
     preset: "cloudflare-module",
