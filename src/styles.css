@@ -30,6 +30,7 @@
   --color-premium-border: var(--premium-border);
   --shadow-card: var(--shadow-card);
   --shadow-soft: var(--shadow-soft);
+  --shadow-button: var(--shadow-button);
   --shadow-gold: var(--shadow-gold);
   --color-system-blue: var(--system-blue);
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI",
@@ -107,6 +108,7 @@
   );
   --shadow-soft: 0 1px 2px rgba(20, 30, 50, 0.04), 0 2px 8px rgba(20, 30, 50, 0.04);
   --shadow-card: 0 2px 4px rgba(20, 30, 50, 0.04), 0 12px 32px -8px rgba(20, 30, 50, 0.08);
+  --shadow-button: 0 1px 1px rgba(20, 30, 50, 0.04), 0 4px 10px -2px rgba(20, 30, 50, 0.1);
   --shadow-gold: 0 1px 0 oklch(1 0 0 / 0.45) inset, 0 8px 22px -8px oklch(0.6 0.12 68 / 0.6);
   --shadow-premium: 0 1px 0 oklch(1 0 0 / 0.5) inset, 0 6px 18px -6px oklch(0.6 0.12 68 / 0.45);
   --system-blue: oklch(0.55 0.23 255);
@@ -158,6 +160,7 @@
   --premium-border: oklch(1 0 0 / 0.14);
   --shadow-card: 0 1px 2px oklch(0 0 0 / 40%), 0 8px 24px oklch(0 0 0 / 30%);
   --shadow-soft: 0 1px 2px oklch(0 0 0 / 35%), 0 2px 8px oklch(0 0 0 / 25%);
+  --shadow-button: 0 1px 1px oklch(0 0 0 / 25%), 0 4px 10px -2px oklch(0 0 0 / 35%);
   --shadow-gold: 0 1px 0 oklch(1 0 0 / 0.2) inset, 0 8px 22px -8px oklch(0.6 0.12 68 / 0.7);
   --system-blue: oklch(0.55 0.23 255);
   --background: oklch(0.18 0.012 250);
@@ -263,5 +266,15 @@
     animation: none;
     opacity: 0;
   }
+}
+
+@utility edge-fix {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@utility shadow-button {
+  box-shadow: var(--shadow-button);
 }
 

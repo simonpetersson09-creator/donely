@@ -114,7 +114,7 @@ function Installningar() {
 
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+2rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-x-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+2rem)]">
       <div>
         <div className="py-2">
           <BackButton
@@ -136,7 +136,7 @@ function Installningar() {
       <div className="mt-20 flex flex-[1.1] items-end justify-center pb-6">
         <div className="relative">
           <div className="absolute -right-8 -top-12 z-10 rotate-[6deg]">
-            <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
+            <div className="relative overflow-hidden rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card edge-fix">
               <p className="max-w-[13rem] text-center text-[11px] font-semibold leading-[14px] text-primary">
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
@@ -148,7 +148,18 @@ function Installningar() {
                 )}
               </p>
 
-              <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
+              <svg
+                className="absolute -bottom-[5px] left-1/2 h-[10px] w-[14px] -translate-x-1/2 overflow-visible"
+                viewBox="0 0 14 10"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0 0L7 10L14 0Z"
+                  className="fill-background stroke-primary"
+                  strokeWidth="1"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </div>
           </div>
           <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
@@ -169,7 +180,7 @@ function Installningar() {
               }
               purchasePremium();
             }}
-            className="premium-sheen group w-full rounded-full border border-premium-border bg-gradient-premium px-3.5 py-3.5 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60"
+            className="premium-sheen group w-full overflow-hidden rounded-full border border-premium-border bg-gradient-premium px-3.5 py-3.5 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60 edge-fix"
           >
             <span className="relative z-[2] inline-flex items-center justify-center gap-2 text-[14px] font-semibold leading-[18px] text-gold-foreground">
               <Crown className="size-4 text-gold-deep transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
@@ -190,7 +201,7 @@ function Installningar() {
             <button
               type="button"
               onClick={openManageSubscriptions}
-              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
               {t("manageSubscription")}
             </button>
@@ -199,7 +210,7 @@ function Installningar() {
               type="button"
               disabled={premium.busy}
               onClick={() => restorePurchase()}
-              className="flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent disabled:opacity-60"
+              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
             >
               {premium.phase === "restoring" ? t("restoring") : t("restorePurchase")}
             </button>
@@ -211,7 +222,7 @@ function Installningar() {
             {t("remindersSection")}
           </p>
 
-          <div className="rounded-xl border border-border bg-card px-3 py-3 shadow-card">
+          <div className="overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-card edge-fix">
             <div className="flex items-center gap-3">
               <Bell className="size-[18px] shrink-0 text-primary" />
               <div className="min-w-0 flex-1">
@@ -276,7 +287,7 @@ function Installningar() {
 
           <Link
             to="/senaste-registreringar"
-            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+            className="flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2">
               <Trash2 className="size-[18px]" />
@@ -296,7 +307,7 @@ function Installningar() {
               type="button"
               onClick={handleExport}
               disabled={exporting}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent disabled:opacity-60"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
             >
               <Download className="size-[18px]" />
               <span>{t("exportBackup")}</span>
@@ -305,7 +316,7 @@ function Installningar() {
             <button
               type="button"
               onClick={() => fileInput.current?.click()}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
               <Upload className="size-[18px]" />
               <span>{t("importBackup")}</span>
@@ -344,7 +355,7 @@ function Installningar() {
                 toast.error(t("legalOpenError"));
               }
             }}
-            className="relative mb-2 flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 shadow-card transition-colors active:bg-accent"
+            className="relative mb-2 flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary">
               <FileText className="size-[18px]" />
@@ -357,7 +368,7 @@ function Installningar() {
             <button
               type="button"
               onClick={requestAppStoreReview}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
               <Star className="size-[18px]" />
               <span>{t("rateDonely")}</span>
@@ -366,7 +377,7 @@ function Installningar() {
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="flex items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-destructive shadow-card transition-colors active:bg-destructive/10"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-destructive shadow-button transition-colors active:bg-destructive/10 edge-fix"
             >
               <Trash2 className="size-[18px]" />
               <span>{t("deleteAllDataRow")}</span>
@@ -386,7 +397,7 @@ function Installningar() {
                   toast.success(`${count} exempelaktiviteter tillagda`);
                   window.location.href = "/statistik";
                 }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground transition-colors active:bg-accent"
+                className="flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground shadow-button transition-colors active:bg-accent edge-fix"
               >
                 <FlaskConical className="size-[18px]" />
                 <span>Fyll på med exempeldata (endast utveckling)</span>
