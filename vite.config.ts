@@ -11,15 +11,6 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
-    // Capacitor has no SSR server at runtime. Build TanStack's official
-    // client-rendered shell directly as dist/client/index.html instead of
-    // replaying an SSR response in the postbuild script.
-    spa: {
-      enabled: true,
-      prerender: {
-        outputPath: "/index",
-      },
-    },
   },
   // Pin the build output layout so it is identical on every machine (Lovable sandbox,
   // macOS, CI). Without this, nitro writes to `.output/` outside the sandbox, which
