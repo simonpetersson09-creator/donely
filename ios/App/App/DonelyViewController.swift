@@ -28,17 +28,43 @@ final class DonelyViewController: CAPBridgeViewController {
     /// Strong reference — StoreKit 2 bridge (WKScriptMessageHandler).
     private var storeKitBridge: AnyObject?
     private var loadingObservation: NSKeyValueObservation?
+    private var progressObservation: NSKeyValueObservation?
+    private var urlObservation: NSKeyValueObservation?
+    private let runtimeDiagnostics = DonelyWebRuntimeDiagnostics()
     /// Temporary on-device diagnostics (Info.plist: DonelyDebugOverlay).
     private var diagnosticsOverlay: DonelyDiagnosticsOverlay?
 
     override func viewDidLoad() {
+        print("DONELY_NATIVE: DonelyViewController.viewDidLoad enter view=\(type(of: view))")
         guard validateBundledWebApp() else { return }
         super.viewDidLoad()
+        print("DONELY_CAPACITOR: super.viewDidLoad returned webView=\(String(describing: webView)) bridge=\(String(describing: bridge))")
         edgesForExtendedLayout = .all
         extendedLayoutIncludesOpaqueBars = true
         applyAppBackgroundColor()
         installNotificationBridge()
         installDiagnosticsOverlay()
+        installRuntimeObservations()
+        logViewHierarchy(stage: "viewDidLoad")
+    }
+
+    override func webViewConfiguration(for instanceConfiguration: InstanceConfiguration) -> WKWebViewConfiguration {
+        let configuration = super.webViewConfiguration(for: instanceConfiguration)
+        let controller = configuration.userContentController
+        controller.removeScriptMessageHandler(forName: DonelyWebRuntimeDiagnostics.handlerName)
+        controller.add(runtimeDiagnostics, name: DonelyWebRuntimeDiagnostics.handlerName)
+        controller.addUserScript(WKUserScript(
+            source: DonelyWebRuntimeDiagnostics.bootstrapScript,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: true
+        ))
+        print("DONELY_CAPACITOR: WKWebViewConfiguration created; startup diagnostics installed")
+        return configuration
+    }
+
+    override func webView(with frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
+        print("DONELY_CAPACITOR: creating WKWebView frame=\(frame)")
+        return DonelyDiagnosticWebView(frame: frame, configuration: configuration)
     }
 
     /// Capacitor terminates the process inside `super.viewDidLoad()` when the
@@ -52,12 +78,15 @@ final class DonelyViewController: CAPBridgeViewController {
         )
         let configURL = Bundle.main.url(forResource: "capacitor.config", withExtension: "json")
         guard indexURL != nil, configURL != nil else {
+            print("DONELY_NATIVE: bundle validation FAILED index=\(String(describing: indexURL)) config=\(String(describing: configURL)) resourceURL=\(String(describing: Bundle.main.resourceURL))")
             showNativeStartupFailure(
                 "Donely kunde inte starta\n\nWebbfiler saknas i app-paketet. " +
                 "Bygg om med npm run build och npx cap sync ios före arkivering."
             )
             return false
         }
+        let assetURL = Bundle.main.url(forResource: "assets", withExtension: nil, subdirectory: "public")
+        print("DONELY_NATIVE: bundle validation OK index=\(indexURL?.path ?? "nil") config=\(configURL?.path ?? "nil") assets=\(assetURL?.path ?? "nil")")
         return true
     }
 
@@ -82,17 +111,28 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        print("DONELY_NATIVE: DonelyViewController.viewDidAppear")
         // Explicitly prove that the launch screen has yielded to the app
         // controller and keep the real app window above any stale window.
         view.window?.backgroundColor = DonelyAppColors.background
         view.window?.makeKeyAndVisible()
         installDiagnosticsOverlay()
         diagnosticsOverlay?.bringToFront()
+        logViewHierarchy(stage: "viewDidAppear")
     }
 
     private func installDiagnosticsOverlay() {
         guard diagnosticsOverlay == nil, DonelyDiagnosticsOverlay.isEnabled else { return }
-        diagnosticsOverlay = DonelyDiagnosticsOverlay(host: view, webView: webView)
+        // CAPBridgeViewController makes `view` the WKWebView itself. Hosting a
+        // diagnostic subview inside WebKit is unreliable because WebKit owns
+        // and reorders its internal hierarchy. UIWindow is an independent,
+        // guaranteed top layer and is used only while the debug flag is on.
+        guard let window = view.window else {
+            print("DONELY_NATIVE: diagnostics overlay waiting for UIWindow")
+            return
+        }
+        diagnosticsOverlay = DonelyDiagnosticsOverlay(host: window, webView: webView)
+        print("DONELY_NATIVE: diagnostics overlay installed on UIWindow")
     }
 
     /// Matches the web app background so the safe-area strips (status bar /
@@ -135,6 +175,7 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("DONELY_NATIVE: DonelyViewController.viewWillAppear")
         applyAppBackgroundColor()
         installDiagnosticsOverlay()
     }
@@ -152,8 +193,31 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func capacitorDidLoad() {
         super.capacitorDidLoad()
+        print("DONELY_CAPACITOR: capacitorDidLoad bridge=\(String(describing: bridge)) webView=\(String(describing: webView))")
         applyAppBackgroundColor()
         installNotificationBridge()
+    }
+
+    private func installRuntimeObservations() {
+        guard progressObservation == nil, let webView else {
+            print("DONELY_WEBVIEW: observation install skipped; webView is nil or already observed")
+            return
+        }
+        progressObservation = webView.observe(\.estimatedProgress, options: [.initial, .new]) { webView, _ in
+            print("DONELY_WEBVIEW: progress=\(String(format: "%.2f", webView.estimatedProgress)) loading=\(webView.isLoading) url=\(webView.url?.absoluteString ?? "nil")")
+        }
+        urlObservation = webView.observe(\.url, options: [.initial, .new]) { webView, _ in
+            print("DONELY_WEBVIEW: URL changed to \(webView.url?.absoluteString ?? "nil")")
+        }
+    }
+
+    private func logViewHierarchy(stage: String) {
+        let root = view.window?.rootViewController
+        let web = webView
+        let descendants = web.map { $0.isDescendant(of: view) } ?? false
+        let index = web.flatMap { view.subviews.firstIndex(of: $0) }.map(String.init) ?? "-"
+        print("DONELY_NATIVE: hierarchy stage=\(stage) root=\(String(describing: root.map { type(of: $0) })) active=\(type(of: self)) view=\(type(of: view)) subviews=\(view.subviews.count)")
+        print("DONELY_WEBVIEW: exists=\(web != nil) viewIsWebView=\(web === view) descendant=\(descendants) index=\(index) frame=\(String(describing: web?.frame)) hidden=\(String(describing: web?.isHidden)) alpha=\(String(describing: web?.alpha)) window=\(String(describing: web?.window)) url=\(web?.url?.absoluteString ?? "nil")")
     }
 
     private func installNotificationBridge() {
@@ -203,5 +267,10 @@ final class DonelyViewController: CAPBridgeViewController {
 
     deinit {
         loadingObservation = nil
+        progressObservation = nil
+        urlObservation = nil
+        webView?.configuration.userContentController.removeScriptMessageHandler(
+            forName: DonelyWebRuntimeDiagnostics.handlerName
+        )
     }
 }

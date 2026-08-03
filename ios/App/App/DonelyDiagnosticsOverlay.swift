@@ -13,6 +13,71 @@
 import UIKit
 import WebKit
 
+/// Logs the exact request passed to WKWebView. This distinguishes Capacitor's
+/// public/index.html file routing from the URL visible to TanStack Router.
+final class DonelyDiagnosticWebView: WKWebView {
+    override func load(_ request: URLRequest) -> WKNavigation? {
+        print("DONELY_WEBVIEW: load request=\(request.url?.absoluteString ?? "nil") method=\(request.httpMethod ?? "GET")")
+        return super.load(request)
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        print("DONELY_WEBVIEW: didMoveToWindow window=\(String(describing: window)) frame=\(frame) hidden=\(isHidden) alpha=\(alpha)")
+    }
+}
+
+/// Captures JavaScript startup milestones before React or any Donely module is
+/// evaluated. Messages are written to the Xcode/device console even when the
+/// visible diagnostics overlay cannot be installed.
+final class DonelyWebRuntimeDiagnostics: NSObject, WKScriptMessageHandler {
+    static let handlerName = "donelyDiagnostics"
+
+    static let bootstrapScript = """
+    (function () {
+      function emit(stage, detail) {
+        try {
+          window.webkit.messageHandlers.donelyDiagnostics.postMessage({
+            stage: stage,
+            detail: String(detail || ''),
+            url: location.href,
+            readyState: document.readyState
+          });
+        } catch (_) {}
+      }
+      emit('document-start', 'bootstrap installed');
+      window.addEventListener('error', function (event) {
+        emit('error', (event.message || 'Script error') + ' @ ' +
+          (event.filename || '') + ':' + (event.lineno || 0) + ':' + (event.colno || 0));
+      }, true);
+      window.addEventListener('unhandledrejection', function (event) {
+        var reason = event.reason;
+        emit('unhandledrejection', (reason && (reason.stack || reason.message)) || String(reason));
+      });
+      document.addEventListener('DOMContentLoaded', function () {
+        emit('dom-content-loaded', 'bodyChildren=' + (document.body ? document.body.children.length : -1));
+      });
+      window.addEventListener('load', function () {
+        emit('window-load', 'ready=' + !!document.querySelector('[data-donely-app-ready]'));
+        setTimeout(function () {
+          emit('react-check', 'ready=' + !!document.querySelector('[data-donely-app-ready]') +
+            ' bodyText=' + (document.body ? document.body.innerText.trim().slice(0, 120) : '(no body)'));
+        }, 1500);
+      });
+    })();
+    """
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        let payload = message.body as? [String: Any]
+        let stage = payload?["stage"] as? String ?? "unknown"
+        let detail = payload?["detail"] as? String ?? ""
+        let url = payload?["url"] as? String ?? "(no URL)"
+        let readyState = payload?["readyState"] as? String ?? "unknown"
+        let prefix = stage == "react-check" ? "DONELY_REACT" : "DONELY_HTML"
+        print("\(prefix): stage=\(stage) readyState=\(readyState) url=\(url) detail=\(detail)")
+    }
+}
+
 final class DonelyDiagnosticsOverlay {
 
     static var isEnabled: Bool {
