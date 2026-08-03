@@ -26,18 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // DonelyNotificationBridge takes over as soon as the web view exists.
         UNUserNotificationCenter.current().delegate = self
 
-        // Create the Capacitor controller explicitly. Relying on
-        // UIMainStoryboardFile left some archived builds with a colored window
-        // but no root controller, so neither WKWebView nor native diagnostics
-        // could ever appear.
-        let appWindow = UIWindow(frame: UIScreen.main.bounds)
-        appWindow.backgroundColor = DonelyAppColors.background
-        appWindow.rootViewController = DonelyViewController()
-        appWindow.makeKeyAndVisible()
-        window = appWindow
-
-        // The window sits behind the safe areas; tinting it prevents the
-        // black strips behind the status bar / home indicator.
+        // Main.storyboard owns the window and instantiates DonelyViewController.
+        // CAPBridgeViewController performs part of its bridge/web-view setup
+        // during storyboard restoration. Replacing that window here can leave
+        // the launch snapshot visible forever in archived device builds.
         applyAppBackgroundToWindows()
         return true
     }
