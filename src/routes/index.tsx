@@ -110,6 +110,21 @@ function Index() {
     };
   }, []);
 
+  // Lock scrolling on the home screen — the layout is designed to fit the
+  // viewport, and page scroll causes unwanted shifts on iOS.
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtml = html.style.overflow;
+    const prevBody = body.style.overflow;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = prevHtml;
+      body.style.overflow = prevBody;
+    };
+  }, []);
+
   const selected = areaCategories.find((c) => c.id === categoryId);
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
@@ -176,7 +191,7 @@ function Index() {
   const showReminderPrompt = reminderPromptHydrated && !reminderPromptAnswered;
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-[1.1] items-end justify-center pb-3">
         <div className="relative">
           <div className="absolute -right-10 -top-14 z-10 rotate-[6deg] scale-100">
