@@ -179,7 +179,7 @@ function Index() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-[1.1] items-end justify-center pb-3">
         <div className="relative">
-          <div className="absolute -right-14 -top-14 z-10 rotate-[6deg] scale-100">
+          <div className="absolute -right-10 -top-14 z-10 rotate-[6deg] scale-100">
             <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
               <p className="whitespace-nowrap text-center text-[11px] font-semibold leading-[14px] text-primary">
 
