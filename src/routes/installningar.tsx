@@ -6,14 +6,13 @@ import {
   Crown,
   Download,
   FileText,
-  FlaskConical,
   Star,
   Trash2,
   Upload,
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
-import { DATA_CHANGED_EVENT, clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
+import { DATA_CHANGED_EVENT, clearAllData } from "@/lib/store";
 import { importData } from "@/lib/persistence";
 import { readBackupFile, saveBackupFile } from "@/lib/backup-file";
 import { useLanguage } from "@/lib/use-language";
@@ -76,8 +75,6 @@ function Installningar() {
   const reminder = useReminder();
 
   const [confirming, setConfirming] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   const fileInput = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<string | null>(null);
@@ -373,26 +370,8 @@ function Installningar() {
             </button>
           </div>
 
-          <div className="mt-2">
-            {mounted && isDevEnvironment() && (
-              <button
-                type="button"
-                onClick={() => {
-                  const count = seedDemoEntries();
-                  if (count === 0) {
-                    toast.error("Kunde inte skapa exempeldata");
-                    return;
-                  }
-                  toast.success(`${count} exempelaktiviteter tillagda`);
-                  window.location.href = "/statistik";
-                }}
-                className="flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground shadow-button transition-colors active:bg-accent edge-fix"
-              >
-                <FlaskConical className="size-[18px]" />
-                <span>Fyll på med exempeldata (endast utveckling)</span>
-              </button>
-            )}
-          </div>
+
+
 
           <p className="mt-2 text-center text-[9px] font-normal leading-[13px] text-muted-foreground/80">
             Donely · {t("version")} 1.0
