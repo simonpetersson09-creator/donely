@@ -268,3 +268,13 @@
   }
 }
 
+@utility edge-fix {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+@utility shadow-button {
+  box-shadow: var(--shadow-button);
+}
+
