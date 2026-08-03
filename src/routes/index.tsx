@@ -313,7 +313,7 @@ function Index() {
             onClick={register}
             aria-label={
               locked
-                ? `${t("register")} — ${t("premiumRequired", { defaultValue: "Premium krävs" })}`
+                ? `${t("register")} — ${t("premiumRequired")}`
                 : t("register")
             }
             className={cn(
