@@ -136,7 +136,7 @@ function Installningar() {
       <div className="mt-20 flex flex-[1.1] items-end justify-center pb-6">
         <div className="relative">
           <div className="absolute -right-8 -top-12 z-10 rotate-[6deg]">
-            <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
+            <div className="relative overflow-hidden rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card edge-fix">
               <p className="max-w-[13rem] text-center text-[11px] font-semibold leading-[14px] text-primary">
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
@@ -148,7 +148,18 @@ function Installningar() {
                 )}
               </p>
 
-              <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
+              <svg
+                className="absolute -bottom-[5px] left-1/2 h-[10px] w-[14px] -translate-x-1/2 overflow-visible"
+                viewBox="0 0 14 10"
+                aria-hidden="true"
+              >
+                <path
+                  d="M0 0L7 10L14 0Z"
+                  className="fill-background stroke-primary"
+                  strokeWidth="1"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </div>
           </div>
           <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
