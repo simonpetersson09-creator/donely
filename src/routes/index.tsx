@@ -191,7 +191,7 @@ function Index() {
   const showReminderPrompt = reminderPromptHydrated && !reminderPromptAnswered;
 
   return (
-    <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main data-donely-app-ready className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-[1.1] items-end justify-center pb-3">
         <div className="relative">
           <div className="absolute -right-10 -top-14 z-10 rotate-[6deg] scale-100">
@@ -848,7 +848,7 @@ function Onboarding({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main data-donely-app-ready className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
           Donely
