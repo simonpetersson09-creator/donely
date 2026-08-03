@@ -110,6 +110,21 @@ function Index() {
     };
   }, []);
 
+  // Lock scrolling on the home screen — the layout is designed to fit the
+  // viewport, and page scroll causes unwanted shifts on iOS.
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtml = html.style.overflow;
+    const prevBody = body.style.overflow;
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    return () => {
+      html.style.overflow = prevHtml;
+      body.style.overflow = prevBody;
+    };
+  }, []);
+
   const selected = areaCategories.find((c) => c.id === categoryId);
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
