@@ -114,7 +114,7 @@ function Installningar() {
 
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-between px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+2rem)]">
       <div>
         <div className="py-2">
           <BackButton
@@ -133,11 +133,11 @@ function Installningar() {
         </p>
       </div>
 
-      <div className="flex flex-1 items-center justify-center py-6">
+      <div className="flex flex-[1.1] items-end justify-center pb-4">
         <div className="relative">
-          <div className="absolute -right-14 -top-14 z-10 rotate-[6deg]">
-            <div className="relative rounded-full border border-primary bg-background px-4 py-3 shadow-card">
-              <p className="max-w-[9rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
+          <div className="absolute -right-10 -top-14 z-10 rotate-[6deg]">
+            <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
+              <p className="max-w-[13rem] text-center text-[11px] font-semibold leading-[14px] text-primary">
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
                     <Crown className="size-3 text-gold" fill="currentColor" />
@@ -157,7 +157,7 @@ function Installningar() {
         </div>
       </div>
 
-      <div>
+      <div className="mt-6">
         <section className="space-y-3">
           <button
             type="button"
