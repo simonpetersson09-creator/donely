@@ -86,11 +86,13 @@ final class DonelyViewController: CAPBridgeViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyAppBackgroundColor()
+        installDiagnosticsOverlay()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         applyAppBackgroundColor()
+        diagnosticsOverlay?.bringToFront()
     }
 
     override func traitCollectionDidChange(_ previous: UITraitCollection?) {
