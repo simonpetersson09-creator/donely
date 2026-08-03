@@ -186,7 +186,7 @@ function Statistik() {
 
       <Section
         title={`${t("private")} (${year})`}
-        icon={<Home className="size-5" />}
+        icon={<Home className="size-6" />}
         rows={rows.privat}
         showGoalCta={isCurrentYear}
         onSetGoal={(c) => {
@@ -203,7 +203,7 @@ function Statistik() {
       />
       <Section
         title={`${t("work")} (${year})`}
-        icon={<Briefcase className="size-5" />}
+        icon={<Briefcase className="size-6" />}
         rows={rows.jobb}
         showGoalCta={isCurrentYear}
         onSetGoal={(c) => {
