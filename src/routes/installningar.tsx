@@ -355,7 +355,7 @@ function Installningar() {
                 toast.error(t("legalOpenError"));
               }
             }}
-            className="relative mb-2 flex w-full items-center justify-center rounded-xl border border-border bg-card px-3 py-3 shadow-card transition-colors active:bg-accent"
+            className="relative mb-2 flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary">
               <FileText className="size-[18px]" />
@@ -368,7 +368,7 @@ function Installningar() {
             <button
               type="button"
               onClick={requestAppStoreReview}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
               <Star className="size-[18px]" />
               <span>{t("rateDonely")}</span>
@@ -377,7 +377,7 @@ function Installningar() {
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="flex items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-destructive shadow-card transition-colors active:bg-destructive/10"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-destructive shadow-button transition-colors active:bg-destructive/10 edge-fix"
             >
               <Trash2 className="size-[18px]" />
               <span>{t("deleteAllDataRow")}</span>
@@ -397,7 +397,7 @@ function Installningar() {
                   toast.success(`${count} exempelaktiviteter tillagda`);
                   window.location.href = "/statistik";
                 }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground transition-colors active:bg-accent"
+                className="flex w-full items-center justify-center gap-2 overflow-hidden rounded-xl border border-dashed border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-muted-foreground shadow-button transition-colors active:bg-accent edge-fix"
               >
                 <FlaskConical className="size-[18px]" />
                 <span>Fyll på med exempeldata (endast utveckling)</span>
