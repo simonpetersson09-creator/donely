@@ -40,6 +40,16 @@ final class DonelyViewController: CAPBridgeViewController {
         installDiagnosticsOverlay()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Explicitly prove that the launch screen has yielded to the app
+        // controller and keep the real app window above any stale window.
+        view.window?.backgroundColor = DonelyAppColors.background
+        view.window?.makeKeyAndVisible()
+        installDiagnosticsOverlay()
+        diagnosticsOverlay?.bringToFront()
+    }
+
     private func installDiagnosticsOverlay() {
         guard diagnosticsOverlay == nil, DonelyDiagnosticsOverlay.isEnabled else { return }
         diagnosticsOverlay = DonelyDiagnosticsOverlay(host: view, webView: webView)
