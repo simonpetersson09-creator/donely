@@ -285,26 +285,34 @@ function Index() {
           </div>
         </section>
 
-        {/* Km och minuter — visas bara för träningsliknande privata kategorier */}
-        {showMetrics && (
-          <section>
-            <Label>{t("metricsHint")}</Label>
-            <div className="flex gap-2">
-              <MetricField
-                label={t("distanceKm")}
-                value={distance}
-                onChange={setDistance}
-                suffix="km"
-              />
-              <MetricField
-                label={t("durationMin")}
-                value={duration}
-                onChange={setDuration}
-                suffix="min"
-              />
-            </div>
-          </section>
-        )}
+        {/* Km och minuter — visas bara för träningsliknande privata kategorier.
+            Platsen reserveras alltid så att övrigt innehåll inte hoppar upp
+            när fälten visas. */}
+        <section
+          className={cn(
+            "min-h-[56px] transition-opacity duration-200",
+            showMetrics ? "opacity-100" : "invisible opacity-0",
+          )}
+          aria-hidden={!showMetrics}
+        >
+          <Label>{t("metricsHint")}</Label>
+          <div className="flex gap-2">
+            <MetricField
+              label={t("distanceKm")}
+              value={distance}
+              onChange={setDistance}
+              suffix="km"
+              disabled={!showMetrics}
+            />
+            <MetricField
+              label={t("durationMin")}
+              value={duration}
+              onChange={setDuration}
+              suffix="min"
+              disabled={!showMetrics}
+            />
+          </div>
+        </section>
       </div>
 
       {/* Registrera + Statistik — fasta längst ner */}
