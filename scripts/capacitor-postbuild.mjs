@@ -1,10 +1,8 @@
 // Post-build step for the native (Capacitor / iOS) workflow.
 //
-// 1. Generates + hardens the static SPA shell at dist/client/index.html.
-//    Capacitor has no SSR server at runtime, so the shell is assembled from the
-//    build manifest (client entry script + CSS bundle) instead of replaying an
-//    SSR response or relying on TanStack's prerender (which needs a Node server
-//    entry that the Cloudflare nitro preset does not emit).
+// 1. Generates + hardens the static app shell at dist/client/index.html.
+//    Capacitor has no SSR server at runtime, so the shell is rendered once at
+//    build time and then sanitized for direct loading by WKWebView.
 // 2. On macOS, creates the native iOS project (ios/App) if it does not exist
 //    yet, so `npx cap sync ios` works straight after a fresh `git pull`.
 //
@@ -51,7 +49,11 @@ async function renderIndex() {
 
 async function writeShell() {
   const html = await renderIndex();
-  await writeFile(outFile, harden(html), "utf8");
+  const shell = harden(html);
+  if (shell.includes("\0")) {
+    throw new Error("The generated Capacitor shell still contains NUL bytes.");
+  }
+  await writeFile(outFile, shell, "utf8");
   console.log(`[capacitor] Wrote static app shell -> dist/client/index.html (${html.length} bytes)`);
 }
 
@@ -70,7 +72,11 @@ async function writeShell() {
 function harden(html) {
   const head = `<style>html,body{background-color:#afa9a6;color:#1c1a19}</style>`;
   const watchdog = `<div id="donely-boot-error" style="display:none;position:fixed;inset:0;z-index:2147483647;background:#afa9a6;color:#1c1a19;font:14px/1.45 -apple-system,system-ui,sans-serif;padding:calc(env(safe-area-inset-top) + 24px) 20px 20px;white-space:pre-wrap;overflow:auto"></div><script>(function(){var shown=false;function show(msg){if(shown)return;shown=true;var el=document.getElementById("donely-boot-error");if(!el)return;el.textContent="Donely kunde inte starta.\\n\\n"+msg;el.style.display="block"}window.addEventListener("error",function(e){show((e.message||"Script error")+"\\n"+(e.filename||"")+":"+(e.lineno||0))},true);window.addEventListener("unhandledrejection",function(e){var r=e.reason;show("Unhandled rejection: "+((r&&(r.stack||r.message))||String(r)))});document.querySelectorAll('script[type="module"][src]').forEach(function(s){s.addEventListener("error",function(){show("JavaScript-filen kunde inte laddas:\\n"+(s.getAttribute("src")||"okänd fil"))})});setTimeout(function(){if(!document.querySelector("[data-donely-app-ready]"))show("Appens gränssnitt renderades inte inom 8 sekunder.")},8000)})();</script>`;
-  let out = html;
+  // TanStack's streamed route ids use NUL separators. A normal HTTP response
+  // can carry those bytes, but an HTML file loaded directly by WKWebView cannot:
+  // WebKit may stop parsing at the first NUL, before the client entry and boot
+  // watchdog. Preserve the JavaScript string value with an escaped code point.
+  let out = html.replaceAll("\0", "\\u0000");
   out = out.includes("</head>") ? out.replace("</head>", `${head}</head>`) : head + out;
   out = out.includes("</body>") ? out.replace("</body>", `${watchdog}</body>`) : out + watchdog;
   return out;
