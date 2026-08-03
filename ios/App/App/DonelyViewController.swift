@@ -11,6 +11,20 @@ import Capacitor
 import UserNotifications
 import WebKit
 
+/// Single source of truth for the native chrome color. Must stay in sync with
+/// the web app's `--background` token (src/styles.css) and the
+/// `backgroundColor` values in capacitor.config.ts.
+enum DonelyAppColors {
+    /// Light: #afa9a6 (warm taupe) — Dark: #0e1217
+    static let background: UIColor = {
+        let light = UIColor(red: 0.686, green: 0.663, blue: 0.651, alpha: 1)
+        let dark = UIColor(red: 0.055, green: 0.071, blue: 0.090, alpha: 1)
+        return UIColor { traits in
+            traits.userInterfaceStyle == .dark ? dark : light
+        }
+    }()
+}
+
 final class DonelyViewController: CAPBridgeViewController {
 
     /// Strong reference — the bridge is the WKScriptMessageHandler and the
@@ -27,18 +41,47 @@ final class DonelyViewController: CAPBridgeViewController {
     }
 
     /// Matches the web app background so the safe-area strips (status bar /
-    /// home indicator) never show through as black.
+    /// home indicator) never show through as black. Applied to every layer
+    /// that can be visible behind the web content: window, root view,
+    /// web view and its scroll view.
     private func applyAppBackgroundColor() {
-        let light = UIColor(red: 0.686, green: 0.663, blue: 0.651, alpha: 1) // #afa9a6
-        let dark = UIColor(red: 0.055, green: 0.071, blue: 0.090, alpha: 1)  // #0e1217
-        let color = UIColor { traits in
-            traits.userInterfaceStyle == .dark ? dark : light
-        }
+        let color = DonelyAppColors.background
         view.backgroundColor = color
+        view.window?.backgroundColor = color
+        view.superview?.backgroundColor = color
+        UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.windows }
+            .flatMap { $0 }
+            .forEach { $0.backgroundColor = color }
         webView?.backgroundColor = color
         webView?.isOpaque = false
         webView?.scrollView.backgroundColor = color
         webView?.scrollView.bounces = false
+        // Keep the rubber-band / inset area tinted rather than system black.
+        webView?.scrollView.contentInsetAdjustmentBehavior = .never
+        webView?.underPageBackgroundColor = color
+        setNeedsStatusBarAppearanceUpdate()
+    }
+
+    /// The status bar text has to follow the (light/dark) background so the
+    /// safe area at the top reads as part of the app.
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        traitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        applyAppBackgroundColor()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.window?.backgroundColor = DonelyAppColors.background
+    }
+
+    override func traitCollectionDidChange(_ previous: UITraitCollection?) {
+        super.traitCollectionDidChange(previous)
+        applyAppBackgroundColor()
     }
 
     override func capacitorDidLoad() {

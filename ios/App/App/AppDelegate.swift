@@ -15,6 +15,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Temporary delegate so a cold-start notification tap is not lost.
         // DonelyNotificationBridge takes over as soon as the web view exists.
         UNUserNotificationCenter.current().delegate = self
+
+        // The window sits behind the safe areas; tinting it prevents the
+        // black strips behind the status bar / home indicator.
+        window?.backgroundColor = DonelyAppColors.background
         return true
     }
 
