@@ -587,7 +587,7 @@ function CategorySheet({
         onClick={onClose}
         className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px] animate-in fade-in"
       />
-      <div className="relative flex w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
+      <div className="relative flex max-h-[85dvh] w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
         <div className="mb-2 flex items-center justify-between">
           <h2 className="flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
             {area === "jobb" ? <Briefcase className="size-5" /> : <Home className="size-5" />}
@@ -645,7 +645,10 @@ function CategorySheet({
           {t("swipeHint")}
         </p>
 
-        <div className="no-scrollbar max-h-[55dvh] space-y-0.5 overflow-y-auto overscroll-contain">
+        <div
+          className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+        >
           {categories.map((c) =>
             renamingId === c.id ? (
               <form

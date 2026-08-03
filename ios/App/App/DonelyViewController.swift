@@ -38,6 +38,7 @@ final class DonelyViewController: CAPBridgeViewController {
         webView?.backgroundColor = color
         webView?.isOpaque = false
         webView?.scrollView.backgroundColor = color
+        webView?.scrollView.bounces = false
     }
 
     override func capacitorDidLoad() {

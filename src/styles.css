@@ -205,12 +205,20 @@
 
   html {
     background-color: var(--color-background);
+    overscroll-behavior: none;
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     min-height: 100dvh;
+    overscroll-behavior: none;
+  }
+
+  /* The rubber-band area above/below the page paints the root element's
+     background — keep it in sync so no black strip shows on iOS. */
+  :root {
+    background-color: var(--color-background);
   }
 }
 
