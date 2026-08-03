@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
-import { useLanguage, useLocale } from "@/lib/use-language";
+import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 import { useEntries } from "@/lib/store";
 import { toast } from "sonner";
 
@@ -63,7 +63,7 @@ function SenasteRegistreringar() {
               >
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
-                    {entry.categoryName}
+                    {categoryLabel(t, { id: entry.categoryId, name: entry.categoryName })}
                     <span className="ml-1 font-normal text-muted-foreground">×{entry.amount}</span>
                   </p>
                   <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">

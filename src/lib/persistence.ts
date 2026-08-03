@@ -595,6 +595,11 @@ function backfillRunningCategory() {
 
   const current = readKey(STORAGE_KEYS.categories, categoriesSchema);
   if (current.status !== "ok") return;
+  // An intentionally emptied list stays empty — never resurrect defaults.
+  if (current.value.length === 0) {
+    writeKey(BACKFILL_RUNNING_KEY, true, flagSchema);
+    return;
+  }
 
   if (!current.value.some((c) => c.id === RUNNING_CATEGORY.id)) {
     const next = [...current.value];
