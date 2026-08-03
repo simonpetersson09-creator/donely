@@ -6,7 +6,10 @@ const config: CapacitorConfig = {
   webDir: "dist/client",
   backgroundColor: "#afa9a6",
   ios: {
-    contentInset: "always",
+    // Render the WKWebView edge-to-edge. The web app already protects its
+    // content with env(safe-area-inset-*), so "always" only exposes native
+    // strips above and below the web view.
+    contentInset: "never",
     backgroundColor: "#afa9a6",
   },
   server: {

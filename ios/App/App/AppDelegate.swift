@@ -11,6 +11,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     /// ready (cold start). Consumed by DonelyViewController.
     static var pendingNotificationRoute: String?
 
+    private func applyAppBackgroundToWindows() {
+        UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.windows }
+            .flatMap { $0 }
+            .forEach { window in
+                window.backgroundColor = DonelyAppColors.background
+                window.rootViewController?.view.backgroundColor = DonelyAppColors.background
+            }
+    }
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Temporary delegate so a cold-start notification tap is not lost.
         // DonelyNotificationBridge takes over as soon as the web view exists.
@@ -19,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // The window sits behind the safe areas; tinting it prevents the
         // black strips behind the status bar / home indicator.
         window?.backgroundColor = DonelyAppColors.background
+        applyAppBackgroundToWindows()
         return true
     }
 
@@ -39,6 +50,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        // With a storyboard the UIWindow may still be nil in
+        // didFinishLaunching, so apply the color again once it is on-screen.
+        applyAppBackgroundToWindows()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

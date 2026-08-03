@@ -36,6 +36,8 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        edgesForExtendedLayout = .all
+        extendedLayoutIncludesOpaqueBars = true
         applyAppBackgroundColor()
         installNotificationBridge()
     }
@@ -57,6 +59,11 @@ final class DonelyViewController: CAPBridgeViewController {
         webView?.isOpaque = false
         webView?.scrollView.backgroundColor = color
         webView?.scrollView.bounces = false
+        // The web app uses viewport-fit=cover and env(safe-area-inset-*).
+        // Prevent UIKit from adding a second inset that exposes the root view.
+        webView?.scrollView.contentInsetAdjustmentBehavior = .never
+        webView?.scrollView.contentInset = .zero
+        webView?.scrollView.scrollIndicatorInsets = .zero
         // Keep the area revealed behind/around the page tinted, not black.
         if #available(iOS 15.0, *) {
             webView?.underPageBackgroundColor = color
@@ -77,7 +84,7 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        view.window?.backgroundColor = DonelyAppColors.background
+        applyAppBackgroundColor()
     }
 
     override func traitCollectionDidChange(_ previous: UITraitCollection?) {
