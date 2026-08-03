@@ -285,26 +285,34 @@ function Index() {
           </div>
         </section>
 
-        {/* Km och minuter — visas bara för träningsliknande privata kategorier */}
-        {showMetrics && (
-          <section>
-            <Label>{t("metricsHint")}</Label>
-            <div className="flex gap-2">
-              <MetricField
-                label={t("distanceKm")}
-                value={distance}
-                onChange={setDistance}
-                suffix="km"
-              />
-              <MetricField
-                label={t("durationMin")}
-                value={duration}
-                onChange={setDuration}
-                suffix="min"
-              />
-            </div>
-          </section>
-        )}
+        {/* Km och minuter — visas bara för träningsliknande privata kategorier.
+            Platsen reserveras alltid så att övrigt innehåll inte hoppar upp
+            när fälten visas. */}
+        <section
+          className={cn(
+            "min-h-[56px] transition-opacity duration-200",
+            showMetrics ? "opacity-100" : "invisible opacity-0",
+          )}
+          aria-hidden={!showMetrics}
+        >
+          <Label>{t("metricsHint")}</Label>
+          <div className="flex gap-2">
+            <MetricField
+              label={t("distanceKm")}
+              value={distance}
+              onChange={setDistance}
+              suffix="km"
+              disabled={!showMetrics}
+            />
+            <MetricField
+              label={t("durationMin")}
+              value={duration}
+              onChange={setDuration}
+              suffix="min"
+              disabled={!showMetrics}
+            />
+          </div>
+        </section>
       </div>
 
       {/* Registrera + Statistik — fasta längst ner */}
@@ -443,14 +451,16 @@ function MetricField({
   value,
   onChange,
   suffix,
+  disabled,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   suffix: string;
+  disabled?: boolean;
 }) {
   return (
-    <label className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card">
+    <label className={cn("flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card", disabled && "opacity-50")}>
       <input
         inputMode="decimal"
         value={value}
@@ -458,6 +468,8 @@ function MetricField({
         onChange={(e) => onChange(e.target.value.replace(/[^0-9.,]/g, "").slice(0, 6))}
         onFocus={(e) => e.target.select()}
         aria-label={label}
+        disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
         className="min-w-0 flex-1 bg-transparent text-[16px] font-semibold tabular-nums text-card-foreground outline-none placeholder:text-card-foreground/30"
       />
       <span className="text-[12px] font-semibold text-card-foreground/50">{suffix}</span>
