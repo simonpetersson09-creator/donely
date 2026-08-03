@@ -133,9 +133,9 @@ function Installningar() {
         </p>
       </div>
 
-      <div className="mt-4 flex flex-[1.1] items-end justify-center pb-4">
+      <div className="mt-12 flex flex-[1.1] items-end justify-center pb-4">
         <div className="relative">
-          <div className="absolute -right-10 -top-14 z-10 rotate-[6deg]">
+          <div className="absolute -right-8 -top-12 z-10 rotate-[6deg]">
             <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
               <p className="max-w-[13rem] text-center text-[11px] font-semibold leading-[14px] text-primary">
                 {premium.subscribed ? (
