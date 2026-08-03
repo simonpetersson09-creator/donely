@@ -181,7 +181,7 @@ function Index() {
         <div className="relative">
           <div className="absolute -right-14 -top-14 z-10 rotate-[6deg] scale-100">
             <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
-              <p className="max-w-[12rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
+              <p className="whitespace-nowrap text-center text-[11px] font-semibold leading-[14px] text-primary">
 
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
