@@ -21,49 +21,40 @@ const clientDir = resolve(root, "dist/client");
 const serverDir = resolve(root, "dist/server");
 const outFile = resolve(clientDir, "index.html");
 
-async function findClientEntry() {
-  const files = await readdir(serverDir);
-  const manifestFile = files.find((f) => f.startsWith("_tanstack-start-manifest_v-"));
-  if (!manifestFile) {
-    throw new Error(`No TanStack start manifest found in ${serverDir}.`);
+/**
+ * Renders "/" with the built server bundle inside this Node process. The
+ * TanStack client entry refuses to boot without the `$_TSR` bootstrap payload
+ * that only a real server render emits, so a hand-written shell is not enough.
+ */
+async function renderIndex() {
+  const entry = resolve(serverDir, "index.mjs");
+  if (!existsSync(entry)) {
+    throw new Error(`Missing ${entry}. Run \`vite build\` before the Capacitor postbuild step.`);
   }
-  const manifest = await readFile(resolve(serverDir, manifestFile), "utf8");
-  const rootBlock = manifest.slice(manifest.indexOf("__root__"));
-  const scripts = rootBlock.slice(rootBlock.indexOf("scripts:"));
-  const match = scripts.match(/src: "(\/assets\/[^"]+\.js)"/);
-  if (!match) {
-    throw new Error("Could not resolve the client entry script from the build manifest.");
+  const mod = await import(pathToFileURL(entry).toString());
+  const handler = mod.default;
+  if (!handler?.fetch) {
+    throw new Error("The built server bundle does not export a fetch handler.");
   }
-  return match[1];
+  const res = await handler.fetch(new Request("http://localhost/"), {}, {
+    waitUntil() {},
+    passThroughOnException() {},
+  });
+  const html = await res.text();
+  if (res.status !== 200 || !html.includes("$_TSR") || !html.includes('type="module"')) {
+    throw new Error(
+      `Server render of "/" failed (status ${res.status}, ${html.length} bytes) - refusing to ship an empty shell.`,
+    );
+  }
+  return html;
 }
 
 async function writeShell() {
-  const entry = await findClientEntry();
-  const assets = await readdir(resolve(clientDir, "assets"));
-  const css = assets.filter((f) => f.endsWith(".css")).map((f) => `/assets/${f}`);
-
-  const html = `<!DOCTYPE html>
-<html lang="sv">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <title>Donely</title>
-    <link rel="icon" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/icon-180.png" />
-${css.map((href) => `    <link rel="stylesheet" href="${href}" />`).join("\n")}
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="${entry}"></script>
-  </body>
-</html>
-`;
-
+  const html = await renderIndex();
   await writeFile(outFile, harden(html), "utf8");
-  console.log(`[capacitor] Wrote static SPA shell -> dist/client/index.html (entry ${entry})`);
+  console.log(`[capacitor] Wrote static app shell -> dist/client/index.html (${html.length} bytes)`);
 }
+
 
 
 /**
