@@ -15,14 +15,9 @@ import WebKit
 /// the web app's `--background` token (src/styles.css) and the
 /// `backgroundColor` values in capacitor.config.ts.
 enum DonelyAppColors {
-    /// Light: #afa9a6 (warm taupe) — Dark: #0e1217
-    static let background: UIColor = {
-        let light = UIColor(red: 0.686, green: 0.663, blue: 0.651, alpha: 1)
-        let dark = UIColor(red: 0.055, green: 0.071, blue: 0.090, alpha: 1)
-        return UIColor { traits in
-            traits.userInterfaceStyle == .dark ? dark : light
-        }
-    }()
+    /// #afa9a6 (warm taupe). The web app currently keeps this background in
+    /// both iOS appearances, so native chrome must not turn black in Dark Mode.
+    static let background = UIColor(red: 0.686, green: 0.663, blue: 0.651, alpha: 1)
 }
 
 final class DonelyViewController: CAPBridgeViewController {
@@ -36,6 +31,8 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        edgesForExtendedLayout = .all
+        extendedLayoutIncludesOpaqueBars = true
         applyAppBackgroundColor()
         installNotificationBridge()
     }
@@ -57,6 +54,11 @@ final class DonelyViewController: CAPBridgeViewController {
         webView?.isOpaque = false
         webView?.scrollView.backgroundColor = color
         webView?.scrollView.bounces = false
+        // The web app uses viewport-fit=cover and env(safe-area-inset-*).
+        // Prevent UIKit from adding a second inset that exposes the root view.
+        webView?.scrollView.contentInsetAdjustmentBehavior = .never
+        webView?.scrollView.contentInset = .zero
+        webView?.scrollView.scrollIndicatorInsets = .zero
         // Keep the area revealed behind/around the page tinted, not black.
         if #available(iOS 15.0, *) {
             webView?.underPageBackgroundColor = color
@@ -67,7 +69,7 @@ final class DonelyViewController: CAPBridgeViewController {
     /// The status bar text has to follow the (light/dark) background so the
     /// safe area at the top reads as part of the app.
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        traitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+        .darkContent
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -77,7 +79,7 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        view.window?.backgroundColor = DonelyAppColors.background
+        applyAppBackgroundColor()
     }
 
     override func traitCollectionDidChange(_ previous: UITraitCollection?) {
