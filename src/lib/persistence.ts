@@ -127,11 +127,11 @@ const BACKFILL_RUNNING_KEY = "vr.backfill.lopning.v1";
 
 /** Canonical work categories (order + names) and their one-time backfill flag. */
 const WORK_CATEGORIES: Category[] = DEFAULT_CATEGORIES.filter((c) => c.area === "jobb");
-const BACKFILL_WORK_KEY = "vr.backfill.jobb.v2";
+const BACKFILL_WORK_KEY = "vr.backfill.jobb.v3";
 
 /** Canonical private categories (order + names) and their one-time backfill flag. */
 const PRIVATE_CATEGORIES: Category[] = DEFAULT_CATEGORIES.filter((c) => c.area === "privat");
-const BACKFILL_PRIVATE_KEY = "vr.backfill.privat.v1";
+const BACKFILL_PRIVATE_KEY = "vr.backfill.privat.v2";
 
 
 // ---------------------------------------------------------------------------
@@ -626,7 +626,7 @@ function backfillWorkCategories() {
   const list = current.value;
   const defaults = list.filter((c) => WORK_CATEGORIES.some((w) => w.id === c.id));
   if (defaults.length > 0) {
-    const ordered = WORK_CATEGORIES.filter((w) => defaults.some((c) => c.id === w.id));
+    const ordered = WORK_CATEGORIES.map((w) => defaults.find((c) => c.id === w.id) ?? w);
     const rest = list.filter((c) => !WORK_CATEGORIES.some((w) => w.id === c.id));
     const firstWorkIndex = list.findIndex((c) => WORK_CATEGORIES.some((w) => w.id === c.id));
     const before = rest.filter((c) => list.indexOf(c) < firstWorkIndex);
@@ -654,7 +654,7 @@ function backfillPrivateCategories() {
   const isDefault = (c: Category) => PRIVATE_CATEGORIES.some((p) => p.id === c.id);
   const present = list.filter(isDefault);
   if (present.length > 0) {
-    const ordered = PRIVATE_CATEGORIES.filter((p) => present.some((c) => c.id === p.id));
+    const ordered = PRIVATE_CATEGORIES.map((p) => present.find((c) => c.id === p.id) ?? p);
     const rest = list.filter((c) => !isDefault(c));
     const firstIndex = list.findIndex(isDefault);
     const before = rest.filter((c) => list.indexOf(c) < firstIndex);
