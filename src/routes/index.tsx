@@ -612,7 +612,7 @@ function CategorySheet({
                 setAdding(false);
               }
             }}
-            className="mb-1.5 flex gap-2"
+            className="mb-1.5 flex shrink-0 gap-2"
           >
             <input
               autoFocus
@@ -633,20 +633,20 @@ function CategorySheet({
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="mb-1.5 flex w-full items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
+            className="mb-1.5 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
           >
             <Plus className="size-3.5" />
             {t("addCategory")}
           </button>
         )}
 
-        <p className="mb-1.5 flex items-center gap-1 px-1 text-[11px] font-normal leading-[15px] text-muted-foreground">
+        <p className="mb-1.5 flex shrink-0 items-center gap-1 px-1 text-[11px] font-normal leading-[15px] text-muted-foreground">
           <ChevronLeft className="size-3 shrink-0" />
           {t("swipeHint")}
         </p>
 
         <div
-          className="no-scrollbar max-h-[52dvh] min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
+          className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
           style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
           onScroll={() => setOpenId(null)}
         >
