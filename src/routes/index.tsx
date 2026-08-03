@@ -617,7 +617,7 @@ function CategorySheet({
           {t("swipeHint")}
         </p>
 
-        <div className="max-h-[55dvh] space-y-0.5 overflow-y-auto">
+        <div className="max-h-[55dvh] space-y-0.5 overflow-y-auto overscroll-contain">
           {categories.map((c) =>
             renamingId === c.id ? (
               <form
