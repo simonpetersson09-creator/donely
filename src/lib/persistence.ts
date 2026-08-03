@@ -121,6 +121,11 @@ export const DEFAULT_CATEGORIES: Category[] = [
   { id: "j-admin", name: "Admin-uppgifter", area: "jobb" },
 ];
 
+/** The default running category and the flag guarding its one-time backfill. */
+const RUNNING_CATEGORY: Category = { id: "p-lopning", name: "Löpning", area: "privat" };
+const BACKFILL_RUNNING_KEY = "vr.backfill.lopning.v1";
+
+
 // ---------------------------------------------------------------------------
 // Low level storage access
 // ---------------------------------------------------------------------------
