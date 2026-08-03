@@ -180,8 +180,9 @@ function Index() {
       <div className="flex flex-[1.1] items-end justify-center pb-3">
         <div className="relative">
           <div className="absolute -right-12 -top-11 z-10 rotate-[6deg] scale-100">
-            <div className="relative rounded-full border border-primary bg-background px-3.5 py-2 shadow-card">
-              <p className="max-w-[8.5rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
+            <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
+              <p className="max-w-[9.5rem] text-balance text-center text-[11px] font-semibold leading-[14px] text-primary">
+
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
                     <Crown className="size-3 text-gold" fill="currentColor" />
