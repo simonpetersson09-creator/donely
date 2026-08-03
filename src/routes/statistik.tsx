@@ -293,7 +293,7 @@ function Section({
   if (rows.length === 0) return null;
   return (
     <section className="mt-8">
-      <h2 className="mb-2 flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
+      <h2 className="mb-2 flex items-center gap-2 px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {icon}
         {title}
       </h2>
