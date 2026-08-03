@@ -12,14 +12,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     static var pendingNotificationRoute: String?
 
     private func applyAppBackgroundToWindows() {
-        UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.windows }
-            .flatMap { $0 }
-            .forEach { window in
-                window.backgroundColor = DonelyAppColors.background
-                window.rootViewController?.view.backgroundColor = DonelyAppColors.background
-            }
+        // Only the app's own key window. Never enumerate every window in the
+        // scene: system overlay windows (text effects, keyboard) sit above the
+        // app window and are transparent by design — tinting them paints an
+        // opaque sheet over the entire UI.
+        let appWindow = window
+            ?? UIApplication.shared.connectedScenes
+                .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                .first
+        appWindow?.backgroundColor = DonelyAppColors.background
+        appWindow?.rootViewController?.view.backgroundColor = DonelyAppColors.background
     }
+
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         print("DONELY_NATIVE: AppDelegate.didFinishLaunching bundle=\(Bundle.main.bundlePath)")
