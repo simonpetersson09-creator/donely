@@ -59,7 +59,8 @@ final class DonelyWebRuntimeDiagnostics: NSObject, WKScriptMessageHandler {
         let detail = payload?["detail"] as? String ?? ""
         let url = payload?["url"] as? String ?? "(no URL)"
         let readyState = payload?["readyState"] as? String ?? "unknown"
-        print("DONELY_HTML: stage=\(stage) readyState=\(readyState) url=\(url) detail=\(detail)")
+        let prefix = stage == "react-check" ? "DONELY_REACT" : "DONELY_HTML"
+        print("\(prefix): stage=\(stage) readyState=\(readyState) url=\(url) detail=\(detail)")
     }
 }
 
