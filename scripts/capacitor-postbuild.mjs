@@ -108,14 +108,17 @@ async function syncIosWebAssets() {
  */
 function harden(html) {
   const head = `<style>html,body{background-color:#afa9a6;color:#1c1a19}</style>`;
-  const watchdog = `<div id="donely-boot-error" style="display:none;position:fixed;inset:0;z-index:2147483647;background:#afa9a6;color:#1c1a19;font:14px/1.45 -apple-system,system-ui,sans-serif;padding:calc(env(safe-area-inset-top) + 24px) 20px 20px;white-space:pre-wrap;overflow:auto"></div><script>(function(){var shown=false;function show(msg){if(shown)return;shown=true;var el=document.getElementById("donely-boot-error");if(!el)return;el.textContent="Donely kunde inte starta.\\n\\n"+msg;el.style.display="block"}window.addEventListener("error",function(e){show((e.message||"Script error")+"\\n"+(e.filename||"")+":"+(e.lineno||0))},true);window.addEventListener("unhandledrejection",function(e){var r=e.reason;show("Unhandled rejection: "+((r&&(r.stack||r.message))||String(r)))});document.querySelectorAll('script[type="module"][src]').forEach(function(s){s.addEventListener("error",function(){show("JavaScript-filen kunde inte laddas:\\n"+(s.getAttribute("src")||"okänd fil"))})});setTimeout(function(){if(!document.querySelector("[data-donely-app-ready]"))show("Appens gränssnitt renderades inte inom 8 sekunder.")},8000)})();</script>`;
+  // Static, JS-free proof that index.html itself was parsed and painted by
+  // WKWebView. Removed automatically as soon as the React app renders.
+  const beacon = `<div id="donely-static-beacon" style="position:fixed;left:0;right:0;top:0;z-index:2147483646;background:#1c1a19;color:#fff;font:12px/1.4 -apple-system,system-ui,sans-serif;padding:calc(env(safe-area-inset-top) + 6px) 10px 6px;text-align:center">DONELY STATIC HTML OK &middot; ${new Date().toISOString()}</div>`;
+  const watchdog = `<div id="donely-boot-error" style="display:none;position:fixed;inset:0;z-index:2147483647;background:#afa9a6;color:#1c1a19;font:14px/1.45 -apple-system,system-ui,sans-serif;padding:calc(env(safe-area-inset-top) + 24px) 20px 20px;white-space:pre-wrap;overflow:auto"></div><script>(function(){var shown=false;function show(msg){window.__donelyLastError=msg;if(shown)return;shown=true;var el=document.getElementById("donely-boot-error");if(!el)return;el.textContent="Donely kunde inte starta.\\n\\n"+msg;el.style.display="block"}window.addEventListener("error",function(e){show((e.message||"Script error")+"\\n"+(e.filename||"")+":"+(e.lineno||0))},true);window.addEventListener("unhandledrejection",function(e){var r=e.reason;show("Unhandled rejection: "+((r&&(r.stack||r.message))||String(r)))});document.querySelectorAll('script[type="module"][src]').forEach(function(s){s.addEventListener("error",function(){show("JavaScript-filen kunde inte laddas:\\n"+(s.getAttribute("src")||"okänd fil"))})});var t=setInterval(function(){if(document.querySelector("[data-donely-app-ready]")){clearInterval(t);var b=document.getElementById("donely-static-beacon");if(b)b.remove()}},250);setTimeout(function(){clearInterval(t);if(!document.querySelector("[data-donely-app-ready]"))show("Appens gränssnitt renderades inte inom 8 sekunder.")},8000)})();</script>`;
   // TanStack's streamed route ids use NUL separators. A normal HTTP response
   // can carry those bytes, but an HTML file loaded directly by WKWebView cannot:
   // WebKit may stop parsing at the first NUL, before the client entry and boot
   // watchdog. Preserve the JavaScript string value with an escaped code point.
   let out = html.replaceAll("\0", "\\u0000");
   out = out.includes("</head>") ? out.replace("</head>", `${head}</head>`) : head + out;
-  out = out.includes("</body>") ? out.replace("</body>", `${watchdog}</body>`) : out + watchdog;
+  out = out.includes("</body>") ? out.replace("</body>", `${beacon}${watchdog}</body>`) : out + beacon + watchdog;
   return out;
 }
 
