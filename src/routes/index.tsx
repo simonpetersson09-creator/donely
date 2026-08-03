@@ -183,6 +183,7 @@ function Index() {
             <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
               <p className="max-w-[13rem] text-center text-[11px] font-semibold leading-[14px] text-primary">
 
+
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
                     <Crown className="size-3 text-gold" fill="currentColor" />
