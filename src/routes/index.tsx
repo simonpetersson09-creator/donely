@@ -587,8 +587,8 @@ function CategorySheet({
         onClick={onClose}
         className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px] animate-in fade-in"
       />
-      <div className="relative flex max-h-[85dvh] w-full max-w-md flex-col rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
-        <div className="mb-2 flex items-center justify-between">
+      <div className="relative flex h-[63dvh] max-h-[63dvh] w-full max-w-md flex-col overflow-hidden rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
+        <div className="mb-2 flex shrink-0 items-center justify-between">
           <h2 className="flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
             {area === "jobb" ? <Briefcase className="size-5" /> : <Home className="size-5" />}
             {area === "jobb" ? t("work") : t("private")}
@@ -612,7 +612,7 @@ function CategorySheet({
                 setAdding(false);
               }
             }}
-            className="mb-1.5 flex gap-2"
+            className="mb-1.5 flex shrink-0 gap-2"
           >
             <input
               autoFocus
@@ -633,20 +633,20 @@ function CategorySheet({
           <button
             type="button"
             onClick={() => setAdding(true)}
-            className="mb-1.5 flex w-full items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
+            className="mb-1.5 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
           >
             <Plus className="size-3.5" />
             {t("addCategory")}
           </button>
         )}
 
-        <p className="mb-1.5 flex items-center gap-1 px-1 text-[11px] font-normal leading-[15px] text-muted-foreground">
+        <p className="mb-1.5 flex shrink-0 items-center gap-1 px-1 text-[11px] font-normal leading-[15px] text-muted-foreground">
           <ChevronLeft className="size-3 shrink-0" />
           {t("swipeHint")}
         </p>
 
         <div
-          className="no-scrollbar max-h-[52dvh] min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
+          className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
           style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
           onScroll={() => setOpenId(null)}
         >
