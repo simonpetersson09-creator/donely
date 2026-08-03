@@ -114,6 +114,7 @@
 			buildConfigurationList = 504EC3161FED79650016851F /* Build configuration list for PBXNativeTarget "App" */;
 			buildPhases = (
 				6634F4EFEBD30273BCE97C65 /* [CP] Check Pods Manifest.lock */,
+				D0NE1Y0000000000000020 /* Verify Capacitor Web Assets */,
 				504EC3001FED79650016851F /* Sources */,
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
@@ -181,6 +182,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		D0NE1Y0000000000000020 /* Verify Capacitor Web Assets */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/App/public/index.html",
+				"$(SRCROOT)/App/capacitor.config.json",
+			);
+			name = "Verify Capacitor Web Assets";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\nPUBLIC_DIR=\"${SRCROOT}/App/public\"\nINDEX=\"${PUBLIC_DIR}/index.html\"\nCONFIG=\"${SRCROOT}/App/capacitor.config.json\"\n\nif [ ! -s \"${INDEX}\" ]; then\n  echo \"error: Missing Capacitor web app: ${INDEX}\" >&2\n  echo \"error: From the repository root, run: npm run build && npx cap sync ios\" >&2\n  exit 1\nfi\n\nif [ ! -s \"${CONFIG}\" ]; then\n  echo \"error: Missing Capacitor configuration: ${CONFIG}\" >&2\n  echo \"error: From the repository root, run: npm run build && npx cap sync ios\" >&2\n  exit 1\nfi\n\nif ! grep -q 'data-donely-app-ready' \"${INDEX}\"; then\n  echo \"error: Capacitor index.html is stale or incomplete (Donely ready marker missing).\" >&2\n  echo \"error: From the repository root, run: npm run build && npx cap sync ios\" >&2\n  exit 1\nfi\n\nASSET_COUNT=$(find \"${PUBLIC_DIR}/assets\" -type f 2>/dev/null | wc -l | tr -d ' ')\nif [ \"${ASSET_COUNT}\" -eq 0 ]; then\n  echo \"error: Capacitor assets directory is empty: ${PUBLIC_DIR}/assets\" >&2\n  exit 1\nfi\n\necho \"Verified Donely Capacitor bundle: index.html, config and ${ASSET_COUNT} assets.\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6634F4EFEBD30273BCE97C65 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
