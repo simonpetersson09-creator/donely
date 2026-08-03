@@ -125,7 +125,7 @@ export function EdgeSwipeBack({ children }: { children: ReactNode }) {
   }, [router]);
 
   return (
-    <div ref={surfaceRef} className="min-h-screen will-change-transform">
+    <div ref={surfaceRef} className="min-h-dvh bg-background">
       {children}
     </div>
   );
