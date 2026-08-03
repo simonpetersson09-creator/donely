@@ -133,7 +133,7 @@ function Installningar() {
         </p>
       </div>
 
-      <div className="mt-12 flex flex-[1.1] items-end justify-center pb-4">
+      <div className="mt-20 flex flex-[1.1] items-end justify-center pb-6">
         <div className="relative">
           <div className="absolute -right-8 -top-12 z-10 rotate-[6deg]">
             <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
