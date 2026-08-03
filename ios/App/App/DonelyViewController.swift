@@ -57,9 +57,10 @@ final class DonelyViewController: CAPBridgeViewController {
         webView?.isOpaque = false
         webView?.scrollView.backgroundColor = color
         webView?.scrollView.bounces = false
-        // Keep the rubber-band / inset area tinted rather than system black.
-        webView?.scrollView.contentInsetAdjustmentBehavior = .never
-        webView?.underPageBackgroundColor = color
+        // Keep the area revealed behind/around the page tinted, not black.
+        if #available(iOS 15.0, *) {
+            webView?.underPageBackgroundColor = color
+        }
         setNeedsStatusBarAppearanceUpdate()
     }
 
