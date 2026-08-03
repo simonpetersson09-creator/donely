@@ -692,6 +692,7 @@ function CategoryRow({
   const renameLabel = t("rename");
   const deleteLabel = t("delete");
   const startX = useRef(0);
+  const startY = useRef(0);
   const moved = useRef(false);
   const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -699,6 +700,7 @@ function CategoryRow({
     if (pressTimer.current) clearTimeout(pressTimer.current);
     pressTimer.current = null;
   };
+
 
   return (
     <div className="relative overflow-hidden rounded-xl">
