@@ -115,15 +115,19 @@ export const DEFAULT_CATEGORIES: Category[] = [
   { id: "p-promenad", name: "Promenad", area: "privat" },
   { id: "p-meditation", name: "Meditation", area: "privat" },
   { id: "p-bocker", name: "Lästa böcker", area: "privat" },
-  { id: "j-moten", name: "Möten", area: "jobb" },
-  { id: "j-avtal", name: "Avtal", area: "jobb" },
+  { id: "j-moten", name: "Möte", area: "jobb" },
   { id: "j-samtal", name: "Nya samtal", area: "jobb" },
-  { id: "j-admin", name: "Admin-uppgifter", area: "jobb" },
+  { id: "j-avtal", name: "Avtal", area: "jobb" },
+  { id: "j-admin", name: "Administration", area: "jobb" },
 ];
 
 /** The default running category and the flag guarding its one-time backfill. */
 const RUNNING_CATEGORY: Category = { id: "p-lopning", name: "Löpning", area: "privat" };
 const BACKFILL_RUNNING_KEY = "vr.backfill.lopning.v1";
+
+/** Canonical work categories (order + names) and their one-time backfill flag. */
+const WORK_CATEGORIES: Category[] = DEFAULT_CATEGORIES.filter((c) => c.area === "jobb");
+const BACKFILL_WORK_KEY = "vr.backfill.jobb.v2";
 
 
 // ---------------------------------------------------------------------------
@@ -563,6 +567,7 @@ export function initializeStorage(): IntegrityStatus {
   }
 
   backfillRunningCategory();
+  backfillWorkCategories();
 
   const outcome = runMigrations();
   if (outcome.status === "failed") {
@@ -595,6 +600,35 @@ function backfillRunningCategory() {
     writeKey(STORAGE_KEYS.categories, next, categoriesSchema);
   }
   writeKey(BACKFILL_RUNNING_KEY, true, flagSchema);
+}
+
+/**
+ * One-time backfill: aligns the default work categories with the current
+ * naming and ordering (Möte, Nya samtal, Avtal, Administration). Categories the
+ * user removed stay removed, custom ones keep their place after the defaults.
+ */
+function backfillWorkCategories() {
+  const store = storage();
+  if (!store) return;
+  const done = readKey(BACKFILL_WORK_KEY, flagSchema);
+  if (done.status === "ok" && done.value) return;
+
+  const current = readKey(STORAGE_KEYS.categories, categoriesSchema);
+  if (current.status !== "ok") {
+    return;
+  }
+
+  const list = current.value;
+  const defaults = list.filter((c) => WORK_CATEGORIES.some((w) => w.id === c.id));
+  if (defaults.length > 0) {
+    const ordered = WORK_CATEGORIES.filter((w) => defaults.some((c) => c.id === w.id));
+    const rest = list.filter((c) => !WORK_CATEGORIES.some((w) => w.id === c.id));
+    const firstWorkIndex = list.findIndex((c) => WORK_CATEGORIES.some((w) => w.id === c.id));
+    const before = rest.filter((c) => list.indexOf(c) < firstWorkIndex);
+    const after = rest.filter((c) => list.indexOf(c) > firstWorkIndex);
+    writeKey(STORAGE_KEYS.categories, [...before, ...ordered, ...after], categoriesSchema);
+  }
+  writeKey(BACKFILL_WORK_KEY, true, flagSchema);
 }
 
 
