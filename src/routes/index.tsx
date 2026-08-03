@@ -191,7 +191,7 @@ function Index() {
 
   return (
     <main data-donely-app-ready className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
-      <div className="flex shrink-0 items-end justify-center pb-4 pt-16">
+      <div className="flex flex-[1.1] flex-col items-center justify-center pb-4 pt-[calc(env(safe-area-inset-top)+0.5rem)]">
         <div className="relative">
           <div className="absolute -right-10 -top-14 z-10 rotate-[6deg] scale-100">
             <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
