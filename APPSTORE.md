@@ -337,3 +337,20 @@ Donely-appen, dvs. inuti appens sandlåda och med i iCloud-/enhetsbackup).
 
 ### Tester
 `bun run test` (Vitest) – 24 tester i `src/lib/persistence.test.ts`.
+
+## Varför project.pbxproj ändras lokalt
+
+`ios/App/App.xcodeproj/project.pbxproj` skrivs om av tre saker:
+
+1. **Xcode** – när du väljer Team/signing, när Xcode uppgraderar projektinställningar (`LastUpgradeCheck`) och när build-/versionsnummer ändras (`CURRENT_PROJECT_VERSION`, `MARKETING_VERSION`).
+2. **`npx cap sync ios`** – uppdaterar plugin- och pod-referenser (`cap copy`, som `npm run build` kör, rör *inte* filen).
+3. **Våra scripts** – ingen av dem skriver till projektfilen; `capacitor-postbuild.mjs` rör bara webbresurser under `ios/App/App/public`.
+
+Ändringarna är alltid maskin-lokala och behöver aldrig committas. Kör därför:
+
+```bash
+npm run ios:pull      # säkerhetskopierar + återställer projektfilen och kör git pull
+npm run build && npx cap sync ios
+```
+
+Säkerhetskopiorna hamnar i `ios/.local-backups/` (ignorerad av git). `.gitattributes` markerar dessutom `*.pbxproj` som `merge=union` så att verkliga merges inte spårar ur.
