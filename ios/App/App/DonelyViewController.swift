@@ -119,7 +119,63 @@ final class DonelyViewController: CAPBridgeViewController {
         installDiagnosticsOverlay()
         diagnosticsOverlay?.bringToFront()
         logViewHierarchy(stage: "viewDidAppear")
+        auditWindowHierarchy(stage: "viewDidAppear")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.auditWindowHierarchy(stage: "viewDidAppear+2s")
+        }
     }
+
+    /// Dumps the REAL view hierarchy of every window and flags any view that is
+    /// ordered above the WKWebView and large enough to cover it. This is the
+    /// evidence needed to rule out a native overlay: the log lists class,
+    /// frame, alpha, hidden, opaque and background colour for every node.
+    private func auditWindowHierarchy(stage: String) {
+        let windows = UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.windows }
+            .flatMap { $0 }
+        let web = webView
+
+        func describe(_ v: UIView, depth: Int) {
+            let pad = String(repeating: "  ", count: depth)
+            let mark = (v === web) ? " <== WKWEBVIEW" : ((v === view) ? " <== VC.view" : "")
+            print("DONELY_HIERARCHY: \(pad)\(type(of: v)) frame=\(v.frame) alpha=\(v.alpha) hidden=\(v.isHidden) opaque=\(v.isOpaque) bg=\(v.backgroundColor.map { "\($0)" } ?? "nil")\(mark)")
+            v.subviews.forEach { describe($0, depth: depth + 1) }
+        }
+
+        for window in windows {
+            print("DONELY_HIERARCHY: --- stage=\(stage) window key=\(window.isKeyWindow) level=\(window.windowLevel.rawValue) bg=\(window.backgroundColor.map { "\($0)" } ?? "nil") ---")
+            describe(window, depth: 0)
+        }
+
+        // Coverage check: anything painted after (above) the web view.
+        guard let web, let webWindow = web.window else {
+            print("DONELY_HIERARCHY: coverage check skipped; webView=\(web != nil) window=nil")
+            return
+        }
+        var offenders: [String] = []
+        func scan(_ v: UIView, seenWeb: inout Bool) {
+            if v === web { seenWeb = true; return }
+            if seenWeb, !v.isHidden, v.alpha > 0.01 {
+                let rect = v.convert(v.bounds, to: webWindow)
+                let coverage = rect.intersection(webWindow.bounds)
+                let ratio = (coverage.width * coverage.height) / max(webWindow.bounds.width * webWindow.bounds.height, 1)
+                if ratio > 0.5 {
+                    offenders.append("\(type(of: v)) coverage=\(Int(ratio * 100))% alpha=\(v.alpha) bg=\(v.backgroundColor.map { "\($0)" } ?? "nil")")
+                }
+            }
+            v.subviews.forEach { scan($0, seenWeb: &seenWeb) }
+        }
+        for window in windows {
+            var seenWeb = window !== webWindow ? (window.windowLevel.rawValue > webWindow.windowLevel.rawValue) : false
+            scan(window, seenWeb: &seenWeb)
+        }
+        if offenders.isEmpty {
+            print("DONELY_HIERARCHY: coverage check OK — no native view above the WKWebView covers >50% of the screen")
+        } else {
+            print("DONELY_HIERARCHY: coverage check FAILED — views above the WKWebView: \(offenders.joined(separator: " | "))")
+        }
+    }
+
 
     private func installDiagnosticsOverlay() {
         guard diagnosticsOverlay == nil, DonelyDiagnosticsOverlay.isEnabled else { return }
