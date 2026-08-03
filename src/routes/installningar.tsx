@@ -114,7 +114,7 @@ function Installningar() {
 
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+2rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col overflow-x-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+2rem)]">
       <div>
         <div className="py-2">
           <BackButton
