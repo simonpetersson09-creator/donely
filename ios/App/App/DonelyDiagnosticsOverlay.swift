@@ -13,6 +13,20 @@
 import UIKit
 import WebKit
 
+/// Logs the exact request passed to WKWebView. This distinguishes Capacitor's
+/// public/index.html file routing from the URL visible to TanStack Router.
+final class DonelyDiagnosticWebView: WKWebView {
+    override func load(_ request: URLRequest) -> WKNavigation? {
+        print("DONELY_WEBVIEW: load request=\(request.url?.absoluteString ?? "nil") method=\(request.httpMethod ?? "GET")")
+        return super.load(request)
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        print("DONELY_WEBVIEW: didMoveToWindow window=\(String(describing: window)) frame=\(frame) hidden=\(isHidden) alpha=\(alpha)")
+    }
+}
+
 /// Captures JavaScript startup milestones before React or any Donely module is
 /// evaluated. Messages are written to the Xcode/device console even when the
 /// visible diagnostics overlay cannot be installed.

@@ -62,6 +62,11 @@ final class DonelyViewController: CAPBridgeViewController {
         return configuration
     }
 
+    override func webView(with frame: CGRect, configuration: WKWebViewConfiguration) -> WKWebView {
+        print("DONELY_CAPACITOR: creating WKWebView frame=\(frame)")
+        return DonelyDiagnosticWebView(frame: frame, configuration: configuration)
+    }
+
     /// Capacitor terminates the process inside `super.viewDidLoad()` when the
     /// bundled start file is missing. Validate first so an incomplete archive
     /// can never look like a silent, solid-colour screen on a physical device.
@@ -118,7 +123,16 @@ final class DonelyViewController: CAPBridgeViewController {
 
     private func installDiagnosticsOverlay() {
         guard diagnosticsOverlay == nil, DonelyDiagnosticsOverlay.isEnabled else { return }
-        diagnosticsOverlay = DonelyDiagnosticsOverlay(host: view, webView: webView)
+        // CAPBridgeViewController makes `view` the WKWebView itself. Hosting a
+        // diagnostic subview inside WebKit is unreliable because WebKit owns
+        // and reorders its internal hierarchy. UIWindow is an independent,
+        // guaranteed top layer and is used only while the debug flag is on.
+        guard let window = view.window else {
+            print("DONELY_NATIVE: diagnostics overlay waiting for UIWindow")
+            return
+        }
+        diagnosticsOverlay = DonelyDiagnosticsOverlay(host: window, webView: webView)
+        print("DONELY_NATIVE: diagnostics overlay installed on UIWindow")
     }
 
     /// Matches the web app background so the safe-area strips (status bar /
@@ -203,7 +217,7 @@ final class DonelyViewController: CAPBridgeViewController {
         let descendants = web.map { $0.isDescendant(of: view) } ?? false
         let index = web.flatMap { view.subviews.firstIndex(of: $0) }.map(String.init) ?? "-"
         print("DONELY_NATIVE: hierarchy stage=\(stage) root=\(String(describing: root.map { type(of: $0) })) active=\(type(of: self)) view=\(type(of: view)) subviews=\(view.subviews.count)")
-        print("DONELY_WEBVIEW: exists=\(web != nil) descendant=\(descendants) index=\(index) frame=\(String(describing: web?.frame)) hidden=\(String(describing: web?.isHidden)) alpha=\(String(describing: web?.alpha)) window=\(String(describing: web?.window)) url=\(web?.url?.absoluteString ?? "nil")")
+        print("DONELY_WEBVIEW: exists=\(web != nil) viewIsWebView=\(web === view) descendant=\(descendants) index=\(index) frame=\(String(describing: web?.frame)) hidden=\(String(describing: web?.isHidden)) alpha=\(String(describing: web?.alpha)) window=\(String(describing: web?.window)) url=\(web?.url?.absoluteString ?? "nil")")
     }
 
     private func installNotificationBridge() {
