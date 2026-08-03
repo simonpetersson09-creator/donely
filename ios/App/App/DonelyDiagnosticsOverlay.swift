@@ -13,6 +13,56 @@
 import UIKit
 import WebKit
 
+/// Captures JavaScript startup milestones before React or any Donely module is
+/// evaluated. Messages are written to the Xcode/device console even when the
+/// visible diagnostics overlay cannot be installed.
+final class DonelyWebRuntimeDiagnostics: NSObject, WKScriptMessageHandler {
+    static let handlerName = "donelyDiagnostics"
+
+    static let bootstrapScript = """
+    (function () {
+      function emit(stage, detail) {
+        try {
+          window.webkit.messageHandlers.donelyDiagnostics.postMessage({
+            stage: stage,
+            detail: String(detail || ''),
+            url: location.href,
+            readyState: document.readyState
+          });
+        } catch (_) {}
+      }
+      emit('document-start', 'bootstrap installed');
+      window.addEventListener('error', function (event) {
+        emit('error', (event.message || 'Script error') + ' @ ' +
+          (event.filename || '') + ':' + (event.lineno || 0) + ':' + (event.colno || 0));
+      }, true);
+      window.addEventListener('unhandledrejection', function (event) {
+        var reason = event.reason;
+        emit('unhandledrejection', (reason && (reason.stack || reason.message)) || String(reason));
+      });
+      document.addEventListener('DOMContentLoaded', function () {
+        emit('dom-content-loaded', 'bodyChildren=' + (document.body ? document.body.children.length : -1));
+      });
+      window.addEventListener('load', function () {
+        emit('window-load', 'ready=' + !!document.querySelector('[data-donely-app-ready]'));
+        setTimeout(function () {
+          emit('react-check', 'ready=' + !!document.querySelector('[data-donely-app-ready]') +
+            ' bodyText=' + (document.body ? document.body.innerText.trim().slice(0, 120) : '(no body)'));
+        }, 1500);
+      });
+    })();
+    """
+
+    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        let payload = message.body as? [String: Any]
+        let stage = payload?["stage"] as? String ?? "unknown"
+        let detail = payload?["detail"] as? String ?? ""
+        let url = payload?["url"] as? String ?? "(no URL)"
+        let readyState = payload?["readyState"] as? String ?? "unknown"
+        print("DONELY_HTML: stage=\(stage) readyState=\(readyState) url=\(url) detail=\(detail)")
+    }
+}
+
 final class DonelyDiagnosticsOverlay {
 
     static var isEnabled: Bool {

@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        print("DONELY_NATIVE: AppDelegate.didFinishLaunching bundle=\(Bundle.main.bundlePath)")
         // Temporary delegate so a cold-start notification tap is not lost.
         // DonelyNotificationBridge takes over as soon as the web view exists.
         UNUserNotificationCenter.current().delegate = self
@@ -54,6 +55,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // With a storyboard the UIWindow may still be nil in
         // didFinishLaunching, so apply the color again once it is on-screen.
         applyAppBackgroundToWindows()
+        let windows = UIApplication.shared.connectedScenes
+            .compactMap { ($0 as? UIWindowScene)?.windows }
+            .flatMap { $0 }
+        for window in windows {
+            print("DONELY_NATIVE: active window key=\(window.isKeyWindow) root=\(String(describing: window.rootViewController.map { type(of: $0) })) subviews=\(window.subviews.count)")
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
