@@ -12,6 +12,7 @@ import {
   readFlag,
   readKey,
   subscribeIntegrity,
+  writeTransaction,
   writeKey,
   type Category,
   type Entry,
@@ -65,6 +66,43 @@ export function readStoredCategories(): Category[] {
 export function readStoredEntries(): Entry[] {
   ready();
   return readList<Entry>(ENTRIES_KEY, entriesSchema, []);
+}
+
+/**
+ * Deletes a category and all related data as one storage transaction.
+ * This avoids three rapid writes/events (and three large backups), which can
+ * leave WKWebView in a partially updated state when storage is close to quota.
+ */
+export function deleteCategoryData(categoryId: string): boolean {
+  ready();
+  const categories = readKey(CATS_KEY, categoriesSchema);
+  const entries = readKey(ENTRIES_KEY, entriesSchema);
+  const goals = readKey(GOALS_KEY, goalsSchema);
+  if (categories.status !== "ok") return false;
+
+  const nextGoals = goals.status === "ok" ? { ...goals.value } : {};
+  for (const key of Object.keys(nextGoals)) {
+    if (key.endsWith(`:${categoryId}`)) delete nextGoals[key];
+  }
+
+  createBackup("remove-category-data");
+  const committed = writeTransaction([
+    {
+      key: CATS_KEY,
+      value: categories.value.filter((category) => category.id !== categoryId),
+      schema: categoriesSchema,
+    },
+    {
+      key: ENTRIES_KEY,
+      value: entries.status === "ok"
+        ? entries.value.filter((entry) => entry.categoryId !== categoryId)
+        : [],
+      schema: entriesSchema,
+    },
+    { key: GOALS_KEY, value: nextGoals, schema: goalsSchema },
+  ]);
+  if (committed) emitDataChanged();
+  return committed;
 }
 
 const SERVER_INTEGRITY = { state: "ok" } as ReturnType<typeof getIntegrityStatus>;

@@ -25,6 +25,7 @@ import {
   useOnboarding,
   useLanguageGuide,
   useReminderPrompt,
+  deleteCategoryData,
   DEFAULT_CATEGORIES,
   type Area,
 } from "@/lib/store";
@@ -72,9 +73,9 @@ function Index() {
 
   const { t } = useLanguage();
   const locale = useLocale();
-  const { categories, addCategory, renameCategory, removeCategory, hydrated } = useCategories();
-  const { addEntry, removeEntriesByCategory } = useEntries();
-  const { removeGoalsByCategory } = useGoals();
+  const { categories, addCategory, renameCategory, hydrated } = useCategories();
+  const { addEntry } = useEntries();
+  useGoals();
   const {
     seen: onboardingSeen,
     markSeen: markOnboardingSeen,
@@ -415,11 +416,9 @@ function Index() {
               setPaywallOpen(true);
               return;
             }
-            // Remove the category together with its entries and goals, so no
-            // orphan data keeps counting in the statistics totals.
-            removeCategory(id);
-            removeEntriesByCategory(id);
-            removeGoalsByCategory(id);
+            // Category, entries and goals are committed together. This keeps
+            // storage valid even if iOS suspends the app during deletion.
+            if (!deleteCategoryData(id)) toast.error(t("dataWriteFailed"));
           }}
           onClose={() => setPickerOpen(false)}
         />

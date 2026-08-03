@@ -15,6 +15,7 @@ import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import {
   goalKey,
+  deleteCategoryData,
   useCategories,
   useEntries,
   useGoals,
@@ -68,9 +69,9 @@ function Statistik() {
   const { t } = useLanguage();
   const premium = usePremium();
   const locale = useLocale();
-  const { categories, removeCategory } = useCategories();
-  const { entries, removeEntriesByCategory } = useEntries();
-  const { goals, setGoal, removeGoal, removeGoalsByCategory } = useGoals();
+  const { categories } = useCategories();
+  const { entries } = useEntries();
+  const { goals, setGoal, removeGoal } = useGoals();
 
   const isCurrentYear = year === currentYear;
 
@@ -265,9 +266,7 @@ function Statistik() {
               setPaywallOpen(true);
               return;
             }
-            removeCategory(editing.id);
-            removeEntriesByCategory(editing.id);
-            removeGoalsByCategory(editing.id);
+            if (!deleteCategoryData(editing.id)) toast.error(t("dataWriteFailed"));
             setEditing(null);
           }}
           onClose={() => setEditing(null)}
