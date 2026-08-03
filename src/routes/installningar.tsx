@@ -6,14 +6,13 @@ import {
   Crown,
   Download,
   FileText,
-  FlaskConical,
   Star,
   Trash2,
   Upload,
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { toast } from "sonner";
-import { DATA_CHANGED_EVENT, clearAllData, isDevEnvironment, seedDemoEntries } from "@/lib/store";
+import { DATA_CHANGED_EVENT, clearAllData } from "@/lib/store";
 import { importData } from "@/lib/persistence";
 import { readBackupFile, saveBackupFile } from "@/lib/backup-file";
 import { useLanguage } from "@/lib/use-language";
@@ -76,8 +75,6 @@ function Installningar() {
   const reminder = useReminder();
 
   const [confirming, setConfirming] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   const fileInput = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<string | null>(null);
