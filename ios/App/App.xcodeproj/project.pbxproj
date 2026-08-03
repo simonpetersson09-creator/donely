@@ -18,6 +18,7 @@
 		D0NE1Y0000000000000001 /* DonelyNotificationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */; };
 		D0NE1Y0000000000000002 /* DonelyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000012 /* DonelyViewController.swift */; };
 		D0NE1Y0000000000000003 /* DonelyStoreKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */; };
+		D0NE1Y0000000000000004 /* DonelyDiagnosticsOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000014 /* DonelyDiagnosticsOverlay.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyNotificationBridge.swift; sourceTree = "<group>"; };
 		D0NE1Y0000000000000012 /* DonelyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyViewController.swift; sourceTree = "<group>"; };
 		D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyStoreKitBridge.swift; sourceTree = "<group>"; };
+		D0NE1Y0000000000000014 /* DonelyDiagnosticsOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyDiagnosticsOverlay.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */,
 				D0NE1Y0000000000000012 /* DonelyViewController.swift */,
 				D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */,
+				D0NE1Y0000000000000014 /* DonelyDiagnosticsOverlay.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
 				504EC30E1FED79650016851F /* Assets.xcassets */,
 				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
@@ -222,6 +225,7 @@
 				D0NE1Y0000000000000001 /* DonelyNotificationBridge.swift in Sources */,
 				D0NE1Y0000000000000002 /* DonelyViewController.swift in Sources */,
 				D0NE1Y0000000000000003 /* DonelyStoreKitBridge.swift in Sources */,
+				D0NE1Y0000000000000004 /* DonelyDiagnosticsOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
