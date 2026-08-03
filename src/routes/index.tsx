@@ -649,7 +649,7 @@ function CategorySheet({
           className="no-scrollbar max-h-[52dvh] min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
           style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
           onScroll={() => setOpenId(null)}
-        >form
+        >
           {categories.map((c) =>
             renamingId === c.id ? (
               <form
