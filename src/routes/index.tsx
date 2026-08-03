@@ -5,6 +5,7 @@ import {
   Briefcase,
   Check,
   ChevronDown,
+  ChevronLeft,
   Crown,
   Home,
   Lock,
@@ -609,6 +610,11 @@ function CategorySheet({
           </button>
         )}
 
+        <p className="mb-1.5 flex items-center gap-1 px-1 text-[11px] font-normal leading-[15px] text-muted-foreground">
+          <ChevronLeft className="size-3 shrink-0" />
+          {t("swipeHint")}
+        </p>
+
         <div className="max-h-[55dvh] space-y-0.5 overflow-y-auto">
           {categories.map((c) =>
             renamingId === c.id ? (
@@ -744,7 +750,15 @@ function CategoryRow({
         className="relative flex w-full items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200 active:bg-secondary"
       >
         <span className="truncate">{name}</span>
-        {selected && !actionsOpen && <Check className="size-3.5 shrink-0 text-primary" />}
+        {!actionsOpen && (
+          <span className="flex shrink-0 items-center gap-1.5">
+            {selected && <Check className="size-3.5 text-primary" />}
+            <span aria-hidden className="flex items-center text-muted-foreground/45">
+              <ChevronLeft className="-mr-2 size-3.5" />
+              <ChevronLeft className="size-3.5" />
+            </span>
+          </span>
+        )}
       </button>
     </div>
   );
