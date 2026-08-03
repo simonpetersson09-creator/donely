@@ -16,7 +16,6 @@ export default defineConfig({
     // streamed SSR document saved to a file breaks hydration ("Invariant failed"
     // => black screen in the WKWebView).
     spa: { enabled: true },
-    pages: [{ path: "/", prerender: { enabled: true } }],
   },
 
   // Pin the build output layout so it is identical on every machine (Lovable sandbox,
