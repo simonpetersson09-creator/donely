@@ -198,13 +198,16 @@ final class DonelyViewController: CAPBridgeViewController {
     private func applyAppBackgroundColor() {
         let color = DonelyAppColors.background
         view.backgroundColor = color
+        // ONLY this controller's own window may be tinted. Tinting every window
+        // in the scene also painted system overlay windows (UITextEffectsWindow,
+        // UIRemoteKeyboardWindow) — they sit ABOVE the app window and are
+        // normally transparent, so an opaque taupe fill there covers the whole
+        // screen while still letting touches/text selection reach the web view.
+        // That is exactly the "layer over the app" symptom.
         view.window?.backgroundColor = color
         view.superview?.backgroundColor = color
-        UIApplication.shared.connectedScenes
-            .compactMap { ($0 as? UIWindowScene)?.windows }
-            .flatMap { $0 }
-            .forEach { $0.backgroundColor = color }
         webView?.backgroundColor = color
+
         // Opaque: a transparent WKWebView can composite as pure black on a
         // device build before the page paints (the "black app" symptom).
         webView?.isOpaque = true
