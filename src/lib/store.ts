@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import type { z } from "zod";
 import {
   DEFAULT_CATEGORIES,
   STORAGE_KEYS,
@@ -90,16 +91,16 @@ export function deleteCategoryData(categoryId: string): boolean {
     {
       key: CATS_KEY,
       value: categories.value.filter((category) => category.id !== categoryId),
-      schema: categoriesSchema,
+      schema: categoriesSchema as unknown as z.ZodType<unknown>,
     },
     {
       key: ENTRIES_KEY,
       value: entries.status === "ok"
         ? entries.value.filter((entry) => entry.categoryId !== categoryId)
         : [],
-      schema: entriesSchema,
+      schema: entriesSchema as unknown as z.ZodType<unknown>,
     },
-    { key: GOALS_KEY, value: nextGoals, schema: goalsSchema },
+    { key: GOALS_KEY, value: nextGoals, schema: goalsSchema as unknown as z.ZodType<unknown> },
   ]);
   if (committed) emitDataChanged();
   return committed;

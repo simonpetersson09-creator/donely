@@ -266,7 +266,7 @@ function Statistik() {
               setPaywallOpen(true);
               return;
             }
-            if (!deleteCategoryData(editing.id)) toast.error(t("dataWriteFailed"));
+            deleteCategoryData(editing.id);
             setEditing(null);
           }}
           onClose={() => setEditing(null)}

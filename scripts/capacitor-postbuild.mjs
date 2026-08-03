@@ -1,10 +1,8 @@
 // Post-build step for the native (Capacitor / iOS) workflow.
 //
-// 1. Generates + hardens the static SPA shell at dist/client/index.html.
-//    Capacitor has no SSR server at runtime, so the shell is assembled from the
-//    build manifest (client entry script + CSS bundle) instead of replaying an
-//    SSR response or relying on TanStack's prerender (which needs a Node server
-//    entry that the Cloudflare nitro preset does not emit).
+// 1. Generates + hardens the static app shell at dist/client/index.html.
+//    Capacitor has no SSR server at runtime, so the shell is rendered once at
+//    build time and then sanitized for direct loading by WKWebView.
 // 2. On macOS, creates the native iOS project (ios/App) if it does not exist
 //    yet, so `npx cap sync ios` works straight after a fresh `git pull`.
 //

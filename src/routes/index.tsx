@@ -21,7 +21,6 @@ import { cn } from "@/lib/utils";
 import {
   useCategories,
   useEntries,
-  useGoals,
   useOnboarding,
   useLanguageGuide,
   useReminderPrompt,
@@ -75,7 +74,6 @@ function Index() {
   const locale = useLocale();
   const { categories, addCategory, renameCategory, hydrated } = useCategories();
   const { addEntry } = useEntries();
-  useGoals();
   const {
     seen: onboardingSeen,
     markSeen: markOnboardingSeen,
@@ -418,7 +416,7 @@ function Index() {
             }
             // Category, entries and goals are committed together. This keeps
             // storage valid even if iOS suspends the app during deletion.
-            if (!deleteCategoryData(id)) toast.error(t("dataWriteFailed"));
+            deleteCategoryData(id);
           }}
           onClose={() => setPickerOpen(false)}
         />
