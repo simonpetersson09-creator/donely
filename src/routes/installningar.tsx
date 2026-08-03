@@ -222,7 +222,7 @@ function Installningar() {
             {t("remindersSection")}
           </p>
 
-          <div className="rounded-xl border border-border bg-card px-3 py-3 shadow-card">
+          <div className="overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-card edge-fix">
             <div className="flex items-center gap-3">
               <Bell className="size-[18px] shrink-0 text-primary" />
               <div className="min-w-0 flex-1">
@@ -287,7 +287,7 @@ function Installningar() {
 
           <Link
             to="/senaste-registreringar"
-            className="flex w-full items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+            className="flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2">
               <Trash2 className="size-[18px]" />
@@ -307,7 +307,7 @@ function Installningar() {
               type="button"
               onClick={handleExport}
               disabled={exporting}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent disabled:opacity-60"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
             >
               <Download className="size-[18px]" />
               <span>{t("exportBackup")}</span>
@@ -316,7 +316,7 @@ function Installningar() {
             <button
               type="button"
               onClick={() => fileInput.current?.click()}
-              className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-card transition-colors active:bg-accent"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
               <Upload className="size-[18px]" />
               <span>{t("importBackup")}</span>
