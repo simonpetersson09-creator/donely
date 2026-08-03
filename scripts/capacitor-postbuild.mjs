@@ -9,7 +9,7 @@
 // The build output layout (dist/client + dist/server) is pinned in vite.config.ts
 // via the nitro `output` option, so this works identically on macOS, Linux and CI.
 import { existsSync } from "node:fs";
-import { writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -18,6 +18,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const clientDir = resolve(root, "dist/client");
 const serverDir = resolve(root, "dist/server");
 const outFile = resolve(clientDir, "index.html");
+const iosPublicDir = resolve(root, "ios/App/App/public");
 
 /**
  * Renders "/" with the built server bundle inside this Node process. The
@@ -55,6 +56,42 @@ async function writeShell() {
   }
   await writeFile(outFile, shell, "utf8");
   console.log(`[capacitor] Wrote static app shell -> dist/client/index.html (${html.length} bytes)`);
+}
+
+/**
+ * Copies the exact fresh web build into the Xcode project. `cap sync` still
+ * remains useful for native dependency updates, but an archive can no longer
+ * silently contain an older index.html or mismatched hashed JavaScript files.
+ */
+async function syncIosWebAssets() {
+  if (!existsSync(resolve(root, "ios/App/App.xcodeproj"))) return;
+
+  const stagingDir = `${iosPublicDir}.staging`;
+  await rm(stagingDir, { recursive: true, force: true });
+  await mkdir(stagingDir, { recursive: true });
+  await cp(clientDir, stagingDir, { recursive: true });
+
+  const index = await readFile(resolve(stagingDir, "index.html"), "utf8");
+  const assetReferences = [...index.matchAll(/(?:src|href)=["']\/?(assets\/[^"']+)["']/g)].map(
+    (match) => match[1],
+  );
+  if (assetReferences.length === 0) {
+    throw new Error("The iOS shell contains no bundled asset references.");
+  }
+  for (const relativePath of assetReferences) {
+    if (!existsSync(resolve(stagingDir, relativePath))) {
+      throw new Error(`The iOS shell references a missing asset: ${relativePath}`);
+    }
+  }
+
+  await rm(iosPublicDir, { recursive: true, force: true });
+  await rename(stagingDir, iosPublicDir);
+
+  const copiedIndex = await readFile(resolve(iosPublicDir, "index.html"), "utf8");
+  if (copiedIndex !== index || (await readdir(resolve(iosPublicDir, "assets"))).length === 0) {
+    throw new Error("Verification of copied iOS web assets failed.");
+  }
+  console.log(`[capacitor] Synced and verified fresh web assets -> ios/App/App/public`);
 }
 
 
@@ -99,3 +136,4 @@ function ensureIosProject() {
 
 await writeShell();
 ensureIosProject();
+await syncIosWebAssets();
