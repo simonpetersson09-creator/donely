@@ -169,7 +169,7 @@ function Installningar() {
               }
               purchasePremium();
             }}
-            className="premium-sheen group w-full rounded-full border border-gold/40 bg-gradient-premium px-3.5 py-3.5 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60"
+            className="premium-sheen group w-full rounded-full border border-premium-border bg-gradient-premium px-3.5 py-3.5 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60"
           >
             <span className="relative z-[2] inline-flex items-center justify-center gap-2 text-[14px] font-semibold leading-[18px] text-gold-foreground">
               <Crown className="size-4 text-gold-deep transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
