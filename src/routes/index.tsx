@@ -552,8 +552,21 @@ function CategorySheet({
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
 
+  // Freezes the page behind the sheet. Without this the background keeps its
+  // own scroll, which makes the view jump when the sheet opens/closes.
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const body = document.body;
+    const previousOverflow = body.style.overflow;
+    body.style.overflow = "hidden";
+    return () => {
+      body.style.overflow = previousOverflow;
+    };
+  }, []);
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center">
+
       <button
         aria-label={t("close")}
         onClick={onClose}
@@ -617,7 +630,7 @@ function CategorySheet({
           {t("swipeHint")}
         </p>
 
-        <div className="max-h-[55dvh] space-y-0.5 overflow-y-auto overscroll-contain">
+        <div className="no-scrollbar max-h-[55dvh] space-y-0.5 overflow-y-auto overscroll-contain">
           {categories.map((c) =>
             renamingId === c.id ? (
               <form

@@ -278,3 +278,13 @@
   box-shadow: var(--shadow-button);
 }
 
+
+/* Hides the overlay scrollbar inside sheets so opening one doesn't flash a
+   bar on the right edge (iOS/WebKit shows it on every touch). */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
