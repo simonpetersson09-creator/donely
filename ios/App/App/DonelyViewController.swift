@@ -28,6 +28,8 @@ final class DonelyViewController: CAPBridgeViewController {
     /// Strong reference — StoreKit 2 bridge (WKScriptMessageHandler).
     private var storeKitBridge: AnyObject?
     private var loadingObservation: NSKeyValueObservation?
+    /// Temporary on-device diagnostics (Info.plist: DonelyDebugOverlay).
+    private var diagnosticsOverlay: DonelyDiagnosticsOverlay?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +37,12 @@ final class DonelyViewController: CAPBridgeViewController {
         extendedLayoutIncludesOpaqueBars = true
         applyAppBackgroundColor()
         installNotificationBridge()
+        installDiagnosticsOverlay()
+    }
+
+    private func installDiagnosticsOverlay() {
+        guard diagnosticsOverlay == nil, DonelyDiagnosticsOverlay.isEnabled else { return }
+        diagnosticsOverlay = DonelyDiagnosticsOverlay(host: view, webView: webView)
     }
 
     /// Matches the web app background so the safe-area strips (status bar /
@@ -78,11 +86,13 @@ final class DonelyViewController: CAPBridgeViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         applyAppBackgroundColor()
+        installDiagnosticsOverlay()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         applyAppBackgroundColor()
+        diagnosticsOverlay?.bringToFront()
     }
 
     override func traitCollectionDidChange(_ previous: UITraitCollection?) {
