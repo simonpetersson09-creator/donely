@@ -451,14 +451,16 @@ function MetricField({
   value,
   onChange,
   suffix,
+  disabled,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   suffix: string;
+  disabled?: boolean;
 }) {
   return (
-    <label className="flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card">
+    <label className={cn("flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card", disabled && "opacity-50")}>
       <input
         inputMode="decimal"
         value={value}
@@ -466,6 +468,8 @@ function MetricField({
         onChange={(e) => onChange(e.target.value.replace(/[^0-9.,]/g, "").slice(0, 6))}
         onFocus={(e) => e.target.select()}
         aria-label={label}
+        disabled={disabled}
+        tabIndex={disabled ? -1 : 0}
         className="min-w-0 flex-1 bg-transparent text-[16px] font-semibold tabular-nums text-card-foreground outline-none placeholder:text-card-foreground/30"
       />
       <span className="text-[12px] font-semibold text-card-foreground/50">{suffix}</span>
