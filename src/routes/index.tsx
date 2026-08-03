@@ -727,20 +727,24 @@ function CategoryRow({
         type="button"
         onTouchStart={(e) => {
           startX.current = e.touches[0].clientX;
+          startY.current = e.touches[0].clientY;
           moved.current = false;
           clearPress();
           pressTimer.current = setTimeout(onOpenActions, 500);
         }}
         onTouchMove={(e) => {
           const dx = e.touches[0].clientX - startX.current;
-          if (Math.abs(dx) > 8) {
+          const dy = e.touches[0].clientY - startY.current;
+          if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
             moved.current = true;
             clearPress();
           }
+          if (Math.abs(dy) > Math.abs(dx)) return;
           if (dx < -40) onOpenActions();
           if (dx > 40) onCloseActions();
         }}
         onTouchEnd={clearPress}
+        onTouchCancel={clearPress}
         onContextMenu={(e) => {
           e.preventDefault();
           onOpenActions();
@@ -750,8 +754,14 @@ function CategoryRow({
           if (actionsOpen) onCloseActions();
           else onSelect();
         }}
-        style={{ transform: actionsOpen ? "translateX(-78px)" : "translateX(0)" }}
-        className="relative flex w-full items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200 active:bg-secondary"
+        style={{
+          transform: actionsOpen ? "translateX(-78px)" : "translateX(0)",
+          WebkitTouchCallout: "none",
+          WebkitUserSelect: "none",
+          touchAction: "pan-y",
+        }}
+        className="relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200 active:bg-secondary"
+
       >
         <span className="truncate">{name}</span>
         {!actionsOpen && (
