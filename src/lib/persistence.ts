@@ -129,6 +129,10 @@ const BACKFILL_RUNNING_KEY = "vr.backfill.lopning.v1";
 const WORK_CATEGORIES: Category[] = DEFAULT_CATEGORIES.filter((c) => c.area === "jobb");
 const BACKFILL_WORK_KEY = "vr.backfill.jobb.v2";
 
+/** Canonical private categories (order + names) and their one-time backfill flag. */
+const PRIVATE_CATEGORIES: Category[] = DEFAULT_CATEGORIES.filter((c) => c.area === "privat");
+const BACKFILL_PRIVATE_KEY = "vr.backfill.privat.v1";
+
 
 // ---------------------------------------------------------------------------
 // Low level storage access
@@ -568,6 +572,7 @@ export function initializeStorage(): IntegrityStatus {
 
   backfillRunningCategory();
   backfillWorkCategories();
+  backfillPrivateCategories();
 
   const outcome = runMigrations();
   if (outcome.status === "failed") {
@@ -629,6 +634,34 @@ function backfillWorkCategories() {
     writeKey(STORAGE_KEYS.categories, [...before, ...ordered, ...after], categoriesSchema);
   }
   writeKey(BACKFILL_WORK_KEY, true, flagSchema);
+}
+
+/**
+ * One-time backfill: restores the default private categories in their
+ * canonical order (Träningspass, Löpning, Promenad, Meditation, Lästa böcker).
+ * Missing defaults are re-added; custom categories keep their place after them.
+ */
+function backfillPrivateCategories() {
+  const store = storage();
+  if (!store) return;
+  const done = readKey(BACKFILL_PRIVATE_KEY, flagSchema);
+  if (done.status === "ok" && done.value) return;
+
+  const current = readKey(STORAGE_KEYS.categories, categoriesSchema);
+  if (current.status !== "ok") return;
+
+  const list = current.value;
+  const isDefault = (c: Category) => PRIVATE_CATEGORIES.some((p) => p.id === c.id);
+  const present = list.filter(isDefault);
+  if (present.length > 0) {
+    const ordered = PRIVATE_CATEGORIES.filter((p) => present.some((c) => c.id === p.id));
+    const rest = list.filter((c) => !isDefault(c));
+    const firstIndex = list.findIndex(isDefault);
+    const before = rest.filter((c) => list.indexOf(c) < firstIndex);
+    const after = rest.filter((c) => list.indexOf(c) > firstIndex);
+    writeKey(STORAGE_KEYS.categories, [...before, ...ordered, ...after], categoriesSchema);
+  }
+  writeKey(BACKFILL_PRIVATE_KEY, true, flagSchema);
 }
 
 
