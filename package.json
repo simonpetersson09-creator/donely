@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && node scripts/capacitor-postbuild.mjs",
-    "build:dev": "vite build --mode development && node scripts/capacitor-postbuild.mjs",
+    "build": "node scripts/clean-build.mjs && vite build && node scripts/capacitor-postbuild.mjs",
+    "build:dev": "node scripts/clean-build.mjs && vite build --mode development && node scripts/capacitor-postbuild.mjs",
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
