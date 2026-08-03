@@ -51,8 +51,11 @@ final class DonelyViewController: CAPBridgeViewController {
             .flatMap { $0 }
             .forEach { $0.backgroundColor = color }
         webView?.backgroundColor = color
-        webView?.isOpaque = false
+        // Opaque: a transparent WKWebView can composite as pure black on a
+        // device build before the page paints (the "black app" symptom).
+        webView?.isOpaque = true
         webView?.scrollView.backgroundColor = color
+
         webView?.scrollView.bounces = false
         // The web app uses viewport-fit=cover and env(safe-area-inset-*).
         // Prevent UIKit from adding a second inset that exposes the root view.
