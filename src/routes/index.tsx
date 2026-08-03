@@ -645,7 +645,10 @@ function CategorySheet({
           {t("swipeHint")}
         </p>
 
-        <div className="no-scrollbar max-h-[55dvh] space-y-0.5 overflow-y-auto overscroll-contain">
+        <div
+          className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
+          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+        >
           {categories.map((c) =>
             renamingId === c.id ? (
               <form
