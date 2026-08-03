@@ -32,12 +32,52 @@ final class DonelyViewController: CAPBridgeViewController {
     private var diagnosticsOverlay: DonelyDiagnosticsOverlay?
 
     override func viewDidLoad() {
+        guard validateBundledWebApp() else { return }
         super.viewDidLoad()
         edgesForExtendedLayout = .all
         extendedLayoutIncludesOpaqueBars = true
         applyAppBackgroundColor()
         installNotificationBridge()
         installDiagnosticsOverlay()
+    }
+
+    /// Capacitor terminates the process inside `super.viewDidLoad()` when the
+    /// bundled start file is missing. Validate first so an incomplete archive
+    /// can never look like a silent, solid-colour screen on a physical device.
+    private func validateBundledWebApp() -> Bool {
+        let indexURL = Bundle.main.url(
+            forResource: "index",
+            withExtension: "html",
+            subdirectory: "public"
+        )
+        let configURL = Bundle.main.url(forResource: "capacitor.config", withExtension: "json")
+        guard indexURL != nil, configURL != nil else {
+            showNativeStartupFailure(
+                "Donely kunde inte starta\n\nWebbfiler saknas i app-paketet. " +
+                "Bygg om med npm run build och npx cap sync ios före arkivering."
+            )
+            return false
+        }
+        return true
+    }
+
+    private func showNativeStartupFailure(_ message: String) {
+        view.backgroundColor = DonelyAppColors.background
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.textColor = UIColor(red: 0.110, green: 0.102, blue: 0.098, alpha: 1)
+        label.font = .systemFont(ofSize: 17, weight: .semibold)
+        label.text = message
+        view.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 24),
+            label.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -24),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+        ])
     }
 
     override func viewDidAppear(_ animated: Bool) {
