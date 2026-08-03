@@ -557,12 +557,41 @@ export function initializeStorage(): IntegrityStatus {
     }
   }
 
+  backfillRunningCategory();
+
   const outcome = runMigrations();
   if (outcome.status === "failed") {
     setIntegrity({ state: "corrupt", keys: [STORAGE_KEYS.schemaVersion] });
   }
   return integrity;
 }
+
+/**
+ * One-time backfill: existing installs never got the default "Löpning"
+ * category. It is inserted right after "Träningspass" (or first among the
+ * private categories). Runs at most once, so a user who deletes it keeps it
+ * deleted.
+ */
+function backfillRunningCategory() {
+  const store = storage();
+  if (!store) return;
+  const done = readKey(BACKFILL_RUNNING_KEY, flagSchema);
+  if (done.status === "ok" && done.value) return;
+
+  const current = readKey(STORAGE_KEYS.categories, categoriesSchema);
+  if (current.status !== "ok") return;
+
+  if (!current.value.some((c) => c.id === RUNNING_CATEGORY.id)) {
+    const next = [...current.value];
+    const trainingIndex = next.findIndex((c) => c.id === "p-traning");
+    const insertAt =
+      trainingIndex >= 0 ? trainingIndex + 1 : Math.max(next.findIndex((c) => c.area === "privat"), 0);
+    next.splice(insertAt, 0, RUNNING_CATEGORY);
+    writeKey(STORAGE_KEYS.categories, next, categoriesSchema);
+  }
+  writeKey(BACKFILL_RUNNING_KEY, true, flagSchema);
+}
+
 
 /** Test hook: lets the suite re-run initialization on a fresh storage. */
 export function resetInitializationForTests() {
