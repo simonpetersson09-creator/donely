@@ -119,6 +119,7 @@
 				504EC3011FED79650016851F /* Frameworks */,
 				504EC3021FED79650016851F /* Resources */,
 				D0NE1Y0000000000000021 /* Verify Built App Bundle */,
+				D0NE1Y0000000000000022 /* Reject Archived Web Overlays */,
 				9592DBEFFC6D2A0C8D5DEB22 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
@@ -183,6 +184,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		D0NE1Y0000000000000022 /* Reject Archived Web Overlays */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Reject Archived Web Overlays";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -eu\nAPP_BUNDLE=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}\"\nINDEX=\"${APP_BUNDLE}/public/index.html\"\n\nif [ ! -s \"${INDEX}\" ]; then\n  echo \"error: DONELY_NATIVE: cannot inspect final archived HTML because it is missing: ${INDEX}\" >&2\n  exit 1\nfi\n\necho \"DONELY_NATIVE: inspecting exact final app HTML: ${INDEX}\"\nHASH=$(shasum -a 256 \"${INDEX}\" | awk '{print $1}')\necho \"DONELY_NATIVE: final App.app/public/index.html SHA-256: ${HASH}\"\n\nAUDIT=\"${DERIVED_FILE_DIR:-${TMPDIR:-/tmp}}/donely-overlay-audit.txt\"\nBLOCKED=\"${DERIVED_FILE_DIR:-${TMPDIR:-/tmp}}/donely-blocked-overlay-matches.txt\"\ngrep -Ein 'donely-boot-error|donely-static-beacon|z-index[[:space:]]*:[[:space:]]*2147483647|position[[:space:]]*:[[:space:]]*fixed|background[[:space:]]*:[[:space:]]*#afa9a6' \"${INDEX}\" > \"${AUDIT}\" || true\nif [ -s \"${AUDIT}\" ]; then\n  echo \"DONELY_NATIVE: requested overlay audit matches in final App.app HTML:\"\n  cat \"${AUDIT}\"\nelse\n  echo \"DONELY_NATIVE: requested overlay audit found no matches.\"\nfi\n\nif grep -Ein 'donely-boot-error|donely-static-beacon|z-index[[:space:]]*:[[:space:]]*2147483647' \"${INDEX}\" > \"${BLOCKED}\"; then\n  echo \"error: DONELY_NATIVE: blocked overlay signature found in exact final archive HTML: ${INDEX}\" >&2\n  while IFS= read -r MATCH; do\n    echo \"error: DONELY_NATIVE: ${MATCH}\" >&2\n  done < \"${BLOCKED}\"\n  exit 1\nfi\n\necho \"DONELY_NATIVE: exact final App.app/public/index.html contains no blocked Donely overlay signatures.\"\n";
+			showEnvVarsInLog = 0;
+		};
 		D0NE1Y0000000000000021 /* Verify Built App Bundle */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
