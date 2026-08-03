@@ -116,11 +116,31 @@ async function writeShell() {
   }
 
   await mkdir(clientDir, { recursive: true });
-  await writeFile(outFile, html, "utf8");
+  await writeFile(outFile, harden(html), "utf8");
   console.log(
     `[capacitor] Wrote static app shell -> dist/client/index.html (${html.length} bytes)`,
   );
 }
+
+/**
+ * The native shell loads this file from a file/capacitor URL with no server
+ * behind it. Two safety nets are baked in so a failed boot can never show up
+ * as a plain black screen (which is impossible to debug from TestFlight):
+ *
+ *  1. An inline background color on <html>/<body>, so the app color is on
+ *     screen even if the CSS bundle fails to load.
+ *  2. A boot watchdog: if the app has not rendered anything after 8s, or a
+ *     script error / unhandled rejection happens, the reason is displayed.
+ */
+function harden(html) {
+  const head = `<style>html,body{background-color:#afa9a6;color:#1c1a19}</style>`;
+  const watchdog = `<div id="donely-boot-error" style="display:none;position:fixed;inset:0;z-index:2147483647;background:#afa9a6;color:#1c1a19;font:14px/1.45 -apple-system,system-ui,sans-serif;padding:calc(env(safe-area-inset-top) + 24px) 20px 20px;white-space:pre-wrap;overflow:auto"></div><script>(function(){var shown=false;function show(msg){if(shown)return;shown=true;var el=document.getElementById("donely-boot-error");if(!el)return;el.textContent="Donely kunde inte starta.\\n\\n"+msg;el.style.display="block"}window.addEventListener("error",function(e){show((e.message||"Script error")+"\\n"+(e.filename||"")+":"+(e.lineno||0))},true);window.addEventListener("unhandledrejection",function(e){var r=e.reason;show("Unhandled rejection: "+((r&&(r.stack||r.message))||String(r)))});setTimeout(function(){var b=document.body;if(b&&b.innerText.trim().length===0)show("Appen svarade inte inom 8 sekunder (inget innehåll renderades).")},8000)})();</script>`;
+  let out = html;
+  out = out.includes("</head>") ? out.replace("</head>", `${head}</head>`) : head + out;
+  out = out.includes("</body>") ? out.replace("</body>", `${watchdog}</body>`) : out + watchdog;
+  return out;
+}
+
 
 function ensureIosProject() {
   if (process.platform !== "darwin") return;
