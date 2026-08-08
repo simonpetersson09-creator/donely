@@ -234,8 +234,17 @@ export function setProduct(product: StoreProduct | string | null) {
   const displayPrice = typeof data?.displayPrice === "string" ? data.displayPrice.trim() : "";
   if (!displayPrice) {
     setState({ product: null, productStatus: "unavailable" });
+    // Transient App Store / sandbox hiccups are common: retry a couple of
+    // times with backoff before showing the "price unavailable" state.
+    if (typeof window !== "undefined" && productAttempt < PRODUCT_MAX_ATTEMPTS) {
+      const delay = 1500 * productAttempt;
+      window.setTimeout(() => {
+        if (state.productStatus === "unavailable") loadProduct();
+      }, delay);
+    }
     return;
   }
+  productAttempt = 0;
   setState({
     product: { id: typeof data?.id === "string" ? data.id : PRODUCT_ID, displayPrice },
     productStatus: "loaded",
@@ -383,11 +392,17 @@ export function requestEntitlement() {
   applyEntitlement({ subscribed: false, inTrial: false, trialDaysLeft: 0 });
 }
 
+/** Number of times we re-ask StoreKit before declaring the product unavailable. */
+const PRODUCT_MAX_ATTEMPTS = 3;
+let productAttempt = 0;
+
 /** Asks StoreKit for the product so the real localized price can be shown. */
-export function loadProduct() {
+export function loadProduct(options?: { retry?: boolean }) {
   if (state.productStatus === "loading") return;
+  if (options?.retry) productAttempt = 0;
   const handler = nativeHandler("requestProduct");
   if (handler) {
+    productAttempt += 1;
     setState({ productStatus: "loading" });
     handler.postMessage({ product: PRODUCT_ID });
     // Swift replies with __donelySetProduct(...)
@@ -409,10 +424,9 @@ export function purchasePremium() {
   if (state.busy) return;
   const handler = nativeHandler("purchasePremium");
   if (handler) {
-    if (state.productStatus === "unavailable") {
-      emitPurchaseEvent({ status: "productUnavailable" });
-      return;
-    }
+    // Always hand the request to StoreKit, even if the price fetch failed
+    // earlier. StoreKit can succeed where the metadata fetch did not, and if
+    // it fails we surface Apple's real reason instead of a generic error.
     setState({ phase: "purchasing", busy: true, lastResult: null, lastMessage: null });
     handler.postMessage({ product: PRODUCT_ID });
     armTimer("purchase", PURCHASE_TIMEOUT_MS, () => reportPurchaseResult("failed"));
@@ -490,15 +504,6 @@ export function openManageSubscriptions() {
  */
 export function canMutate(state: PremiumState): boolean {
   if (import.meta.env.DEV || LOCAL_FALLBACK_ENABLED) return true;
-  if (typeof window !== "undefined") {
-    const hostname = window.location.hostname;
-    const isDevelopmentPreview =
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname.includes("-preview--") ||
-      hostname.endsWith("-dev.lovable.app");
-    if (isDevelopmentPreview) return true;
-  }
   return state.status === "trial" || state.status === "subscribed";
 }
 
@@ -548,5 +553,8 @@ export function usePremium() {
 /** Price to interpolate into i18next strings as {{price}}. */
 export function usePrice(): string {
   const { product } = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
-  return product?.displayPrice ?? FALLBACK_PRICE;
+  if (product?.displayPrice) return product.displayPrice;
+  // Never invent a price in a production iOS build — an invented price is what
+  // makes a failed StoreKit fetch look like a working (but broken) purchase.
+  return LOCAL_FALLBACK_ENABLED ? FALLBACK_PRICE : "";
 }

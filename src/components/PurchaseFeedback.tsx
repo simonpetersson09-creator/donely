@@ -27,7 +27,8 @@ export function PurchaseFeedback() {
             toast.error(message ?? t("purchaseFailed"));
             break;
           case "productUnavailable":
-            toast.error(message ?? t("productUnavailable"));
+            // Show Apple's own reason as description when StoreKit gave one.
+            toast.error(t("productUnavailable"), message ? { description: message } : undefined);
             break;
           case "nothingToRestore":
             toast.message(message ?? t("restoreNone"));

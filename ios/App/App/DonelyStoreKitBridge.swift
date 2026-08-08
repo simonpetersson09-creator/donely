@@ -76,21 +76,33 @@ final class DonelyStoreKitBridge: NSObject {
 
     // MARK: - StoreKit
 
+    /// Last error from a failed `Product.products` fetch, surfaced to the user
+    /// instead of a generic message.
+    private var lastProductError: String?
+
     @discardableResult
-    private func loadProduct() async -> Product? {
-        do {
-            let products = try await Product.products(for: [DonelyStoreKitBridge.productID])
-            guard let product = products.first else {
-                sendProduct(nil)
-                return nil
+    private func loadProduct(attempts: Int = 3) async -> Product? {
+        for attempt in 1...max(1, attempts) {
+            do {
+                let products = try await Product.products(for: [DonelyStoreKitBridge.productID])
+                if let product = products.first {
+                    self.product = product
+                    self.lastProductError = nil
+                    sendProduct(product)
+                    return product
+                }
+                // Empty result: the product is not (yet) available in this
+                // storefront / sandbox. Retry a couple of times before giving up.
+                lastProductError = nil
+            } catch {
+                lastProductError = error.localizedDescription
             }
-            self.product = product
-            sendProduct(product)
-            return product
-        } catch {
-            sendProduct(nil)
-            return nil
+            if attempt < max(1, attempts) {
+                try? await Task.sleep(nanoseconds: UInt64(attempt) * 1_500_000_000)
+            }
         }
+        sendProduct(nil)
+        return nil
     }
 
     private func currentProduct() async -> Product? {
@@ -136,7 +148,8 @@ final class DonelyStoreKitBridge: NSObject {
 
     private func purchase() async {
         guard let product = await currentProduct() else {
-            sendPurchaseResult("productUnavailable")
+            // Give StoreKit the real reason when we have one.
+            sendPurchaseResult("productUnavailable", lastProductError)
             return
         }
         do {
