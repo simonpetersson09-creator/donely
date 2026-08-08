@@ -179,7 +179,9 @@ function Installningar() {
                     ? t("premiumActive")
                     : premium.productStatus === "loading"
                       ? t("productLoading")
-                      : t("startPremiumPriceDynamic", { price })}
+                      : price
+                        ? t("startPremiumPriceDynamic", { price })
+                        : t("startPremiumPlain")}
             </span>
           </button>
 

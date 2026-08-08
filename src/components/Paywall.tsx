@@ -54,13 +54,15 @@ export function Paywall({ onClose }: { onClose: () => void }) {
           {t("paywallBody")}
         </p>
 
-        <p className="mt-4 text-center text-[26px] font-bold tabular-nums tracking-[-0.02em] text-foreground">
-          {premium.productStatus === "loading"
-            ? t("productLoading")
-            : premium.productStatus === "unavailable"
-              ? t("productUnavailable")
-              : t("pricePerMonth", { price })}
-        </p>
+        {price ? (
+          <p className="mt-4 text-center text-[26px] font-bold tabular-nums tracking-[-0.02em] text-foreground">
+            {t("pricePerMonth", { price })}
+          </p>
+        ) : (
+          <p className="mt-4 text-center text-[14px] font-medium text-muted-foreground">
+            {premium.productStatus === "loading" ? t("productLoading") : t("productUnavailable")}
+          </p>
+        )}
 
         <div className="mt-4 space-y-2">
           <button
@@ -73,7 +75,9 @@ export function Paywall({ onClose }: { onClose: () => void }) {
               ? t("premiumLoading")
               : premium.phase === "purchasing"
                 ? t("purchasePending")
-                : t("startPremiumDynamic", { price })}
+                : price
+                  ? t("startPremiumDynamic", { price })
+                  : t("startPremiumPlain")}
           </button>
           <button
             type="button"
