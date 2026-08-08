@@ -37,7 +37,7 @@ final class DonelyStoreKitBridge: NSObject {
         "manageSubscription",
     ]
 
-    static let productID = "donely.premium.monthly"
+    static let productID = "se.shiningdays.donely.premium.monthly"
 
     private weak var webView: WKWebView?
     private var product: Product?

@@ -32,7 +32,7 @@ const TRIAL_KEY = "vr.trial.v1";
 const PREMIUM_KEY = "vr.premium.v1";
 
 export const TRIAL_DAYS = 7;
-export const PRODUCT_ID = "donely.premium.monthly";
+export const PRODUCT_ID = "se.shiningdays.donely.premium.monthly";
 
 /** Fallback price shown only until StoreKit reports the real localized price. */
 export const FALLBACK_PRICE = "29 kr";
