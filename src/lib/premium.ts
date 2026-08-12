@@ -31,7 +31,7 @@ import { useCallback, useEffect, useSyncExternalStore } from "react";
 const TRIAL_KEY = "vr.trial.v1";
 const PREMIUM_KEY = "vr.premium.v1";
 
-export const TRIAL_DAYS = 7;
+export const TRIAL_DAYS = 30;
 export const PRODUCT_ID = "se.shiningdays.donely.premium.monthly";
 
 /** Fallback price shown only until StoreKit reports the real localized price. */
