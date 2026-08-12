@@ -124,12 +124,12 @@ function Installningar() {
           </BackButton>
         </div>
 
-        <h1 className="px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary">
+        <h1 className="px-1 text-[22px] font-bold leading-[28px] tracking-[-0.03em] text-primary">
           {t("settings")}
         </h1>
       </div>
 
-      <div className="mt-12 flex flex-[1.1] items-end justify-center pb-6">
+      <div className="mt-8 flex flex-[1.1] items-end justify-center pb-4">
         <div className="relative">
           <div className="absolute -right-6 -top-9 z-10">
             <div className="relative rounded-full bg-primary px-3 py-1 shadow-[0_6px_16px_-8px_hsl(0_0%_0%/0.45)]">
@@ -147,10 +147,10 @@ function Installningar() {
             </div>
           </div>
 
-          <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+          <h1 className="font-logo select-none text-[30px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
-          <p className="mt-0.5 text-center text-[13px] font-medium tracking-wide text-primary/80">
+          <p className="mt-0.5 text-center text-[11px] font-medium tracking-wide text-primary/80">
             {t("tagline")}
           </p>
         </div>
