@@ -205,7 +205,7 @@ function Index() {
     <main data-donely-app-ready className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex shrink-0 items-end justify-center pb-4 pt-16">
         <div className="relative translate-y-[94px]">
-          <div className="absolute -right-9 -top-14 z-10 scale-100">
+          <div className="absolute -right-8 -top-12 z-10 scale-100">
             <div className="relative rotate-[6deg] rounded-[14px] border border-primary bg-background px-3.5 py-1.5 shadow-card">
               <p className="max-w-[8rem] break-words text-center text-[10px] font-semibold leading-[13px] text-primary">
                 {premium.subscribed ? (
