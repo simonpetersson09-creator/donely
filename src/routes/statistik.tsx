@@ -394,14 +394,14 @@ function GoalCard({
     <Link
       to="/kategori/$id"
       params={{ id: category.id }}
-      className="block rounded-xl border border-border bg-card px-3 py-2 text-card-foreground shadow-card transition-colors active:bg-accent"
+      className="block rounded-xl border border-border bg-card px-2.5 py-1.5 text-card-foreground shadow-card transition-colors active:bg-accent"
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[11px] font-medium text-card-foreground/70">
+          <h3 className="truncate text-[10px] font-medium text-card-foreground/70">
             {categoryLabel(t, category)}
           </h3>
-          <p className="text-[18px] font-bold leading-tight tabular-nums">
+          <p className="text-[16px] font-bold leading-tight tabular-nums">
             {goal !== null
               ? t("ofGoal", {
                   total: total.toLocaleString(locale),
@@ -410,10 +410,10 @@ function GoalCard({
               : t("soFarCount", { total: total.toLocaleString(locale) })}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-1.5">
+        <div className="flex shrink-0 items-center gap-1">
           {reached && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
-              <Check className="size-3" /> {t("achieved")}
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
+              <Check className="size-2.5" /> {t("achieved")}
             </span>
           )}
           {showGoalCta && (
@@ -425,38 +425,38 @@ function GoalCard({
                 e.stopPropagation();
                 onSetGoal(category);
               }}
-              className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
+              className="flex size-5 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
             >
-              <Pencil className="size-3" />
+              <Pencil className="size-2.5" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-1 flex items-center justify-between gap-2">
+      <div className="mt-0.5 flex items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1">
           {distanceKm > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-card-foreground/80">
-              <MapPin className="size-3 text-primary" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[9px] font-medium tabular-nums text-card-foreground/80">
+              <MapPin className="size-2.5 text-primary" />
               {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
             </span>
           )}
           {durationMin > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-card-foreground/80">
-              <Timer className="size-3 text-primary" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[9px] font-medium tabular-nums text-card-foreground/80">
+              <Timer className="size-2.5 text-primary" />
               {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
             </span>
           )}
         </div>
         {lastAt && mounted && (
-          <span className="shrink-0 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] text-muted-foreground">
+          <span className="shrink-0 rounded-full bg-secondary px-1.5 py-0.5 text-[9px] text-muted-foreground">
             {formatRelativeDate(lastAt, locale, t)}
           </span>
         )}
       </div>
 
       {pct !== null && (
-        <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-accent">
+        <div className="mt-1 h-[3px] w-full overflow-hidden rounded-full bg-accent">
           <div
             className={cn("h-full rounded-full transition-all duration-500", accentClass)}
             style={{ width: `${Math.min(100, pct)}%` }}
