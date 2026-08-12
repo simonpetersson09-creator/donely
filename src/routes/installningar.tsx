@@ -156,8 +156,8 @@ function Installningar() {
         </div>
       </div>
 
-      <div className="mt-6">
-        <section className="space-y-3">
+      <div className="mt-4">
+        <section className="space-y-2">
           <button
             type="button"
             disabled={premium.busy || premium.loading}
@@ -168,10 +168,10 @@ function Installningar() {
               }
               purchasePremium();
             }}
-            className="premium-sheen group w-full overflow-hidden rounded-full border border-premium-border bg-gradient-premium px-3.5 py-2.5 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60 edge-fix"
+            className="premium-sheen group w-full overflow-hidden rounded-full border border-premium-border bg-gradient-premium px-3 py-2 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60 edge-fix"
           >
-            <span className="relative z-[2] inline-flex items-center justify-center gap-2 text-[14px] font-semibold leading-[18px] text-gold-foreground">
-              <Crown className="size-4 text-gold-deep transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
+            <span className="relative z-[2] inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[17px] text-gold-foreground">
+              <Crown className="size-3.5 text-gold-deep transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
 
               {premium.loading
                 ? t("premiumLoading")
@@ -191,7 +191,7 @@ function Installningar() {
             <button
               type="button"
               onClick={openManageSubscriptions}
-              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
+              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
               {t("manageSubscription")}
             </button>
@@ -200,7 +200,7 @@ function Installningar() {
               type="button"
               disabled={premium.busy}
               onClick={() => restorePurchase()}
-              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
+              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
             >
               {premium.phase === "restoring" ? t("restoring") : t("restorePurchase")}
             </button>
