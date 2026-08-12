@@ -207,7 +207,7 @@ function Index() {
         <div className="relative translate-y-[94px]">
           <div className="absolute -right-12 -top-14 z-10 rotate-[6deg] scale-100">
             <div className="relative rounded-[14px] border border-primary bg-background px-3.5 py-1.5 shadow-card">
-              <p className="max-w-[10rem] text-center text-[10px] font-semibold leading-[13px] text-primary">
+              <p className="max-w-[10rem] break-words text-center text-[10px] font-semibold leading-[13px] text-primary">
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
                     <Crown className="size-2.5 text-gold" fill="currentColor" />
