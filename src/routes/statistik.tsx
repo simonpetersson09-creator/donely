@@ -406,13 +406,15 @@ function GoalRow({
       )}
     >
       <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-1.5">
-        <span className="min-w-0 truncate text-[14px] font-medium text-card-foreground">
-          {categoryLabel(t, category)}
-        </span>
-        <span className="text-center text-[16px] font-bold tabular-nums text-card-foreground">
+        <div className="min-w-0 overflow-hidden">
+          <span className="block truncate text-[14px] font-medium text-card-foreground">
+            {categoryLabel(t, category)}
+          </span>
+        </div>
+        <span className="shrink-0 text-center text-[16px] font-bold tabular-nums text-card-foreground">
           {total.toLocaleString(locale)}
         </span>
-        <span className="text-center text-[12px] tabular-nums text-muted-foreground">
+        <span className="shrink-0 text-center text-[12px] tabular-nums text-muted-foreground">
           {goal !== null ? goal.toLocaleString(locale) : "—"}
         </span>
         {showGoalCta ? (
