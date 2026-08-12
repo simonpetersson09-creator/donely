@@ -207,19 +207,19 @@ function Installningar() {
           </div>
         </section>
 
-        <section className="mt-4">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <section className="mt-3">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("remindersSection")}
           </p>
 
-          <div className="overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-card edge-fix">
+          <div className="overflow-hidden rounded-xl border border-border bg-card px-3 py-2.5 shadow-card edge-fix">
             <div className="flex items-center gap-3">
-              <Bell className="size-[18px] shrink-0 text-primary" />
+              <Bell className="size-[16px] shrink-0 text-primary" />
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-semibold leading-[18px] text-primary">
+                <p className="text-[12px] font-semibold leading-[17px] text-primary">
                   {t("weeklyReminder")}
                 </p>
-                <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                <p className="mt-0.5 text-[10px] font-normal leading-[14px] text-muted-foreground">
                   {t("weeklyReminderDesc")}
                 </p>
               </div>
@@ -242,7 +242,7 @@ function Installningar() {
             </div>
 
             {reminder.enabled && reminder.permission !== "denied" && (
-              <p className="mt-2 pl-[30px] text-[11px] font-normal leading-[15px] text-muted-foreground">
+              <p className="mt-2 pl-[28px] text-[10px] font-normal leading-[14px] text-muted-foreground">
                 {t("nextReminder", {
                   date: formatFireDate(reminder.nextFireDate, language),
                 })}
@@ -250,12 +250,12 @@ function Installningar() {
             )}
 
             <div className="mt-3 flex items-center gap-3 border-t border-border pt-3">
-              <Bell className="size-[18px] shrink-0 text-primary" />
+              <Bell className="size-[16px] shrink-0 text-primary" />
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-semibold leading-[18px] text-primary">
+                <p className="text-[12px] font-semibold leading-[17px] text-primary">
                   {t("dailyReminder")}
                 </p>
-                <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                <p className="mt-0.5 text-[10px] font-normal leading-[14px] text-muted-foreground">
                   {t("dailyReminderDesc")}
                 </p>
               </div>
@@ -279,7 +279,7 @@ function Installningar() {
 
             {reminder.permission === "denied" && (
               <div className="mt-3 rounded-lg bg-secondary px-3 py-2.5">
-                <p className="text-[11px] font-normal leading-[16px] text-muted-foreground">
+                <p className="text-[10px] font-normal leading-[14px] text-muted-foreground">
                   {t("notifDenied")}
                 </p>
                 <button
@@ -289,7 +289,7 @@ function Installningar() {
                       toast.error(t("notifUnsupported"));
                     }
                   }}
-                  className="mt-2 text-[12px] font-semibold leading-[16px] text-primary underline-offset-2 active:underline"
+                  className="mt-2 text-[11px] font-semibold leading-[15px] text-primary underline-offset-2 active:underline"
                 >
                   {t("openIosSettings")}
                 </button>
