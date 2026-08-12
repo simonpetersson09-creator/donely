@@ -49,6 +49,8 @@ const sv = {
   settingsSubtitle: "Premium och data",
   deleteAllData: "Ta bort all data",
   cancel: "Avbryt",
+  confirmTitle: "Bekräfta registrering",
+  confirmRegister: "Registrera",
   allDataDeleted: "All data har raderats",
   dataIssueTitle: "Problem med sparad data",
   dataIssueBody:
@@ -220,6 +222,8 @@ const en: Dict = {
   settingsSubtitle: "Premium and data",
   deleteAllData: "Delete all data",
   cancel: "Cancel",
+  confirmTitle: "Confirm entry",
+  confirmRegister: "Register",
   allDataDeleted: "All data has been deleted",
   dataIssueTitle: "Problem with saved data",
   dataIssueBody:
@@ -389,6 +393,8 @@ const de: Dict = {
   settingsSubtitle: "Premium und Daten",
   deleteAllData: "Alle Daten löschen",
   cancel: "Abbrechen",
+  confirmTitle: "Eintrag bestätigen",
+  confirmRegister: "Erfassen",
   allDataDeleted: "Alle Daten wurden gelöscht",
   dataIssueTitle: "Problem mit gespeicherten Daten",
   dataIssueBody:
@@ -560,6 +566,8 @@ const fr: Dict = {
   settingsSubtitle: "Premium et données",
   deleteAllData: "Supprimer toutes les données",
   cancel: "Annuler",
+  confirmTitle: "Confirmer l'enregistrement",
+  confirmRegister: "Enregistrer",
   allDataDeleted: "Toutes les données ont été supprimées",
   dataIssueTitle: "Problème avec les données enregistrées",
   dataIssueBody:
@@ -737,6 +745,8 @@ const es: Dict = {
   settingsSubtitle: "Premium y datos",
   deleteAllData: "Borrar todos los datos",
   cancel: "Cancelar",
+  confirmTitle: "Confirmar registro",
+  confirmRegister: "Registrar",
   allDataDeleted: "Se han borrado todos los datos",
   dataIssueTitle: "Problema con los datos guardados",
   dataIssueBody:
@@ -914,6 +924,8 @@ const it: Dict = {
   settingsSubtitle: "Premium e dati",
   deleteAllData: "Elimina tutti i dati",
   cancel: "Annulla",
+  confirmTitle: "Conferma registrazione",
+  confirmRegister: "Registra",
   allDataDeleted: "Tutti i dati sono stati eliminati",
   dataIssueTitle: "Problema con i dati salvati",
   dataIssueBody:
@@ -1090,6 +1102,8 @@ const ptBR: Dict = {
   settingsSubtitle: "Premium e dados",
   deleteAllData: "Excluir todos os dados",
   cancel: "Cancelar",
+  confirmTitle: "Confirmar registro",
+  confirmRegister: "Registrar",
   allDataDeleted: "Todos os dados foram excluídos",
   dataIssueTitle: "Problema com os dados salvos",
   dataIssueBody:
@@ -1266,6 +1280,8 @@ const nl: Dict = {
   settingsSubtitle: "Premium en gegevens",
   deleteAllData: "Alle gegevens verwijderen",
   cancel: "Annuleren",
+  confirmTitle: "Registratie bevestigen",
+  confirmRegister: "Registreren",
   allDataDeleted: "Alle gegevens zijn verwijderd",
   dataIssueTitle: "Probleem met opgeslagen gegevens",
   dataIssueBody:
@@ -1436,6 +1452,8 @@ const pl: Dict = {
   settingsSubtitle: "Premium i dane",
   deleteAllData: "Usuń wszystkie dane",
   cancel: "Anuluj",
+  confirmTitle: "Potwierdź wpis",
+  confirmRegister: "Zarejestruj",
   allDataDeleted: "Wszystkie dane zostały usunięte",
   dataIssueTitle: "Problem z zapisanymi danymi",
   dataIssueBody:
@@ -1615,6 +1633,8 @@ const da: Dict = {
   settingsSubtitle: "Premium og data",
   deleteAllData: "Slet alle data",
   cancel: "Annuller",
+  confirmTitle: "Bekræft registrering",
+  confirmRegister: "Registrér",
   allDataDeleted: "Alle data er slettet",
   dataIssueTitle: "Problem med gemte data",
   dataIssueBody:
@@ -1784,6 +1804,8 @@ const no: Dict = {
   settingsSubtitle: "Premium og data",
   deleteAllData: "Slett alle data",
   cancel: "Avbryt",
+  confirmTitle: "Bekräfta registrering",
+  confirmRegister: "Registrera",
   allDataDeleted: "Alle data er slettet",
   dataIssueTitle: "Problem med lagrede data",
   dataIssueBody:
@@ -1953,6 +1975,8 @@ const fi: Dict = {
   settingsSubtitle: "Premium ja tiedot",
   deleteAllData: "Poista kaikki tiedot",
   cancel: "Peruuta",
+  confirmTitle: "Vahvista merkintä",
+  confirmRegister: "Rekisteröi",
   allDataDeleted: "Kaikki tiedot on poistettu",
   dataIssueTitle: "Tallennettujen tietojen ongelma",
   dataIssueBody:
@@ -2122,6 +2146,8 @@ const ja: Dict = {
   settingsSubtitle: "プレミアムとデータ",
   deleteAllData: "すべてのデータを削除",
   cancel: "キャンセル",
+  confirmTitle: "登録を確認",
+  confirmRegister: "登録する",
   allDataDeleted: "すべてのデータを削除しました",
   dataIssueTitle: "保存データに問題があります",
   dataIssueBody:

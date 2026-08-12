@@ -297,7 +297,7 @@ function AreaStat({
   tone: "life" | "work";
 }) {
   return (
-    <div className="flex items-center gap-2 rounded-xl bg-secondary/60 px-2.5 py-2">
+    <div className="flex items-center justify-center gap-2 rounded-xl bg-secondary/60 px-2.5 py-2">
       <div
         className={cn(
           "flex size-8 shrink-0 items-center justify-center rounded-full",
@@ -308,7 +308,7 @@ function AreaStat({
       >
         {icon}
       </div>
-      <div className="min-w-0">
+      <div className="min-w-0 text-center">
         <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
         <p className="text-[18px] font-bold leading-none tabular-nums text-card-foreground">
           {value}
