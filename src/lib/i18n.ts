@@ -187,6 +187,11 @@ const sv = {
   weeklySummaryLink: "Din vecka",
   weeklyHeading: "Vecka",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Din dag i Donely",
+  dailySummaryEmpty: "Inga aktiviteter registrerade idag.",
+  dailySummaryTotal_one: "Totalt: {{count}} aktivitet",
+  dailySummaryTotal_other: "Totalt: {{count}} aktiviteter",
+  dailySummaryLink: "Din dag",
 };
 
 type Dict = typeof sv & Record<string, string>;
@@ -346,6 +351,11 @@ const en: Dict = {
   weeklySummaryLink: "Your week",
   weeklyHeading: "Week",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Your day in Donely",
+  dailySummaryEmpty: "No activities logged today.",
+  dailySummaryTotal_one: "Total: {{count}} activity",
+  dailySummaryTotal_other: "Total: {{count}} activities",
+  dailySummaryLink: "Your day",
 };
 
 const de: Dict = {
@@ -505,6 +515,11 @@ const de: Dict = {
   weeklySummaryLink: "Deine Woche",
   weeklyHeading: "Woche",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Dein Tag in Donely",
+  dailySummaryEmpty: "Heute wurden keine Aktivitäten erfasst.",
+  dailySummaryTotal_one: "Gesamt: {{count}} Aktivität",
+  dailySummaryTotal_other: "Gesamt: {{count}} Aktivitäten",
+  dailySummaryLink: "Dein Tag",
 };
 
 const fr: Dict = {
@@ -669,6 +684,12 @@ const fr: Dict = {
   weeklySummaryLink: "Votre semaine",
   weeklyHeading: "Semaine",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Votre journée dans Donely",
+  dailySummaryEmpty: "Aucune activité enregistrée aujourd'hui.",
+  dailySummaryTotal_one: "Total : {{count}} activité",
+  dailySummaryTotal_other: "Total : {{count}} activités",
+  dailySummaryTotal_many: "Total : {{count}} activités",
+  dailySummaryLink: "Votre journée",
 };
 
 const es: Dict = {
@@ -833,6 +854,12 @@ const es: Dict = {
   weeklySummaryLink: "Tu semana",
   weeklyHeading: "Semana",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Tu día en Donely",
+  dailySummaryEmpty: "No se registraron actividades hoy.",
+  dailySummaryTotal_one: "Total: {{count}} actividad",
+  dailySummaryTotal_other: "Total: {{count}} actividades",
+  dailySummaryTotal_many: "Total: {{count}} actividades",
+  dailySummaryLink: "Tu día",
 };
 
 const it: Dict = {
@@ -996,6 +1023,12 @@ const it: Dict = {
   weeklySummaryLink: "La tua settimana",
   weeklyHeading: "Settimana",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "La tua giornata in Donely",
+  dailySummaryEmpty: "Nessuna attività registrata oggi.",
+  dailySummaryTotal_one: "Totale: {{count}} attività",
+  dailySummaryTotal_other: "Totale: {{count}} attività",
+  dailySummaryTotal_many: "Totale: {{count}} attività",
+  dailySummaryLink: "La tua giornata",
 };
 
 const ptBR: Dict = {
@@ -1159,6 +1192,12 @@ const ptBR: Dict = {
   weeklySummaryLink: "Sua semana",
   weeklyHeading: "Semana",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Seu dia no Donely",
+  dailySummaryEmpty: "Nenhuma atividade registrada hoje.",
+  dailySummaryTotal_one: "Total: {{count}} atividade",
+  dailySummaryTotal_other: "Total: {{count}} atividades",
+  dailySummaryTotal_many: "Total: {{count}} atividades",
+  dailySummaryLink: "Seu dia",
 };
 
 const nl: Dict = {
@@ -1317,6 +1356,11 @@ const nl: Dict = {
   weeklySummaryLink: "Jouw week",
   weeklyHeading: "Week",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Jouw dag in Donely",
+  dailySummaryEmpty: "Vandaag zijn er geen activiteiten geregistreerd.",
+  dailySummaryTotal_one: "Totaal: {{count}} activiteit",
+  dailySummaryTotal_other: "Totaal: {{count}} activiteiten",
+  dailySummaryLink: "Jouw dag",
 };
 
 const pl: Dict = {
@@ -1482,6 +1526,13 @@ const pl: Dict = {
   weeklySummaryLink: "Twój tydzień",
   weeklyHeading: "Tydzień",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Twój dzień w Donely",
+  dailySummaryEmpty: "Dzisiaj nie zarejestrowano żadnych aktywności.",
+  dailySummaryTotal_one: "Łącznie: {{count}} aktywność",
+  dailySummaryTotal_few: "Łącznie: {{count}} aktywności",
+  dailySummaryTotal_many: "Łącznie: {{count}} aktywności",
+  dailySummaryTotal_other: "Łącznie: {{count}} aktywności",
+  dailySummaryLink: "Twój dzień",
 };
 
 const da: Dict = {
@@ -1639,6 +1690,11 @@ const da: Dict = {
   weeklySummaryLink: "Din uge",
   weeklyHeading: "Uge",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Din dag i Donely",
+  dailySummaryEmpty: "Ingen aktiviteter registreret i dag.",
+  dailySummaryTotal_one: "I alt: {{count}} aktivitet",
+  dailySummaryTotal_other: "I alt: {{count}} aktiviteter",
+  dailySummaryLink: "Din dag",
 };
 
 const no: Dict = {
@@ -1796,6 +1852,11 @@ const no: Dict = {
   weeklySummaryLink: "Uken din",
   weeklyHeading: "Uke",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Dagen din i Donely",
+  dailySummaryEmpty: "Ingen aktiviteter registrert i dag.",
+  dailySummaryTotal_one: "Totalt: {{count}} aktivitet",
+  dailySummaryTotal_other: "Totalt: {{count}} aktiviteter",
+  dailySummaryLink: "Dagen din",
 };
 
 const fi: Dict = {
@@ -1953,6 +2014,11 @@ const fi: Dict = {
   weeklySummaryLink: "Viikkosi",
   weeklyHeading: "Viikko",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Päiväsi Donelyssa",
+  dailySummaryEmpty: "Tänään ei ole kirjattu aktiviteetteja.",
+  dailySummaryTotal_one: "Yhteensä: {{count}} aktiviteetti",
+  dailySummaryTotal_other: "Yhteensä: {{count}} aktiviteettia",
+  dailySummaryLink: "Päiväsi",
 };
 
 const ja: Dict = {
@@ -2110,6 +2176,11 @@ const ja: Dict = {
   weeklySummaryLink: "今週",
   weeklyHeading: "週",
   weeklySummaryRange: "{{range}}",
+  dailySummaryTitle: "Donely の今日",
+  dailySummaryEmpty: "今日は記録されたアクティビティがありません。",
+  dailySummaryTotal_one: "合計：{{count}} 件のアクティビティ",
+  dailySummaryTotal_other: "合計：{{count}} 件のアクティビティ",
+  dailySummaryLink: "今日",
 };
 
 const resources = {

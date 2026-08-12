@@ -185,13 +185,22 @@ function Statistik() {
         </div>
       </div>
 
-      <Link
-        to="/veckostatistik"
-        className="mt-2 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
-      >
-        <span>{t("weeklySummaryLink")}</span>
-        <ChevronRight className="size-4 text-muted-foreground" />
-      </Link>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <Link
+          to="/dagsstatistik"
+          className="flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+        >
+          <span>{t("dailySummaryLink")}</span>
+          <ChevronRight className="size-4 text-muted-foreground" />
+        </Link>
+        <Link
+          to="/veckostatistik"
+          className="flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+        >
+          <span>{t("weeklySummaryLink")}</span>
+          <ChevronRight className="size-4 text-muted-foreground" />
+        </Link>
+      </div>
 
       <h1 className="mt-3 px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
