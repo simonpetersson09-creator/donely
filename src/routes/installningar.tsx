@@ -373,8 +373,8 @@ function Installningar() {
 
 
 
-        <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <div className="mt-3 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
           </p>
 
@@ -385,10 +385,10 @@ function Installningar() {
                 toast.error(t("legalOpenError"));
               }
             }}
-            className="relative mb-2 flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-button transition-colors active:bg-accent edge-fix"
+            className="relative mb-2 flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-2.5 shadow-button transition-colors active:bg-accent edge-fix"
           >
-            <span className="flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary">
-              <FileText className="size-[18px]" />
+            <span className="flex items-center gap-2 text-[12px] font-semibold leading-[17px] text-primary">
+              <FileText className="size-[16px]" />
               {t("legalRow")}
             </span>
             <ChevronRight className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -398,18 +398,18 @@ function Installningar() {
             <button
               type="button"
               onClick={requestAppStoreReview}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
-              <Star className="size-[18px]" />
+              <Star className="size-[16px]" />
               <span>{t("rateDonely")}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-destructive shadow-button transition-colors active:bg-destructive/10 edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-destructive shadow-button transition-colors active:bg-destructive/10 edge-fix"
             >
-              <Trash2 className="size-[18px]" />
+              <Trash2 className="size-[16px]" />
               <span>{t("deleteAllDataRow")}</span>
             </button>
           </div>
@@ -417,7 +417,7 @@ function Installningar() {
 
 
 
-          <p className="mt-2 text-center text-[9px] font-normal leading-[13px] text-muted-foreground/80">
+          <p className="mt-2 text-center text-[8px] font-normal leading-[12px] text-muted-foreground/80">
             Donely · {t("version")} 1.0
           </p>
         </div>
