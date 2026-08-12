@@ -205,14 +205,12 @@ function Index() {
     <main data-donely-app-ready className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex shrink-0 items-end justify-center pb-4 pt-16">
         <div className="relative translate-y-[94px]">
-          <div className="absolute -right-10 -top-14 z-10 rotate-[6deg] scale-100">
-            <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
-              <p className="max-w-[13rem] text-center text-[11px] font-semibold leading-[14px] text-primary">
-
-
+          <div className="absolute -right-12 -top-14 z-10 rotate-[6deg] scale-100">
+            <div className="relative rounded-[14px] border border-primary bg-background px-3.5 py-1.5 shadow-card">
+              <p className="max-w-[10rem] text-center text-[10px] font-semibold leading-[13px] text-primary">
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
-                    <Crown className="size-3 text-gold" fill="currentColor" />
+                    <Crown className="size-2.5 text-gold" fill="currentColor" />
                     {t("premiumActive")}
                   </span>
                 ) : (
