@@ -356,8 +356,8 @@ function Section({
       <div className="card-base overflow-hidden">
         <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
           <span>{t("activity")}</span>
-          <span className="text-right">{t("done")}</span>
-          <span className="text-right">{t("goal")}</span>
+          <span className="text-center">{t("done")}</span>
+          <span className="text-center">{t("goal")}</span>
           <span />
         </div>
         {rows.map((row, idx) => (
@@ -409,10 +409,10 @@ function GoalRow({
         <span className="min-w-0 truncate text-[14px] font-medium text-card-foreground">
           {categoryLabel(t, category)}
         </span>
-        <span className="text-right text-[16px] font-bold tabular-nums text-card-foreground">
+        <span className="text-center text-[16px] font-bold tabular-nums text-card-foreground">
           {total.toLocaleString(locale)}
         </span>
-        <span className="text-right text-[12px] tabular-nums text-muted-foreground">
+        <span className="text-center text-[12px] tabular-nums text-muted-foreground">
           {goal !== null ? goal.toLocaleString(locale) : "—"}
         </span>
         {showGoalCta ? (
