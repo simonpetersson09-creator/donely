@@ -178,7 +178,30 @@ export function useCategories() {
     [commit],
   );
 
-  return { categories, addCategory, renameCategory, removeCategory, hydrated };
+  /**
+   * Moves a category one step up/down *within its own area*. The stored array
+   * order is the manual order used by the picker and the statistics lists.
+   */
+  const moveCategory = useCallback(
+    (id: string, direction: -1 | 1) => {
+      setCategories((prev) => {
+        const current = prev.find((c) => c.id === id);
+        if (!current) return prev;
+        const sameArea = prev.filter((c) => c.area === current.area);
+        const index = sameArea.findIndex((c) => c.id === id);
+        const target = index + direction;
+        if (target < 0 || target >= sameArea.length) return prev;
+        const neighbour = sameArea[target];
+        const next = prev.map((c) =>
+          c.id === current.id ? neighbour : c.id === neighbour.id ? current : c,
+        );
+        return commit(next);
+      });
+    },
+    [commit],
+  );
+
+  return { categories, addCategory, renameCategory, removeCategory, moveCategory, hydrated };
 }
 
 function readFlagSeeded(): Category[] {
