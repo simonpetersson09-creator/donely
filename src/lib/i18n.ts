@@ -131,6 +131,7 @@ const sv = {
   "cat.j-admin": "Administration",
   welcomeTitle: "Välkommen till Donely",
   welcomeLine1: "Registrera det du faktiskt gör.",
+  tagline: "Det du faktiskt gjort",
   welcomeLine2: "Följ dina resultat över tid.",
   getStarted: "Kom igång",
   languageGuideTitle: "Byt språk här.",
