@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { Mail } from "lucide-react";
+import { BarChart3, Calendar, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
@@ -32,6 +32,7 @@ export const Route = createFileRoute("/veckostatistik")({
 function Veckostatistik() {
   const { t } = useLanguage();
   const locale = useLocale();
+  const currentYear = new Date().getFullYear();
   const { categories } = useCategories();
   const { entries } = useEntries();
 
