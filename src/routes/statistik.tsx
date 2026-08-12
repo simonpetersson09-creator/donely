@@ -202,7 +202,7 @@ function Statistik() {
         </Link>
       </div>
 
-      <h1 className="mt-3 px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
+      <h1 className="mt-2 px-1 text-center text-[22px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
