@@ -1008,6 +1008,7 @@ const it: Dict = {
   "cat.j-admin": "Amministrazione",
   welcomeTitle: "Ti diamo il benvenuto in Donely",
   welcomeLine1: "Registra ciò che fai davvero.",
+  tagline: "Ciò che hai fatto davvero",
   welcomeLine2: "Segui i tuoi risultati nel tempo.",
   getStarted: "Inizia",
   languageGuideTitle: "Cambia lingua qui.",
