@@ -188,14 +188,14 @@ function Statistik() {
       <div className="mt-2 grid grid-cols-2 gap-2">
         <Link
           to="/dagsstatistik"
-          className="flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+          className="card-base flex items-center justify-between text-[13px] font-semibold text-primary transition-colors active:bg-accent"
         >
           <span>{t("dailySummaryLink")}</span>
           <ChevronRight className="size-4 text-muted-foreground" />
         </Link>
         <Link
           to="/veckostatistik"
-          className="flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+          className="card-base flex items-center justify-between text-[13px] font-semibold text-primary transition-colors active:bg-accent"
         >
           <span>{t("weeklySummaryLink")}</span>
           <ChevronRight className="size-4 text-muted-foreground" />
@@ -207,18 +207,18 @@ function Statistik() {
       </h1>
 
       <div className="mt-2 grid grid-cols-2 gap-2">
-        <div className="col-span-2 rounded-2xl bg-primary px-3 py-2 text-primary-foreground shadow-card">
+        <div className="card-base col-span-2">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.1em] opacity-75">
+              <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
                 {t("totalActivities")}
               </p>
-              <p className="mt-0.5 text-[22px] font-bold leading-none tabular-nums">
+              <p className="mt-0.5 text-[22px] font-bold leading-none tabular-nums text-card-foreground">
                 {totalActivities.toLocaleString(locale)}
               </p>
             </div>
             {reachedGoals > 0 && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-foreground/15 px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
                 <Check className="size-3" />
                 {reachedGoals} {t("achieved")}
               </span>
@@ -226,7 +226,7 @@ function Statistik() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-1.5 shadow-card">
+        <div className="card-base">
           <div className="flex items-center gap-1.5">
             <div className="flex size-6 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
               <Home className="size-3" />
@@ -240,7 +240,7 @@ function Statistik() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-1.5 shadow-card">
+        <div className="card-base">
           <div className="flex items-center gap-1.5">
             <div className="flex size-6 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
               <Briefcase className="size-3" />
