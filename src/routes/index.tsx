@@ -330,7 +330,7 @@ function Index() {
       </div>
 
       {/* Registrera + Statistik — fasta längst ner */}
-      <div className="mt-auto space-y-2 pb-1">
+      <div className="relative z-10 mt-auto space-y-2 pb-1">
         <div className="h-4 text-center">
           <span
             className={cn(
