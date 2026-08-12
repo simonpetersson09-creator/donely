@@ -151,7 +151,7 @@ function Statistik() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex items-center justify-between pb-1 pt-0.5">
         <BackButton
           fallbackTo="/"
@@ -185,79 +185,66 @@ function Statistik() {
         </div>
       </div>
 
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <Link
-          to="/dagsstatistik"
-          className="card-base flex items-center justify-between text-[13px] font-semibold text-primary transition-colors active:bg-accent"
-        >
-          <span>{t("dailySummaryLink")}</span>
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Link>
-        <Link
-          to="/veckostatistik"
-          className="card-base flex items-center justify-between text-[13px] font-semibold text-primary transition-colors active:bg-accent"
-        >
-          <span>{t("weeklySummaryLink")}</span>
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Link>
-      </div>
-
-      <h1 className="mt-2 px-1 text-center text-[22px] font-bold leading-tight tracking-[-0.03em] text-primary">
+      <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <div className="card-base col-span-2">
-          <div className="flex items-end justify-between gap-3">
-            <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                {t("totalActivities")}
-              </p>
-              <p className="mt-0.5 text-[22px] font-bold leading-none tabular-nums text-card-foreground">
-                {totalActivities.toLocaleString(locale)}
-              </p>
-            </div>
-            {reachedGoals > 0 && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
-                <Check className="size-3" />
-                {reachedGoals} {t("achieved")}
-              </span>
-            )}
+      {/* Överblick */}
+      <div className="card-base mt-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+              {t("totalActivities")}
+            </p>
+            <p className="mt-1 text-[34px] font-bold leading-none tabular-nums text-card-foreground">
+              {totalActivities.toLocaleString(locale)}
+            </p>
           </div>
+          {reachedGoals > 0 && (
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[12px] font-semibold text-primary-foreground">
+              <Check className="size-3.5" />
+              {reachedGoals} {t("achieved")}
+            </span>
+          )}
         </div>
 
-        <div className="card-base">
-          <div className="flex items-center gap-1.5">
-            <div className="flex size-6 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
-              <Home className="size-3" />
-            </div>
-            <div>
-              <p className="text-[9px] font-medium text-muted-foreground">{t("private")}</p>
-              <p className="text-[14px] font-bold tabular-nums text-card-foreground">
-                {areaTotals.privat.toLocaleString(locale)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card-base">
-          <div className="flex items-center gap-1.5">
-            <div className="flex size-6 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
-              <Briefcase className="size-3" />
-            </div>
-            <div>
-              <p className="text-[9px] font-medium text-muted-foreground">{t("work")}</p>
-              <p className="text-[14px] font-bold tabular-nums text-card-foreground">
-                {areaTotals.jobb.toLocaleString(locale)}
-              </p>
-            </div>
-          </div>
+        <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3">
+          <AreaStat
+            icon={<Home className="size-4" />}
+            label={t("private")}
+            value={areaTotals.privat.toLocaleString(locale)}
+            tone="life"
+          />
+          <AreaStat
+            icon={<Briefcase className="size-4" />}
+            label={t("work")}
+            value={areaTotals.jobb.toLocaleString(locale)}
+            tone="work"
+          />
         </div>
       </div>
 
+      {/* Snabblänkar */}
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <Link
+          to="/dagsstatistik"
+          className="card-base flex items-center justify-between gap-1 text-[14px] font-semibold text-primary transition-colors active:bg-accent"
+        >
+          <span className="truncate">{t("dailySummaryLink")}</span>
+          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+        </Link>
+        <Link
+          to="/veckostatistik"
+          className="card-base flex items-center justify-between gap-1 text-[14px] font-semibold text-primary transition-colors active:bg-accent"
+        >
+          <span className="truncate">{t("weeklySummaryLink")}</span>
+          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+        </Link>
+      </div>
+
       <Section
-        title={`${t("private")} (${year})`}
-        icon={<Home className="size-5" />}
+        title={t("private")}
+        icon={<Home className="size-4" />}
         area="privat"
         total={areaTotals.privat}
         rows={rows.privat}
@@ -265,8 +252,8 @@ function Statistik() {
         onSetGoal={handleSetGoal}
       />
       <Section
-        title={`${t("work")} (${year})`}
-        icon={<Briefcase className="size-5" />}
+        title={t("work")}
+        icon={<Briefcase className="size-4" />}
         area="jobb"
         total={areaTotals.jobb}
         rows={rows.jobb}
@@ -275,10 +262,11 @@ function Statistik() {
       />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
-        <p className="mt-8 px-1 text-[15px] text-muted-foreground">
+        <p className="mt-8 px-1 text-center text-[15px] text-muted-foreground">
           {isCurrentYear ? t("noEntriesThisYear") : t("noEntriesYear", { year })}
         </p>
       )}
+
 
       {editing && (
         <GoalSheet
