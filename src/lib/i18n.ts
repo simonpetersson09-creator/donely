@@ -2228,6 +2228,7 @@ const ja: Dict = {
   "cat.j-admin": "管理業務",
   welcomeTitle: "Donely へようこそ",
   welcomeLine1: "実際にやったことを記録しましょう。",
+  tagline: "実際に成し遂げたこと",
   welcomeLine2: "成果の積み重ねを振り返れます。",
   getStarted: "始める",
   languageGuideTitle: "ここで言語を変更",
