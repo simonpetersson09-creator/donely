@@ -460,7 +460,7 @@ function GoalCard({
               </span>
             </>
           ) : (
-            <span className="text-[20px] font-bold leading-none text-card-foreground">
+            <span className="text-[26px] font-bold leading-none text-card-foreground">
               {total.toLocaleString(locale)}
             </span>
           )}
