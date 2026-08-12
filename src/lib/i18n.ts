@@ -171,6 +171,8 @@ const sv = {
   remindersSection: "Påminnelser",
   weeklyReminder: "Veckopåminnelse",
   weeklyReminderDesc: "Varje fredag kl. 17:00, enligt tiden på din enhet.",
+  dailyReminder: "Dagspåminnelse",
+  dailyReminderDesc: "Måndag–fredag kl. 17:00, sammanställning av din dag.",
   nextReminder: "Nästa påminnelse: {{date}}",
   notifDenied:
     "Notiser är avstängda för Donely. Slå på dem i iOS-inställningarna för att få påminnelsen.",
@@ -340,6 +342,8 @@ const en: Dict = {
   remindersSection: "Reminders",
   weeklyReminder: "Weekly reminder",
   weeklyReminderDesc: "Every Friday at 17:00, in your device's local time.",
+  dailyReminder: "Daily reminder",
+  dailyReminderDesc: "Monday–Friday at 17:00, a summary of your day.",
   nextReminder: "Next reminder: {{date}}",
   notifDenied:
     "Notifications are turned off for Donely. Enable them in iOS Settings to get the reminder.",
@@ -507,6 +511,8 @@ const de: Dict = {
   remindersSection: "Erinnerungen",
   weeklyReminder: "Wöchentliche Erinnerung",
   weeklyReminderDesc: "Jeden Freitag um 17:00 Uhr, in der Ortszeit deines Geräts.",
+  dailyReminder: "Tägliche Erinnerung",
+  dailyReminderDesc: "Montag–Freitag um 17:00 Uhr, eine Zusammenfassung deines Tages.",
   nextReminder: "Nächste Erinnerung: {{date}}",
   notifDenied:
     "Mitteilungen sind für Donely deaktiviert. Aktiviere sie in den iOS-Einstellungen, um die Erinnerung zu erhalten.",
@@ -679,6 +685,8 @@ const fr: Dict = {
   remindersSection: "Rappels",
   weeklyReminder: "Rappel hebdomadaire",
   weeklyReminderDesc: "Chaque vendredi à 17h00, à l’heure locale de votre appareil.",
+  dailyReminder: "Rappel quotidien",
+  dailyReminderDesc: "Du lundi au vendredi à 17h00, un résumé de votre journée.",
   nextReminder: "Prochain rappel : {{date}}",
   notifDenied:
     "Les notifications sont désactivées pour Donely. Activez-les dans les Réglages iOS pour recevoir le rappel.",
@@ -854,6 +862,8 @@ const es: Dict = {
   remindersSection: "Recordatorios",
   weeklyReminder: "Recordatorio semanal",
   weeklyReminderDesc: "Cada viernes a las 17:00, según la hora local de tu dispositivo.",
+  dailyReminder: "Recordatorio diario",
+  dailyReminderDesc: "De lunes a viernes a las 17:00, un resumen de tu día.",
   nextReminder: "Próximo recordatorio: {{date}}",
   notifDenied:
     "Las notificaciones están desactivadas para Donely. Actívalas en los Ajustes de iOS para recibir el recordatorio.",
@@ -1029,6 +1039,8 @@ const it: Dict = {
   remindersSection: "Promemoria",
   weeklyReminder: "Promemoria settimanale",
   weeklyReminderDesc: "Ogni venerdì alle 17:00, secondo l’ora locale del dispositivo.",
+  dailyReminder: "Promemoria giornaliero",
+  dailyReminderDesc: "Dal lunedì al venerdì alle 17:00, un riepilogo della tua giornata.",
   nextReminder: "Prossimo promemoria: {{date}}",
   notifDenied:
     "Le notifiche sono disattivate per Donely. Attivale in Impostazioni di iOS per ricevere il promemoria.",
@@ -1203,6 +1215,8 @@ const ptBR: Dict = {
   remindersSection: "Lembretes",
   weeklyReminder: "Lembrete semanal",
   weeklyReminderDesc: "Toda sexta-feira às 17:00, no horário local do seu aparelho.",
+  dailyReminder: "Lembrete diário",
+  dailyReminderDesc: "De segunda a sexta às 17:00, um resumo do seu dia.",
   nextReminder: "Próximo lembrete: {{date}}",
   notifDenied:
     "As notificações estão desativadas para o Donely. Ative-as nos Ajustes do iOS para receber o lembrete.",
@@ -1374,6 +1388,8 @@ const nl: Dict = {
   remindersSection: "Herinneringen",
   weeklyReminder: "Wekelijkse herinnering",
   weeklyReminderDesc: "Elke vrijdag om 17:00 uur, in de lokale tijd van je apparaat.",
+  dailyReminder: "Dagelijkse herinnering",
+  dailyReminderDesc: "Maandag t/m vrijdag om 17:00 uur, een samenvatting van je dag.",
   nextReminder: "Volgende herinnering: {{date}}",
   notifDenied:
     "Meldingen staan uit voor Donely. Zet ze aan in de iOS-instellingen om de herinnering te ontvangen.",
@@ -1544,6 +1560,8 @@ const pl: Dict = {
   remindersSection: "Przypomnienia",
   weeklyReminder: "Cotygodniowe przypomnienie",
   weeklyReminderDesc: "W każdy piątek o 17:00, według czasu lokalnego urządzenia.",
+  dailyReminder: "Codzienne przypomnienie",
+  dailyReminderDesc: "Od poniedziałku do piątku o 17:00, podsumowanie Twojego dnia.",
   nextReminder: "Następne przypomnienie: {{date}}",
   notifDenied:
     "Powiadomienia dla Donely są wyłączone. Włącz je w Ustawieniach iOS, aby otrzymywać przypomnienie.",
@@ -1719,6 +1737,8 @@ const da: Dict = {
   remindersSection: "Påmindelser",
   weeklyReminder: "Ugentlig påmindelse",
   weeklyReminderDesc: "Hver fredag kl. 17.00 efter enhedens lokale tid.",
+  dailyReminder: "Daglig påmindelse",
+  dailyReminderDesc: "Mandag–fredag kl. 17:00, en opsummering af din dag.",
   nextReminder: "Næste påmindelse: {{date}}",
   notifDenied:
     "Notifikationer er slået fra for Donely. Slå dem til i Indstillinger på iOS for at få påmindelsen.",
@@ -1886,6 +1906,8 @@ const no: Dict = {
   remindersSection: "Påminnelser",
   weeklyReminder: "Ukentlig påminnelse",
   weeklyReminderDesc: "Hver fredag kl. 17.00 etter lokal tid på enheten din.",
+  dailyReminder: "Daglig påminnelse",
+  dailyReminderDesc: "Mandag–fredag kl. 17:00, en oppsummering av dagen din.",
   nextReminder: "Neste påminnelse: {{date}}",
   notifDenied:
     "Varsler er slått av for Donely. Slå dem på i Innstillinger på iOS for å få påminnelsen.",
@@ -2053,6 +2075,8 @@ const fi: Dict = {
   remindersSection: "Muistutukset",
   weeklyReminder: "Viikoittainen muistutus",
   weeklyReminderDesc: "Joka perjantai klo 17.00 laitteesi paikallista aikaa.",
+  dailyReminder: "Päivittäinen muistutus",
+  dailyReminderDesc: "Maanantaista perjantaihin klo 17.00, yhteenveto päivästäsi.",
   nextReminder: "Seuraava muistutus: {{date}}",
   notifDenied:
     "Ilmoitukset on poistettu käytöstä Donelylta. Ota ne käyttöön iOS-asetuksissa, niin saat muistutuksen.",
@@ -2220,6 +2244,8 @@ const ja: Dict = {
   remindersSection: "リマインダー",
   weeklyReminder: "毎週のリマインダー",
   weeklyReminderDesc: "毎週金曜日 17:00（端末のローカル時間）に通知します。",
+  dailyReminder: "毎日のリマインダー",
+  dailyReminderDesc: "月曜日〜金曜日の17:00に、その日のまとめをお届けします。",
   nextReminder: "次回の通知：{{date}}",
   notifDenied:
     "Donely の通知がオフになっています。iOS の「設定」でオンにするとリマインダーが届きます。",
