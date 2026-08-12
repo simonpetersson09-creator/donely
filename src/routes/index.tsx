@@ -439,6 +439,25 @@ function Index() {
         />
       )}
 
+      {confirmOpen && selected && (
+        <ConfirmDialog
+          area={area}
+          areaLabel={area === "jobb" ? t("work") : t("private")}
+          categoryName={categoryLabel(t, selected)}
+          amount={parsed}
+          distanceText={distanceKm !== undefined ? `${formatKm(distanceKm, locale)} km` : null}
+          durationText={durationMin !== undefined ? formatMinutes(durationMin, locale) : null}
+          title={t("confirmTitle")}
+          areaWord={t("area")}
+          categoryWord={t("category")}
+          amountWord={t("amount")}
+          confirmLabel={t("confirmRegister")}
+          cancelLabel={t("cancel")}
+          onConfirm={commit}
+          onClose={() => setConfirmOpen(false)}
+        />
+      )}
+
       {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
 
       {showReminderPrompt && (
