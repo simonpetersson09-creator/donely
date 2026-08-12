@@ -187,7 +187,7 @@ function Statistik() {
 
       <Link
         to="/veckostatistik"
-        className="mt-2 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2.5 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+        className="mt-2 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-2 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
       >
         <span>{t("weeklySummaryLink")}</span>
         <ChevronRight className="size-4 text-muted-foreground" />
