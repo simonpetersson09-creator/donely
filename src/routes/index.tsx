@@ -205,21 +205,22 @@ function Index() {
     <main data-donely-app-ready className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex shrink-0 items-end justify-center pb-4 pt-16">
         <div className="relative translate-y-[94px]">
-          <div className="absolute -right-8 -top-12 z-10">
-            <div className="relative rounded-[14px] border border-primary bg-background px-3.5 py-1.5 shadow-card">
-              <p className="max-w-[8rem] break-words text-center text-[10px] font-semibold leading-[13px] text-primary">
+          <div className="absolute -right-6 -top-9 z-10">
+            <div className="relative rounded-full bg-primary px-3 py-1 shadow-[0_6px_16px_-8px_hsl(0_0%_0%/0.45)]">
+              <span className="flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold leading-[14px] tracking-wide text-primary-foreground">
                 {premium.subscribed ? (
-                  <span className="inline-flex items-center gap-1">
-                    <Crown className="size-2.5 text-gold" fill="currentColor" />
+                  <>
+                    <Crown className="size-2.5 shrink-0 text-gold" fill="currentColor" />
                     {t("premiumActive")}
-                  </span>
+                  </>
                 ) : (
                   t("trialLeft", { count: premium.inTrial ? premium.trialDaysLeft : 0 })
                 )}
-              </p>
-              <div className="absolute -bottom-[7px] left-4 size-3 rotate-45 rounded-[2px] border-b border-l border-primary bg-background" />
+              </span>
+              <div className="absolute -bottom-[3px] left-3 size-2.5 rotate-45 rounded-[1px] bg-primary" />
             </div>
           </div>
+
 
           <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
