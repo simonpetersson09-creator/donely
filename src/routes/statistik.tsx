@@ -224,17 +224,15 @@ function Statistik() {
       <div className="mt-3 grid grid-cols-2 gap-2">
         <Link
           to="/dagsstatistik"
-          className="card-base flex items-center justify-between gap-1 bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+          className="flex items-center justify-center gap-1 rounded-2xl bg-primary px-3 py-2.5 text-center text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
         >
-          <span className="truncate">{t("dailySummaryLink")}</span>
-          <ChevronRight className="size-4 shrink-0 text-primary-foreground/80" />
+          <span>{t("dailySummaryLink")}</span>
         </Link>
         <Link
           to="/veckostatistik"
-          className="card-base flex items-center justify-between gap-1 bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+          className="flex items-center justify-center gap-1 rounded-2xl bg-primary px-3 py-2.5 text-center text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
         >
-          <span className="truncate">{t("weeklySummaryLink")}</span>
-          <ChevronRight className="size-4 shrink-0 text-primary-foreground/80" />
+          <span>{t("weeklySummaryLink")}</span>
         </Link>
       </div>
 
