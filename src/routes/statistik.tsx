@@ -114,13 +114,6 @@ function Statistik() {
 
   const yearIndex = years.indexOf(year);
 
-  const totalActivities = useMemo(() => {
-    const known = new Set(categories.map((c) => c.id));
-    return entries
-      .filter((e) => known.has(e.categoryId) && new Date(e.createdAt).getFullYear() === year)
-      .reduce((sum, e) => sum + e.amount, 0);
-  }, [categories, entries, year]);
-
   const areaTotals = useMemo(
     () => ({
       privat: rows.privat.reduce((sum, r) => sum + r.total, 0),
@@ -128,12 +121,6 @@ function Statistik() {
     }),
     [rows],
   );
-
-  const reachedGoals = useMemo(() => {
-    const reached = (arr: Row[]) =>
-      arr.filter((r) => r.goal !== null && r.total >= r.goal!).length;
-    return reached(rows.privat) + reached(rows.jobb);
-  }, [rows]);
 
   const handleSetGoal = (c: Category) => {
     if (premium.loading) {
