@@ -2,6 +2,7 @@ import { useCallback, useEffect, useSyncExternalStore } from "react";
 import i18n, { localeOf } from "@/lib/i18n";
 import { DATA_CHANGED_EVENT } from "@/lib/store";
 import { weeklyNotificationContent } from "@/lib/weekly-summary";
+import { dailyNotificationContent } from "@/lib/daily-summary";
 
 /**
  * Weekly local reminder for Donely — Fridays 17:00 in the *device's* local
@@ -73,6 +74,8 @@ export type ReminderState = {
   lastError: string | null;
   /** True when running inside the iOS shell (real scheduling available). */
   native: boolean;
+  /** Daily reminder (Mon–Fri 17:00) with the "your day" summary. */
+  dailyEnabled: boolean;
 };
 
 // ---------------------------------------------------------------------------
@@ -144,6 +147,7 @@ const initial: ReminderState = {
   busy: false,
   lastError: null,
   native: false,
+  dailyEnabled: false,
 };
 
 let state: ReminderState = initial;
@@ -434,6 +438,7 @@ export function logReminderDiagnostics(reason = "status"): void {
 // ---------------------------------------------------------------------------
 
 let pendingEnable: { language: string } | null = null;
+let pendingDailyEnable: { language: string } | null = null;
 let installed = false;
 
 function installBridge() {
@@ -473,6 +478,18 @@ function installBridge() {
       // The user may have come back from iOS Settings after allowing notifications.
       maybeAutoEnable(permission);
     }
+
+    if (pendingDailyEnable && (permission === "granted" || permission === "provisional")) {
+      const { language } = pendingDailyEnable;
+      pendingDailyEnable = null;
+      writeDailyEnabled(true);
+      setState({ dailyEnabled: true });
+      scheduleDailyReminders(language);
+    } else if (pendingDailyEnable && permission === "denied") {
+      pendingDailyEnable = null;
+      writeDailyEnabled(false);
+      setState({ dailyEnabled: false });
+    }
   };
 
   w.__donelyNotificationScheduled = (value: unknown) => {
@@ -496,6 +513,7 @@ function installBridge() {
   setState({
     native: hasNotificationBridge(),
     enabled: readEnabled(),
+    dailyEnabled: readDailyEnabled(),
     nextFireDate: readEnabled() ? nextReminderDate().toISOString() : null,
     scheduledLanguage: readEnabled() ? i18n.language || "sv" : null,
   });
@@ -505,9 +523,9 @@ function installBridge() {
   // Language change → reschedule so the pending notification text follows the
   // language the user picked inside Donely.
   i18n.on("languageChanged", (lng: string) => {
-    if (!readEnabled()) return;
     if (state.permission === "denied" || state.permission === "unsupported") return;
-    scheduleWeeklyReminder(lng);
+    if (readEnabled()) scheduleWeeklyReminder(lng);
+    if (readDailyEnabled()) scheduleDailyReminders(lng);
   });
 
   // Travelling / time-zone change: iOS recalculates the calendar trigger by
@@ -532,12 +550,14 @@ function installBridge() {
   // of edits results in a single reschedule.
   let refreshTimer: ReturnType<typeof setTimeout> | null = null;
   window.addEventListener(DATA_CHANGED_EVENT, () => {
-    if (!readEnabled()) return;
+    if (!readEnabled() && !readDailyEnabled()) return;
     if (state.permission === "denied" || state.permission === "unsupported") return;
     if (refreshTimer) clearTimeout(refreshTimer);
     refreshTimer = setTimeout(() => {
       refreshTimer = null;
-      scheduleWeeklyReminder(state.scheduledLanguage ?? i18n.language ?? "sv");
+      const lng = state.scheduledLanguage ?? i18n.language ?? "sv";
+      if (readEnabled()) scheduleWeeklyReminder(lng);
+      if (readDailyEnabled()) scheduleDailyReminders(lng);
     }, 400);
   });
 
@@ -585,5 +605,98 @@ export function useReminder() {
     [snapshot.permission],
   );
 
-  return { ...snapshot, toggle };
+  const toggleDaily = useCallback(
+    async (next: boolean, language: string) => {
+      if (next) return enableDailyReminder(language);
+      disableDailyReminder();
+      return snapshot.permission;
+    },
+    [snapshot.permission],
+  );
+
+  return { ...snapshot, toggle, toggleDaily };
+}
+
+// ---------------------------------------------------------------------------
+// daily reminder — Monday–Friday 17:00, "your day" summary
+// ---------------------------------------------------------------------------
+
+/** One repeating request per weekday (iOS DateComponents: Monday = 2 … Friday = 6). */
+export const DAILY_REMINDER_WEEKDAYS = [2, 3, 4, 5, 6];
+export const DAILY_REMINDER_ROUTE = "/dagsstatistik";
+const DAILY_ENABLED_KEY = "vr.reminder.daily.v1";
+
+function dailyId(weekday: number) {
+  return `donely.reminder.daily.${weekday}`;
+}
+
+function readDailyEnabled(): boolean {
+  try {
+    return localStorage.getItem(DAILY_ENABLED_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function writeDailyEnabled(value: boolean) {
+  try {
+    localStorage.setItem(DAILY_ENABLED_KEY, String(value));
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+/** (Re)schedules the five weekday reminders. Idempotent — stable identifiers. */
+export function scheduleDailyReminders(language = i18n.language || "sv"): void {
+  const { title, subtitle, body, bodyLines } = dailyNotificationContent(language);
+  const timeZone = currentTimeZone();
+  for (const weekday of DAILY_REMINDER_WEEKDAYS) {
+    const id = dailyId(weekday);
+    post("cancelNotification", { id });
+    post("scheduleWeeklyReminder", {
+      id,
+      weekday,
+      hour: REMINDER_HOUR,
+      minute: REMINDER_MINUTE,
+      repeats: true,
+      title,
+      subtitle,
+      body,
+      bodyLines,
+      language,
+      timeZone,
+      route: DAILY_REMINDER_ROUTE,
+    });
+  }
+}
+
+/** Turns the daily reminder on, asking for permission first when needed. */
+export async function enableDailyReminder(
+  language = i18n.language || "sv",
+): Promise<PermissionStatus> {
+  let permission = state.permission;
+  if (permission === "unknown" || permission === "notDetermined") {
+    permission = await requestPermission();
+    if (permission === "unknown") {
+      pendingDailyEnable = { language };
+      return permission;
+    }
+  }
+  if (permission === "denied" || permission === "unsupported") {
+    setState({ busy: false });
+    return permission;
+  }
+  writeDailyEnabled(true);
+  setState({ dailyEnabled: true, busy: false });
+  scheduleDailyReminders(language);
+  return permission;
+}
+
+/** Turns the daily reminder off and removes all five pending requests. */
+export function disableDailyReminder(): void {
+  writeDailyEnabled(false);
+  for (const weekday of DAILY_REMINDER_WEEKDAYS) {
+    post("cancelNotification", { id: dailyId(weekday) });
+  }
+  setState({ dailyEnabled: false, busy: false });
 }
