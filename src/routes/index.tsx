@@ -8,6 +8,7 @@ import {
   Check,
   ChevronDown,
   ChevronLeft,
+  ChevronUp,
   CirclePlus,
   Crown,
   Home,
@@ -76,7 +77,7 @@ function Index() {
 
   const { t } = useLanguage();
   const locale = useLocale();
-  const { categories, addCategory, renameCategory, hydrated } = useCategories();
+  const { categories, addCategory, renameCategory, moveCategory, hydrated } = useCategories();
   const { addEntry } = useEntries();
   const {
     seen: onboardingSeen,
@@ -95,11 +96,12 @@ function Index() {
   const reminder = useReminder();
   const { language } = useLanguage();
 
-  const areaCategories = useMemo(() => {
-    const list = categories.filter((c) => c.area === area);
-    const isStd = (id: string) => DEFAULT_IDS.has(id);
-    return [...list.filter((c) => isStd(c.id)), ...list.filter((c) => !isStd(c.id))];
-  }, [categories, area]);
+  // Manuell ordning: listan visas exakt som den är sparad, så användarens
+  // egna upp/ned-flyttar syns både här och i statistiken.
+  const areaCategories = useMemo(
+    () => categories.filter((c) => c.area === area),
+    [categories, area],
+  );
 
   useEffect(() => {
     if (!areaCategories.some((c) => c.id === categoryId)) {
@@ -381,7 +383,7 @@ function Index() {
         </div>
         <div className="flex items-stretch gap-2">
           <Link
-            to="/statistik"
+            to="/veckostatistik"
             className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[16px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
           >
             <BarChart3 className="size-5" />
@@ -416,6 +418,18 @@ function Index() {
             const created = addCategory(name, area);
             setCategoryId(created.id);
             setPickerOpen(false);
+          }}
+          onMove={(id, direction) => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
+            if (!canMutate(premium)) {
+              setPickerOpen(false);
+              setPaywallOpen(true);
+              return;
+            }
+            moveCategory(id, direction);
           }}
           onRename={(id, name) => {
             if (premium.loading) {
@@ -592,6 +606,7 @@ function CategorySheet({
   onSelect,
   onCreate,
   onRename,
+  onMove,
   onDelete,
   onClose,
 }: {
@@ -601,6 +616,7 @@ function CategorySheet({
   onSelect: (id: string) => void;
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
+  onMove: (id: string, direction: -1 | 1) => void;
   onDelete: (id: string) => void;
   onClose: () => void;
 }) {
@@ -694,7 +710,7 @@ function CategorySheet({
           style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
           onScroll={() => setOpenId(null)}
         >
-          {categories.map((c) =>
+          {categories.map((c, index) =>
             renamingId === c.id ? (
               <form
                 key={c.id}
@@ -726,6 +742,10 @@ function CategorySheet({
                 actionsOpen={openId === c.id}
                 onOpenActions={() => setOpenId(c.id)}
                 onCloseActions={() => setOpenId(null)}
+                canMoveUp={index > 0}
+                canMoveDown={index < categories.length - 1}
+                onMoveUp={() => onMove(c.id, -1)}
+                onMoveDown={() => onMove(c.id, 1)}
                 onSelect={() => onSelect(c.id)}
                 onRename={() => {
                   setRenameValue(categoryLabel(t, c));
@@ -751,6 +771,10 @@ function CategoryRow({
   actionsOpen,
   onOpenActions,
   onCloseActions,
+  canMoveUp,
+  canMoveDown,
+  onMoveUp,
+  onMoveDown,
   onSelect,
   onRename,
   onDelete,
@@ -760,6 +784,10 @@ function CategoryRow({
   actionsOpen: boolean;
   onOpenActions: () => void;
   onCloseActions: () => void;
+  canMoveUp: boolean;
+  canMoveDown: boolean;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
   onSelect: () => void;
   onRename: () => void;
   onDelete: () => void;
@@ -781,6 +809,24 @@ function CategoryRow({
   return (
     <div className="relative overflow-hidden rounded-xl">
       <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
+        <button
+          type="button"
+          onClick={onMoveUp}
+          disabled={!canMoveUp}
+          aria-label={t("moveUp")}
+          className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
+        >
+          <ChevronUp className="size-3.5" />
+        </button>
+        <button
+          type="button"
+          onClick={onMoveDown}
+          disabled={!canMoveDown}
+          aria-label={t("moveDown")}
+          className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
+        >
+          <ChevronDown className="size-3.5" />
+        </button>
         <button
           type="button"
           onClick={onRename}
@@ -831,7 +877,7 @@ function CategoryRow({
           else onSelect();
         }}
         style={{
-          transform: actionsOpen ? "translateX(-78px)" : "translateX(0)",
+          transform: actionsOpen ? "translateX(-150px)" : "translateX(0)",
           WebkitTouchCallout: "none",
           WebkitUserSelect: "none",
           touchAction: "pan-y",
