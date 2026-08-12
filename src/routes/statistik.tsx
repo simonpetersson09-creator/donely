@@ -10,6 +10,7 @@ import {
   Briefcase,
   MapPin,
   Timer,
+  Plus,
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
