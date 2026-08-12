@@ -3,7 +3,6 @@ import { useMemo, useState, type ReactNode } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Check,
   X,
   Pencil,
   Home,
@@ -115,13 +114,6 @@ function Statistik() {
 
   const yearIndex = years.indexOf(year);
 
-  const totalActivities = useMemo(() => {
-    const known = new Set(categories.map((c) => c.id));
-    return entries
-      .filter((e) => known.has(e.categoryId) && new Date(e.createdAt).getFullYear() === year)
-      .reduce((sum, e) => sum + e.amount, 0);
-  }, [categories, entries, year]);
-
   const areaTotals = useMemo(
     () => ({
       privat: rows.privat.reduce((sum, r) => sum + r.total, 0),
@@ -129,12 +121,6 @@ function Statistik() {
     }),
     [rows],
   );
-
-  const reachedGoals = useMemo(() => {
-    const reached = (arr: Row[]) =>
-      arr.filter((r) => r.goal !== null && r.total >= r.goal!).length;
-    return reached(rows.privat) + reached(rows.jobb);
-  }, [rows]);
 
   const handleSetGoal = (c: Category) => {
     if (premium.loading) {
@@ -189,24 +175,7 @@ function Statistik() {
 
       {/* Överblick */}
       <div className="card-base mt-3 px-3 py-3">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
-              {t("totalActivities")}
-            </p>
-            <p className="mt-0.5 text-[30px] font-bold leading-none tabular-nums text-card-foreground">
-              {totalActivities.toLocaleString(locale)}
-            </p>
-          </div>
-          {reachedGoals > 0 && (
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
-              <Check className="size-3" />
-              {reachedGoals} {t("achieved")}
-            </span>
-          )}
-        </div>
-
-        <div className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-2">
+        <div className="grid grid-cols-2 gap-2">
           <AreaStat
             icon={<Home className="size-3.5" />}
             label={t("private")}
