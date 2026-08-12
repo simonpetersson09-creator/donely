@@ -369,23 +369,20 @@ function Section({
   if (rows.length === 0) return null;
   return (
     <section className="mt-5">
-      <div className="mb-2 flex items-center justify-between px-1">
-        <h2 className="flex items-center gap-2 text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
-          <span
-            className={cn(
-              "flex size-6 items-center justify-center rounded-full",
-              area === "privat"
-                ? "bg-accent-life-soft text-accent-life"
-                : "bg-accent-work-soft text-accent-work",
-            )}
-          >
-            {icon}
-          </span>
-          <span>{title}</span>
-        </h2>
-        <span className="text-[13px] font-semibold tabular-nums text-muted-foreground">
-          {total.toLocaleString(locale)}
+      <div className="mb-2 flex items-center gap-2 px-1">
+        <span
+          className={cn(
+            "flex size-6 items-center justify-center rounded-full",
+            area === "privat"
+              ? "bg-accent-life-soft text-accent-life"
+              : "bg-accent-work-soft text-accent-work",
+          )}
+        >
+          {icon}
         </span>
+        <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
+          {title}
+        </h2>
       </div>
       <div className="space-y-2">
         {rows.map((row) => (
