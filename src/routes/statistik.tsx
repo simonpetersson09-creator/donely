@@ -415,13 +415,11 @@ function GoalCard({
 }) {
   const { t } = useLanguage();
   const locale = useLocale();
-  const { category, total, goal, lastAt, distanceKm, durationMin } = row;
+  const { category, total, goal, distanceKm, durationMin } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
   const hours = Math.floor(durationMin / 60);
   const mins = Math.round(durationMin % 60);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   const accentClass = area === "privat" ? "bg-accent-life" : "bg-accent-work";
 
@@ -481,7 +479,7 @@ function GoalCard({
         </div>
       )}
 
-      {(distanceKm > 0 || durationMin > 0 || (lastAt && mounted)) && (
+      {(distanceKm > 0 || durationMin > 0) && (
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
           {distanceKm > 0 && (
             <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
@@ -495,15 +493,9 @@ function GoalCard({
               {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
             </span>
           )}
-          {lastAt && mounted && (
-            <span className="ml-auto shrink-0 text-[11px] text-muted-foreground">
-              {formatRelativeDate(lastAt, locale, t)}
-            </span>
-          )}
         </div>
       )}
     </Link>
-
   );
 }
 
