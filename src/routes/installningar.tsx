@@ -298,17 +298,17 @@ function Installningar() {
           </div>
         </section>
 
-        <section className="mt-4">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <section className="mt-3">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("recentSection")}
           </p>
 
           <Link
             to="/senaste-registreringar"
-            className="flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
+            className="flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-2.5 text-[12px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2">
-              <Trash2 className="size-[18px]" />
+              <Trash2 className="size-[16px]" />
               {t("recentSection")}
             </span>
             <ChevronRight className="size-4 text-muted-foreground" />
@@ -316,10 +316,10 @@ function Installningar() {
 
           <Link
             to="/historik"
-            className="mt-2 flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
+            className="mt-2 flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-2.5 text-[12px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2">
-              <CalendarPlus className="size-[18px]" />
+              <CalendarPlus className="size-[16px]" />
               {t("historySection")}
             </span>
             <ChevronRight className="size-4 text-muted-foreground" />
@@ -327,8 +327,8 @@ function Installningar() {
         </section>
 
 
-        <section className="mt-4">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <section className="mt-3">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("backupSection")}
           </p>
 
@@ -337,18 +337,18 @@ function Installningar() {
               type="button"
               onClick={handleExport}
               disabled={exporting}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
             >
-              <Download className="size-[18px]" />
+              <Download className="size-[16px]" />
               <span>{t("exportBackup")}</span>
             </button>
 
             <button
               type="button"
               onClick={() => fileInput.current?.click()}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
-              <Upload className="size-[18px]" />
+              <Upload className="size-[16px]" />
               <span>{t("importBackup")}</span>
             </button>
           </div>
