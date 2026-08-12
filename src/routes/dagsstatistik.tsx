@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { MapPin, Timer } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
+import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { buildDailySummary } from "@/lib/daily-summary";
@@ -58,53 +58,18 @@ function Dagsstatistik() {
         </BackButton>
       </div>
 
-      <h1 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
+      <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {t("dailySummaryTitle")}
       </h1>
-      <p className="mt-1 px-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
+      <p className="mt-1 px-1 text-center text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
 
       {summary.rows.length === 0 ? (
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("dailySummaryEmpty")}</p>
       ) : (
-        <div className="mt-4 space-y-1.5">
-          {summary.rows.map((row) => {
-            const hasMetrics = row.distanceKm > 0 || row.durationMin > 0;
-            const hours = Math.floor(row.durationMin / 60);
-            const mins = Math.round(row.durationMin % 60);
-            return (
-              <div
-                key={row.id}
-                className="rounded-xl border border-border bg-card px-3.5 py-3 text-card-foreground shadow-card"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span className="truncate text-[15px] font-medium">{row.label}</span>
-                  <span className="shrink-0 text-[17px] font-bold tabular-nums">
-                    {row.total.toLocaleString(locale)}
-                  </span>
-                </div>
-                {hasMetrics && (
-                  <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                    {row.distanceKm > 0 && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
-                        <MapPin className="size-3 text-primary" />
-                        {row.distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
-                      </span>
-                    )}
-                    {row.durationMin > 0 && (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
-                        <Timer className="size-3 text-primary" />
-                        {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
-                      </span>
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
+        <SummaryBreakdown rows={summary.rows} />
       )}
 
-      <div className="mt-4 rounded-xl bg-primary px-3.5 py-3 text-center shadow-card">
+      <div className="mt-5 rounded-xl bg-primary px-3.5 py-3 text-center shadow-card">
         <p className="text-[15px] font-semibold text-primary-foreground">
           {t("dailySummaryTotal", { count: summary.total })}
         </p>
