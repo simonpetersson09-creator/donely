@@ -241,7 +241,6 @@ function Statistik() {
         title={t("private")}
         icon={<Home className="size-4" />}
         area="privat"
-        total={areaTotals.privat}
         rows={rows.privat}
         showGoalCta={isCurrentYear}
         onSetGoal={handleSetGoal}
@@ -250,7 +249,6 @@ function Statistik() {
         title={t("work")}
         icon={<Briefcase className="size-4" />}
         area="jobb"
-        total={areaTotals.jobb}
         rows={rows.jobb}
         showGoalCta={isCurrentYear}
         onSetGoal={handleSetGoal}
@@ -352,7 +350,6 @@ function Section({
   title,
   icon,
   area,
-  total,
   rows,
   showGoalCta,
   onSetGoal,
@@ -360,12 +357,10 @@ function Section({
   title: string;
   icon: ReactNode;
   area: Area;
-  total: number;
   rows: Row[];
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
 }) {
-  const locale = useLocale();
   if (rows.length === 0) return null;
   return (
     <section className="mt-5">
