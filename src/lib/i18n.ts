@@ -2057,6 +2057,7 @@ const fi: Dict = {
   "cat.j-admin": "Hallinto",
   welcomeTitle: "Tervetuloa Donelyyn",
   welcomeLine1: "Kirjaa se, mitä oikeasti teet.",
+  tagline: "Se, mitä oikeasti teit",
   welcomeLine2: "Seuraa tuloksiasi pitkällä aikavälillä.",
   getStarted: "Aloita",
   languageGuideTitle: "Vaihda kieltä tästä.",
