@@ -125,9 +125,6 @@ function Installningar() {
         <h1 className="px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary">
           {t("settings")}
         </h1>
-        <p className="mt-1 px-1 text-[12px] font-normal leading-[17px] text-muted-foreground">
-          {t("settingsSubtitle")}
-        </p>
       </div>
 
       <div className="mt-12 flex flex-[1.1] items-end justify-center pb-6">
