@@ -354,7 +354,7 @@ function Section({
         </h2>
       </div>
       <div className="card-base overflow-hidden">
-        <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
           <span>{t("activity")}</span>
           <span className="text-right">{t("done")}</span>
           <span className="text-right">{t("goal")}</span>
@@ -405,7 +405,7 @@ function GoalRow({
         !isLast && "border-b border-border",
       )}
     >
-      <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-2.5">
+      <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-1.5">
         <span className="min-w-0 truncate text-[14px] font-medium text-card-foreground">
           {categoryLabel(t, category)}
         </span>
