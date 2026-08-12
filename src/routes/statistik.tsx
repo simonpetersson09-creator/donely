@@ -452,7 +452,7 @@ function GoalCard({
         <p className="min-w-0 truncate text-[13px] font-medium tabular-nums text-muted-foreground">
           {goal !== null ? (
             <>
-              <span className="text-[20px] font-bold leading-none text-card-foreground">
+              <span className="text-[26px] font-bold leading-none text-card-foreground">
                 {total.toLocaleString(locale)}
               </span>{" "}
               <span className="text-[11px] text-muted-foreground">
