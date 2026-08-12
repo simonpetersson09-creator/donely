@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DagsstatistikRouteImport } from './routes/dagsstatistik'
+import { Route as HistorikRouteImport } from './routes/historik'
 import { Route as InstallningarRouteImport } from './routes/installningar'
 import { Route as SenasteRegistreringarRouteImport } from './routes/senaste-registreringar'
 import { Route as StatistikRouteImport } from './routes/statistik'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const DagsstatistikRoute = DagsstatistikRouteImport.update({
   id: '/dagsstatistik',
   path: '/dagsstatistik',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistorikRoute = HistorikRouteImport.update({
+  id: '/historik',
+  path: '/historik',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstallningarRoute = InstallningarRouteImport.update({
@@ -56,6 +62,7 @@ const KategoriIdRoute = KategoriIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dagsstatistik': typeof DagsstatistikRoute
+  '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dagsstatistik': typeof DagsstatistikRoute
+  '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dagsstatistik': typeof DagsstatistikRoute
+  '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dagsstatistik'
+    | '/historik'
     | '/installningar'
     | '/senaste-registreringar'
     | '/statistik'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dagsstatistik'
+    | '/historik'
     | '/installningar'
     | '/senaste-registreringar'
     | '/statistik'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dagsstatistik'
+    | '/historik'
     | '/installningar'
     | '/senaste-registreringar'
     | '/statistik'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DagsstatistikRoute: typeof DagsstatistikRoute
+  HistorikRoute: typeof HistorikRoute
   InstallningarRoute: typeof InstallningarRoute
   SenasteRegistreringarRoute: typeof SenasteRegistreringarRoute
   StatistikRoute: typeof StatistikRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/dagsstatistik'
       fullPath: '/dagsstatistik'
       preLoaderRoute: typeof DagsstatistikRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historik': {
+      id: '/historik'
+      path: '/historik'
+      fullPath: '/historik'
+      preLoaderRoute: typeof HistorikRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/installningar': {
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DagsstatistikRoute: DagsstatistikRoute,
+  HistorikRoute: HistorikRoute,
   InstallningarRoute: InstallningarRoute,
   SenasteRegistreringarRoute: SenasteRegistreringarRoute,
   StatistikRoute: StatistikRoute,
