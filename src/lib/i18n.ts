@@ -1715,6 +1715,7 @@ const da: Dict = {
   "cat.j-admin": "Administration",
   welcomeTitle: "Velkommen til Donely",
   welcomeLine1: "Registrér det, du faktisk gør.",
+  tagline: "Det du faktisk har gjort",
   welcomeLine2: "Følg dine resultater over tid.",
   getStarted: "Kom i gang",
   languageGuideTitle: "Skift sprog her.",
