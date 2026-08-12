@@ -129,7 +129,7 @@ function Installningar() {
         </h1>
       </div>
 
-      <div className="mt-10 flex flex-[1.1] items-end justify-center pb-4">
+      <div className="mt-10 flex flex-[1.1] items-end justify-center pb-10">
         <div className="relative">
           <h1 className="font-logo select-none text-[30px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
