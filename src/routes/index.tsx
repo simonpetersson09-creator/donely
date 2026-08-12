@@ -68,6 +68,7 @@ function Index() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const [paywallOpen, setPaywallOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { t } = useLanguage();
@@ -157,6 +158,14 @@ function Index() {
       return;
     }
     if (!valid || !selected) return;
+    navigator.vibrate?.(6);
+    setConfirmOpen(true);
+  }
+
+  // Runs after the user confirms the summary in the dialog.
+  function commit() {
+    if (!valid || !selected) return;
+    setConfirmOpen(false);
     const name = categoryLabel(t, selected);
     addEntry({
       area,
