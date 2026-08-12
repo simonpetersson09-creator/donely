@@ -1043,8 +1043,9 @@ function ConfirmDialog({
             type="button"
             autoFocus
             onClick={onConfirm}
-            className="flex-1 rounded-2xl bg-gold py-3 text-[15px] font-bold text-gold-foreground shadow-card transition-transform active:scale-[0.98]"
+            className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-primary py-3.5 text-[16px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)]"
           >
+            <Check className="size-4" />
             {confirmLabel}
           </button>
         </div>
