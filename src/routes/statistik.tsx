@@ -144,17 +144,17 @@ function Statistik() {
           {t("back")}
         </BackButton>
 
-        <div className="flex items-center gap-1 rounded-full bg-primary p-1 text-primary-foreground shadow-soft">
+        <div className="flex items-center gap-0.5 rounded-full border border-border bg-card px-1 py-0.5 shadow-soft">
           <button
             type="button"
             aria-label={t("prevYear")}
             disabled={yearIndex >= years.length - 1}
             onClick={() => setYear(years[yearIndex + 1])}
-            className="flex size-7 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
+            className="flex size-6 items-center justify-center rounded-full text-primary transition-transform active:scale-95 disabled:opacity-30"
           >
-            <ChevronLeft className="size-4" />
+            <ChevronLeft className="size-3.5" />
           </button>
-          <span className="min-w-[3.5ch] text-center text-[15px] font-bold tabular-nums text-primary-foreground">
+          <span className="min-w-[4ch] text-center text-[13px] font-semibold tabular-nums text-primary">
             {year}
           </span>
           <button
@@ -162,11 +162,12 @@ function Statistik() {
             aria-label={t("nextYear")}
             disabled={yearIndex <= 0}
             onClick={() => setYear(years[yearIndex - 1])}
-            className="flex size-7 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
+            className="flex size-6 items-center justify-center rounded-full text-primary transition-transform active:scale-95 disabled:opacity-30"
           >
-            <ChevronRight className="size-4" />
+            <ChevronRight className="size-3.5" />
           </button>
         </div>
+
       </div>
 
       <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
