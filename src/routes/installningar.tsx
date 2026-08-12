@@ -311,7 +311,19 @@ function Installningar() {
             </span>
             <ChevronRight className="size-4 text-muted-foreground" />
           </Link>
+
+          <Link
+            to="/historik"
+            className="mt-2 flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
+          >
+            <span className="flex items-center gap-2">
+              <CalendarPlus className="size-[18px]" />
+              {t("historySection")}
+            </span>
+            <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
         </section>
+
 
         <section className="mt-4">
           <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
