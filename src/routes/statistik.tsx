@@ -466,7 +466,7 @@ function GoalCard({
           )}
         </p>
         {pct !== null && (
-          <span className="shrink-0 text-[13px] font-bold tabular-nums text-primary">
+          <span className="shrink-0 text-[15px] font-bold tabular-nums text-primary">
             {pct}%
           </span>
         )}
