@@ -362,32 +362,47 @@ function Section({
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
 }) {
+  const locale = useLocale();
+  const { t } = useLanguage();
   if (rows.length === 0) return null;
+  const total = rows.reduce((sum, r) => sum + r.total, 0);
   return (
     <section className="mt-5">
-      <div className="mb-2 flex items-center gap-2 px-1">
-        <span
-          className={cn(
-            "flex size-6 items-center justify-center rounded-full",
-            area === "privat"
-              ? "bg-accent-life-soft text-accent-life"
-              : "bg-accent-work-soft text-accent-work",
-          )}
-        >
-          {icon}
+      <div className="mb-2 flex items-center justify-between gap-2 px-1">
+        <div className="flex items-center gap-2">
+          <span
+            className={cn(
+              "flex size-6 items-center justify-center rounded-full",
+              area === "privat"
+                ? "bg-accent-life-soft text-accent-life"
+                : "bg-accent-work-soft text-accent-work",
+            )}
+          >
+            {icon}
+          </span>
+          <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
+            {title}
+          </h2>
+        </div>
+        <span className="text-[17px] font-bold tabular-nums text-card-foreground">
+          {total.toLocaleString(locale)}
         </span>
-        <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
-          {title}
-        </h2>
       </div>
-      <div className="space-y-2">
-        {rows.map((row) => (
-          <GoalCard
+      <div className="card-base overflow-hidden">
+        <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span>{t("activity")}</span>
+          <span className="text-right">{t("done")}</span>
+          <span className="text-right">{t("goal")}</span>
+          <span />
+        </div>
+        {rows.map((row, idx) => (
+          <GoalRow
             key={row.category.id}
             row={row}
             area={area}
             showGoalCta={showGoalCta}
             onSetGoal={onSetGoal}
+            isLast={idx === rows.length - 1}
           />
         ))}
       </div>
@@ -395,126 +410,80 @@ function Section({
   );
 }
 
-function GoalCard({
+function GoalRow({
   row,
   area,
   showGoalCta,
   onSetGoal,
+  isLast,
 }: {
   row: Row;
   area: Area;
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
+  isLast: boolean;
 }) {
   const { t } = useLanguage();
   const locale = useLocale();
-  const { category, total, goal, distanceKm, durationMin } = row;
+  const { category, total, goal } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
-  const hours = Math.floor(durationMin / 60);
-  const mins = Math.round(durationMin % 60);
 
   const accentClass = area === "privat" ? "bg-accent-life" : "bg-accent-work";
-  const celebrationBg =
-    area === "privat" ? "bg-accent-life-soft" : "bg-accent-work-soft";
 
   return (
     <Link
       to="/kategori/$id"
       params={{ id: category.id }}
       className={cn(
-        "card-base block text-card-foreground shadow-[0_2px_4px_rgba(20,30,50,0.04),0_10px_28px_-8px_rgba(20,30,50,0.1)] transition-colors active:bg-accent",
-        reached && celebrationBg
+        "block transition-colors active:bg-accent",
+        !isLast && "border-b border-border",
       )}
     >
-      <div className="flex items-center justify-between gap-2">
-        <h3 className="min-w-0 flex-1 truncate text-[15px] font-semibold leading-tight">
+      <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-2.5">
+        <span className="min-w-0 truncate text-[14px] font-medium text-card-foreground">
           {categoryLabel(t, category)}
-        </h3>
-        <div className="flex shrink-0 items-center gap-1.5">
-          {reached && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
-              <Check className="size-2.5" /> {t("achieved")}
-            </span>
-          )}
-          {showGoalCta && (
-            <button
-              type="button"
-              aria-label={t("changeGoalFor", { name: categoryLabel(t, category) })}
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onSetGoal(category);
-              }}
-              className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
-            >
-              <Pencil className="size-3" />
-            </button>
-          )}
-        </div>
-      </div>
-
-      <div className="mt-1 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-2">
-        <p className="min-w-0 truncate text-[13px] font-medium tabular-nums text-muted-foreground">
+        </span>
+        <span className="text-right text-[16px] font-bold tabular-nums text-card-foreground">
+          {total.toLocaleString(locale)}
+        </span>
+        <span className="text-right text-[12px] tabular-nums text-muted-foreground">
           {goal !== null ? (
             <>
-              <span className="text-[26px] font-bold leading-none text-card-foreground">
-                {total.toLocaleString(locale)}
-              </span>{" "}
-              <span className="text-[11px] text-muted-foreground">
-                {t("ofGoalGoalOnly", { goal: goal.toLocaleString(locale) })}
-              </span>
+              {goal.toLocaleString(locale)}
+              {pct !== null && (
+                <span className="ml-1 text-[10px] text-muted-foreground/70">
+                  · {pct}%
+                </span>
+              )}
             </>
           ) : (
-            <span className="text-[26px] font-bold leading-none text-card-foreground">
-              {total.toLocaleString(locale)}
-            </span>
+            "—"
           )}
-        </p>
-        {pct !== null ? (
-          <span className="shrink-0 text-[15px] font-bold tabular-nums text-primary">
-            {pct}%
-            {reached && <Check className="ml-0.5 inline-block size-3.5 align-middle" />}
-          </span>
-        ) : (
+        </span>
+        {showGoalCta ? (
           <button
             type="button"
+            aria-label={t("changeGoalFor", { name: categoryLabel(t, category) })}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               onSetGoal(category);
             }}
-            className="shrink-0 inline-flex items-center gap-0.5 text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
+            className="flex size-6 items-center justify-center text-muted-foreground transition-colors active:text-primary"
           >
-            <Plus className="size-3" />
-            {t("setGoal")}
+            <Pencil className="size-3" />
           </button>
+        ) : (
+          <span />
         )}
       </div>
-
-      {pct !== null && (
-        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">
+      {goal !== null && (
+        <div className="h-[2px] w-full bg-accent">
           <div
-            className={cn("h-full rounded-full transition-all duration-500", accentClass)}
-            style={{ width: reached ? "100%" : `${Math.min(100, pct)}%` }}
+            className={cn("h-full transition-all duration-500", accentClass)}
+            style={{ width: `${Math.min(100, pct ?? 0)}%` }}
           />
-        </div>
-      )}
-
-      {(distanceKm > 0 || durationMin > 0) && (
-        <div className="mt-1.5 flex flex-wrap items-center gap-1">
-          {distanceKm > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-card-foreground/80">
-              <MapPin className="size-2.5 text-primary" />
-              {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
-            </span>
-          )}
-          {durationMin > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-card-foreground/80">
-              <Timer className="size-2.5 text-primary" />
-              {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
-            </span>
-          )}
         </div>
       )}
     </Link>
