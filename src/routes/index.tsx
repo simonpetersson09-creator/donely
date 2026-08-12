@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  ArrowRight,
   BarChart3,
   Bell,
   Briefcase,
@@ -906,9 +907,11 @@ function Onboarding({ onStart }: { onStart: () => void }) {
       <button
         type="button"
         onClick={onStart}
-        className="w-full rounded-xl bg-primary py-3.5 text-[17px] font-semibold text-primary-foreground shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96]"
+        className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl bg-primary py-4 text-[17px] font-semibold text-primary-foreground shadow-[0_12px_28px_-8px_hsl(0_0%_0%/0.35),0_4px_8px_-3px_hsl(0_0%_0%/0.2)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_6px_14px_-5px_hsl(0_0%_0%/0.3)]"
       >
-        {t("getStarted")}
+        <span className="relative z-10">{t("getStarted")}</span>
+        <ArrowRight className="relative z-10 size-[18px] transition-transform duration-300 group-hover:translate-x-0.5" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/15 to-transparent" />
       </button>
     </main>
   );
