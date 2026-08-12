@@ -405,7 +405,7 @@ function GoalRow({
         !isLast && "border-b border-border",
       )}
     >
-      <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-2.5">
+      <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-1.5">
         <span className="min-w-0 truncate text-[14px] font-medium text-card-foreground">
           {categoryLabel(t, category)}
         </span>
