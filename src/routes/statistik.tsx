@@ -362,32 +362,47 @@ function Section({
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
 }) {
+  const locale = useLocale();
+  const { t } = useLanguage();
   if (rows.length === 0) return null;
+  const total = rows.reduce((sum, r) => sum + r.total, 0);
   return (
     <section className="mt-5">
-      <div className="mb-2 flex items-center gap-2 px-1">
-        <span
-          className={cn(
-            "flex size-6 items-center justify-center rounded-full",
-            area === "privat"
-              ? "bg-accent-life-soft text-accent-life"
-              : "bg-accent-work-soft text-accent-work",
-          )}
-        >
-          {icon}
+      <div className="mb-2 flex items-center justify-between gap-2 px-1">
+        <div className="flex items-center gap-2">
+          <span
+            className={cn(
+              "flex size-6 items-center justify-center rounded-full",
+              area === "privat"
+                ? "bg-accent-life-soft text-accent-life"
+                : "bg-accent-work-soft text-accent-work",
+            )}
+          >
+            {icon}
+          </span>
+          <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
+            {title}
+          </h2>
+        </div>
+        <span className="text-[17px] font-bold tabular-nums text-card-foreground">
+          {total.toLocaleString(locale)}
         </span>
-        <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
-          {title}
-        </h2>
       </div>
-      <div className="space-y-2">
-        {rows.map((row) => (
-          <GoalCard
+      <div className="card-base overflow-hidden">
+        <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span>{t("activity")}</span>
+          <span className="text-right">{t("done")}</span>
+          <span className="text-right">{t("goal")}</span>
+          <span />
+        </div>
+        {rows.map((row, idx) => (
+          <GoalRow
             key={row.category.id}
             row={row}
             area={area}
             showGoalCta={showGoalCta}
             onSetGoal={onSetGoal}
+            isLast={idx === rows.length - 1}
           />
         ))}
       </div>
