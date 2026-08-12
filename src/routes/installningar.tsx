@@ -131,7 +131,14 @@ function Installningar() {
 
       <div className="mt-10 flex flex-[1.1] items-end justify-center pb-4">
         <div className="relative">
-          <div className="absolute left-full top-1/2 z-10 ml-2 -translate-y-1/2">
+          <h1 className="font-logo select-none text-[30px] font-bold leading-none tracking-[-0.04em] text-primary">
+            Donely
+          </h1>
+          <p className="mt-0.5 text-center text-[11px] font-medium tracking-wide text-primary/80">
+            {t("tagline")}
+          </p>
+
+          <div className="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2">
             <div className="relative rounded-full bg-primary px-3 py-1 shadow-[0_6px_16px_-8px_hsl(0_0%_0%/0.45)]">
               <span className="flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold leading-[14px] tracking-wide text-primary-foreground">
                 {premium.subscribed ? (
@@ -143,16 +150,9 @@ function Installningar() {
                   t("trialLeft", { count: premium.inTrial ? premium.trialDaysLeft : 0 })
                 )}
               </span>
-              <div className="absolute -left-[3px] top-1/2 size-2.5 -translate-y-1/2 rotate-45 rounded-[1px] bg-primary" />
+              <div className="absolute -top-[3px] left-1/2 size-2.5 -translate-x-1/2 rotate-45 rounded-[1px] bg-primary" />
             </div>
           </div>
-
-          <h1 className="font-logo select-none text-[30px] font-bold leading-none tracking-[-0.04em] text-primary">
-            Donely
-          </h1>
-          <p className="mt-0.5 text-center text-[11px] font-medium tracking-wide text-primary/80">
-            {t("tagline")}
-          </p>
         </div>
       </div>
 
