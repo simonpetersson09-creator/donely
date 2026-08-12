@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  BarChart3,
   Bell,
   Briefcase,
   Check,
   ChevronDown,
   ChevronLeft,
+  CirclePlus,
   Crown,
   Home,
   Lock,
