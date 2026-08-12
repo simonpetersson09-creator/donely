@@ -352,14 +352,16 @@ function Section({
   const locale = useLocale();
   if (rows.length === 0) return null;
   return (
-    <section className="mt-4">
-      <h2 className="mb-1 flex items-center gap-2 px-1 text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {icon}
-        <span className="truncate">{title}</span>
-        <span className="ml-auto text-[16px] font-semibold tabular-nums text-muted-foreground">
+    <section className="mt-3">
+      <div className="mb-1 flex flex-col items-center px-1">
+        <h2 className="flex items-center gap-1.5 text-[18px] font-bold leading-tight tracking-[-0.02em] text-primary">
+          {icon}
+          <span>{title}</span>
+        </h2>
+        <span className="text-[13px] font-semibold tabular-nums text-muted-foreground">
           {total.toLocaleString(locale)}
         </span>
-      </h2>
+      </div>
       <div className="space-y-1">
         {rows.map((row) => (
           <GoalCard
