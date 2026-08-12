@@ -197,19 +197,19 @@ function Statistik() {
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <div className="col-span-2 rounded-2xl bg-primary px-4 py-3.5 text-primary-foreground shadow-card">
+      <div className="mt-2.5 grid grid-cols-2 gap-2">
+        <div className="col-span-2 rounded-2xl bg-primary px-4 py-3 text-primary-foreground shadow-card">
           <div className="flex items-end justify-between gap-3">
             <div>
               <p className="text-[11px] font-semibold uppercase tracking-[0.1em] opacity-75">
                 {t("totalActivities")}
               </p>
-              <p className="mt-0.5 text-[32px] font-bold leading-none tabular-nums">
+              <p className="mt-0.5 text-[28px] font-bold leading-none tabular-nums">
                 {totalActivities.toLocaleString(locale)}
               </p>
             </div>
             {reachedGoals > 0 && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-foreground/15 px-2.5 py-1 text-[12px] font-semibold text-primary-foreground">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-foreground/15 px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
                 <Check className="size-3" />
                 {reachedGoals} {t("achieved")}
               </span>
@@ -217,28 +217,28 @@ function Statistik() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-3 shadow-card">
-          <div className="flex items-center gap-2.5">
-            <div className="flex size-9 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
+        <div className="rounded-2xl border border-border bg-card p-2.5 shadow-card">
+          <div className="flex items-center gap-2">
+            <div className="flex size-8 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
               <Home className="size-4" />
             </div>
             <div>
               <p className="text-[11px] font-medium text-muted-foreground">{t("private")}</p>
-              <p className="text-[18px] font-bold tabular-nums text-card-foreground">
+              <p className="text-[17px] font-bold tabular-nums text-card-foreground">
                 {areaTotals.privat.toLocaleString(locale)}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-3 shadow-card">
-          <div className="flex items-center gap-2.5">
-            <div className="flex size-9 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
+        <div className="rounded-2xl border border-border bg-card p-2.5 shadow-card">
+          <div className="flex items-center gap-2">
+            <div className="flex size-8 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
               <Briefcase className="size-4" />
             </div>
             <div>
               <p className="text-[11px] font-medium text-muted-foreground">{t("work")}</p>
-              <p className="text-[18px] font-bold tabular-nums text-card-foreground">
+              <p className="text-[17px] font-bold tabular-nums text-card-foreground">
                 {areaTotals.jobb.toLocaleString(locale)}
               </p>
             </div>
