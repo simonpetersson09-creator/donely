@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -499,30 +499,6 @@ function GoalCard({
   );
 }
 
-function formatRelativeDate(
-  iso: string,
-  locale: string,
-  t: (key: string, opts?: Record<string, unknown>) => string,
-) {
-  const date = new Date(iso);
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const diffDays = Math.round(
-    (startOfToday.getTime() - startOfDate.getTime()) / (1000 * 60 * 60 * 24),
-  );
-  const time = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
-
-  if (diffDays === 0) return t("today", { time });
-  if (diffDays === 1) return t("yesterday", { time });
-  if (diffDays >= 2 && diffDays <= 6) return t("daysAgo", { count: diffDays });
-
-  return date.toLocaleDateString(locale, {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 function GoalSheet({
   category,
