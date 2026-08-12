@@ -118,13 +118,37 @@ function Statistik() {
   const yearIndex = years.indexOf(year);
 
   const totalActivities = useMemo(() => {
-    // Ignore entries whose category no longer exists, so the total always matches
-    // the cards below it.
     const known = new Set(categories.map((c) => c.id));
     return entries
       .filter((e) => known.has(e.categoryId) && new Date(e.createdAt).getFullYear() === year)
       .reduce((sum, e) => sum + e.amount, 0);
   }, [categories, entries, year]);
+
+  const areaTotals = useMemo(
+    () => ({
+      privat: rows.privat.reduce((sum, r) => sum + r.total, 0),
+      jobb: rows.jobb.reduce((sum, r) => sum + r.total, 0),
+    }),
+    [rows],
+  );
+
+  const reachedGoals = useMemo(() => {
+    const reached = (arr: Row[]) =>
+      arr.filter((r) => r.goal !== null && r.total >= r.goal!).length;
+    return reached(rows.privat) + reached(rows.jobb);
+  }, [rows]);
+
+  const handleSetGoal = (c: Category) => {
+    if (premium.loading) {
+      toast.message(t("premiumLoading"));
+      return;
+    }
+    if (!canMutate(premium)) {
+      setPaywallOpen(true);
+      return;
+    }
+    setEditing(c);
+  };
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -135,39 +159,37 @@ function Statistik() {
         >
           {t("back")}
         </BackButton>
-        <div className="flex items-center gap-2">
-          <span className="text-[12px] font-medium text-foreground/60">{t("changeYear")}</span>
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              aria-label={t("prevYear")}
-              disabled={yearIndex >= years.length - 1}
-              onClick={() => setYear(years[yearIndex + 1])}
-              className="flex size-8 items-center justify-center rounded-full bg-primary text-white shadow-soft transition-transform active:scale-95 disabled:opacity-30"
-            >
-              <ChevronLeft className="size-4" />
-            </button>
-            <button
-              type="button"
-              aria-label={t("nextYear")}
-              disabled={yearIndex <= 0}
-              onClick={() => setYear(years[yearIndex - 1])}
-              className="flex size-8 items-center justify-center rounded-full bg-primary text-white shadow-soft transition-transform active:scale-95 disabled:opacity-30"
-            >
-              <ChevronRight className="size-4" />
-            </button>
-          </div>
+
+        <div className="flex items-center gap-1 rounded-full bg-secondary p-1">
+          <button
+            type="button"
+            aria-label={t("prevYear")}
+            disabled={yearIndex >= years.length - 1}
+            onClick={() => setYear(years[yearIndex + 1])}
+            className="flex size-7 items-center justify-center rounded-full bg-card text-primary shadow-soft transition-transform active:scale-95 disabled:opacity-40"
+          >
+            <ChevronLeft className="size-4" />
+          </button>
+          <span className="min-w-[3.5ch] text-center text-[15px] font-bold tabular-nums text-primary">
+            {year}
+          </span>
+          <button
+            type="button"
+            aria-label={t("nextYear")}
+            disabled={yearIndex <= 0}
+            onClick={() => setYear(years[yearIndex - 1])}
+            className="flex size-7 items-center justify-center rounded-full bg-card text-primary shadow-soft transition-transform active:scale-95 disabled:opacity-40"
+          >
+            <ChevronRight className="size-4" />
+          </button>
         </div>
       </div>
 
-      <h2 className="px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {t("weeklyHeading")}
-      </h2>
       <Link
         to="/veckostatistik"
-        className="mt-1.5 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
+        className="mt-2 flex items-center justify-between rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-card transition-colors active:bg-accent"
       >
-        {t("weeklySummaryLink")}
+        <span>{t("weeklySummaryLink")}</span>
         <ChevronRight className="size-4 text-muted-foreground" />
       </Link>
 
@@ -175,48 +197,72 @@ function Statistik() {
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
-      <div className="mt-3 rounded-xl border border-border bg-card px-3.5 py-2.5 text-card-foreground shadow-card">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-card-foreground/60">
-          {t("totalActivities")}
-        </p>
-        <p className="mt-0.5 text-[26px] font-bold leading-none tabular-nums">
-          {totalActivities.toLocaleString(locale)}
-        </p>
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <div className="col-span-2 rounded-2xl bg-primary px-4 py-3.5 text-primary-foreground shadow-card">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.1em] opacity-75">
+                {t("totalActivities")}
+              </p>
+              <p className="mt-0.5 text-[32px] font-bold leading-none tabular-nums">
+                {totalActivities.toLocaleString(locale)}
+              </p>
+            </div>
+            {reachedGoals > 0 && (
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-foreground/15 px-2.5 py-1 text-[12px] font-semibold text-primary-foreground">
+                <Check className="size-3" />
+                {reachedGoals} {t("achieved")}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-3 shadow-card">
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-9 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
+              <Home className="size-4" />
+            </div>
+            <div>
+              <p className="text-[11px] font-medium text-muted-foreground">{t("private")}</p>
+              <p className="text-[18px] font-bold tabular-nums text-card-foreground">
+                {areaTotals.privat.toLocaleString(locale)}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-border bg-card p-3 shadow-card">
+          <div className="flex items-center gap-2.5">
+            <div className="flex size-9 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
+              <Briefcase className="size-4" />
+            </div>
+            <div>
+              <p className="text-[11px] font-medium text-muted-foreground">{t("work")}</p>
+              <p className="text-[18px] font-bold tabular-nums text-card-foreground">
+                {areaTotals.jobb.toLocaleString(locale)}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Section
         title={`${t("private")} (${year})`}
-        icon={<Home className="size-6" />}
+        icon={<Home className="size-5" />}
+        area="privat"
+        total={areaTotals.privat}
         rows={rows.privat}
         showGoalCta={isCurrentYear}
-        onSetGoal={(c) => {
-          if (premium.loading) {
-            toast.message(t("premiumLoading"));
-            return;
-          }
-          if (!canMutate(premium)) {
-            setPaywallOpen(true);
-            return;
-          }
-          setEditing(c);
-        }}
+        onSetGoal={handleSetGoal}
       />
       <Section
         title={`${t("work")} (${year})`}
-        icon={<Briefcase className="size-6" />}
+        icon={<Briefcase className="size-5" />}
+        area="jobb"
+        total={areaTotals.jobb}
         rows={rows.jobb}
         showGoalCta={isCurrentYear}
-        onSetGoal={(c) => {
-          if (premium.loading) {
-            toast.message(t("premiumLoading"));
-            return;
-          }
-          if (!canMutate(premium)) {
-            setPaywallOpen(true);
-            return;
-          }
-          setEditing(c);
-        }}
+        onSetGoal={handleSetGoal}
       />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
@@ -280,28 +326,37 @@ function Statistik() {
 function Section({
   title,
   icon,
+  area,
+  total,
   rows,
   showGoalCta,
   onSetGoal,
 }: {
   title: string;
   icon: ReactNode;
+  area: Area;
+  total: number;
   rows: Row[];
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
 }) {
+  const locale = useLocale();
   if (rows.length === 0) return null;
   return (
-    <section className="mt-8">
+    <section className="mt-6">
       <h2 className="mb-2 flex items-center gap-2 px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {icon}
-        {title}
+        <span className="truncate">{title}</span>
+        <span className="ml-auto text-[17px] font-semibold tabular-nums text-muted-foreground">
+          {total.toLocaleString(locale)}
+        </span>
       </h2>
       <div className="space-y-1.5">
         {rows.map((row) => (
           <GoalCard
             key={row.category.id}
             row={row}
+            area={area}
             showGoalCta={showGoalCta}
             onSetGoal={onSetGoal}
           />
@@ -313,14 +368,16 @@ function Section({
 
 function GoalCard({
   row,
+  area,
   showGoalCta,
   onSetGoal,
 }: {
   row: Row;
+  area: Area;
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
 }) {
-  const { t } = useTranslation();
+  const { t } = useLanguage();
   const locale = useLocale();
   const { category, total, goal, lastAt, distanceKm, durationMin } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
@@ -331,17 +388,27 @@ function GoalCard({
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
+  const accentClass = area === "privat" ? "bg-accent-life" : "bg-accent-work";
+
   return (
     <Link
       to="/kategori/$id"
       params={{ id: category.id }}
-      className="block rounded-xl border border-border bg-card px-3.5 py-2 text-card-foreground shadow-card transition-colors active:bg-accent"
+      className="block rounded-xl border border-border bg-card px-3.5 py-2.5 text-card-foreground shadow-card transition-colors active:bg-accent"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1 text-left">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
           <h3 className="truncate text-[12px] font-medium text-card-foreground/70">
             {categoryLabel(t, category)}
           </h3>
+          <p className="mt-0.5 text-[19px] font-bold leading-tight tabular-nums">
+            {goal !== null
+              ? t("ofGoal", {
+                  total: total.toLocaleString(locale),
+                  goal: goal.toLocaleString(locale),
+                })
+              : t("soFarCount", { total: total.toLocaleString(locale) })}
+          </p>
         </div>
         <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
@@ -366,43 +433,32 @@ function GoalCard({
         </div>
       </div>
 
-      <div className="mt-0.5 flex items-center justify-between gap-2">
-        <p className="min-w-0 truncate text-[20px] font-bold leading-tight tabular-nums">
-          {goal !== null
-            ? t("ofGoal", {
-                total: total.toLocaleString(locale),
-                goal: goal.toLocaleString(locale),
-              })
-            : t("soFarCount", { total: total.toLocaleString(locale) })}
-        </p>
-        {lastAt && mounted && (
-          <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[12px] text-muted-foreground">
-            {formatRelativeDate(lastAt, locale, t)}
-          </span>
-        )}
-      </div>
-
-      {hasMetrics && (
-        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+      <div className="mt-1.5 flex items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           {distanceKm > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
               <MapPin className="size-3 text-primary" />
               {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
             </span>
           )}
           {durationMin > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[12px] font-medium tabular-nums text-card-foreground/80">
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
               <Timer className="size-3 text-primary" />
               {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
             </span>
           )}
         </div>
-      )}
+        {lastAt && mounted && (
+          <span className="shrink-0 rounded-full bg-secondary px-2 py-0.5 text-[11px] text-muted-foreground">
+            {formatRelativeDate(lastAt, locale, t)}
+          </span>
+        )}
+      </div>
 
       {pct !== null && (
-        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">
+        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-accent">
           <div
-            className="h-full rounded-full bg-primary transition-all duration-500"
+            className={cn("h-full rounded-full transition-all duration-500", accentClass)}
             style={{ width: `${Math.min(100, pct)}%` }}
           />
         </div>
