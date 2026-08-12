@@ -207,7 +207,7 @@ function Index() {
         <div className="relative translate-y-[94px]">
           <div className="absolute -right-12 -top-14 z-10 rotate-[6deg] scale-100">
             <div className="relative rounded-[14px] border border-primary bg-background px-3.5 py-1.5 shadow-card">
-              <p className="max-w-[10rem] text-center text-[10px] font-semibold leading-[13px] text-primary">
+              <p className="max-w-[10rem] break-words text-center text-[10px] font-semibold leading-[13px] text-primary">
                 {premium.subscribed ? (
                   <span className="inline-flex items-center gap-1">
                     <Crown className="size-2.5 text-gold" fill="currentColor" />
@@ -218,13 +218,13 @@ function Index() {
                 )}
               </p>
 
-              <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
+              <div className="absolute -bottom-1.5 left-2 h-3 w-3 rotate-45 border-b border-l border-primary bg-background" />
             </div>
           </div>
           <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
-          <p className="mt-1.5 text-center text-[13px] font-medium tracking-wide text-primary/80">
+          <p className="mt-0.5 text-center text-[13px] font-medium tracking-wide text-primary/80">
             {t("tagline")}
           </p>
         </div>
