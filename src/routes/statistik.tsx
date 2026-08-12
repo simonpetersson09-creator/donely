@@ -10,6 +10,7 @@ import {
   Briefcase,
   MapPin,
   Timer,
+  Plus,
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
@@ -414,12 +415,17 @@ function GoalCard({
   const mins = Math.round(durationMin % 60);
 
   const accentClass = area === "privat" ? "bg-accent-life" : "bg-accent-work";
+  const celebrationBg =
+    area === "privat" ? "bg-accent-life-soft" : "bg-accent-work-soft";
 
   return (
     <Link
       to="/kategori/$id"
       params={{ id: category.id }}
-      className="card-base block text-card-foreground shadow-[0_2px_4px_rgba(20,30,50,0.04),0_10px_28px_-8px_rgba(20,30,50,0.1)] transition-colors active:bg-accent"
+      className={cn(
+        "card-base block text-card-foreground shadow-[0_2px_4px_rgba(20,30,50,0.04),0_10px_28px_-8px_rgba(20,30,50,0.1)] transition-colors active:bg-accent",
+        reached && celebrationBg
+      )}
     >
       <div className="flex items-center justify-between gap-2">
         <h3 className="min-w-0 flex-1 truncate text-[15px] font-semibold leading-tight">
@@ -448,7 +454,7 @@ function GoalCard({
         </div>
       </div>
 
-      <div className="mt-1.5 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-2">
+      <div className="mt-1 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-2">
         <p className="min-w-0 truncate text-[13px] font-medium tabular-nums text-muted-foreground">
           {goal !== null ? (
             <>
@@ -465,10 +471,24 @@ function GoalCard({
             </span>
           )}
         </p>
-        {pct !== null && (
+        {pct !== null ? (
           <span className="shrink-0 text-[15px] font-bold tabular-nums text-primary">
             {pct}%
+            {reached && <Check className="ml-0.5 inline-block size-3.5 align-middle" />}
           </span>
+        ) : (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onSetGoal(category);
+            }}
+            className="shrink-0 inline-flex items-center gap-0.5 text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
+          >
+            <Plus className="size-3" />
+            {t("setGoal")}
+          </button>
         )}
       </div>
 
@@ -476,7 +496,7 @@ function GoalCard({
         <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">
           <div
             className={cn("h-full rounded-full transition-all duration-500", accentClass)}
-            style={{ width: `${Math.min(100, pct)}%` }}
+            style={{ width: reached ? "100%" : `${Math.min(100, pct)}%` }}
           />
         </div>
       )}
