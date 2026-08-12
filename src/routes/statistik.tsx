@@ -202,23 +202,23 @@ function Statistik() {
         </Link>
       </div>
 
-      <h1 className="mt-3 px-1 text-[28px] font-bold leading-tight tracking-[-0.03em] text-primary">
+      <h1 className="mt-2 px-1 text-center text-[22px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
       <div className="mt-2 grid grid-cols-2 gap-2">
-        <div className="col-span-2 rounded-2xl bg-primary px-4 py-2.5 text-primary-foreground shadow-card">
+        <div className="col-span-2 rounded-2xl bg-primary px-3 py-2 text-primary-foreground shadow-card">
           <div className="flex items-end justify-between gap-3">
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.1em] opacity-75">
+              <p className="text-[9px] font-semibold uppercase tracking-[0.1em] opacity-75">
                 {t("totalActivities")}
               </p>
-              <p className="mt-0.5 text-[26px] font-bold leading-none tabular-nums">
+              <p className="mt-0.5 text-[22px] font-bold leading-none tabular-nums">
                 {totalActivities.toLocaleString(locale)}
               </p>
             </div>
             {reachedGoals > 0 && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-foreground/15 px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary-foreground/15 px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
                 <Check className="size-3" />
                 {reachedGoals} {t("achieved")}
               </span>
@@ -226,28 +226,28 @@ function Statistik() {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-2 shadow-card">
-          <div className="flex items-center gap-2">
-            <div className="flex size-7 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
-              <Home className="size-3.5" />
+        <div className="rounded-2xl border border-border bg-card p-1.5 shadow-card">
+          <div className="flex items-center gap-1.5">
+            <div className="flex size-6 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
+              <Home className="size-3" />
             </div>
             <div>
-              <p className="text-[10px] font-medium text-muted-foreground">{t("private")}</p>
-              <p className="text-[16px] font-bold tabular-nums text-card-foreground">
+              <p className="text-[9px] font-medium text-muted-foreground">{t("private")}</p>
+              <p className="text-[14px] font-bold tabular-nums text-card-foreground">
                 {areaTotals.privat.toLocaleString(locale)}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-border bg-card p-2 shadow-card">
-          <div className="flex items-center gap-2">
-            <div className="flex size-7 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
-              <Briefcase className="size-3.5" />
+        <div className="rounded-2xl border border-border bg-card p-1.5 shadow-card">
+          <div className="flex items-center gap-1.5">
+            <div className="flex size-6 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
+              <Briefcase className="size-3" />
             </div>
             <div>
-              <p className="text-[10px] font-medium text-muted-foreground">{t("work")}</p>
-              <p className="text-[16px] font-bold tabular-nums text-card-foreground">
+              <p className="text-[9px] font-medium text-muted-foreground">{t("work")}</p>
+              <p className="text-[14px] font-bold tabular-nums text-card-foreground">
                 {areaTotals.jobb.toLocaleString(locale)}
               </p>
             </div>
@@ -352,14 +352,16 @@ function Section({
   const locale = useLocale();
   if (rows.length === 0) return null;
   return (
-    <section className="mt-4">
-      <h2 className="mb-1 flex items-center gap-2 px-1 text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {icon}
-        <span className="truncate">{title}</span>
-        <span className="ml-auto text-[16px] font-semibold tabular-nums text-muted-foreground">
+    <section className="mt-3">
+      <div className="mb-1 flex flex-col items-center px-1">
+        <h2 className="flex items-center gap-1.5 text-[18px] font-bold leading-tight tracking-[-0.02em] text-primary">
+          {icon}
+          <span>{title}</span>
+        </h2>
+        <span className="text-[13px] font-semibold tabular-nums text-muted-foreground">
           {total.toLocaleString(locale)}
         </span>
-      </h2>
+      </div>
       <div className="space-y-1">
         {rows.map((row) => (
           <GoalCard
@@ -403,14 +405,14 @@ function GoalCard({
     <Link
       to="/kategori/$id"
       params={{ id: category.id }}
-      className="block rounded-xl border border-border bg-card px-2.5 py-1.5 text-card-foreground shadow-card transition-colors active:bg-accent"
+      className="block rounded-xl border border-border bg-card px-2 py-1 text-card-foreground shadow-card transition-colors active:bg-accent"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[10px] font-medium text-card-foreground/70">
+          <h3 className="truncate text-[9px] font-medium text-card-foreground/70">
             {categoryLabel(t, category)}
           </h3>
-          <p className="text-[16px] font-bold leading-tight tabular-nums">
+          <p className="text-[14px] font-bold leading-tight tabular-nums">
             {goal !== null
               ? t("ofGoal", {
                   total: total.toLocaleString(locale),
@@ -421,8 +423,8 @@ function GoalCard({
         </div>
         <div className="flex shrink-0 items-center gap-1">
           {reached && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
-              <Check className="size-2.5" /> {t("achieved")}
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-1 py-0.5 text-[8px] font-semibold text-primary-foreground">
+              <Check className="size-2" /> {t("achieved")}
             </span>
           )}
           {showGoalCta && (
@@ -434,9 +436,9 @@ function GoalCard({
                 e.stopPropagation();
                 onSetGoal(category);
               }}
-              className="flex size-5 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
+              className="flex size-4 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
             >
-              <Pencil className="size-2.5" />
+              <Pencil className="size-2" />
             </button>
           )}
         </div>
@@ -445,27 +447,27 @@ function GoalCard({
       <div className="mt-0.5 flex items-center justify-between gap-2">
         <div className="flex flex-wrap items-center gap-1">
           {distanceKm > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[9px] font-medium tabular-nums text-card-foreground/80">
-              <MapPin className="size-2.5 text-primary" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1 py-0.5 text-[8px] font-medium tabular-nums text-card-foreground/80">
+              <MapPin className="size-2 text-primary" />
               {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
             </span>
           )}
           {durationMin > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[9px] font-medium tabular-nums text-card-foreground/80">
-              <Timer className="size-2.5 text-primary" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1 py-0.5 text-[8px] font-medium tabular-nums text-card-foreground/80">
+              <Timer className="size-2 text-primary" />
               {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
             </span>
           )}
         </div>
         {lastAt && mounted && (
-          <span className="shrink-0 rounded-full bg-secondary px-1.5 py-0.5 text-[9px] text-muted-foreground">
+          <span className="shrink-0 rounded-full bg-secondary px-1 py-0.5 text-[8px] text-muted-foreground">
             {formatRelativeDate(lastAt, locale, t)}
           </span>
         )}
       </div>
 
       {pct !== null && (
-        <div className="mt-1 h-[3px] w-full overflow-hidden rounded-full bg-accent">
+        <div className="mt-1 h-[2px] w-full overflow-hidden rounded-full bg-accent">
           <div
             className={cn("h-full rounded-full transition-all duration-500", accentClass)}
             style={{ width: `${Math.min(100, pct)}%` }}
