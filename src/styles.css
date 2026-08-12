@@ -206,6 +206,9 @@
   html {
     background-color: var(--color-background);
     overscroll-behavior: none;
+    /* Sidorna scrollar bara när innehållet faktiskt är högre än skärmen. */
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   body {
@@ -213,6 +216,7 @@
     color: var(--color-foreground);
     min-height: 100dvh;
     overscroll-behavior: none;
+    overflow-x: hidden;
   }
 
   /* The rubber-band area above/below the page paints the root element's

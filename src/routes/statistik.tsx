@@ -99,8 +99,8 @@ function Statistik() {
           distanceKm: km.get(c.id) ?? 0,
           durationMin: minutes.get(c.id) ?? 0,
         }))
-        .filter((r) => r.total > 0 || r.goal !== null)
-        .sort((a, b) => b.total - a.total);
+        // Manuell ordning från kategorilistan styr raderna.
+        .filter((r) => r.total > 0 || r.goal !== null);
 
     return { privat: build("privat"), jobb: build("jobb") };
   }, [categories, entries, goals, year]);
@@ -138,7 +138,7 @@ function Statistik() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex items-center justify-between pb-1 pt-0.5">
         <BackButton
-          fallbackTo="/"
+          fallbackTo="/veckostatistik"
           className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
         >
           {t("back")}
@@ -436,9 +436,9 @@ function GoalRow({
         )}
       </div>
       {goal !== null && (
-        <div className="h-[2px] w-full bg-accent">
+        <div className="h-[6px] w-full overflow-hidden rounded-full bg-accent">
           <div
-            className={cn("h-full transition-all duration-500", accentClass)}
+            className={cn("h-full rounded-full transition-all duration-500", accentClass)}
             style={{ width: `${Math.min(100, pct ?? 0)}%` }}
           />
         </div>
