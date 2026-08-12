@@ -124,12 +124,12 @@ function Installningar() {
           </BackButton>
         </div>
 
-        <h1 className="px-1 text-[26px] font-bold leading-[32px] tracking-[-0.03em] text-primary">
+        <h1 className="px-1 text-[22px] font-bold leading-[28px] tracking-[-0.03em] text-primary">
           {t("settings")}
         </h1>
       </div>
 
-      <div className="mt-12 flex flex-[1.1] items-end justify-center pb-6">
+      <div className="mt-8 flex flex-[1.1] items-end justify-center pb-4">
         <div className="relative">
           <div className="absolute -right-6 -top-9 z-10">
             <div className="relative rounded-full bg-primary px-3 py-1 shadow-[0_6px_16px_-8px_hsl(0_0%_0%/0.45)]">
@@ -147,17 +147,17 @@ function Installningar() {
             </div>
           </div>
 
-          <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
+          <h1 className="font-logo select-none text-[30px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
-          <p className="mt-0.5 text-center text-[13px] font-medium tracking-wide text-primary/80">
+          <p className="mt-0.5 text-center text-[11px] font-medium tracking-wide text-primary/80">
             {t("tagline")}
           </p>
         </div>
       </div>
 
-      <div className="mt-6">
-        <section className="space-y-3">
+      <div className="mt-4">
+        <section className="space-y-2">
           <button
             type="button"
             disabled={premium.busy || premium.loading}
@@ -168,10 +168,10 @@ function Installningar() {
               }
               purchasePremium();
             }}
-            className="premium-sheen group w-full overflow-hidden rounded-full border border-premium-border bg-gradient-premium px-3.5 py-2.5 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60 edge-fix"
+            className="premium-sheen group w-full overflow-hidden rounded-full border border-premium-border bg-gradient-premium px-3 py-2 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60 edge-fix"
           >
-            <span className="relative z-[2] inline-flex items-center justify-center gap-2 text-[14px] font-semibold leading-[18px] text-gold-foreground">
-              <Crown className="size-4 text-gold-deep transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
+            <span className="relative z-[2] inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[17px] text-gold-foreground">
+              <Crown className="size-3.5 text-gold-deep transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
 
               {premium.loading
                 ? t("premiumLoading")
@@ -191,7 +191,7 @@ function Installningar() {
             <button
               type="button"
               onClick={openManageSubscriptions}
-              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
+              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
               {t("manageSubscription")}
             </button>
@@ -200,26 +200,26 @@ function Installningar() {
               type="button"
               disabled={premium.busy}
               onClick={() => restorePurchase()}
-              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
+              className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
             >
               {premium.phase === "restoring" ? t("restoring") : t("restorePurchase")}
             </button>
           </div>
         </section>
 
-        <section className="mt-4">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <section className="mt-3">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("remindersSection")}
           </p>
 
-          <div className="overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-card edge-fix">
+          <div className="overflow-hidden rounded-xl border border-border bg-card px-3 py-2.5 shadow-card edge-fix">
             <div className="flex items-center gap-3">
-              <Bell className="size-[18px] shrink-0 text-primary" />
+              <Bell className="size-[16px] shrink-0 text-primary" />
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-semibold leading-[18px] text-primary">
+                <p className="text-[12px] font-semibold leading-[17px] text-primary">
                   {t("weeklyReminder")}
                 </p>
-                <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                <p className="mt-0.5 text-[10px] font-normal leading-[14px] text-muted-foreground">
                   {t("weeklyReminderDesc")}
                 </p>
               </div>
@@ -242,7 +242,7 @@ function Installningar() {
             </div>
 
             {reminder.enabled && reminder.permission !== "denied" && (
-              <p className="mt-2 pl-[30px] text-[11px] font-normal leading-[15px] text-muted-foreground">
+              <p className="mt-2 pl-[28px] text-[10px] font-normal leading-[14px] text-muted-foreground">
                 {t("nextReminder", {
                   date: formatFireDate(reminder.nextFireDate, language),
                 })}
@@ -250,12 +250,12 @@ function Installningar() {
             )}
 
             <div className="mt-3 flex items-center gap-3 border-t border-border pt-3">
-              <Bell className="size-[18px] shrink-0 text-primary" />
+              <Bell className="size-[16px] shrink-0 text-primary" />
               <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-semibold leading-[18px] text-primary">
+                <p className="text-[12px] font-semibold leading-[17px] text-primary">
                   {t("dailyReminder")}
                 </p>
-                <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                <p className="mt-0.5 text-[10px] font-normal leading-[14px] text-muted-foreground">
                   {t("dailyReminderDesc")}
                 </p>
               </div>
@@ -279,7 +279,7 @@ function Installningar() {
 
             {reminder.permission === "denied" && (
               <div className="mt-3 rounded-lg bg-secondary px-3 py-2.5">
-                <p className="text-[11px] font-normal leading-[16px] text-muted-foreground">
+                <p className="text-[10px] font-normal leading-[14px] text-muted-foreground">
                   {t("notifDenied")}
                 </p>
                 <button
@@ -289,7 +289,7 @@ function Installningar() {
                       toast.error(t("notifUnsupported"));
                     }
                   }}
-                  className="mt-2 text-[12px] font-semibold leading-[16px] text-primary underline-offset-2 active:underline"
+                  className="mt-2 text-[11px] font-semibold leading-[15px] text-primary underline-offset-2 active:underline"
                 >
                   {t("openIosSettings")}
                 </button>
@@ -298,17 +298,17 @@ function Installningar() {
           </div>
         </section>
 
-        <section className="mt-4">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <section className="mt-3">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("recentSection")}
           </p>
 
           <Link
             to="/senaste-registreringar"
-            className="flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
+            className="flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-2.5 text-[12px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2">
-              <Trash2 className="size-[18px]" />
+              <Trash2 className="size-[16px]" />
               {t("recentSection")}
             </span>
             <ChevronRight className="size-4 text-muted-foreground" />
@@ -316,10 +316,10 @@ function Installningar() {
 
           <Link
             to="/historik"
-            className="mt-2 flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-3 text-[14px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
+            className="mt-2 flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-2.5 text-[12px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2">
-              <CalendarPlus className="size-[18px]" />
+              <CalendarPlus className="size-[16px]" />
               {t("historySection")}
             </span>
             <ChevronRight className="size-4 text-muted-foreground" />
@@ -327,8 +327,8 @@ function Installningar() {
         </section>
 
 
-        <section className="mt-4">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <section className="mt-3">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("backupSection")}
           </p>
 
@@ -337,18 +337,18 @@ function Installningar() {
               type="button"
               onClick={handleExport}
               disabled={exporting}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent disabled:opacity-60 edge-fix"
             >
-              <Download className="size-[18px]" />
+              <Download className="size-[16px]" />
               <span>{t("exportBackup")}</span>
             </button>
 
             <button
               type="button"
               onClick={() => fileInput.current?.click()}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
-              <Upload className="size-[18px]" />
+              <Upload className="size-[16px]" />
               <span>{t("importBackup")}</span>
             </button>
           </div>
@@ -373,8 +373,8 @@ function Installningar() {
 
 
 
-        <div className="mt-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
-          <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+        <div className="mt-3 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
+          <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("aboutApp")}
           </p>
 
@@ -385,10 +385,10 @@ function Installningar() {
                 toast.error(t("legalOpenError"));
               }
             }}
-            className="relative mb-2 flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-3 shadow-button transition-colors active:bg-accent edge-fix"
+            className="relative mb-2 flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-card px-3 py-2.5 shadow-button transition-colors active:bg-accent edge-fix"
           >
-            <span className="flex items-center gap-2 text-[13px] font-semibold leading-[18px] text-primary">
-              <FileText className="size-[18px]" />
+            <span className="flex items-center gap-2 text-[12px] font-semibold leading-[17px] text-primary">
+              <FileText className="size-[16px]" />
               {t("legalRow")}
             </span>
             <ChevronRight className="absolute right-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -398,18 +398,18 @@ function Installningar() {
             <button
               type="button"
               onClick={requestAppStoreReview}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-border bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-primary shadow-button transition-colors active:bg-accent edge-fix"
             >
-              <Star className="size-[18px]" />
+              <Star className="size-[16px]" />
               <span>{t("rateDonely")}</span>
             </button>
 
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-card px-3 py-3 text-[13px] font-semibold leading-[18px] text-destructive shadow-button transition-colors active:bg-destructive/10 edge-fix"
+              className="flex items-center justify-center gap-2 overflow-hidden rounded-xl border border-destructive/30 bg-card px-3 py-2 text-[12px] font-semibold leading-[17px] text-destructive shadow-button transition-colors active:bg-destructive/10 edge-fix"
             >
-              <Trash2 className="size-[18px]" />
+              <Trash2 className="size-[16px]" />
               <span>{t("deleteAllDataRow")}</span>
             </button>
           </div>
@@ -417,7 +417,7 @@ function Installningar() {
 
 
 
-          <p className="mt-2 text-center text-[9px] font-normal leading-[13px] text-muted-foreground/80">
+          <p className="mt-2 text-center text-[8px] font-normal leading-[12px] text-muted-foreground/80">
             Donely · {t("version")} 1.0
           </p>
         </div>
