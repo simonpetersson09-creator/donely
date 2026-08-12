@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { Share } from "@capacitor/share";
+import { Send } from "lucide-react";
+import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
@@ -43,6 +46,35 @@ function Veckostatistik() {
     return `${fmt.format(summary.start)} – ${fmt.format(summary.end)}`;
   }, [locale, summary.start, summary.end]);
 
+  const workRows = useMemo(
+    () =>
+      summary.rows.filter(
+        (r) => categories.find((c) => c.id === r.id)?.area === "jobb",
+      ),
+    [summary.rows, categories],
+  );
+
+  const shareWork = async () => {
+    if (workRows.length === 0) {
+      toast(t("shareWorkSummaryEmpty"));
+      return;
+    }
+    const lines = workRows.map((r) => `• ${r.label}: ${r.total}`);
+    const total = workRows.reduce((acc, r) => acc + r.total, 0);
+    const title = t("shareWorkSummarySubject", { range });
+    const text = [title, "", ...lines, "", t("shareWorkSummaryTotal", { count: total })].join("\n");
+    try {
+      await Share.share({ title, text, dialogTitle: title });
+    } catch (err) {
+      if (err instanceof Error && /cancel/i.test(err.message)) return;
+      try {
+        window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text)}`;
+      } catch {
+        toast.error(t("shareWorkSummaryFailed"));
+      }
+    }
+  };
+
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="pb-1 pt-0.5">
@@ -65,7 +97,16 @@ function Veckostatistik() {
         <SummaryBreakdown rows={summary.rows} />
       )}
 
-      <div className="mt-5 rounded-xl bg-primary px-3.5 py-3 text-center shadow-card">
+      <button
+        type="button"
+        onClick={shareWork}
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-3.5 py-3 text-[15px] font-semibold text-primary shadow-soft transition-transform active:scale-[0.99]"
+      >
+        <Send className="size-4" />
+        {t("shareWorkSummary")}
+      </button>
+
+      <div className="mt-3 rounded-xl bg-primary px-3.5 py-3 text-center shadow-card">
         <p className="text-[15px] font-semibold text-primary-foreground">
           {t("weeklySummaryTotal", { count: summary.total })}
         </p>
