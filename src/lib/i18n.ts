@@ -1186,6 +1186,7 @@ const ptBR: Dict = {
   "cat.j-admin": "Administração",
   welcomeTitle: "Boas-vindas ao Donely",
   welcomeLine1: "Registre o que você realmente faz.",
+  tagline: "O que você realmente fez",
   welcomeLine2: "Acompanhe seus resultados ao longo do tempo.",
   getStarted: "Começar",
   languageGuideTitle: "Mude o idioma aqui.",
