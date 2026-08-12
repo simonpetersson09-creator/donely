@@ -229,7 +229,7 @@ function Index() {
         </div>
       </div>
 
-      <div className="flex flex-1 translate-y-[40px] flex-col justify-center gap-3">
+      <div className="flex flex-1 translate-y-[80px] flex-col justify-center gap-3">
         {/* Område */}
         <AreaSegmented
           area={area}
