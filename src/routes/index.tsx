@@ -221,7 +221,7 @@ function Index() {
               <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
             </div>
           </div>
-          <h1 className="font-logo select-none text-[36px] leading-none tracking-[-0.04em] text-primary">
+          <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
           <p className="mt-1.5 text-center text-[13px] font-medium tracking-wide text-primary/80">
