@@ -47,19 +47,28 @@ function Veckostatistik() {
 
   const workRows = useMemo(
     () =>
-      summary.rows.filter(
-        (r) => categories.find((c) => c.id === r.id)?.area === "jobb",
-      ),
+      summary.rows.filter((r) => {
+        const category = categories.find((c) => c.id === r.id);
+        // Endast jobb-kategorier ska kunna delas som jobbsammanställning.
+        return category?.area === "jobb";
+      }),
     [summary.rows, categories],
   );
 
   const shareWork = () => {
-    if (workRows.length === 0) {
+    // Dubbelkolla att inga privat-rader har slunkit med.
+    const onlyJobbRows = workRows.filter((r) => {
+      const category = categories.find((c) => c.id === r.id);
+      return category?.area === "jobb";
+    });
+
+    if (onlyJobbRows.length === 0) {
       toast(t("shareWorkSummaryEmpty"));
       return;
     }
-    const lines = workRows.map((r) => `• ${r.label}: ${r.total}`);
-    const total = workRows.reduce((acc, r) => acc + r.total, 0);
+
+    const lines = onlyJobbRows.map((r) => `• ${r.label}: ${r.total}`);
+    const total = onlyJobbRows.reduce((acc, r) => acc + r.total, 0);
     const title = t("shareWorkSummarySubject", { range });
     const text = [title, "", ...lines, "", t("shareWorkSummaryTotal", { count: total })].join("\n");
     try {
