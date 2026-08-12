@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -55,7 +55,6 @@ type Row = {
   category: Category;
   total: number;
   goal: number | null;
-  lastAt: string | null;
   distanceKm: number;
   durationMin: number;
 };
@@ -77,7 +76,6 @@ function Statistik() {
 
   const rows = useMemo(() => {
     const totals = new Map<string, number>();
-    const lastAt = new Map<string, string>();
     const km = new Map<string, number>();
     const minutes = new Map<string, number>();
     for (const e of entries as Entry[]) {
@@ -87,8 +85,6 @@ function Statistik() {
       if (e.distanceKm) km.set(e.categoryId, (km.get(e.categoryId) ?? 0) + e.distanceKm);
       if (e.durationMin)
         minutes.set(e.categoryId, (minutes.get(e.categoryId) ?? 0) + e.durationMin);
-      const prev = lastAt.get(e.categoryId);
-      if (!prev || d > new Date(prev)) lastAt.set(e.categoryId, e.createdAt);
     }
 
     const build = (area: Area): Row[] =>
@@ -98,7 +94,6 @@ function Statistik() {
           category: c,
           total: totals.get(c.id) ?? 0,
           goal: goals[goalKey(year, c.id)] ?? null,
-          lastAt: lastAt.get(c.id) ?? null,
           distanceKm: km.get(c.id) ?? 0,
           durationMin: minutes.get(c.id) ?? 0,
         }))
@@ -420,13 +415,11 @@ function GoalCard({
 }) {
   const { t } = useLanguage();
   const locale = useLocale();
-  const { category, total, goal, lastAt, distanceKm, durationMin } = row;
+  const { category, total, goal, distanceKm, durationMin } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
   const hours = Math.floor(durationMin / 60);
   const mins = Math.round(durationMin % 60);
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
 
   const accentClass = area === "privat" ? "bg-accent-life" : "bg-accent-work";
 
@@ -486,7 +479,7 @@ function GoalCard({
         </div>
       )}
 
-      {(distanceKm > 0 || durationMin > 0 || (lastAt && mounted)) && (
+      {(distanceKm > 0 || durationMin > 0) && (
         <div className="mt-2 flex flex-wrap items-center gap-1.5">
           {distanceKm > 0 && (
             <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
@@ -500,42 +493,12 @@ function GoalCard({
               {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
             </span>
           )}
-          {lastAt && mounted && (
-            <span className="ml-auto shrink-0 text-[11px] text-muted-foreground">
-              {formatRelativeDate(lastAt, locale, t)}
-            </span>
-          )}
         </div>
       )}
     </Link>
-
   );
 }
 
-function formatRelativeDate(
-  iso: string,
-  locale: string,
-  t: (key: string, opts?: Record<string, unknown>) => string,
-) {
-  const date = new Date(iso);
-  const now = new Date();
-  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const startOfDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const diffDays = Math.round(
-    (startOfToday.getTime() - startOfDate.getTime()) / (1000 * 60 * 60 * 24),
-  );
-  const time = date.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
-
-  if (diffDays === 0) return t("today", { time });
-  if (diffDays === 1) return t("yesterday", { time });
-  if (diffDays >= 2 && diffDays <= 6) return t("daysAgo", { count: diffDays });
-
-  return date.toLocaleDateString(locale, {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
 
 function GoalSheet({
   category,
