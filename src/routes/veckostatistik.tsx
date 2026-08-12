@@ -94,6 +94,24 @@ function Veckostatistik() {
       </h1>
       <p className="mt-1 px-1 text-center text-[13px] text-muted-foreground">{range}</p>
 
+      {/* Snabblänkar till dagsvyn och årsstatistiken */}
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <Link
+          to="/dagsstatistik"
+          className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+        >
+          <Calendar className="size-4" />
+          <span>{t("dailySummaryLink")}</span>
+        </Link>
+        <Link
+          to="/statistik"
+          className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+        >
+          <BarChart3 className="size-4" />
+          <span>{currentYear}</span>
+        </Link>
+      </div>
+
       {summary.rows.length === 0 ? (
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("weeklySummaryEmpty")}</p>
       ) : (
@@ -103,17 +121,13 @@ function Veckostatistik() {
       <button
         type="button"
         onClick={shareWork}
-        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-3.5 py-3 text-[15px] font-semibold text-primary shadow-soft transition-transform active:scale-[0.99]"
+        className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3.5 text-[15px] font-semibold text-primary-foreground shadow-[0_10px_24px_-10px_hsl(0_0%_0%/0.45)] transition-all duration-200 active:scale-[0.98] active:shadow-[0_4px_12px_-8px_hsl(0_0%_0%/0.45)]"
       >
-        <Mail className="size-4" />
+        <span className="flex size-7 items-center justify-center rounded-full bg-primary-foreground/15 ring-1 ring-primary-foreground/25">
+          <Mail className="size-4" />
+        </span>
         {t("shareWorkSummary")}
       </button>
-
-      <div className="mt-3 rounded-xl bg-primary px-3.5 py-3 text-center shadow-card">
-        <p className="text-[15px] font-semibold text-primary-foreground">
-          {t("weeklySummaryTotal", { count: summary.total })}
-        </p>
-      </div>
     </main>
   );
 }
