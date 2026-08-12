@@ -29,7 +29,6 @@ import {
   useLanguageGuide,
   useReminderPrompt,
   deleteCategoryData,
-  DEFAULT_CATEGORIES,
   type Area,
 } from "@/lib/store";
 import { useTranslation } from "react-i18next";
@@ -39,8 +38,6 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";
 import { useReminder } from "@/lib/notifications";
-
-const DEFAULT_IDS = new Set(DEFAULT_CATEGORIES.map((c) => c.id));
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -483,9 +480,10 @@ function Index() {
 
       {showReminderPrompt && (
         <ReminderPrompt
-          onEnable={() => {
+          onEnable={(choice) => {
             markReminderPromptAnswered();
-            void reminder.toggle(true, language);
+            if (choice.weekly) void reminder.toggle(true, language);
+            if (choice.daily) void reminder.toggleDaily(true, language);
           }}
           onLater={markReminderPromptAnswered}
         />
@@ -900,8 +898,18 @@ function CategoryRow({
   );
 }
 
-function ReminderPrompt({ onEnable, onLater }: { onEnable: () => void; onLater: () => void }) {
+function ReminderPrompt({
+  onEnable,
+  onLater,
+}: {
+  onEnable: (choice: { weekly: boolean; daily: boolean }) => void;
+  onLater: () => void;
+}) {
   const { t } = useLanguage();
+  // Användaren får välja båda påminnelserna direkt: veckan (fre 17:00) och
+  // dagen (mån–fre 17:00). Båda är förvalda.
+  const [weekly, setWeekly] = useState(true);
+  const [daily, setDaily] = useState(true);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">
@@ -915,10 +923,27 @@ function ReminderPrompt({ onEnable, onLater }: { onEnable: () => void; onLater: 
         <p className="mt-1.5 text-[13px] font-normal leading-[18px] text-muted-foreground">
           {t("reminderPromptBody")}
         </p>
+
+        <div className="mt-3 space-y-1.5 text-left">
+          <ReminderOption
+            checked={weekly}
+            onToggle={() => setWeekly((v) => !v)}
+            title={t("weeklyReminder")}
+            description={t("weeklyReminderDesc")}
+          />
+          <ReminderOption
+            checked={daily}
+            onToggle={() => setDaily((v) => !v)}
+            title={t("dailyReminder")}
+            description={t("dailyReminderDesc")}
+          />
+        </div>
+
         <button
           type="button"
-          onClick={onEnable}
-          className="mt-4 w-full rounded-xl bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-transform active:scale-[0.98]"
+          disabled={!weekly && !daily}
+          onClick={() => onEnable({ weekly, daily })}
+          className="mt-4 w-full rounded-xl bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-40"
         >
           {t("reminderPromptEnable")}
         </button>
@@ -931,6 +956,45 @@ function ReminderPrompt({ onEnable, onLater }: { onEnable: () => void; onLater: 
         </button>
       </div>
     </div>
+  );
+}
+
+function ReminderOption({
+  checked,
+  onToggle,
+  title,
+  description,
+}: {
+  checked: boolean;
+  onToggle: () => void;
+  title: string;
+  description: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-pressed={checked}
+      className={cn(
+        "flex w-full items-start gap-2 rounded-xl border px-3 py-2 text-left transition-colors",
+        checked ? "border-primary bg-secondary" : "border-border bg-card",
+      )}
+    >
+      <span
+        className={cn(
+          "mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-[5px] border",
+          checked ? "border-primary bg-primary text-primary-foreground" : "border-border",
+        )}
+      >
+        {checked && <Check className="size-3" />}
+      </span>
+      <span className="min-w-0">
+        <span className="block text-[13px] font-semibold text-card-foreground">{title}</span>
+        <span className="block text-[11px] leading-[15px] text-muted-foreground">
+          {description}
+        </span>
+      </span>
+    </button>
   );
 }
 
