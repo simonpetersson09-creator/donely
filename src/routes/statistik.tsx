@@ -151,7 +151,7 @@ function Statistik() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="flex items-center justify-between pb-1 pt-0.5">
         <BackButton
           fallbackTo="/"
@@ -185,79 +185,66 @@ function Statistik() {
         </div>
       </div>
 
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <Link
-          to="/dagsstatistik"
-          className="card-base flex items-center justify-between text-[13px] font-semibold text-primary transition-colors active:bg-accent"
-        >
-          <span>{t("dailySummaryLink")}</span>
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Link>
-        <Link
-          to="/veckostatistik"
-          className="card-base flex items-center justify-between text-[13px] font-semibold text-primary transition-colors active:bg-accent"
-        >
-          <span>{t("weeklySummaryLink")}</span>
-          <ChevronRight className="size-4 text-muted-foreground" />
-        </Link>
-      </div>
-
-      <h1 className="mt-2 px-1 text-center text-[22px] font-bold leading-tight tracking-[-0.03em] text-primary">
+      <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
-      <div className="mt-2 grid grid-cols-2 gap-2">
-        <div className="card-base col-span-2">
-          <div className="flex items-end justify-between gap-3">
-            <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
-                {t("totalActivities")}
-              </p>
-              <p className="mt-0.5 text-[22px] font-bold leading-none tabular-nums text-card-foreground">
-                {totalActivities.toLocaleString(locale)}
-              </p>
-            </div>
-            {reachedGoals > 0 && (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-semibold text-primary-foreground">
-                <Check className="size-3" />
-                {reachedGoals} {t("achieved")}
-              </span>
-            )}
+      {/* Överblick */}
+      <div className="card-base mt-4">
+        <div className="flex items-center justify-between gap-3">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+              {t("totalActivities")}
+            </p>
+            <p className="mt-1 text-[34px] font-bold leading-none tabular-nums text-card-foreground">
+              {totalActivities.toLocaleString(locale)}
+            </p>
           </div>
+          {reachedGoals > 0 && (
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[12px] font-semibold text-primary-foreground">
+              <Check className="size-3.5" />
+              {reachedGoals} {t("achieved")}
+            </span>
+          )}
         </div>
 
-        <div className="card-base">
-          <div className="flex items-center gap-1.5">
-            <div className="flex size-6 items-center justify-center rounded-full bg-accent-life-soft text-accent-life">
-              <Home className="size-3" />
-            </div>
-            <div>
-              <p className="text-[9px] font-medium text-muted-foreground">{t("private")}</p>
-              <p className="text-[14px] font-bold tabular-nums text-card-foreground">
-                {areaTotals.privat.toLocaleString(locale)}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card-base">
-          <div className="flex items-center gap-1.5">
-            <div className="flex size-6 items-center justify-center rounded-full bg-accent-work-soft text-accent-work">
-              <Briefcase className="size-3" />
-            </div>
-            <div>
-              <p className="text-[9px] font-medium text-muted-foreground">{t("work")}</p>
-              <p className="text-[14px] font-bold tabular-nums text-card-foreground">
-                {areaTotals.jobb.toLocaleString(locale)}
-              </p>
-            </div>
-          </div>
+        <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3">
+          <AreaStat
+            icon={<Home className="size-4" />}
+            label={t("private")}
+            value={areaTotals.privat.toLocaleString(locale)}
+            tone="life"
+          />
+          <AreaStat
+            icon={<Briefcase className="size-4" />}
+            label={t("work")}
+            value={areaTotals.jobb.toLocaleString(locale)}
+            tone="work"
+          />
         </div>
       </div>
 
+      {/* Snabblänkar */}
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <Link
+          to="/dagsstatistik"
+          className="card-base flex items-center justify-between gap-1 text-[14px] font-semibold text-primary transition-colors active:bg-accent"
+        >
+          <span className="truncate">{t("dailySummaryLink")}</span>
+          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+        </Link>
+        <Link
+          to="/veckostatistik"
+          className="card-base flex items-center justify-between gap-1 text-[14px] font-semibold text-primary transition-colors active:bg-accent"
+        >
+          <span className="truncate">{t("weeklySummaryLink")}</span>
+          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+        </Link>
+      </div>
+
       <Section
-        title={`${t("private")} (${year})`}
-        icon={<Home className="size-5" />}
+        title={t("private")}
+        icon={<Home className="size-4" />}
         area="privat"
         total={areaTotals.privat}
         rows={rows.privat}
@@ -265,8 +252,8 @@ function Statistik() {
         onSetGoal={handleSetGoal}
       />
       <Section
-        title={`${t("work")} (${year})`}
-        icon={<Briefcase className="size-5" />}
+        title={t("work")}
+        icon={<Briefcase className="size-4" />}
         area="jobb"
         total={areaTotals.jobb}
         rows={rows.jobb}
@@ -275,10 +262,11 @@ function Statistik() {
       />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
-        <p className="mt-8 px-1 text-[15px] text-muted-foreground">
+        <p className="mt-8 px-1 text-center text-[15px] text-muted-foreground">
           {isCurrentYear ? t("noEntriesThisYear") : t("noEntriesYear", { year })}
         </p>
       )}
+
 
       {editing && (
         <GoalSheet
@@ -332,6 +320,39 @@ function Statistik() {
   );
 }
 
+function AreaStat({
+  icon,
+  label,
+  value,
+  tone,
+}: {
+  icon: ReactNode;
+  label: string;
+  value: string;
+  tone: "life" | "work";
+}) {
+  return (
+    <div className="flex items-center gap-2 rounded-xl bg-secondary/60 px-2.5 py-2">
+      <div
+        className={cn(
+          "flex size-8 shrink-0 items-center justify-center rounded-full",
+          tone === "life"
+            ? "bg-accent-life-soft text-accent-life"
+            : "bg-accent-work-soft text-accent-work",
+        )}
+      >
+        {icon}
+      </div>
+      <div className="min-w-0">
+        <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
+        <p className="text-[18px] font-bold leading-none tabular-nums text-card-foreground">
+          {value}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function Section({
   title,
   icon,
@@ -352,17 +373,26 @@ function Section({
   const locale = useLocale();
   if (rows.length === 0) return null;
   return (
-    <section className="mt-3">
-      <div className="mb-1 flex flex-col items-center px-1">
-        <h2 className="flex items-center gap-1.5 text-[18px] font-bold leading-tight tracking-[-0.02em] text-primary">
-          {icon}
+    <section className="mt-5">
+      <div className="mb-2 flex items-center justify-between px-1">
+        <h2 className="flex items-center gap-2 text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
+          <span
+            className={cn(
+              "flex size-6 items-center justify-center rounded-full",
+              area === "privat"
+                ? "bg-accent-life-soft text-accent-life"
+                : "bg-accent-work-soft text-accent-work",
+            )}
+          >
+            {icon}
+          </span>
           <span>{title}</span>
         </h2>
         <span className="text-[13px] font-semibold tabular-nums text-muted-foreground">
           {total.toLocaleString(locale)}
         </span>
       </div>
-      <div className="space-y-1">
+      <div className="space-y-2">
         {rows.map((row) => (
           <GoalCard
             key={row.category.id}
@@ -393,7 +423,6 @@ function GoalCard({
   const { category, total, goal, lastAt, distanceKm, durationMin } = row;
   const pct = goal && goal > 0 ? Math.round((total / goal) * 100) : null;
   const reached = pct !== null && total >= goal!;
-  const hasMetrics = distanceKm > 0 || durationMin > 0;
   const hours = Math.floor(durationMin / 60);
   const mins = Math.round(durationMin % 60);
   const [mounted, setMounted] = useState(false);
@@ -407,24 +436,14 @@ function GoalCard({
       params={{ id: category.id }}
       className="card-base block text-card-foreground transition-colors active:bg-accent"
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <h3 className="truncate text-[9px] font-medium text-card-foreground/70">
-            {categoryLabel(t, category)}
-          </h3>
-          <p className="text-[14px] font-bold leading-tight tabular-nums">
-            {goal !== null
-              ? t("ofGoal", {
-                  total: total.toLocaleString(locale),
-                  goal: goal.toLocaleString(locale),
-                })
-              : t("soFarCount", { total: total.toLocaleString(locale) })}
-          </p>
-        </div>
-        <div className="flex shrink-0 items-center gap-1">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="min-w-0 flex-1 truncate text-[15px] font-semibold">
+          {categoryLabel(t, category)}
+        </h3>
+        <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-1 py-0.5 text-[8px] font-semibold text-primary-foreground">
-              <Check className="size-2" /> {t("achieved")}
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
+              <Check className="size-3" /> {t("achieved")}
             </span>
           )}
           {showGoalCta && (
@@ -436,45 +455,60 @@ function GoalCard({
                 e.stopPropagation();
                 onSetGoal(category);
               }}
-              className="flex size-4 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
+              className="flex size-7 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
             >
-              <Pencil className="size-2" />
+              <Pencil className="size-3.5" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-0.5 flex items-center justify-between gap-2">
-        <div className="flex flex-wrap items-center gap-1">
-          {distanceKm > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1 py-0.5 text-[8px] font-medium tabular-nums text-card-foreground/80">
-              <MapPin className="size-2 text-primary" />
-              {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
-            </span>
-          )}
-          {durationMin > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1 py-0.5 text-[8px] font-medium tabular-nums text-card-foreground/80">
-              <Timer className="size-2 text-primary" />
-              {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
-            </span>
-          )}
-        </div>
-        {lastAt && mounted && (
-          <span className="shrink-0 rounded-full bg-secondary px-1 py-0.5 text-[8px] text-muted-foreground">
-            {formatRelativeDate(lastAt, locale, t)}
-          </span>
+      <div className="mt-1 flex items-baseline justify-between gap-2">
+        <p className="text-[14px] font-medium tabular-nums text-muted-foreground">
+          {goal !== null
+            ? t("ofGoal", {
+                total: total.toLocaleString(locale),
+                goal: goal.toLocaleString(locale),
+              })
+            : t("soFarCount", { total: total.toLocaleString(locale) })}
+        </p>
+        {pct !== null && (
+          <span className="shrink-0 text-[13px] font-bold tabular-nums text-primary">{pct}%</span>
         )}
       </div>
 
       {pct !== null && (
-        <div className="mt-1 h-[2px] w-full overflow-hidden rounded-full bg-accent">
+        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-accent">
           <div
             className={cn("h-full rounded-full transition-all duration-500", accentClass)}
             style={{ width: `${Math.min(100, pct)}%` }}
           />
         </div>
       )}
+
+      {(distanceKm > 0 || durationMin > 0 || (lastAt && mounted)) && (
+        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+          {distanceKm > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
+              <MapPin className="size-3 text-primary" />
+              {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
+            </span>
+          )}
+          {durationMin > 0 && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
+              <Timer className="size-3 text-primary" />
+              {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
+            </span>
+          )}
+          {lastAt && mounted && (
+            <span className="ml-auto shrink-0 text-[11px] text-muted-foreground">
+              {formatRelativeDate(lastAt, locale, t)}
+            </span>
+          )}
+        </div>
+      )}
     </Link>
+
   );
 }
 
