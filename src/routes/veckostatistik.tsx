@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { Share } from "@capacitor/share";
-import { Send } from "lucide-react";
+import { Mail } from "lucide-react";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
