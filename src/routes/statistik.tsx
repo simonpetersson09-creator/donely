@@ -419,7 +419,7 @@ function GoalCard({
     <Link
       to="/kategori/$id"
       params={{ id: category.id }}
-      className="card-base block text-card-foreground transition-colors active:bg-accent"
+      className="card-base block text-card-foreground shadow-[0_2px_4px_rgba(20,30,50,0.04),0_10px_28px_-8px_rgba(20,30,50,0.1)] transition-colors active:bg-accent"
     >
       <div className="flex items-center justify-between gap-2">
         <h3 className="min-w-0 flex-1 truncate text-[15px] font-semibold leading-tight">
@@ -450,12 +450,20 @@ function GoalCard({
 
       <div className="mt-1.5 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-2">
         <p className="min-w-0 truncate text-[13px] font-medium tabular-nums text-muted-foreground">
-          {goal !== null
-            ? t("ofGoal", {
-                total: total.toLocaleString(locale),
-                goal: goal.toLocaleString(locale),
-              })
-            : t("soFarCount", { total: total.toLocaleString(locale) })}
+          {goal !== null ? (
+            <>
+              <span className="text-[20px] font-bold leading-none text-card-foreground">
+                {total.toLocaleString(locale)}
+              </span>{" "}
+              <span className="text-muted-foreground">
+                {t("ofGoalGoalOnly", { goal: goal.toLocaleString(locale) })}
+              </span>
+            </>
+          ) : (
+            <span className="text-[20px] font-bold leading-none text-card-foreground">
+              {total.toLocaleString(locale)}
+            </span>
+          )}
         </p>
         {pct !== null && (
           <span className="shrink-0 text-[13px] font-bold tabular-nums text-primary">
@@ -465,7 +473,7 @@ function GoalCard({
       </div>
 
       {pct !== null && (
-        <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-accent">
+        <div className="mt-1.5 h-2 w-full overflow-hidden rounded-full bg-accent">
           <div
             className={cn("h-full rounded-full transition-all duration-500", accentClass)}
             style={{ width: `${Math.min(100, pct)}%` }}
