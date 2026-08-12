@@ -357,10 +357,12 @@ function Index() {
             )}
           >
             <span className="inline-flex items-center justify-center gap-2">
-              {locked && (
+              {locked ? (
                 <span className="flex size-6 items-center justify-center rounded-full bg-primary-foreground/15 ring-1 ring-primary-foreground/25">
                   <Lock className="size-3.5" />
                 </span>
+              ) : (
+                <CirclePlus className="size-5" />
               )}
               {t("register")}
             </span>
@@ -377,8 +379,9 @@ function Index() {
         <div className="flex items-stretch gap-2">
           <Link
             to="/statistik"
-            className="flex h-12 flex-1 items-center justify-center rounded-xl border border-border bg-card text-[16px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+            className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[16px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
           >
+            <BarChart3 className="size-5" />
             {t("statistics")}
           </Link>
           <div className="relative shrink-0">
