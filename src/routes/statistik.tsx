@@ -186,33 +186,33 @@ function Statistik() {
       </h1>
 
       {/* Överblick */}
-      <div className="card-base mt-4">
+      <div className="card-base mt-3 px-3 py-3">
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
               {t("totalActivities")}
             </p>
-            <p className="mt-1 text-[34px] font-bold leading-none tabular-nums text-card-foreground">
+            <p className="mt-0.5 text-[30px] font-bold leading-none tabular-nums text-card-foreground">
               {totalActivities.toLocaleString(locale)}
             </p>
           </div>
           {reachedGoals > 0 && (
-            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-[12px] font-semibold text-primary-foreground">
-              <Check className="size-3.5" />
+            <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
+              <Check className="size-3" />
               {reachedGoals} {t("achieved")}
             </span>
           )}
         </div>
 
-        <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-3">
+        <div className="mt-2 grid grid-cols-2 gap-2 border-t border-border pt-2">
           <AreaStat
-            icon={<Home className="size-4" />}
+            icon={<Home className="size-3.5" />}
             label={t("private")}
             value={areaTotals.privat.toLocaleString(locale)}
             tone="life"
           />
           <AreaStat
-            icon={<Briefcase className="size-4" />}
+            icon={<Briefcase className="size-3.5" />}
             label={t("work")}
             value={areaTotals.jobb.toLocaleString(locale)}
             tone="work"
@@ -224,17 +224,17 @@ function Statistik() {
       <div className="mt-3 grid grid-cols-2 gap-2">
         <Link
           to="/dagsstatistik"
-          className="card-base flex items-center justify-between gap-1 text-[14px] font-semibold text-primary transition-colors active:bg-accent"
+          className="card-base flex items-center justify-between gap-1 bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
         >
           <span className="truncate">{t("dailySummaryLink")}</span>
-          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+          <ChevronRight className="size-4 shrink-0 text-primary-foreground/80" />
         </Link>
         <Link
           to="/veckostatistik"
-          className="card-base flex items-center justify-between gap-1 text-[14px] font-semibold text-primary transition-colors active:bg-accent"
+          className="card-base flex items-center justify-between gap-1 bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
         >
           <span className="truncate">{t("weeklySummaryLink")}</span>
-          <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+          <ChevronRight className="size-4 shrink-0 text-primary-foreground/80" />
         </Link>
       </div>
 
@@ -365,28 +365,22 @@ function Section({
   const locale = useLocale();
   const { t } = useLanguage();
   if (rows.length === 0) return null;
-  const total = rows.reduce((sum, r) => sum + r.total, 0);
   return (
     <section className="mt-5">
-      <div className="mb-2 flex items-center justify-between gap-2 px-1">
-        <div className="flex items-center gap-2">
-          <span
-            className={cn(
-              "flex size-6 items-center justify-center rounded-full",
-              area === "privat"
-                ? "bg-accent-life-soft text-accent-life"
-                : "bg-accent-work-soft text-accent-work",
-            )}
-          >
-            {icon}
-          </span>
-          <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
-            {title}
-          </h2>
-        </div>
-        <span className="text-[17px] font-bold tabular-nums text-card-foreground">
-          {total.toLocaleString(locale)}
+      <div className="mb-2 flex items-center gap-2 px-1">
+        <span
+          className={cn(
+            "flex size-6 items-center justify-center rounded-full",
+            area === "privat"
+              ? "bg-accent-life-soft text-accent-life"
+              : "bg-accent-work-soft text-accent-work",
+          )}
+        >
+          {icon}
         </span>
+        <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
+          {title}
+        </h2>
       </div>
       <div className="card-base overflow-hidden">
         <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
@@ -448,18 +442,7 @@ function GoalRow({
           {total.toLocaleString(locale)}
         </span>
         <span className="text-right text-[12px] tabular-nums text-muted-foreground">
-          {goal !== null ? (
-            <>
-              {goal.toLocaleString(locale)}
-              {pct !== null && (
-                <span className="ml-1 text-[10px] text-muted-foreground/70">
-                  · {pct}%
-                </span>
-              )}
-            </>
-          ) : (
-            "—"
-          )}
+          {goal !== null ? goal.toLocaleString(locale) : "—"}
         </span>
         {showGoalCta ? (
           <button
