@@ -226,6 +226,9 @@ function Index() {
           <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
+          <p className="mt-1.5 text-center text-[13px] font-medium tracking-wide text-primary/80">
+            {t("tagline")}
+          </p>
         </div>
       </div>
 
