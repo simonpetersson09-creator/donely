@@ -405,7 +405,7 @@ function GoalCard({
     <Link
       to="/kategori/$id"
       params={{ id: category.id }}
-      className="block rounded-xl border border-border bg-card px-2 py-1 text-card-foreground shadow-card transition-colors active:bg-accent"
+      className="card-base block text-card-foreground transition-colors active:bg-accent"
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
