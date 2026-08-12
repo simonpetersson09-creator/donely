@@ -430,13 +430,13 @@ function GoalCard({
       className="card-base block text-card-foreground transition-colors active:bg-accent"
     >
       <div className="flex items-center justify-between gap-2">
-        <h3 className="min-w-0 flex-1 truncate text-[15px] font-semibold">
+        <h3 className="min-w-0 flex-1 truncate text-[15px] font-semibold leading-tight">
           {categoryLabel(t, category)}
         </h3>
         <div className="flex shrink-0 items-center gap-1.5">
           {reached && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">
-              <Check className="size-3" /> {t("achieved")}
+            <span className="inline-flex items-center gap-1 rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-semibold text-primary-foreground">
+              <Check className="size-2.5" /> {t("achieved")}
             </span>
           )}
           {showGoalCta && (
@@ -448,16 +448,16 @@ function GoalCard({
                 e.stopPropagation();
                 onSetGoal(category);
               }}
-              className="flex size-7 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
+              className="flex size-6 items-center justify-center rounded-full bg-secondary text-primary transition-colors active:bg-primary active:text-primary-foreground"
             >
-              <Pencil className="size-3.5" />
+              <Pencil className="size-3" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="mt-1 flex items-baseline justify-between gap-2">
-        <p className="text-[14px] font-medium tabular-nums text-muted-foreground">
+      <div className="mt-1.5 grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-2">
+        <p className="min-w-0 truncate text-[13px] font-medium tabular-nums text-muted-foreground">
           {goal !== null
             ? t("ofGoal", {
                 total: total.toLocaleString(locale),
@@ -466,12 +466,14 @@ function GoalCard({
             : t("soFarCount", { total: total.toLocaleString(locale) })}
         </p>
         {pct !== null && (
-          <span className="shrink-0 text-[13px] font-bold tabular-nums text-primary">{pct}%</span>
+          <span className="shrink-0 text-[13px] font-bold tabular-nums text-primary">
+            {pct}%
+          </span>
         )}
       </div>
 
       {pct !== null && (
-        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-accent">
+        <div className="mt-1.5 h-1 w-full overflow-hidden rounded-full bg-accent">
           <div
             className={cn("h-full rounded-full transition-all duration-500", accentClass)}
             style={{ width: `${Math.min(100, pct)}%` }}
@@ -480,16 +482,16 @@ function GoalCard({
       )}
 
       {(distanceKm > 0 || durationMin > 0) && (
-        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+        <div className="mt-1.5 flex flex-wrap items-center gap-1">
           {distanceKm > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
-              <MapPin className="size-3 text-primary" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-card-foreground/80">
+              <MapPin className="size-2.5 text-primary" />
               {distanceKm.toLocaleString(locale, { maximumFractionDigits: 1 })} km
             </span>
           )}
           {durationMin > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
-              <Timer className="size-3 text-primary" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-1.5 py-0.5 text-[10px] font-medium tabular-nums text-card-foreground/80">
+              <Timer className="size-2.5 text-primary" />
               {hours > 0 ? `${hours} h ${mins} min` : `${mins} min`}
             </span>
           )}
