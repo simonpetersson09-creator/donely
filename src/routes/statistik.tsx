@@ -55,7 +55,6 @@ type Row = {
   category: Category;
   total: number;
   goal: number | null;
-  lastAt: string | null;
   distanceKm: number;
   durationMin: number;
 };
@@ -77,7 +76,6 @@ function Statistik() {
 
   const rows = useMemo(() => {
     const totals = new Map<string, number>();
-    const lastAt = new Map<string, string>();
     const km = new Map<string, number>();
     const minutes = new Map<string, number>();
     for (const e of entries as Entry[]) {
@@ -87,8 +85,6 @@ function Statistik() {
       if (e.distanceKm) km.set(e.categoryId, (km.get(e.categoryId) ?? 0) + e.distanceKm);
       if (e.durationMin)
         minutes.set(e.categoryId, (minutes.get(e.categoryId) ?? 0) + e.durationMin);
-      const prev = lastAt.get(e.categoryId);
-      if (!prev || d > new Date(prev)) lastAt.set(e.categoryId, e.createdAt);
     }
 
     const build = (area: Area): Row[] =>
@@ -98,7 +94,6 @@ function Statistik() {
           category: c,
           total: totals.get(c.id) ?? 0,
           goal: goals[goalKey(year, c.id)] ?? null,
-          lastAt: lastAt.get(c.id) ?? null,
           distanceKm: km.get(c.id) ?? 0,
           durationMin: minutes.get(c.id) ?? 0,
         }))
