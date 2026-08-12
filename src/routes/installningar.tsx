@@ -247,6 +247,34 @@ function Installningar() {
               </p>
             )}
 
+            <div className="mt-3 flex items-center gap-3 border-t border-border pt-3">
+              <Bell className="size-[18px] shrink-0 text-primary" />
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-semibold leading-[18px] text-primary">
+                  {t("dailyReminder")}
+                </p>
+                <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                  {t("dailyReminderDesc")}
+                </p>
+              </div>
+              <Switch
+                checked={reminder.dailyEnabled}
+                disabled={reminder.busy}
+                aria-label={t("dailyReminder")}
+                onCheckedChange={async (next) => {
+                  const result = await reminder.toggleDaily(next, language);
+                  if (!next) {
+                    toast.success(t("reminderOffToast"));
+                    return;
+                  }
+                  if (result === "denied") toast.error(t("notifDenied"));
+                  else if (result === "unsupported") toast.error(t("notifUnsupported"));
+                  else if (result === "granted" || result === "provisional")
+                    toast.success(t("reminderOnToast"));
+                }}
+              />
+            </div>
+
             {reminder.permission === "denied" && (
               <div className="mt-3 rounded-lg bg-secondary px-3 py-2.5">
                 <p className="text-[11px] font-normal leading-[16px] text-muted-foreground">
