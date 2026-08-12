@@ -144,17 +144,17 @@ function Statistik() {
           {t("back")}
         </BackButton>
 
-        <div className="flex items-center gap-1 rounded-full bg-secondary p-1">
+        <div className="flex items-center gap-1 rounded-full bg-primary p-1 text-primary-foreground shadow-soft">
           <button
             type="button"
             aria-label={t("prevYear")}
             disabled={yearIndex >= years.length - 1}
             onClick={() => setYear(years[yearIndex + 1])}
-            className="flex size-7 items-center justify-center rounded-full bg-card text-primary shadow-soft transition-transform active:scale-95 disabled:opacity-40"
+            className="flex size-7 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
           >
             <ChevronLeft className="size-4" />
           </button>
-          <span className="min-w-[3.5ch] text-center text-[15px] font-bold tabular-nums text-primary">
+          <span className="min-w-[3.5ch] text-center text-[15px] font-bold tabular-nums text-primary-foreground">
             {year}
           </span>
           <button
@@ -162,7 +162,7 @@ function Statistik() {
             aria-label={t("nextYear")}
             disabled={yearIndex <= 0}
             onClick={() => setYear(years[yearIndex - 1])}
-            className="flex size-7 items-center justify-center rounded-full bg-card text-primary shadow-soft transition-transform active:scale-95 disabled:opacity-40"
+            className="flex size-7 items-center justify-center rounded-full bg-primary-foreground/15 text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
           >
             <ChevronRight className="size-4" />
           </button>
