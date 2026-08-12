@@ -455,7 +455,7 @@ function GoalCard({
               <span className="text-[20px] font-bold leading-none text-card-foreground">
                 {total.toLocaleString(locale)}
               </span>{" "}
-              <span className="text-muted-foreground">
+              <span className="text-[11px] text-muted-foreground">
                 {t("ofGoalGoalOnly", { goal: goal.toLocaleString(locale) })}
               </span>
             </>
