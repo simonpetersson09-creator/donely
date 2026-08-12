@@ -448,7 +448,6 @@ function Index() {
           distanceText={distanceKm !== undefined ? `${formatKm(distanceKm, locale)} km` : null}
           durationText={durationMin !== undefined ? formatMinutes(durationMin, locale) : null}
           title={t("confirmTitle")}
-          areaWord={t("area")}
           categoryWord={t("category")}
           amountWord={t("amount")}
           confirmLabel={t("confirmRegister")}
@@ -944,6 +943,107 @@ function LanguageGuideBubble({ onClose }: { onClose: () => void }) {
         {t("languageGuideBody")}
       </p>
       <div className="absolute -bottom-1.5 right-6 size-3 rotate-45 rounded-[2px] border-r border-b border-border bg-card" />
+    </div>
+  );
+}
+
+function ConfirmDialog({
+  area,
+  areaLabel,
+  categoryName,
+  amount,
+  distanceText,
+  durationText,
+  title,
+  categoryWord,
+  amountWord,
+  confirmLabel,
+  cancelLabel,
+  onConfirm,
+  onClose,
+}: {
+  area: Area;
+  areaLabel: string;
+  categoryName: string;
+  amount: number;
+  distanceText: string | null;
+  durationText: string | null;
+  title: string;
+  categoryWord: string;
+  amountWord: string;
+  confirmLabel: string;
+  cancelLabel: string;
+  onConfirm: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      className="fixed inset-0 z-50 flex items-center justify-center px-6"
+    >
+      <button
+        type="button"
+        aria-label={cancelLabel}
+        onClick={onClose}
+        className="absolute inset-0 bg-foreground/40 backdrop-blur-[2px]"
+      />
+      <div className="relative w-full max-w-sm rounded-3xl border border-border bg-card p-5 shadow-card">
+        <p className="text-center text-[17px] font-bold text-card-foreground">{title}</p>
+
+        <div
+          className={cn(
+            "mt-4 inline-flex w-full items-center justify-center gap-1.5 rounded-full px-3 py-1.5 text-[13px] font-semibold",
+            area === "jobb"
+              ? "bg-accent-work-soft text-accent-work"
+              : "bg-accent-life-soft text-accent-life",
+          )}
+        >
+          {area === "jobb" ? <Briefcase className="size-3.5" /> : <Home className="size-3.5" />}
+          {areaLabel}
+        </div>
+
+        <dl className="mt-3 divide-y divide-border rounded-2xl border border-border">
+          <div className="flex items-center justify-between gap-3 px-3.5 py-2.5">
+            <dt className="text-[13px] text-muted-foreground">{categoryWord}</dt>
+            <dd className="truncate text-[15px] font-semibold text-card-foreground">
+              {categoryName}
+            </dd>
+          </div>
+          <div className="flex items-center justify-between gap-3 px-3.5 py-2.5">
+            <dt className="text-[13px] text-muted-foreground">{amountWord}</dt>
+            <dd className="text-[15px] font-semibold tabular-nums text-card-foreground">
+              {amount}
+            </dd>
+          </div>
+          {(distanceText || durationText) && (
+            <div className="flex items-center justify-end gap-2 px-3.5 py-2.5 text-[13px] font-medium text-muted-foreground">
+              {distanceText && <span>{distanceText}</span>}
+              {distanceText && durationText && <span aria-hidden>·</span>}
+              {durationText && <span>{durationText}</span>}
+            </div>
+          )}
+        </dl>
+
+        <div className="mt-4 flex gap-2">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 rounded-2xl border border-border bg-background py-3 text-[15px] font-semibold text-primary transition-transform active:scale-[0.98]"
+          >
+            {cancelLabel}
+          </button>
+          <button
+            type="button"
+            autoFocus
+            onClick={onConfirm}
+            className="flex-1 rounded-2xl bg-gold py-3 text-[15px] font-bold text-gold-foreground shadow-card transition-transform active:scale-[0.98]"
+          >
+            {confirmLabel}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
