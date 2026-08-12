@@ -224,6 +224,26 @@ export function useEntries() {
     [commit],
   );
 
+  /**
+   * Adds a summed entry for a past year (e.g. "150 runs in 2025"). The entry is
+   * dated Dec 31 12:00 of that year so every yearly statistic picks it up, and
+   * the list stays sorted newest-first.
+   */
+  const addHistoryEntry = useCallback(
+    (entry: Omit<Entry, "id" | "createdAt">, year: number) => {
+      const createdAt = new Date(year, 11, 31, 12, 0, 0).toISOString();
+      createBackup("add-history-entry");
+      setEntries((prev) =>
+        commit(
+          [{ ...entry, id: crypto.randomUUID(), createdAt }, ...prev].sort((a, b) =>
+            a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0,
+          ),
+        ),
+      );
+    },
+    [commit],
+  );
+
   const removeEntry = useCallback(
     (id: string) => {
       createBackup("remove-entry");
@@ -240,7 +260,8 @@ export function useEntries() {
     [commit],
   );
 
-  return { entries, addEntry, removeEntry, removeEntriesByCategory };
+  return { entries, addEntry, addHistoryEntry, removeEntry, removeEntriesByCategory };
+
 }
 
 /** key: `${year}:${categoryId}` -> yearly target */
