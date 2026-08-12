@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
-import { Share } from "@capacitor/share";
-import { Send } from "lucide-react";
+import { Mail } from "lucide-react";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
@@ -54,7 +53,7 @@ function Veckostatistik() {
     [summary.rows, categories],
   );
 
-  const shareWork = async () => {
+  const shareWork = () => {
     if (workRows.length === 0) {
       toast(t("shareWorkSummaryEmpty"));
       return;
@@ -64,14 +63,9 @@ function Veckostatistik() {
     const title = t("shareWorkSummarySubject", { range });
     const text = [title, "", ...lines, "", t("shareWorkSummaryTotal", { count: total })].join("\n");
     try {
-      await Share.share({ title, text, dialogTitle: title });
-    } catch (err) {
-      if (err instanceof Error && /cancel/i.test(err.message)) return;
-      try {
-        window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text)}`;
-      } catch {
-        toast.error(t("shareWorkSummaryFailed"));
-      }
+      window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text)}`;
+    } catch {
+      toast.error(t("shareWorkSummaryFailed"));
     }
   };
 
@@ -102,7 +96,7 @@ function Veckostatistik() {
         onClick={shareWork}
         className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card px-3.5 py-3 text-[15px] font-semibold text-primary shadow-soft transition-transform active:scale-[0.99]"
       >
-        <Send className="size-4" />
+        <Mail className="size-4" />
         {t("shareWorkSummary")}
       </button>
 
