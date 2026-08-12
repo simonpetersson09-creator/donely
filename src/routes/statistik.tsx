@@ -409,10 +409,10 @@ function GoalRow({
         <span className="min-w-0 truncate text-[14px] font-medium text-card-foreground">
           {categoryLabel(t, category)}
         </span>
-        <span className="text-right text-[16px] font-bold tabular-nums text-card-foreground">
+        <span className="text-center text-[16px] font-bold tabular-nums text-card-foreground">
           {total.toLocaleString(locale)}
         </span>
-        <span className="text-right text-[12px] tabular-nums text-muted-foreground">
+        <span className="text-center text-[12px] tabular-nums text-muted-foreground">
           {goal !== null ? goal.toLocaleString(locale) : "—"}
         </span>
         {showGoalCta ? (
