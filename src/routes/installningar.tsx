@@ -130,27 +130,30 @@ function Installningar() {
         </p>
       </div>
 
-      <div className="mt-20 flex flex-[1.1] items-end justify-center pb-6">
+      <div className="mt-12 flex flex-[1.1] items-end justify-center pb-6">
         <div className="relative">
-          <div className="absolute -right-10 -top-14 z-10 rotate-[6deg]">
-            <div className="relative rounded-[18px] border border-primary bg-background px-5 py-2 shadow-card">
-              <p className="max-w-[13rem] text-center text-[11px] font-semibold leading-[14px] text-primary">
+          <div className="absolute -right-6 -top-9 z-10">
+            <div className="relative rounded-full bg-primary px-3 py-1 shadow-[0_6px_16px_-8px_hsl(0_0%_0%/0.45)]">
+              <span className="flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold leading-[14px] tracking-wide text-primary-foreground">
                 {premium.subscribed ? (
-                  <span className="inline-flex items-center gap-1">
-                    <Crown className="size-3 text-gold" fill="currentColor" />
+                  <>
+                    <Crown className="size-2.5 shrink-0 text-gold" fill="currentColor" />
                     {t("premiumActive")}
-                  </span>
+                  </>
                 ) : (
                   t("trialLeft", { count: premium.inTrial ? premium.trialDaysLeft : 0 })
                 )}
-              </p>
-
-              <div className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-primary bg-background" />
+              </span>
+              <div className="absolute -bottom-[3px] left-3 size-2.5 rotate-45 rounded-[1px] bg-primary" />
             </div>
           </div>
+
           <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
           </h1>
+          <p className="mt-0.5 text-center text-[13px] font-medium tracking-wide text-primary/80">
+            {t("tagline")}
+          </p>
         </div>
       </div>
 
