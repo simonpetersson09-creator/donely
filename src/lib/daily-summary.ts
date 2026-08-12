@@ -106,3 +106,27 @@ export function formatDailyBody(summary: DailySummary, language = i18n.language 
 
   return lines.join("\n");
 }
+
+/**
+ * Title + subtitle + body for the daily notification (Mon–Fri 17:00), in the
+ * given language. Mirrors `weeklyNotificationContent` so the native bridge can
+ * render both the same way.
+ */
+export function dailyNotificationContent(language = i18n.language || "sv") {
+  const fixed = i18n.getFixedT(language);
+  const summary = currentDailySummary(language);
+  const body = formatDailyBody(summary, language);
+  const locale = localeOf(language);
+  const dateText = new Intl.DateTimeFormat(locale, {
+    weekday: "long",
+    day: "numeric",
+    month: "short",
+  }).format(summary.date);
+  const totalText = fixed("dailySummaryTotal", { count: summary.total }) as string;
+  return {
+    title: fixed("dailySummaryTitle") as string,
+    subtitle: `${dateText.charAt(0).toLocaleUpperCase(locale)}${dateText.slice(1)} · ${totalText}`,
+    body,
+    bodyLines: body.split("\n"),
+  };
+}
