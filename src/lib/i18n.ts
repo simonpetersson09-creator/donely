@@ -1362,6 +1362,7 @@ const nl: Dict = {
   "cat.j-admin": "Administratie",
   welcomeTitle: "Welkom bij Donely",
   welcomeLine1: "Registreer wat je echt doet.",
+  tagline: "Wat je echt hebt gedaan",
   welcomeLine2: "Volg je resultaten door de tijd heen.",
   getStarted: "Aan de slag",
   languageGuideTitle: "Wijzig hier je taal.",
