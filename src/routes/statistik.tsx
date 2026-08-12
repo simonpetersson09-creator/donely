@@ -3,7 +3,6 @@ import { useMemo, useState, type ReactNode } from "react";
 import {
   ChevronLeft,
   ChevronRight,
-  Check,
   X,
   Pencil,
   Home,
