@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { PhoneChrome, RegisterScreen, WeekScreen, Toast } from "@/components/promo/PromoScreens";
+import { downloadBlob, exportPromoVideo } from "@/lib/promo-export";
+
 
 export const Route = createFileRoute("/promo")({
   head: () => ({
@@ -35,16 +37,42 @@ const win = (t: number, a: number, b: number, f = 320) =>
   Math.min(ramp(t, a, a + f), 1 - ramp(t, b - f, b));
 
 function Promo() {
-  const t = useClock();
+  const clock = useClock();
   const [scale, setScale] = useState(1);
+  const [exportT, setExportT] = useState<number | null>(null);
+  const [progress, setProgress] = useState<number | null>(null);
+  const [err, setErr] = useState<string | null>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const t = exportT ?? clock;
+  const exporting = exportT !== null;
 
   useEffect(() => {
-    const fit = () =>
-      setScale(Math.min(window.innerWidth / 1080, window.innerHeight / 1920));
+    const fit = () => setScale(Math.min(window.innerWidth / 1080, window.innerHeight / 1920));
     fit();
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);
   }, []);
+
+  const runExport = async () => {
+    if (exporting || !stageRef.current) return;
+    setErr(null);
+    setExportT(0);
+    setProgress(0);
+    try {
+      const { blob, filename } = await exportPromoVideo({
+        stage: stageRef.current,
+        durationMs: DUR,
+        setTime: (v) => setExportT(v),
+        onProgress: (done, total) => setProgress(Math.round((done / total) * 100)),
+      });
+      downloadBlob(blob, filename);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Exporten misslyckades");
+    } finally {
+      setExportT(null);
+      setProgress(null);
+    }
+  };
 
   // ---- timeline -----------------------------------------------------------
   const hook = win(t, 0, 2400, 300);
@@ -70,15 +98,38 @@ function Promo() {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#0b0f16]">
+
+      {!exporting && (
+        <button
+          type="button"
+          onClick={runExport}
+          className="absolute right-6 top-6 z-50 rounded-full bg-gradient-gold px-7 py-4 text-lg font-bold text-gold-foreground shadow-gold"
+        >
+          Exportera video
+        </button>
+      )}
+      {progress !== null && (
+        <div className="absolute left-1/2 top-6 z-50 -translate-x-1/2 rounded-full bg-black/70 px-6 py-3 text-lg font-semibold text-white">
+          Exporterar… {progress}%
+        </div>
+      )}
+      {err && (
+        <div className="absolute bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-red-600 px-6 py-3 text-white">
+          {err}
+        </div>
+      )}
       <div
+        ref={stageRef}
         className="relative overflow-hidden bg-background"
         style={{
           width: 1080,
           height: 1920,
-          transform: `scale(${scale})`,
-          transformOrigin: "center",
+          ...(exporting
+            ? { position: "fixed" as const, left: 0, top: 0, transform: "none" }
+            : { transform: `scale(${scale})`, transformOrigin: "center" }),
         }}
       >
+
         {/* warm background wash */}
         <div
           className="absolute inset-0"
