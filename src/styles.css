@@ -459,7 +459,7 @@
   .sheet-out {
     animation: none !important;
   }
-  .crossfade,
+  .sheet-scrim-in,
   .sheet-scrim-in,
   .sheet-scrim-out {
     animation-duration: 1ms;
