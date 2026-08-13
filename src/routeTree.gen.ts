@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as DagsstatistikRouteImport } from './routes/dagsstatistik'
 import { Route as HistorikRouteImport } from './routes/historik'
 import { Route as InstallningarRouteImport } from './routes/installningar'
+import { Route as PromoRouteImport } from './routes/promo'
 import { Route as SenasteRegistreringarRouteImport } from './routes/senaste-registreringar'
 import { Route as StatistikRouteImport } from './routes/statistik'
 import { Route as VeckostatistikRouteImport } from './routes/veckostatistik'
@@ -36,6 +37,11 @@ const HistorikRoute = HistorikRouteImport.update({
 const InstallningarRoute = InstallningarRouteImport.update({
   id: '/installningar',
   path: '/installningar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PromoRoute = PromoRouteImport.update({
+  id: '/promo',
+  path: '/promo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SenasteRegistreringarRoute = SenasteRegistreringarRouteImport.update({
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/dagsstatistik': typeof DagsstatistikRoute
   '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
+  '/promo': typeof PromoRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
   '/veckostatistik': typeof VeckostatistikRoute
@@ -74,6 +81,7 @@ export interface FileRoutesByTo {
   '/dagsstatistik': typeof DagsstatistikRoute
   '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
+  '/promo': typeof PromoRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
   '/veckostatistik': typeof VeckostatistikRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/dagsstatistik': typeof DagsstatistikRoute
   '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
+  '/promo': typeof PromoRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
   '/veckostatistik': typeof VeckostatistikRoute
@@ -97,6 +106,7 @@ export interface FileRouteTypes {
     | '/dagsstatistik'
     | '/historik'
     | '/installningar'
+    | '/promo'
     | '/senaste-registreringar'
     | '/statistik'
     | '/veckostatistik'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/dagsstatistik'
     | '/historik'
     | '/installningar'
+    | '/promo'
     | '/senaste-registreringar'
     | '/statistik'
     | '/veckostatistik'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/dagsstatistik'
     | '/historik'
     | '/installningar'
+    | '/promo'
     | '/senaste-registreringar'
     | '/statistik'
     | '/veckostatistik'
@@ -128,6 +140,7 @@ export interface RootRouteChildren {
   DagsstatistikRoute: typeof DagsstatistikRoute
   HistorikRoute: typeof HistorikRoute
   InstallningarRoute: typeof InstallningarRoute
+  PromoRoute: typeof PromoRoute
   SenasteRegistreringarRoute: typeof SenasteRegistreringarRoute
   StatistikRoute: typeof StatistikRoute
   VeckostatistikRoute: typeof VeckostatistikRoute
@@ -162,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/installningar'
       fullPath: '/installningar'
       preLoaderRoute: typeof InstallningarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/promo': {
+      id: '/promo'
+      path: '/promo'
+      fullPath: '/promo'
+      preLoaderRoute: typeof PromoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/senaste-registreringar': {
@@ -200,6 +220,7 @@ const rootRouteChildren: RootRouteChildren = {
   DagsstatistikRoute: DagsstatistikRoute,
   HistorikRoute: HistorikRoute,
   InstallningarRoute: InstallningarRoute,
+  PromoRoute: PromoRoute,
   SenasteRegistreringarRoute: SenasteRegistreringarRoute,
   StatistikRoute: StatistikRoute,
   VeckostatistikRoute: VeckostatistikRoute,
