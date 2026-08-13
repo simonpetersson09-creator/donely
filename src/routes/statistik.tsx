@@ -32,6 +32,7 @@ import { useTranslation } from "react-i18next";
 import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
+import { CategoryDot } from "@/components/CategoryDot";
 
 export const Route = createFileRoute("/statistik")({
   head: () => ({
@@ -417,7 +418,8 @@ function GoalRow({
       )}
     >
       <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-1.5">
-        <div className="min-w-0 overflow-hidden">
+        <div className="flex min-w-0 items-center gap-2 overflow-hidden">
+          <CategoryDot color={category.color} />
           <span className="block truncate text-[14px] font-medium text-card-foreground">
             {categoryLabel(t, category)}
           </span>

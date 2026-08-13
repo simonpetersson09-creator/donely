@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { useCategories, type Area } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
+import { CategoryDot } from "@/components/CategoryDot";
 
 export type SummaryRow = {
   id: string;
@@ -23,6 +24,7 @@ export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
 
   const areaOf = (id: string): Area =>
     (categories.find((c) => c.id === id)?.area ?? "privat") as Area;
+  const colorOf = (id: string) => categories.find((c) => c.id === id)?.color ?? null;
 
   const privat = rows.filter((r) => areaOf(r.id) === "privat");
   const jobb = rows.filter((r) => areaOf(r.id) === "jobb");
@@ -52,12 +54,14 @@ export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
         icon={<Home className="size-4" />}
         area="privat"
         rows={privat}
+        colorOf={colorOf}
       />
       <SummarySection
         title={t("work")}
         icon={<Briefcase className="size-4" />}
         area="jobb"
         rows={jobb}
+        colorOf={colorOf}
       />
     </>
   );
@@ -101,11 +105,13 @@ function SummarySection({
   icon,
   area,
   rows,
+  colorOf,
 }: {
   title: string;
   icon: ReactNode;
   area: Area;
   rows: SummaryRow[];
+  colorOf: (id: string) => string | null;
 }) {
   const { t } = useLanguage();
   const locale = useLocale();
@@ -146,7 +152,8 @@ function SummarySection({
               style={{ animationDelay: `${Math.min(idx, 12) * 30}ms` }}
             >
               <div className="grid grid-cols-[minmax(0,1fr)_56px] items-center gap-2">
-                <div className="min-w-0 overflow-hidden">
+                <div className="flex min-w-0 items-center gap-2 overflow-hidden">
+                  <CategoryDot color={colorOf(row.id)} />
                   <span className="block truncate text-[14px] font-medium text-card-foreground">
                     {row.label}
                   </span>
