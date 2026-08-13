@@ -182,13 +182,13 @@ function Statistik() {
           <AreaStat
             icon={<Home className="size-3.5" />}
             label={t("private")}
-            value={areaTotals.privat.toLocaleString(locale)}
+            value={areaTotals.privat}
             tone="life"
           />
           <AreaStat
             icon={<Briefcase className="size-3.5" />}
             label={t("work")}
-            value={areaTotals.jobb.toLocaleString(locale)}
+            value={areaTotals.jobb}
             tone="work"
           />
         </div>
@@ -298,7 +298,7 @@ function AreaStat({
 }: {
   icon: ReactNode;
   label: string;
-  value: string;
+  value: number;
   tone: "life" | "work";
 }) {
   return (
@@ -316,7 +316,7 @@ function AreaStat({
       <div className="min-w-0 text-center">
         <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
         <p className="text-[18px] font-bold leading-none tabular-nums text-card-foreground">
-          {value}
+          <AnimatedNumber value={value} />
         </p>
       </div>
     </div>
@@ -340,7 +340,6 @@ function Section({
   onSetGoal: (c: Category) => void;
   runKey: string | number;
 }) {
-  const locale = useLocale();
   const { t } = useLanguage();
   if (rows.length === 0) return null;
   return (
