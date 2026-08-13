@@ -19,7 +19,6 @@ export type SummaryRow = {
  */
 export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
   const { t } = useLanguage();
-  const locale = useLocale();
   const { categories } = useCategories();
 
   const areaOf = (id: string): Area =>
