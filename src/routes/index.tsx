@@ -75,7 +75,7 @@ function Index() {
   const { t } = useLanguage();
   const locale = useLocale();
   const { categories, addCategory, renameCategory, moveCategory, hydrated } = useCategories();
-  const { addEntry } = useEntries();
+  const { addEntry, removeEntry } = useEntries();
   const {
     seen: onboardingSeen,
     markSeen: markOnboardingSeen,
@@ -169,7 +169,7 @@ function Index() {
     if (!valid || !selected) return;
     setConfirmOpen(false);
     const name = categoryLabel(t, selected);
-    addEntry({
+    const entryId = addEntry({
       area,
       categoryId: selected.id,
       categoryName: selected.name,
@@ -190,6 +190,14 @@ function Index() {
     ].filter(Boolean);
     toast.success(t("registeredToast", { count: parsed, name }), {
       description: [area === "jobb" ? t("work") : t("private"), ...extras].join(" · "),
+      duration: 4000,
+      action: {
+        label: t("undoAction"),
+        onClick: () => {
+          removeEntry(entryId);
+          toast.success(t("entryUndone"));
+        },
+      },
     });
   }
 
@@ -213,7 +221,11 @@ function Index() {
                     {t("premiumActive")}
                   </>
                 ) : (
-                  t("trialLeft", { count: premium.inTrial ? premium.trialDaysLeft : 0 })
+                  premium.inTrial ? (
+                    t("trialLeft", { count: premium.trialDaysLeft })
+                  ) : (
+                    t("trialExpired")
+                  )
                 )}
               </span>
               <div className="absolute -bottom-[3px] left-3 size-2.5 rotate-45 rounded-[1px] bg-primary" />
