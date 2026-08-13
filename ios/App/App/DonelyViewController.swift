@@ -27,6 +27,8 @@ final class DonelyViewController: CAPBridgeViewController {
     private var notificationBridge: DonelyNotificationBridge?
     /// Strong reference — StoreKit 2 bridge (WKScriptMessageHandler).
     private var storeKitBridge: AnyObject?
+    /// Strong reference — mail composer bridge (WKScriptMessageHandler).
+    private var mailBridge: DonelyMailBridge?
     private var loadingObservation: NSKeyValueObservation?
     private var progressObservation: NSKeyValueObservation?
     private var urlObservation: NSKeyValueObservation?
