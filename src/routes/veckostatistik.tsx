@@ -7,6 +7,8 @@ import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import i18n from "@/lib/i18n";
+import { activityPhrase } from "@/lib/category-inflection";
+
 import { buildWeeklySummary } from "@/lib/weekly-summary";
 
 export const Route = createFileRoute("/veckostatistik")({
