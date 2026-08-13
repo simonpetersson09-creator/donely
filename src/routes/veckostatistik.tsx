@@ -80,19 +80,22 @@ function Veckostatistik() {
   const openComposer = (note: string) => {
     const total = workRows.reduce((acc, r) => acc + r.total, 0);
     const subject = t("mailSubject", { range: mailRange });
+    // mailto skickar ren text – markdown renderas inte, så rubriker versaliseras.
+    const heading = (label: string) => label.toLocaleUpperCase(locale);
     const body = [
       t("mailGreeting"),
       "",
       t("mailIntro", { range: mailRange }),
       "",
-      `**${t("mailDoneHeading")}**`,
+      heading(t("mailDoneHeading")),
       ...workRows.map((r) => activityLine(r)),
       "",
       t("mailTotal", { count: total }),
     ];
     if (note.trim()) {
-      body.push("", `**${t("mailCommentHeading")}**`, note.trim());
+      body.push("", heading(t("mailCommentHeading")), note.trim());
     }
+
     body.push("", t("mailSignoff"));
 
     try {
