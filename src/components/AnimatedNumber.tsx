@@ -51,7 +51,7 @@ export function AnimatedNumber({
       <span
         aria-hidden
         className={cn(
-          "absolute inset-0 flex items-center justify-inherit",
+          "absolute inset-0 whitespace-nowrap",
           direction === 1 ? "num-roll-out-up" : "num-roll-out-down",
         )}
       >
