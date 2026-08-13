@@ -89,13 +89,13 @@ function Veckostatistik() {
       "",
       t("mailIntro", { range: mailRange }),
       "",
-      t("mailDoneHeading"),
+      `**${t("mailDoneHeading")}**`,
       ...workRows.map((r) => activityLine(r)),
       "",
       t("mailTotal", { count: total }),
     ];
     if (note.trim()) {
-      body.push("", t("mailCommentHeading"), note.trim());
+      body.push("", `**${t("mailCommentHeading")}**`, note.trim());
     }
     body.push("", t("mailSignoff"));
 
