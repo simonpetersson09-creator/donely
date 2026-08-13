@@ -88,7 +88,7 @@ function Veckostatistik() {
       t("mailIntro", { range: mailRange }),
       "",
       heading(t("mailDoneHeading")),
-      ...workRows.map((r) => activityLine(r)),
+      ...workRows.map((r) => `• ${activityLine(r)}`),
       "",
       t("mailTotal", { count: total }),
     ];
@@ -96,7 +96,7 @@ function Veckostatistik() {
       body.push("", heading(t("mailCommentHeading")), note.trim());
     }
 
-    body.push("", t("mailSignoff"));
+    body.push("", "—", "", t("mailSignoff"), "", "Donely");
 
     try {
       window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.join("\n"))}`;
