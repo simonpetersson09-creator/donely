@@ -642,27 +642,13 @@ function CategorySheet({
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
 
-  // Freezes the page behind the sheet. Without this the background keeps its
-  // own scroll, which makes the view jump when the sheet opens/closes.
-  useEffect(() => {
-    if (typeof document === "undefined") return;
-    const body = document.body;
-    const previousOverflow = body.style.overflow;
-    body.style.overflow = "hidden";
-    return () => {
-      body.style.overflow = previousOverflow;
-    };
-  }, []);
-
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center">
+    <BottomSheet
+      onClose={onClose}
+      label={t("close")}
+      className="h-[63dvh] max-h-[63dvh] p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-1"
+    >
 
-      <button
-        aria-label={t("close")}
-        onClick={onClose}
-        className="absolute inset-0 bg-foreground/30 backdrop-blur-[2px] animate-in fade-in"
-      />
-      <div className="relative flex h-[63dvh] max-h-[63dvh] w-full max-w-md flex-col overflow-hidden rounded-t-3xl border border-border bg-card p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-card animate-in slide-in-from-bottom duration-200">
         <div className="mb-2 flex shrink-0 items-center justify-between">
           <h2 className="flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
             {area === "jobb" ? <Briefcase className="size-5" /> : <Home className="size-5" />}
