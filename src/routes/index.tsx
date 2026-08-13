@@ -213,7 +213,10 @@ function Index() {
   const showReminderPrompt = reminderPromptHydrated && !reminderPromptAnswered;
 
   return (
-    <main data-donely-app-ready className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main
+      data-donely-app-ready
+      className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]"
+    >
       <div className="flex shrink-0 items-end justify-center pb-4 pt-16">
         <div className="relative translate-y-[94px]">
           <div className="absolute -right-6 -top-9 z-10">
@@ -224,18 +227,15 @@ function Index() {
                     <Crown className="size-2.5 shrink-0 text-gold" fill="currentColor" />
                     {t("premiumActive")}
                   </>
+                ) : premium.inTrial ? (
+                  t("trialLeft", { count: premium.trialDaysLeft })
                 ) : (
-                  premium.inTrial ? (
-                    t("trialLeft", { count: premium.trialDaysLeft })
-                  ) : (
-                    t("trialExpired")
-                  )
+                  t("trialExpired")
                 )}
               </span>
               <div className="absolute -bottom-[3px] left-3 size-2.5 rotate-45 rounded-[1px] bg-primary" />
             </div>
           </div>
-
 
           <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
             Donely
@@ -364,11 +364,7 @@ function Index() {
             onPointerDown={() => setPressed(true)}
             onAnimationEnd={() => setPressed(false)}
             onClick={register}
-            aria-label={
-              locked
-                ? `${t("register")} — ${t("premiumRequired")}`
-                : t("register")
-            }
+            aria-label={locked ? `${t("register")} — ${t("premiumRequired")}` : t("register")}
             className={cn(
               "relative flex-1 overflow-hidden rounded-xl py-3 text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-shadow duration-200 ease-out active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
               pressed && "press-spring",
@@ -526,7 +522,12 @@ function MetricField({
   disabled?: boolean;
 }) {
   return (
-    <label className={cn("flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card", disabled && "opacity-50")}>
+    <label
+      className={cn(
+        "flex min-w-0 flex-1 items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-2 shadow-card",
+        disabled && "opacity-50",
+      )}
+    >
       <input
         inputMode="decimal"
         value={value}
@@ -650,121 +651,119 @@ function CategorySheet({
       label={t("close")}
       className="h-[63dvh] max-h-[63dvh] p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-1"
     >
-
-        <div className="mb-2 flex shrink-0 items-center justify-between">
-          <h2 className="flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
-            {area === "jobb" ? <Briefcase className="size-5" /> : <Home className="size-5" />}
-            {area === "jobb" ? t("work") : t("private")}
-          </h2>
-          <button
-            onClick={onClose}
-            aria-label={t("close")}
-            className="flex size-7 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
-          >
-            <X className="size-3.5" />
-          </button>
-        </div>
-
-        {adding ? (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (newName.trim()) {
-                onCreate(newName);
-                setNewName("");
-                setAdding(false);
-              }
-            }}
-            className="mb-1.5 flex shrink-0 gap-2"
-          >
-            <input
-              autoFocus
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              placeholder={t("categoryName")}
-              className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-[16px] outline-none placeholder:text-muted-foreground focus:border-ring"
-            />
-            <button
-              type="submit"
-              disabled={!newName.trim()}
-              className="rounded-xl bg-primary px-3 text-[14px] font-semibold text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
-            >
-              {t("save")}
-            </button>
-          </form>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setAdding(true)}
-            className="mb-1.5 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
-          >
-            <Plus className="size-3.5" />
-            {t("addCategory")}
-          </button>
-        )}
-
-        <p className="mb-1.5 flex shrink-0 items-center gap-1 px-1 text-[11px] font-normal leading-[15px] text-muted-foreground">
-          <ChevronLeft className="size-3 shrink-0" />
-          {t("swipeHint")}
-        </p>
-
-        <div
-          className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
-          style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
-          onScroll={() => setOpenId(null)}
+      <div className="mb-2 flex shrink-0 items-center justify-between">
+        <h2 className="flex items-center gap-1.5 px-1 text-[17px] font-bold tracking-[-0.02em] text-primary">
+          {area === "jobb" ? <Briefcase className="size-5" /> : <Home className="size-5" />}
+          {area === "jobb" ? t("work") : t("private")}
+        </h2>
+        <button
+          onClick={onClose}
+          aria-label={t("close")}
+          className="flex size-7 items-center justify-center rounded-full bg-secondary text-secondary-foreground"
         >
-          {categories.map((c, index) =>
-            renamingId === c.id ? (
-              <form
-                key={c.id}
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (renameValue.trim()) onRename(c.id, renameValue);
-                  setRenamingId(null);
-                }}
-                className="flex gap-2 py-1"
-              >
-                <input
-                  autoFocus
-                  value={renameValue}
-                  onChange={(e) => setRenameValue(e.target.value)}
-                  className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[16px] outline-none focus:border-ring"
-                />
-                <button
-                  type="submit"
-                  className="rounded-xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground active:scale-95"
-                >
-                  {t("save")}
-                </button>
-              </form>
-            ) : (
-              <CategoryRow
-                key={c.id}
-                name={categoryLabel(t, c)}
-                selected={c.id === selectedId}
-                actionsOpen={openId === c.id}
-                onOpenActions={() => setOpenId(c.id)}
-                onCloseActions={() => setOpenId(null)}
-                canMoveUp={index > 0}
-                canMoveDown={index < categories.length - 1}
-                onMoveUp={() => onMove(c.id, -1)}
-                onMoveDown={() => onMove(c.id, 1)}
-                onSelect={() => onSelect(c.id)}
-                onRename={() => {
-                  setRenameValue(categoryLabel(t, c));
-                  setRenamingId(c.id);
-                  setOpenId(null);
-                }}
-                onDelete={() => {
-                  onDelete(c.id);
-                  setOpenId(null);
-                }}
-              />
-            ),
-          )}
-        </div>
-    </BottomSheet>
+          <X className="size-3.5" />
+        </button>
+      </div>
 
+      {adding ? (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (newName.trim()) {
+              onCreate(newName);
+              setNewName("");
+              setAdding(false);
+            }
+          }}
+          className="mb-1.5 flex shrink-0 gap-2"
+        >
+          <input
+            autoFocus
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder={t("categoryName")}
+            className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-[16px] outline-none placeholder:text-muted-foreground focus:border-ring"
+          />
+          <button
+            type="submit"
+            disabled={!newName.trim()}
+            className="rounded-xl bg-primary px-3 text-[14px] font-semibold text-primary-foreground transition-transform active:scale-95 disabled:opacity-40"
+          >
+            {t("save")}
+          </button>
+        </form>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setAdding(true)}
+          className="mb-1.5 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
+        >
+          <Plus className="size-3.5" />
+          {t("addCategory")}
+        </button>
+      )}
+
+      <p className="mb-1.5 flex shrink-0 items-center gap-1 px-1 text-[11px] font-normal leading-[15px] text-muted-foreground">
+        <ChevronLeft className="size-3 shrink-0" />
+        {t("swipeHint")}
+      </p>
+
+      <div
+        className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
+        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+        onScroll={() => setOpenId(null)}
+      >
+        {categories.map((c, index) =>
+          renamingId === c.id ? (
+            <form
+              key={c.id}
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (renameValue.trim()) onRename(c.id, renameValue);
+                setRenamingId(null);
+              }}
+              className="flex gap-2 py-1"
+            >
+              <input
+                autoFocus
+                value={renameValue}
+                onChange={(e) => setRenameValue(e.target.value)}
+                className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[16px] outline-none focus:border-ring"
+              />
+              <button
+                type="submit"
+                className="rounded-xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground active:scale-95"
+              >
+                {t("save")}
+              </button>
+            </form>
+          ) : (
+            <CategoryRow
+              key={c.id}
+              name={categoryLabel(t, c)}
+              selected={c.id === selectedId}
+              actionsOpen={openId === c.id}
+              onOpenActions={() => setOpenId(c.id)}
+              onCloseActions={() => setOpenId(null)}
+              canMoveUp={index > 0}
+              canMoveDown={index < categories.length - 1}
+              onMoveUp={() => onMove(c.id, -1)}
+              onMoveDown={() => onMove(c.id, 1)}
+              onSelect={() => onSelect(c.id)}
+              onRename={() => {
+                setRenameValue(categoryLabel(t, c));
+                setRenamingId(c.id);
+                setOpenId(null);
+              }}
+              onDelete={() => {
+                onDelete(c.id);
+                setOpenId(null);
+              }}
+            />
+          ),
+        )}
+      </div>
+    </BottomSheet>
   );
 }
 
@@ -807,7 +806,6 @@ function CategoryRow({
     if (pressTimer.current) clearTimeout(pressTimer.current);
     pressTimer.current = null;
   };
-
 
   return (
     <div className="relative overflow-hidden rounded-xl">
@@ -886,7 +884,6 @@ function CategoryRow({
           touchAction: "pan-y",
         }}
         className="relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200 active:bg-secondary"
-
       >
         <span className="truncate">{name}</span>
         {!actionsOpen && (
@@ -1007,7 +1004,10 @@ function Onboarding({ onStart }: { onStart: () => void }) {
   const { t } = useTranslation();
 
   return (
-    <main data-donely-app-ready className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main
+      data-donely-app-ready
+      className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center px-6 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]"
+    >
       <div className="flex flex-1 flex-col items-center justify-center text-center">
         <h1 className="font-logo select-none text-[36px] font-bold leading-none tracking-[-0.04em] text-primary">
           Donely

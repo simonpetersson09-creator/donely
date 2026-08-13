@@ -33,8 +33,9 @@
   --shadow-button: var(--shadow-button);
   --shadow-gold: var(--shadow-gold);
   --color-system-blue: var(--system-blue);
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI",
-    system-ui, sans-serif;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", system-ui,
+    sans-serif;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -147,7 +148,6 @@
   --sidebar-ring: oklch(0.34 0.06 244);
 }
 
-
 .dark {
   --accent-work: oklch(0.66 0.1 244);
   --accent-work-soft: oklch(0.3 0.05 230);
@@ -197,7 +197,6 @@
   --sidebar-ring: oklch(0.7 0.08 244);
 }
 
-
 @layer base {
   * {
     border-color: var(--color-border);
@@ -225,7 +224,6 @@
     background-color: var(--color-background);
   }
 }
-
 
 @utility bg-gradient-gold {
   background-image: var(--gradient-gold);
@@ -297,7 +295,6 @@
   padding: 0.875rem;
   box-shadow: var(--shadow-card);
 }
-
 
 /* Hides the overlay scrollbar inside sheets so opening one doesn't flash a
    bar on the right edge (iOS/WebKit shows it on every touch). */
@@ -402,7 +399,6 @@
   }
 }
 
-
 /* Rows tone in one after another (30 ms apart) when a list first appears. */
 @keyframes stagger-rise {
   from {
@@ -460,9 +456,7 @@
     animation: none !important;
   }
   .sheet-scrim-in,
-
   .sheet-scrim-out {
     animation-duration: 1ms;
   }
 }
-

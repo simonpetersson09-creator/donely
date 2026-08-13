@@ -102,7 +102,9 @@ function fitText(
  * Renders the report and returns a base64 PNG (no data URI prefix) plus its
  * dimensions. Returns null when no canvas is available (SSR).
  */
-export function renderWeeklyReportPng(input: ReportInput): { base64: string; width: number; height: number } | null {
+export function renderWeeklyReportPng(
+  input: ReportInput,
+): { base64: string; width: number; height: number } | null {
   if (typeof document === "undefined") return null;
 
   const rows = input.rows.filter((r) => r.value > 0);

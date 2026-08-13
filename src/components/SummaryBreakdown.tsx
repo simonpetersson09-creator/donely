@@ -145,7 +145,6 @@ function SummarySection({
               )}
               style={{ animationDelay: `${Math.min(idx, 12) * 30}ms` }}
             >
-
               <div className="grid grid-cols-[minmax(0,1fr)_56px] items-center gap-2">
                 <div className="min-w-0 overflow-hidden">
                   <span className="block truncate text-[14px] font-medium text-card-foreground">

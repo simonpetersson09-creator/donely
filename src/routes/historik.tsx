@@ -95,9 +95,7 @@ function Historik() {
               type="button"
               onClick={() => setYear(y)}
               className={`shrink-0 rounded-full px-3.5 py-1.5 text-[14px] font-semibold transition-colors ${
-                y === year
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-foreground"
+                y === year ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground"
               }`}
             >
               {y}

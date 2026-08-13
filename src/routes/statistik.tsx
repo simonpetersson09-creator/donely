@@ -169,7 +169,6 @@ function Statistik() {
             <ChevronRight className="size-3.5" />
           </button>
         </div>
-
       </div>
 
       <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
@@ -236,7 +235,6 @@ function Statistik() {
           {isCurrentYear ? t("noEntriesThisYear") : t("noEntriesYear", { year })}
         </p>
       )}
-
 
       {editing && (
         <GoalSheet
@@ -378,7 +376,6 @@ function Section({
             isLast={idx === rows.length - 1}
           />
         ))}
-
       </div>
     </section>
   );
@@ -419,7 +416,6 @@ function GoalRow({
         !isLast && "border-b border-border",
       )}
     >
-
       <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-1.5">
         <div className="min-w-0 overflow-hidden">
           <span className="block truncate text-[14px] font-medium text-card-foreground">
@@ -459,7 +455,6 @@ function GoalRow({
     </Link>
   );
 }
-
 
 function GoalSheet({
   category,

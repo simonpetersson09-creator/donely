@@ -12,7 +12,6 @@ import { activityPhrase } from "@/lib/category-inflection";
 import { renderWeeklyReportPng } from "@/lib/report-card";
 import { composeMail, isNativeMailAvailable, openMailto } from "@/lib/mail-bridge";
 
-
 import { buildWeeklySummary } from "@/lib/weekly-summary";
 
 export const Route = createFileRoute("/veckostatistik")({
@@ -101,9 +100,6 @@ function Veckostatistik() {
     return () => clearTimeout(id);
   }, [commentOpen, comment, workRows, mailRange, t]);
 
-
-
-
   /**
    * Builds the weekly report as a PNG and opens the native iOS mail composer
    * with an HTML body where the card is inlined (data URI) – so the recipient
@@ -154,10 +150,7 @@ function Veckostatistik() {
     });
 
     const esc = (value: string) =>
-      value
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+      value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
     const html = [
       '<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:16px;color:#1e3a56;line-height:1.5;">',
@@ -184,7 +177,6 @@ function Veckostatistik() {
       openMailto(subject, plain);
     } else if (status === "failed") toast.error(t("shareWorkSummaryFailed"));
   };
-
 
   const shareWork = () => {
     if (workRows.length === 0) {
@@ -267,11 +259,7 @@ function Veckostatistik() {
             />
             {cardPreview && (
               <div className="mt-3 max-h-[38vh] overflow-y-auto rounded-2xl border border-border bg-secondary/40 p-2">
-                <img
-                  src={cardPreview}
-                  alt={t("reportTitle")}
-                  className="w-full rounded-xl"
-                />
+                <img src={cardPreview} alt={t("reportTitle")} className="w-full rounded-xl" />
               </div>
             )}
 
@@ -299,7 +287,6 @@ function Veckostatistik() {
             </div>
           </div>
         </BottomSheet>
-
       )}
     </main>
   );
