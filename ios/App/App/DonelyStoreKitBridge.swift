@@ -273,7 +273,7 @@ extension DonelyStoreKitBridge: WKScriptMessageHandler {
 /// trial cannot be reset by deleting and reinstalling the app, with a
 /// UserDefaults mirror for fast reads.
 enum TrialClock {
-    static let trialDays = 30
+    static let trialDays = 7
     private static let key = "app.donely.trial.start"
 
     static func daysLeft() -> Int {
