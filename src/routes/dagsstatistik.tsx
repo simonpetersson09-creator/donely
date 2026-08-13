@@ -68,12 +68,6 @@ function Dagsstatistik() {
       ) : (
         <SummaryBreakdown rows={summary.rows} />
       )}
-
-      <div className="mt-5 rounded-xl bg-primary px-3.5 py-3 text-center shadow-card">
-        <p className="text-[15px] font-semibold text-primary-foreground">
-          {t("dailySummaryTotal", { count: summary.total })}
-        </p>
-      </div>
     </main>
   );
 }
