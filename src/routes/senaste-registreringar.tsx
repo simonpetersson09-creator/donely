@@ -113,15 +113,14 @@ function SenasteRegistreringar() {
       </div>
 
       {editing !== null && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/30 px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]"
-          onClick={() => setEditing(null)}
+        <BottomSheet
+          onClose={() => setEditing(null)}
+          label={t("cancel")}
+          className="px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-1"
         >
-          <div
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-4 shadow-card"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div>
             <p className="text-[15px] font-bold leading-tight text-primary">{t("editEntry")}</p>
+
 
             <label className="mt-3 block text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
               {t("amount")}
