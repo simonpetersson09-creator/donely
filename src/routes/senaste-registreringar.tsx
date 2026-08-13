@@ -5,7 +5,8 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
-import { useEntries } from "@/lib/store";
+import { CategoryDot } from "@/components/CategoryDot";
+import { useEntries, useCategories } from "@/lib/store";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/senaste-registreringar")({
@@ -36,6 +37,8 @@ function SenasteRegistreringar() {
   const [editing, setEditing] = useState<string | null>(null);
   const [editAmount, setEditAmount] = useState("1");
   const [editDate, setEditDate] = useState("");
+  const { categories } = useCategories();
+  const colorOf = (id: string) => categories.find((c) => c.id === id)?.color ?? null;
   const recent = entries.slice(0, 10);
 
   return (
@@ -69,7 +72,8 @@ function SenasteRegistreringar() {
                 style={{ animationDelay: `${Math.min(index, 12) * 30}ms` }}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
+                  <p className="flex items-center gap-2 truncate text-[13px] font-semibold leading-[18px] text-foreground">
+                    <CategoryDot color={colorOf(entry.categoryId)} />
                     {categoryLabel(t, { id: entry.categoryId, name: entry.categoryName })}
                     <span className="ml-1 font-normal text-muted-foreground">×{entry.amount}</span>
                   </p>
