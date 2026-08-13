@@ -57,6 +57,9 @@ export const categorySchema = z.object({
   id: z.string().min(1),
   name: z.string(),
   area: areaSchema,
+  // Optional colour tag ("plug") shown left of the name. Optional so existing
+  // stored categories stay valid without migration.
+  color: z.string().min(1).optional(),
 });
 
 export const entrySchema = z.object({

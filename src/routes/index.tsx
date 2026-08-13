@@ -19,7 +19,9 @@ import {
   Settings,
   Trash2,
   X,
+  Palette,
 } from "lucide-react";
+import { CATEGORY_COLORS, categoryColorValue } from "@/lib/category-colors";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/motion";
@@ -78,7 +80,8 @@ function Index() {
 
   const { t } = useLanguage();
   const locale = useLocale();
-  const { categories, addCategory, renameCategory, moveCategory, hydrated } = useCategories();
+  const { categories, addCategory, renameCategory, setCategoryColor, moveCategory, hydrated } =
+    useCategories();
   const { addEntry, removeEntry } = useEntries();
   const {
     seen: onboardingSeen,
@@ -443,6 +446,18 @@ function Index() {
             }
             moveCategory(id, direction);
           }}
+          onSetColor={(id, color) => {
+            if (premium.loading) {
+              toast.message(t("premiumLoading"));
+              return;
+            }
+            if (!canMutate(premium)) {
+              setPickerOpen(false);
+              setPaywallOpen(true);
+              return;
+            }
+            setCategoryColor(id, color);
+          }}
           onRename={(id, name) => {
             if (premium.loading) {
               toast.message(t("premiumLoading"));
@@ -624,16 +639,18 @@ function CategorySheet({
   onSelect,
   onCreate,
   onRename,
+  onSetColor,
   onMove,
   onDelete,
   onClose,
 }: {
   area: Area;
-  categories: { id: string; name: string }[];
+  categories: { id: string; name: string; color?: string }[];
   selectedId: string | null;
   onSelect: (id: string) => void;
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
+  onSetColor: (id: string, color: string | null) => void;
   onMove: (id: string, direction: -1 | 1) => void;
   onDelete: (id: string) => void;
   onClose: () => void;
@@ -741,6 +758,8 @@ function CategorySheet({
             <CategoryRow
               key={c.id}
               name={categoryLabel(t, c)}
+              color={c.color ?? null}
+              onSetColor={(color) => onSetColor(c.id, color)}
               selected={c.id === selectedId}
               actionsOpen={openId === c.id}
               onOpenActions={() => setOpenId(c.id)}
@@ -769,6 +788,8 @@ function CategorySheet({
 
 function CategoryRow({
   name,
+  color,
+  onSetColor,
   selected,
   actionsOpen,
   onOpenActions,
@@ -782,6 +803,8 @@ function CategoryRow({
   onDelete,
 }: {
   name: string;
+  color: string | null;
+  onSetColor: (color: string | null) => void;
   selected: boolean;
   actionsOpen: boolean;
   onOpenActions: () => void;
@@ -801,6 +824,8 @@ function CategoryRow({
   const startY = useRef(0);
   const moved = useRef(false);
   const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [colorOpen, setColorOpen] = useState(false);
+  const dotColor = categoryColorValue(color);
 
   const clearPress = () => {
     if (pressTimer.current) clearTimeout(pressTimer.current);
@@ -808,94 +833,146 @@ function CategoryRow({
   };
 
   return (
-    <div className="relative overflow-hidden rounded-xl">
-      <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
+    <div className="rounded-xl">
+      <div className="relative overflow-hidden rounded-xl">
+        <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
+          <button
+            type="button"
+            onClick={onMoveUp}
+            disabled={!canMoveUp}
+            aria-label={t("moveUp")}
+            className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
+          >
+            <ChevronUp className="size-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={onMoveDown}
+            disabled={!canMoveDown}
+            aria-label={t("moveDown")}
+            className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
+          >
+            <ChevronDown className="size-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => setColorOpen((v) => !v)}
+            aria-label={t("categoryColor")}
+            className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary"
+          >
+            <Palette className="size-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={onRename}
+            aria-label={renameLabel}
+            className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary"
+          >
+            <Pencil className="size-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            aria-label={deleteLabel}
+            className="flex size-8 items-center justify-center rounded-lg bg-destructive text-destructive-foreground"
+          >
+            <Trash2 className="size-3.5" />
+          </button>
+        </div>
+
         <button
           type="button"
-          onClick={onMoveUp}
-          disabled={!canMoveUp}
-          aria-label={t("moveUp")}
-          className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
+          onTouchStart={(e) => {
+            startX.current = e.touches[0].clientX;
+            startY.current = e.touches[0].clientY;
+            moved.current = false;
+            clearPress();
+            pressTimer.current = setTimeout(onOpenActions, 500);
+          }}
+          onTouchMove={(e) => {
+            const dx = e.touches[0].clientX - startX.current;
+            const dy = e.touches[0].clientY - startY.current;
+            if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
+              moved.current = true;
+              clearPress();
+            }
+            if (Math.abs(dy) > Math.abs(dx)) return;
+            if (dx < -40) onOpenActions();
+            if (dx > 40) onCloseActions();
+          }}
+          onTouchEnd={clearPress}
+          onTouchCancel={clearPress}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            onOpenActions();
+          }}
+          onClick={() => {
+            if (moved.current) return;
+            if (actionsOpen) onCloseActions();
+            else onSelect();
+          }}
+          style={{
+            transform: actionsOpen ? "translateX(-186px)" : "translateX(0)",
+            WebkitTouchCallout: "none",
+            WebkitUserSelect: "none",
+            touchAction: "pan-y",
+          }}
+          className="relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200 active:bg-secondary"
         >
-          <ChevronUp className="size-3.5" />
-        </button>
-        <button
-          type="button"
-          onClick={onMoveDown}
-          disabled={!canMoveDown}
-          aria-label={t("moveDown")}
-          className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
-        >
-          <ChevronDown className="size-3.5" />
-        </button>
-        <button
-          type="button"
-          onClick={onRename}
-          aria-label={renameLabel}
-          className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary"
-        >
-          <Pencil className="size-3.5" />
-        </button>
-        <button
-          type="button"
-          onClick={onDelete}
-          aria-label={deleteLabel}
-          className="flex size-8 items-center justify-center rounded-lg bg-destructive text-destructive-foreground"
-        >
-          <Trash2 className="size-3.5" />
+          <span className="flex min-w-0 items-center gap-2">
+            <span
+              aria-hidden
+              className="size-2.5 shrink-0 rounded-full border"
+              style={{
+                backgroundColor: dotColor ?? "transparent",
+                borderColor: dotColor ?? "var(--border)",
+              }}
+            />
+            <span className="truncate">{name}</span>
+          </span>
+          {!actionsOpen && (
+            <span className="flex shrink-0 items-center gap-1.5">
+              {selected && <Check className="size-3.5 text-primary" />}
+              <span aria-hidden className="flex items-center text-muted-foreground/45">
+                <ChevronLeft className="-mr-2 size-3.5" />
+                <ChevronLeft className="size-3.5" />
+              </span>
+            </span>
+          )}
         </button>
       </div>
 
-      <button
-        type="button"
-        onTouchStart={(e) => {
-          startX.current = e.touches[0].clientX;
-          startY.current = e.touches[0].clientY;
-          moved.current = false;
-          clearPress();
-          pressTimer.current = setTimeout(onOpenActions, 500);
-        }}
-        onTouchMove={(e) => {
-          const dx = e.touches[0].clientX - startX.current;
-          const dy = e.touches[0].clientY - startY.current;
-          if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
-            moved.current = true;
-            clearPress();
-          }
-          if (Math.abs(dy) > Math.abs(dx)) return;
-          if (dx < -40) onOpenActions();
-          if (dx > 40) onCloseActions();
-        }}
-        onTouchEnd={clearPress}
-        onTouchCancel={clearPress}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          onOpenActions();
-        }}
-        onClick={() => {
-          if (moved.current) return;
-          if (actionsOpen) onCloseActions();
-          else onSelect();
-        }}
-        style={{
-          transform: actionsOpen ? "translateX(-150px)" : "translateX(0)",
-          WebkitTouchCallout: "none",
-          WebkitUserSelect: "none",
-          touchAction: "pan-y",
-        }}
-        className="relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200 active:bg-secondary"
-      >
-        <span className="truncate">{name}</span>
-        {!actionsOpen && (
-          <span className="flex shrink-0 items-center gap-1.5">
-            {selected && <Check className="size-3.5 text-primary" />}
-            <span aria-hidden className="flex items-center text-muted-foreground/45">
-              <ChevronLeft className="-mr-2 size-3.5" />
-              <ChevronLeft className="size-3.5" />
-            </span>
-          </span>
-        )}
-      </button>
+      {actionsOpen && colorOpen && (
+        <div className="flex flex-wrap items-center gap-2 rounded-b-xl bg-secondary/60 px-3 py-2">
+          {CATEGORY_COLORS.map((c) => (
+            <button
+              key={c.id}
+              type="button"
+              aria-label={c.id}
+              onClick={() => {
+                onSetColor(c.id);
+                setColorOpen(false);
+                onCloseActions();
+              }}
+              className={`size-6 rounded-full transition-transform active:scale-90 ${
+                color === c.id ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
+              }`}
+              style={{ backgroundColor: c.value }}
+            />
+          ))}
+          <button
+            type="button"
+            onClick={() => {
+              onSetColor(null);
+              setColorOpen(false);
+              onCloseActions();
+            }}
+            className="flex size-6 items-center justify-center rounded-full border border-border text-muted-foreground"
+          >
+            <X className="size-3" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

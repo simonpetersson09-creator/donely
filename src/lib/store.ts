@@ -171,6 +171,24 @@ export function useCategories() {
     [commit],
   );
 
+  const setCategoryColor = useCallback(
+    (id: string, color: string | null) => {
+      setCategories((prev) =>
+        commit(
+          prev.map((c) => {
+            if (c.id !== id) return c;
+            if (!color) {
+              const { color: _drop, ...rest } = c;
+              return rest;
+            }
+            return { ...c, color };
+          }),
+        ),
+      );
+    },
+    [commit],
+  );
+
   const removeCategory = useCallback(
     (id: string) => {
       createBackup("remove-category");
@@ -202,7 +220,15 @@ export function useCategories() {
     [commit],
   );
 
-  return { categories, addCategory, renameCategory, removeCategory, moveCategory, hydrated };
+  return {
+    categories,
+    addCategory,
+    renameCategory,
+    setCategoryColor,
+    removeCategory,
+    moveCategory,
+    hydrated,
+  };
 }
 
 function readFlagSeeded(): Category[] {
