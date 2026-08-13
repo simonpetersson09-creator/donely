@@ -19,6 +19,7 @@ import {
   Settings,
   Trash2,
   X,
+  Palette,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -831,7 +832,8 @@ function CategoryRow({
   };
 
   return (
-    <div className="relative overflow-hidden rounded-xl">
+    <div className="rounded-xl">
+      <div className="relative overflow-hidden rounded-xl">
       <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
         <button
           type="button"
@@ -937,6 +939,7 @@ function CategoryRow({
           </span>
         )}
       </button>
+      </div>
 
       {actionsOpen && colorOpen && (
         <div className="flex flex-wrap items-center gap-2 rounded-b-xl bg-secondary/60 px-3 py-2">
