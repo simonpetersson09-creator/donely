@@ -256,7 +256,7 @@ function Index() {
         />
 
         {/* Kategori */}
-        <section key={area} className="crossfade">
+        <section>
           <Label>{t("category")}</Label>
           <button
             type="button"
