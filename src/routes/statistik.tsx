@@ -374,9 +374,11 @@ function Section({
             showGoalCta={showGoalCta}
             onSetGoal={onSetGoal}
             runKey={runKey}
+            index={idx}
             isLast={idx === rows.length - 1}
           />
         ))}
+
       </div>
     </section>
   );
