@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { BarChart3, Calendar, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
+import i18n from "@/lib/i18n";
 import { buildWeeklySummary } from "@/lib/weekly-summary";
 
 export const Route = createFileRoute("/veckostatistik")({
@@ -46,37 +47,72 @@ function Veckostatistik() {
     return `${fmt.format(summary.start)} – ${fmt.format(summary.end)}`;
   }, [locale, summary.start, summary.end]);
 
+  /** Natural range for the email, e.g. "10–16 augusti" (or across months). */
+  const mailRange = useMemo(() => {
+    const day = new Intl.DateTimeFormat(locale, { day: "numeric" });
+    const dayMonth = new Intl.DateTimeFormat(locale, { day: "numeric", month: "long" });
+    const sameMonth = summary.start.getMonth() === summary.end.getMonth();
+    return sameMonth
+      ? `${day.format(summary.start)}–${dayMonth.format(summary.end)}`
+      : `${dayMonth.format(summary.start)} – ${dayMonth.format(summary.end)}`;
+  }, [locale, summary.start, summary.end]);
+
   const workRows = useMemo(
     () =>
       summary.rows.filter((r) => {
         const category = categories.find((c) => c.id === r.id);
         // Endast jobb-kategorier ska kunna delas som jobbsammanställning.
-        return category?.area === "jobb";
+        return category?.area === "jobb" && r.total > 0;
       }),
     [summary.rows, categories],
   );
 
-  const shareWork = () => {
-    // Dubbelkolla att inga privat-rader har slunkit med.
-    const onlyJobbRows = workRows.filter((r) => {
-      const category = categories.find((c) => c.id === r.id);
-      return category?.area === "jobb";
-    });
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [comment, setComment] = useState("");
 
-    if (onlyJobbRows.length === 0) {
-      toast(t("shareWorkSummaryEmpty"));
-      return;
+  /** "10 möten" – uses proper singular/plural for built-in categories. */
+  const activityLine = (row: (typeof workRows)[number]) => {
+    const pluralKey = `catn.${row.id}`;
+    const usesDefaultName = row.label === t(`cat.${row.id}`);
+    const name =
+      usesDefaultName && i18n.exists(pluralKey)
+        ? (t(pluralKey, { count: row.total }) as string)
+        : row.label;
+    return `${row.total.toLocaleString(locale)} ${name}`;
+  };
+
+  const openComposer = (note: string) => {
+    const total = workRows.reduce((acc, r) => acc + r.total, 0);
+    const subject = t("mailSubject", { range: mailRange });
+    const body = [
+      t("mailGreeting"),
+      "",
+      t("mailIntro", { range: mailRange }),
+      "",
+      t("mailDoneHeading"),
+      ...workRows.map((r) => activityLine(r)),
+      "",
+      t("mailTotal", { count: total }),
+    ];
+    if (note.trim()) {
+      body.push("", t("mailCommentHeading"), note.trim());
     }
+    body.push("", t("mailSignoff"));
 
-    const lines = onlyJobbRows.map((r) => `• ${r.label}: ${r.total}`);
-    const total = onlyJobbRows.reduce((acc, r) => acc + r.total, 0);
-    const title = t("shareWorkSummarySubject", { range });
-    const text = [title, "", ...lines, "", t("shareWorkSummaryTotal", { count: total })].join("\n");
     try {
-      window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text)}`;
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.join("\n"))}`;
     } catch {
       toast.error(t("shareWorkSummaryFailed"));
     }
+  };
+
+  const shareWork = () => {
+    if (workRows.length === 0) {
+      toast(t("shareWorkSummaryEmpty"));
+      return;
+    }
+    setComment("");
+    setCommentOpen(true);
   };
 
   return (
@@ -129,6 +165,53 @@ function Veckostatistik() {
         </span>
         {t("shareWorkSummary")}
       </button>
+
+      {commentOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center">
+          <button
+            type="button"
+            aria-label={t("mailCommentSkip")}
+            onClick={() => setCommentOpen(false)}
+            className="absolute inset-0 bg-foreground/40 backdrop-blur-[2px]"
+          />
+          <div className="relative w-full max-w-md rounded-t-3xl border border-border bg-card px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-4 shadow-[0_-12px_40px_-16px_hsl(0_0%_0%/0.4)]">
+            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-border" />
+            <h2 className="text-[18px] font-bold leading-tight tracking-[-0.02em] text-primary">
+              {t("mailCommentTitle")}
+            </h2>
+            <p className="mt-1 text-[13px] text-muted-foreground">{t("mailCommentSubtitle")}</p>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              rows={4}
+              placeholder={t("mailCommentPlaceholder")}
+              className="mt-3 w-full resize-none rounded-2xl border border-border bg-secondary/50 px-3 py-2.5 text-[15px] text-card-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
+            />
+            <div className="mt-3 grid gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setCommentOpen(false);
+                  openComposer(comment);
+                }}
+                className="w-full rounded-2xl bg-primary px-4 py-3 text-[15px] font-semibold text-primary-foreground transition-transform active:scale-[0.98]"
+              >
+                {t("mailCommentContinue")}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCommentOpen(false);
+                  openComposer("");
+                }}
+                className="w-full rounded-2xl bg-secondary px-4 py-3 text-[15px] font-semibold text-card-foreground transition-transform active:scale-[0.98]"
+              >
+                {t("mailCommentSkip")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

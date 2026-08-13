@@ -30,16 +30,16 @@ export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
 
   return (
     <>
-      <div className="card-base mt-3 px-3 py-3">
+      <div className="card-base mt-3 px-2 py-2">
         <div className="grid grid-cols-2 gap-2">
           <AreaStat
-            icon={<Home className="size-3.5" />}
+            icon={<Home className="size-3" />}
             label={t("private")}
             value={sum(privat).toLocaleString(locale)}
             tone="life"
           />
           <AreaStat
-            icon={<Briefcase className="size-3.5" />}
+            icon={<Briefcase className="size-3" />}
             label={t("work")}
             value={sum(jobb).toLocaleString(locale)}
             tone="work"
@@ -75,10 +75,10 @@ function AreaStat({
   tone: "life" | "work";
 }) {
   return (
-    <div className="flex items-center justify-center gap-2 rounded-xl bg-secondary/60 px-2.5 py-2">
+    <div className="flex items-center justify-center gap-2 rounded-xl bg-secondary/60 px-2 py-1.5">
       <div
         className={cn(
-          "flex size-8 shrink-0 items-center justify-center rounded-full",
+          "flex size-7 shrink-0 items-center justify-center rounded-full",
           tone === "life"
             ? "bg-accent-life-soft text-accent-life"
             : "bg-accent-work-soft text-accent-work",
@@ -88,7 +88,7 @@ function AreaStat({
       </div>
       <div className="min-w-0 text-center">
         <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
-        <p className="text-[18px] font-bold leading-none tabular-nums text-card-foreground">
+        <p className="text-[17px] font-bold leading-none tabular-nums text-card-foreground">
           {value}
         </p>
       </div>
@@ -111,7 +111,7 @@ function SummarySection({
   const locale = useLocale();
   if (rows.length === 0) return null;
   return (
-    <section className="mt-5">
+    <section className="mt-4">
       <div className="mb-2 flex items-center gap-2 px-1">
         <span
           className={cn(
