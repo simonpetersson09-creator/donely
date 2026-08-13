@@ -761,8 +761,8 @@ function CategorySheet({
             ),
           )}
         </div>
-      </div>
-    </div>
+    </BottomSheet>
+
   );
 }
 
