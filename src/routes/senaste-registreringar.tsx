@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { BackButton } from "@/components/BackButton";
+import { BottomSheet } from "@/components/BottomSheet";
+
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 import { useEntries } from "@/lib/store";
 import { toast } from "sonner";
@@ -63,8 +65,11 @@ function SenasteRegistreringar() {
             return (
               <div
                 key={entry.id}
-                className={`flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
+                className={`stagger-item flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
+                style={{ animationDelay: `${Math.min(index, 12) * 30}ms` }}
               >
+
+
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
                     {categoryLabel(t, { id: entry.categoryId, name: entry.categoryName })}
@@ -113,15 +118,14 @@ function SenasteRegistreringar() {
       </div>
 
       {editing !== null && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/30 px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]"
-          onClick={() => setEditing(null)}
+        <BottomSheet
+          onClose={() => setEditing(null)}
+          label={t("cancel")}
+          className="px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-1"
         >
-          <div
-            className="w-full max-w-md rounded-2xl border border-border bg-card p-4 shadow-card"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div>
             <p className="text-[15px] font-bold leading-tight text-primary">{t("editEntry")}</p>
+
 
             <label className="mt-3 block text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
               {t("amount")}
@@ -175,7 +179,8 @@ function SenasteRegistreringar() {
               </button>
             </div>
           </div>
-        </div>
+        </BottomSheet>
+
       )}
     </main>
   );

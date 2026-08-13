@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { BarChart3, Calendar, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
+import { BottomSheet } from "@/components/BottomSheet";
+
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
@@ -245,18 +247,16 @@ function Veckostatistik() {
       </button>
 
       {commentOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center">
-          <button
-            type="button"
-            aria-label={t("mailCommentSkip")}
-            onClick={() => setCommentOpen(false)}
-            className="absolute inset-0 bg-foreground/40 backdrop-blur-[2px]"
-          />
-          <div className="relative w-full max-w-md rounded-t-3xl border border-border bg-card px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-4 shadow-[0_-12px_40px_-16px_hsl(0_0%_0%/0.4)]">
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-border" />
+        <BottomSheet
+          onClose={() => setCommentOpen(false)}
+          label={t("mailCommentSkip")}
+          className="px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-2"
+        >
+          <div>
             <h2 className="text-[18px] font-bold leading-tight tracking-[-0.02em] text-primary">
               {t("mailCommentTitle")}
             </h2>
+
             <p className="mt-1 text-[13px] text-muted-foreground">{t("mailCommentSubtitle")}</p>
             <textarea
               value={comment}
@@ -298,7 +298,8 @@ function Veckostatistik() {
               </button>
             </div>
           </div>
-        </div>
+        </BottomSheet>
+
       )}
     </main>
   );
