@@ -70,16 +70,10 @@ function Veckostatistik() {
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
 
-  /** "10 möten" – uses proper singular/plural for built-in categories. */
-  const activityLine = (row: (typeof workRows)[number]) => {
-    const pluralKey = `catn.${row.id}`;
-    const usesDefaultName = row.label === t(`cat.${row.id}`);
-    const name =
-      usesDefaultName && i18n.exists(pluralKey)
-        ? (t(pluralKey, { count: row.total }) as string)
-        : row.label;
-    return `${row.total.toLocaleString(locale)} ${name}`;
-  };
+  /** "10 möten" – uses proper singular/plural for the category name. */
+  const activityLine = (row: (typeof workRows)[number]) =>
+    activityPhrase(row.id, row.label, row.total, locale);
+
 
   const openComposer = (note: string) => {
     const total = workRows.reduce((acc, r) => acc + r.total, 0);
