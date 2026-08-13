@@ -174,7 +174,8 @@ function SenasteRegistreringar() {
               </button>
             </div>
           </div>
-        </div>
+        </BottomSheet>
+
       )}
     </main>
   );
