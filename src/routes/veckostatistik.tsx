@@ -7,7 +7,7 @@ import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { activityPhrase } from "@/lib/category-inflection";
-import { activityPhrase } from "@/lib/category-inflection";
+
 
 import { buildWeeklySummary } from "@/lib/weekly-summary";
 
