@@ -7,6 +7,8 @@ import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { activityPhrase } from "@/lib/category-inflection";
+import { renderWeeklyReportPng } from "@/lib/report-card";
+import { composeMail, isNativeMailAvailable, openMailto } from "@/lib/mail-bridge";
 
 
 import { buildWeeklySummary } from "@/lib/weekly-summary";
