@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BarChart3, Calendar, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
@@ -73,10 +73,33 @@ function Veckostatistik() {
 
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
+  const [cardPreview, setCardPreview] = useState<string | null>(null);
 
   /** "10 möten" – uses proper singular/plural for the category name. */
   const activityLine = (row: (typeof workRows)[number]) =>
     activityPhrase(row.id, row.label, row.total, locale);
+
+  // Live preview of the report card inside the sheet, so the design can be
+  // reviewed both in the web preview and on device before the mail opens.
+  useEffect(() => {
+    if (!commentOpen) return;
+    const id = setTimeout(() => {
+      const card = renderWeeklyReportPng({
+        title: t("reportTitle"),
+        range: mailRange,
+        rows: workRows.map((r) => ({ label: r.label, value: r.total })),
+        total: workRows.reduce((acc, r) => acc + r.total, 0),
+        totalLabel: t("reportTotalLabel"),
+        comment: comment.trim() || undefined,
+        commentHeading: t("mailCommentHeading"),
+        footer: t("reportFooter"),
+      });
+      setCardPreview(card ? `data:image/png;base64,${card.base64}` : null);
+    }, 200);
+    return () => clearTimeout(id);
+  }, [commentOpen, comment, workRows, mailRange, t]);
+
+
 
 
   /**
@@ -242,6 +265,16 @@ function Veckostatistik() {
               placeholder={t("mailCommentPlaceholder")}
               className="mt-3 w-full resize-none rounded-2xl border border-border bg-secondary/50 px-3 py-2.5 text-[15px] text-card-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
             />
+            {cardPreview && (
+              <div className="mt-3 max-h-[38vh] overflow-y-auto rounded-2xl border border-border bg-secondary/40 p-2">
+                <img
+                  src={cardPreview}
+                  alt={t("reportTitle")}
+                  className="w-full rounded-xl"
+                />
+              </div>
+            )}
+
             <div className="mt-3 grid gap-2">
               <button
                 type="button"
