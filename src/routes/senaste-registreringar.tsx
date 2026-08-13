@@ -6,7 +6,7 @@ import { BottomSheet } from "@/components/BottomSheet";
 
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 import { CategoryDot } from "@/components/CategoryDot";
-import { useEntries } from "@/lib/store";
+import { useEntries, useCategories } from "@/lib/store";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/senaste-registreringar")({
