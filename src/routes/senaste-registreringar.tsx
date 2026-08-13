@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { BackButton } from "@/components/BackButton";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 import { useEntries } from "@/lib/store";
@@ -29,7 +30,10 @@ export const Route = createFileRoute("/senaste-registreringar")({
 function SenasteRegistreringar() {
   const { t, language } = useLanguage();
   const locale = useLocale();
-  const { entries, removeEntry } = useEntries();
+  const { entries, removeEntry, updateEntry } = useEntries();
+  const [editing, setEditing] = useState<string | null>(null);
+  const [editAmount, setEditAmount] = useState("1");
+  const [editDate, setEditDate] = useState("");
   const recent = entries.slice(0, 10);
 
   return (
@@ -81,6 +85,18 @@ function SenasteRegistreringar() {
                 </div>
                 <button
                   type="button"
+                  aria-label={t("editEntry")}
+                  onClick={() => {
+                    setEditing(entry.id);
+                    setEditAmount(String(entry.amount));
+                    setEditDate(new Date(entry.createdAt).toISOString().slice(0, 10));
+                  }}
+                  className="shrink-0 rounded-lg p-2 text-primary transition-colors active:bg-accent"
+                >
+                  <Pencil className="size-[16px]" />
+                </button>
+                <button
+                  type="button"
                   aria-label={t("recentDeleted")}
                   onClick={() => {
                     removeEntry(entry.id);
@@ -95,6 +111,72 @@ function SenasteRegistreringar() {
           })
         )}
       </div>
+
+      {editing !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/30 px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)]"
+          onClick={() => setEditing(null)}
+        >
+          <div
+            className="w-full max-w-md rounded-2xl border border-border bg-card p-4 shadow-card"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p className="text-[15px] font-bold leading-tight text-primary">{t("editEntry")}</p>
+
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+              {t("amount")}
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min={1}
+              value={editAmount}
+              onChange={(e) => setEditAmount(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-[16px] font-semibold text-foreground outline-none focus:border-primary"
+            />
+
+            <label className="mt-3 block text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+              {t("entryDate")}
+            </label>
+            <input
+              type="date"
+              value={editDate}
+              onChange={(e) => setEditDate(e.target.value)}
+              className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-[16px] font-semibold text-foreground outline-none focus:border-primary"
+            />
+
+            <div className="mt-4 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setEditing(null)}
+                className="rounded-xl border border-border bg-card px-3 py-2.5 text-[13px] font-semibold text-foreground active:bg-accent"
+              >
+                {t("cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const amount = Math.floor(Number(editAmount));
+                  if (!Number.isFinite(amount) || amount < 1) return;
+                  const current = entries.find((e) => e.id === editing);
+                  const time = current ? new Date(current.createdAt) : new Date();
+                  const [y, m, d] = editDate.split("-").map(Number);
+                  const next =
+                    y && m && d
+                      ? new Date(y, m - 1, d, time.getHours(), time.getMinutes(), time.getSeconds())
+                      : time;
+                  updateEntry(editing, { amount, createdAt: next.toISOString() });
+                  setEditing(null);
+                  toast.success(t("entryUpdated"));
+                }}
+                className="rounded-xl bg-primary px-3 py-2.5 text-[13px] font-semibold text-primary-foreground active:opacity-90"
+              >
+                {t("save")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

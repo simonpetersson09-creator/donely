@@ -10,6 +10,7 @@ import {
   FileText,
   Star,
   Trash2,
+  History,
   Upload,
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
@@ -147,7 +148,11 @@ function Installningar() {
                     {t("premiumActive")}
                   </>
                 ) : (
-                  t("trialLeft", { count: premium.inTrial ? premium.trialDaysLeft : 0 })
+                  premium.inTrial ? (
+                    t("trialLeft", { count: premium.trialDaysLeft })
+                  ) : (
+                    t("trialExpired")
+                  )
                 )}
               </span>
               <div className="absolute -top-[3px] left-1/2 size-2.5 -translate-x-1/2 rotate-45 rounded-[1px] bg-primary" />
@@ -308,7 +313,7 @@ function Installningar() {
             className="flex w-full items-center justify-between overflow-hidden rounded-xl border border-border bg-card px-3.5 py-2.5 text-[12px] font-semibold text-primary shadow-button transition-colors active:bg-accent edge-fix"
           >
             <span className="flex items-center gap-2">
-              <Trash2 className="size-[16px]" />
+              <History className="size-[16px]" />
               {t("recentSection")}
             </span>
             <ChevronRight className="size-4 text-muted-foreground" />

@@ -237,11 +237,25 @@ export function useEntries() {
 
   const addEntry = useCallback(
     (entry: Omit<Entry, "id" | "createdAt">) => {
+      const id = crypto.randomUUID();
       setEntries((prev) =>
-        commit([
-          { ...entry, id: crypto.randomUUID(), createdAt: new Date().toISOString() },
-          ...prev,
-        ]),
+        commit([{ ...entry, id, createdAt: new Date().toISOString() }, ...prev]),
+      );
+      return id;
+    },
+    [commit],
+  );
+
+  /** Edits amount and/or date of a single entry, keeping the list sorted. */
+  const updateEntry = useCallback(
+    (id: string, patch: { amount?: number; createdAt?: string }) => {
+      createBackup("update-entry");
+      setEntries((prev) =>
+        commit(
+          prev
+            .map((e) => (e.id === id ? { ...e, ...patch } : e))
+            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
+        ),
       );
     },
     [commit],
@@ -283,7 +297,7 @@ export function useEntries() {
     [commit],
   );
 
-  return { entries, addEntry, addHistoryEntry, removeEntry, removeEntriesByCategory };
+  return { entries, addEntry, addHistoryEntry, updateEntry, removeEntry, removeEntriesByCategory };
 
 }
 
