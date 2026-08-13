@@ -3,6 +3,7 @@ import { Home, Briefcase, MapPin, Timer } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCategories, type Area } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
+import { AnimatedNumber } from "@/components/AnimatedNumber";
 
 export type SummaryRow = {
   id: string;
@@ -18,7 +19,6 @@ export type SummaryRow = {
  */
 export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
   const { t } = useLanguage();
-  const locale = useLocale();
   const { categories } = useCategories();
 
   const areaOf = (id: string): Area =>
@@ -35,13 +35,13 @@ export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
           <AreaStat
             icon={<Home className="size-3" />}
             label={t("private")}
-            value={sum(privat).toLocaleString(locale)}
+            value={sum(privat)}
             tone="life"
           />
           <AreaStat
             icon={<Briefcase className="size-3" />}
             label={t("work")}
-            value={sum(jobb).toLocaleString(locale)}
+            value={sum(jobb)}
             tone="work"
           />
         </div>
@@ -71,7 +71,7 @@ function AreaStat({
 }: {
   icon: ReactNode;
   label: string;
-  value: string;
+  value: number;
   tone: "life" | "work";
 }) {
   return (
@@ -89,7 +89,7 @@ function AreaStat({
       <div className="min-w-0 text-center">
         <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
         <p className="text-[17px] font-bold leading-none tabular-nums text-card-foreground">
-          {value}
+          <AnimatedNumber value={value} />
         </p>
       </div>
     </div>
@@ -148,7 +148,7 @@ function SummarySection({
                   </span>
                 </div>
                 <span className="shrink-0 text-center text-[16px] font-bold tabular-nums text-card-foreground">
-                  {row.total.toLocaleString(locale)}
+                  <AnimatedNumber value={row.total} />
                 </span>
               </div>
               {hasMetrics && (

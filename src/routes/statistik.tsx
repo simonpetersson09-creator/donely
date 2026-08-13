@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
+import { AnimatedNumber } from "@/components/AnimatedNumber";
+import { AnimatedProgress } from "@/components/AnimatedProgress";
 import {
   goalKey,
   deleteCategoryData,
@@ -180,13 +182,13 @@ function Statistik() {
           <AreaStat
             icon={<Home className="size-3.5" />}
             label={t("private")}
-            value={areaTotals.privat.toLocaleString(locale)}
+            value={areaTotals.privat}
             tone="life"
           />
           <AreaStat
             icon={<Briefcase className="size-3.5" />}
             label={t("work")}
-            value={areaTotals.jobb.toLocaleString(locale)}
+            value={areaTotals.jobb}
             tone="work"
           />
         </div>
@@ -217,6 +219,7 @@ function Statistik() {
         rows={rows.privat}
         showGoalCta={isCurrentYear}
         onSetGoal={handleSetGoal}
+        runKey={year}
       />
       <Section
         title={t("work")}
@@ -225,6 +228,7 @@ function Statistik() {
         rows={rows.jobb}
         showGoalCta={isCurrentYear}
         onSetGoal={handleSetGoal}
+        runKey={year}
       />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
@@ -294,7 +298,7 @@ function AreaStat({
 }: {
   icon: ReactNode;
   label: string;
-  value: string;
+  value: number;
   tone: "life" | "work";
 }) {
   return (
@@ -312,7 +316,7 @@ function AreaStat({
       <div className="min-w-0 text-center">
         <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
         <p className="text-[18px] font-bold leading-none tabular-nums text-card-foreground">
-          {value}
+          <AnimatedNumber value={value} />
         </p>
       </div>
     </div>
@@ -326,6 +330,7 @@ function Section({
   rows,
   showGoalCta,
   onSetGoal,
+  runKey,
 }: {
   title: string;
   icon: ReactNode;
@@ -333,8 +338,8 @@ function Section({
   rows: Row[];
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
+  runKey: string | number;
 }) {
-  const locale = useLocale();
   const { t } = useLanguage();
   if (rows.length === 0) return null;
   return (
@@ -368,6 +373,7 @@ function Section({
             area={area}
             showGoalCta={showGoalCta}
             onSetGoal={onSetGoal}
+            runKey={runKey}
             isLast={idx === rows.length - 1}
           />
         ))}
@@ -382,12 +388,14 @@ function GoalRow({
   showGoalCta,
   onSetGoal,
   isLast,
+  runKey,
 }: {
   row: Row;
   area: Area;
   showGoalCta: boolean;
   onSetGoal: (c: Category) => void;
   isLast: boolean;
+  runKey: string | number;
 }) {
   const { t } = useLanguage();
   const locale = useLocale();
@@ -413,7 +421,7 @@ function GoalRow({
           </span>
         </div>
         <span className="shrink-0 text-center text-[16px] font-bold tabular-nums text-card-foreground">
-          {total.toLocaleString(locale)}
+          <AnimatedNumber value={total} />
         </span>
         <span className="shrink-0 text-center text-[12px] tabular-nums text-muted-foreground">
           {goal !== null ? goal.toLocaleString(locale) : "—"}
@@ -436,12 +444,11 @@ function GoalRow({
         )}
       </div>
       {goal !== null && (
-        <div className="h-[6px] w-full overflow-hidden rounded-full bg-accent">
-          <div
-            className={cn("h-full rounded-full transition-all duration-500", accentClass)}
-            style={{ width: `${Math.min(100, pct ?? 0)}%` }}
-          />
-        </div>
+        <AnimatedProgress
+          value={Math.min(100, pct ?? 0)}
+          className={accentClass}
+          runKey={`${runKey}:${category.id}`}
+        />
       )}
     </Link>
   );

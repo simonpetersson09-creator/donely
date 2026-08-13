@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { haptic } from "@/lib/motion";
 import {
   useCategories,
   useEntries,
@@ -69,6 +70,7 @@ function Index() {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [flash, setFlash] = useState(false);
   const [paywallOpen, setPaywallOpen] = useState(false);
+  const [pressed, setPressed] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -155,12 +157,12 @@ function Index() {
       return;
     }
     if (!canMutate(premium)) {
-      navigator.vibrate?.(8);
+      haptic("medium");
       setPaywallOpen(true);
       return;
     }
     if (!valid || !selected) return;
-    navigator.vibrate?.(6);
+    haptic("light");
     setConfirmOpen(true);
   }
 
@@ -177,7 +179,7 @@ function Index() {
       ...(distanceKm !== undefined ? { distanceKm } : {}),
       ...(durationMin !== undefined ? { durationMin } : {}),
     });
-    navigator.vibrate?.(12);
+    haptic("success");
     setAmount("1");
     setDistance("");
     setDuration("");
@@ -252,7 +254,7 @@ function Index() {
         />
 
         {/* Kategori */}
-        <section>
+        <section key={area} className="crossfade">
           <Label>{t("category")}</Label>
           <button
             type="button"
@@ -357,6 +359,8 @@ function Index() {
           <button
             type="button"
             disabled={!valid && !locked}
+            onPointerDown={() => setPressed(true)}
+            onAnimationEnd={() => setPressed(false)}
             onClick={register}
             aria-label={
               locked
@@ -364,7 +368,8 @@ function Index() {
                 : t("register")
             }
             className={cn(
-              "relative flex-1 overflow-hidden rounded-xl py-3 text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-all duration-200 ease-out active:scale-[0.96] active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
+              "relative flex-1 overflow-hidden rounded-xl py-3 text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-shadow duration-200 ease-out active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
+              pressed && "press-spring",
               locked
                 ? "bg-primary/85 text-primary-foreground"
                 : "bg-primary text-primary-foreground",
@@ -592,7 +597,7 @@ function AreaSegmented({
             role="tab"
             aria-selected={area === o.value}
             onClick={() => {
-              if (area !== o.value) navigator.vibrate?.(8);
+              if (area !== o.value) haptic("light");
               onChange(o.value);
             }}
             className={cn(
