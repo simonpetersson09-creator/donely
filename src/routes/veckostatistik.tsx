@@ -296,7 +296,8 @@ function Veckostatistik() {
               </button>
             </div>
           </div>
-        </div>
+        </BottomSheet>
+
       )}
     </main>
   );
