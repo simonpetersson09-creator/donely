@@ -460,7 +460,7 @@
     animation: none !important;
   }
   .sheet-scrim-in,
-  .sheet-scrim-in,
+
   .sheet-scrim-out {
     animation-duration: 1ms;
   }
