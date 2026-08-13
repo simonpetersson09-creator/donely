@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { BackButton } from "@/components/BackButton";
+import { BottomSheet } from "@/components/BottomSheet";
+
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 import { useEntries } from "@/lib/store";
 import { toast } from "sonner";
