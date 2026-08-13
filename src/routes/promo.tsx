@@ -66,7 +66,7 @@ function Promo() {
   const ctaOut = 1 - ramp(t, 11150, DUR);
 
   const phoneY = (1 - appIn) * 220;
-  const phoneScale = 0.92 + appIn * 0.08 + ramp(t, 6100, 9000) * 0.05;
+  const phoneScale = 0.94 + appIn * 0.1 + ramp(t, 6100, 9000) * 0.05;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center overflow-hidden bg-[#0b0f16]">
@@ -123,7 +123,7 @@ function Promo() {
         <div
           className="absolute inset-x-0 flex justify-center"
           style={{
-            top: 300,
+            top: 250,
             opacity: appIn * stageOut,
             transform: `translateY(${phoneY}px) scale(${phoneScale})`,
           }}
@@ -152,7 +152,7 @@ function Promo() {
             {/* tap ripple on the +5 chip */}
             <div
               className="pointer-events-none absolute"
-              style={{ left: 186, top: 690, opacity: tap }}
+              style={{ left: 157, top: 548, opacity: tap }}
             >
               <div
                 className="size-[74px] rounded-full border-[3px] border-primary/70"
@@ -161,7 +161,7 @@ function Promo() {
             </div>
             <div
               className="pointer-events-none absolute"
-              style={{ left: 300, top: 838, opacity: pressed ? 1 : 0 }}
+              style={{ left: 205, top: 628, opacity: pressed ? 1 : 0 }}
             >
               <div className="size-[80px] rounded-full bg-gold/40" />
             </div>
