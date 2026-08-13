@@ -265,6 +265,16 @@ function Veckostatistik() {
               placeholder={t("mailCommentPlaceholder")}
               className="mt-3 w-full resize-none rounded-2xl border border-border bg-secondary/50 px-3 py-2.5 text-[15px] text-card-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
             />
+            {cardPreview && (
+              <div className="mt-3 max-h-[38vh] overflow-y-auto rounded-2xl border border-border bg-secondary/40 p-2">
+                <img
+                  src={cardPreview}
+                  alt={t("reportTitle")}
+                  className="w-full rounded-xl"
+                />
+              </div>
+            )}
+
             <div className="mt-3 grid gap-2">
               <button
                 type="button"
