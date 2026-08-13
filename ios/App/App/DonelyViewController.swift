@@ -27,6 +27,8 @@ final class DonelyViewController: CAPBridgeViewController {
     private var notificationBridge: DonelyNotificationBridge?
     /// Strong reference — StoreKit 2 bridge (WKScriptMessageHandler).
     private var storeKitBridge: AnyObject?
+    /// Strong reference — mail composer bridge (WKScriptMessageHandler).
+    private var mailBridge: DonelyMailBridge?
     private var loadingObservation: NSKeyValueObservation?
     private var progressObservation: NSKeyValueObservation?
     private var urlObservation: NSKeyValueObservation?
@@ -297,6 +299,11 @@ final class DonelyViewController: CAPBridgeViewController {
             store = storeBridge
         }
 
+        // Mail composer bridge (HTML mail with the weekly report inline).
+        let mail = DonelyMailBridge(webView: webView)
+        mail.register(on: webView.configuration.userContentController)
+        mailBridge = mail
+
         // Notification delegate (also set in the bridge initializer; explicit
         // here so the wiring is obvious and survives refactors).
         UNUserNotificationCenter.current().delegate = bridge
@@ -307,14 +314,17 @@ final class DonelyViewController: CAPBridgeViewController {
                 guard change.newValue == false else { return }
                 self?.loadingObservation = nil
                 self?.notificationBridge?.webViewDidFinishLoad()
+                self?.mailBridge?.webViewDidFinishLoad()
                 if #available(iOS 15.0, *) {
                     (self?.storeKitBridge as? DonelyStoreKitBridge)?.webViewDidFinishLoad()
                 }
             }
         } else {
             bridge.webViewDidFinishLoad()
+            mail.webViewDidFinishLoad()
             if #available(iOS 15.0, *) { store?.webViewDidFinishLoad() }
         }
+
 
 
         // A tap that cold-launched the app is replayed once the web app loads.

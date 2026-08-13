@@ -15,6 +15,7 @@
 		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
 		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
 		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
+		D0NE1Y0000000000000005 /* DonelyMailBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000015 /* DonelyMailBridge.swift */; };
 		D0NE1Y0000000000000001 /* DonelyNotificationBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */; };
 		D0NE1Y0000000000000002 /* DonelyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000012 /* DonelyViewController.swift */; };
 		D0NE1Y0000000000000003 /* DonelyStoreKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */; };
@@ -34,6 +35,7 @@
 		AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.release.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.release.xcconfig"; sourceTree = "<group>"; };
 		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
+		D0NE1Y0000000000000015 /* DonelyMailBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyMailBridge.swift; sourceTree = "<group>"; };
 		D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyNotificationBridge.swift; sourceTree = "<group>"; };
 		D0NE1Y0000000000000012 /* DonelyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyViewController.swift; sourceTree = "<group>"; };
 		D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonelyStoreKitBridge.swift; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				D0NE1Y0000000000000011 /* DonelyNotificationBridge.swift */,
+				D0NE1Y0000000000000015 /* DonelyMailBridge.swift */,
 				D0NE1Y0000000000000012 /* DonelyViewController.swift */,
 				D0NE1Y0000000000000013 /* DonelyStoreKitBridge.swift */,
 				D0NE1Y0000000000000014 /* DonelyDiagnosticsOverlay.swift */,
@@ -273,6 +276,7 @@
 			files = (
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				D0NE1Y0000000000000001 /* DonelyNotificationBridge.swift in Sources */,
+				D0NE1Y0000000000000005 /* DonelyMailBridge.swift in Sources */,
 				D0NE1Y0000000000000002 /* DonelyViewController.swift in Sources */,
 				D0NE1Y0000000000000003 /* DonelyStoreKitBridge.swift in Sources */,
 				D0NE1Y0000000000000004 /* DonelyDiagnosticsOverlay.swift in Sources */,

@@ -7,6 +7,8 @@ import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { activityPhrase } from "@/lib/category-inflection";
+import { renderWeeklyReportPng } from "@/lib/report-card";
+import { composeMail, isNativeMailAvailable, openMailto } from "@/lib/mail-bridge";
 
 
 import { buildWeeklySummary } from "@/lib/weekly-summary";
@@ -77,12 +79,18 @@ function Veckostatistik() {
     activityPhrase(row.id, row.label, row.total, locale);
 
 
-  const openComposer = (note: string) => {
+  /**
+   * Builds the weekly report as a PNG and opens the native iOS mail composer
+   * with an HTML body where the card is inlined (data URI) – so the recipient
+   * sees the report directly in the message, not as a file to open.
+   * Falls back to a plain-text mailto: when no native composer exists.
+   */
+  const openComposer = async (note: string) => {
     const total = workRows.reduce((acc, r) => acc + r.total, 0);
     const subject = t("mailSubject", { range: mailRange });
-    // mailto skickar ren text – markdown renderas inte, så rubriker versaliseras.
     const heading = (label: string) => label.toLocaleUpperCase(locale);
-    const body = [
+
+    const plain = [
       t("mailGreeting"),
       "",
       t("mailIntro", { range: mailRange }),
@@ -91,19 +99,67 @@ function Veckostatistik() {
       ...workRows.map((r) => `• ${activityLine(r)}`),
       "",
       t("mailTotal", { count: total }),
-    ];
-    if (note.trim()) {
-      body.push("", heading(t("mailCommentHeading")), note.trim());
+      ...(note.trim() ? ["", heading(t("mailCommentHeading")), note.trim()] : []),
+      "",
+      "—",
+      "",
+      t("mailSignoff"),
+      "",
+      "Donely",
+    ].join("\n");
+
+    if (!isNativeMailAvailable()) {
+      try {
+        openMailto(subject, plain);
+      } catch {
+        toast.error(t("shareWorkSummaryFailed"));
+      }
+      return;
     }
 
-    body.push("", "—", "", t("mailSignoff"), "", "Donely");
+    const card = renderWeeklyReportPng({
+      title: t("reportTitle"),
+      range: mailRange,
+      rows: workRows.map((r) => ({ label: r.label, value: r.total })),
+      total,
+      totalLabel: t("reportTotalLabel"),
+      comment: note.trim() || undefined,
+      commentHeading: t("mailCommentHeading"),
+      footer: t("reportFooter"),
+    });
 
-    try {
-      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body.join("\n"))}`;
-    } catch {
-      toast.error(t("shareWorkSummaryFailed"));
-    }
+    const esc = (value: string) =>
+      value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    const html = [
+      '<div style="font-family:-apple-system,Helvetica,Arial,sans-serif;font-size:16px;color:#1e3a56;line-height:1.5;">',
+      `<p>${esc(t("mailGreeting"))}</p>`,
+      `<p>${esc(t("mailIntro", { range: mailRange }))}</p>`,
+      card
+        ? `<p><img src="data:image/png;base64,${card.base64}" width="600" style="width:100%;max-width:600px;height:auto;display:block;border:0;" alt="${esc(t("reportTitle"))}" /></p>`
+        : "",
+      `<p>${esc(t("mailSignoff"))}</p>`,
+      "</div>",
+    ].join("");
+
+    const status = await composeMail({
+      subject,
+      html,
+      plain,
+      pngBase64: card?.base64,
+      fileName: "donely-veckosammanstallning.png",
+    });
+
+    if (status === "sent") toast.success(t("mailSent"));
+    else if (status === "unavailable") {
+      toast(t("mailNoAccount"));
+      openMailto(subject, plain);
+    } else if (status === "failed") toast.error(t("shareWorkSummaryFailed"));
   };
+
 
   const shareWork = () => {
     if (workRows.length === 0) {
