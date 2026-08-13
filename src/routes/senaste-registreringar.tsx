@@ -64,11 +64,11 @@ function SenasteRegistreringar() {
             const mins = entry.durationMin ? Math.round(entry.durationMin % 60) : 0;
             return (
               <div
-              <div
                 key={entry.id}
                 className={`stagger-item flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
                 style={{ animationDelay: `${Math.min(index, 12) * 30}ms` }}
               >
+
 
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
