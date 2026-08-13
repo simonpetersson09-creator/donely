@@ -37,6 +37,8 @@ function SenasteRegistreringar() {
   const [editing, setEditing] = useState<string | null>(null);
   const [editAmount, setEditAmount] = useState("1");
   const [editDate, setEditDate] = useState("");
+  const { categories } = useCategories();
+  const colorOf = (id: string) => categories.find((c) => c.id === id)?.color ?? null;
   const recent = entries.slice(0, 10);
 
   return (
