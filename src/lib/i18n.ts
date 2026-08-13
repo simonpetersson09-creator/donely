@@ -63,7 +63,8 @@ const sv = {
   importBackup: "Importera",
   exportDone: "Fil exporterad",
   importTitle: "Importera data?",
-  importBody: "Importen ersätter dina nuvarande registreringar, kategorier och mål. En säkerhetskopia skapas först.",
+  importBody:
+    "Importen ersätter dina nuvarande registreringar, kategorier och mål. En säkerhetskopia skapas först.",
   importConfirm: "Importera",
   importDone: "Import klar: {{entries}} registreringar, {{categories}} kategorier",
   importInvalid: "Filen kunde inte läsas",
@@ -284,7 +285,8 @@ const en: Dict = {
   importBackup: "Import",
   exportDone: "File exported",
   importTitle: "Import data?",
-  importBody: "Importing replaces your current entries, categories and goals. A backup is created first.",
+  importBody:
+    "Importing replaces your current entries, categories and goals. A backup is created first.",
   importConfirm: "Import",
   importDone: "Import done: {{entries}} entries, {{categories}} categories",
   importInvalid: "The file could not be read",
@@ -503,7 +505,8 @@ const de: Dict = {
   importBackup: "Importieren",
   exportDone: "Datei exportiert",
   importTitle: "Daten importieren?",
-  importBody: "Der Import ersetzt deine aktuellen Einträge, Kategorien und Ziele. Zuvor wird eine Sicherung erstellt.",
+  importBody:
+    "Der Import ersetzt deine aktuellen Einträge, Kategorien und Ziele. Zuvor wird eine Sicherung erstellt.",
   importConfirm: "Importieren",
   importDone: "Import fertig: {{entries}} Einträge, {{categories}} Kategorien",
   importInvalid: "Die Datei konnte nicht gelesen werden",
@@ -599,7 +602,8 @@ const de: Dict = {
   recentEmpty: "Noch keine Einträge",
   recentDeleted: "Eintrag gelöscht",
   historySection: "Frühere Jahre hinzufügen",
-  historyIntro: "Füge eine Gesamtsumme pro Kategorie für ein früheres Jahr hinzu, z. B. 150 Läufe 2025.",
+  historyIntro:
+    "Füge eine Gesamtsumme pro Kategorie für ein früheres Jahr hinzu, z. B. 150 Läufe 2025.",
   historyYear: "Jahr",
   historyAdd: "Hinzufügen",
   historyAdded: "Verlauf hinzugefügt",
@@ -724,7 +728,8 @@ const fr: Dict = {
   importBackup: "Importer",
   exportDone: "Fichier exporté",
   importTitle: "Importer les données ?",
-  importBody: "L'import remplace vos entrées, catégories et objectifs actuels. Une sauvegarde est créée avant.",
+  importBody:
+    "L'import remplace vos entrées, catégories et objectifs actuels. Une sauvegarde est créée avant.",
   importConfirm: "Importer",
   importDone: "Import terminé : {{entries}} entrées, {{categories}} catégories",
   importInvalid: "Le fichier n'a pas pu être lu",
@@ -822,7 +827,8 @@ const fr: Dict = {
   recentEmpty: "Aucune entrée pour l'instant",
   recentDeleted: "Entrée supprimée",
   historySection: "Ajouter des années précédentes",
-  historyIntro: "Ajoute un total par catégorie pour une année précédente, par ex. 150 courses en 2025.",
+  historyIntro:
+    "Ajoute un total par catégorie pour une année précédente, par ex. 150 courses en 2025.",
   historyYear: "Année",
   historyAdd: "Ajouter",
   historyAdded: "Historique ajouté",
@@ -951,7 +957,8 @@ const es: Dict = {
   importBackup: "Importar",
   exportDone: "Archivo exportado",
   importTitle: "¿Importar datos?",
-  importBody: "La importación reemplaza tus registros, categorías y metas actuales. Antes se crea una copia de seguridad.",
+  importBody:
+    "La importación reemplaza tus registros, categorías y metas actuales. Antes se crea una copia de seguridad.",
   importConfirm: "Importar",
   importDone: "Importación lista: {{entries}} registros, {{categories}} categorías",
   importInvalid: "No se pudo leer el archivo",
@@ -1178,7 +1185,8 @@ const it: Dict = {
   importBackup: "Importa",
   exportDone: "File esportato",
   importTitle: "Importare i dati?",
-  importBody: "L'importazione sostituisce voci, categorie e obiettivi attuali. Prima viene creato un backup.",
+  importBody:
+    "L'importazione sostituisce voci, categorie e obiettivi attuali. Prima viene creato un backup.",
   importConfirm: "Importa",
   importDone: "Import completato: {{entries}} voci, {{categories}} categorie",
   importInvalid: "Impossibile leggere il file",
@@ -1404,7 +1412,8 @@ const ptBR: Dict = {
   importBackup: "Importar",
   exportDone: "Arquivo exportado",
   importTitle: "Importar dados?",
-  importBody: "A importação substitui seus registros, categorias e metas atuais. Um backup é criado antes.",
+  importBody:
+    "A importação substitui seus registros, categorias e metas atuais. Um backup é criado antes.",
   importConfirm: "Importar",
   importDone: "Importação concluída: {{entries}} registros, {{categories}} categorias",
   importInvalid: "Não foi possível ler o arquivo",
@@ -1630,7 +1639,8 @@ const nl: Dict = {
   importBackup: "Importeren",
   exportDone: "Bestand geëxporteerd",
   importTitle: "Gegevens importeren?",
-  importBody: "Importeren vervangt je huidige registraties, categorieën en doelen. Er wordt eerst een back-up gemaakt.",
+  importBody:
+    "Importeren vervangt je huidige registraties, categorieën en doelen. Er wordt eerst een back-up gemaakt.",
   importConfirm: "Importeren",
   importDone: "Import klaar: {{entries}} registraties, {{categories}} categorieën",
   importInvalid: "Het bestand kon niet worden gelezen",
@@ -1726,7 +1736,8 @@ const nl: Dict = {
   recentEmpty: "Nog geen registraties",
   recentDeleted: "Registratie verwijderd",
   historySection: "Eerdere jaren toevoegen",
-  historyIntro: "Voeg een totaal per categorie toe voor een eerder jaar, bijv. 150 hardlooprondjes in 2025.",
+  historyIntro:
+    "Voeg een totaal per categorie toe voor een eerder jaar, bijv. 150 hardlooprondjes in 2025.",
   historyYear: "Jaar",
   historyAdd: "Toevoegen",
   historyAdded: "Historie toegevoegd",
@@ -1850,7 +1861,8 @@ const pl: Dict = {
   importBackup: "Importuj",
   exportDone: "Plik wyeksportowany",
   importTitle: "Zaimportować dane?",
-  importBody: "Import zastąpi bieżące wpisy, kategorie i cele. Najpierw tworzona jest kopia zapasowa.",
+  importBody:
+    "Import zastąpi bieżące wpisy, kategorie i cele. Najpierw tworzona jest kopia zapasowa.",
   importConfirm: "Importuj",
   importDone: "Import gotowy: {{entries}} wpisów, {{categories}} kategorii",
   importInvalid: "Nie udało się odczytać pliku",
@@ -2079,7 +2091,8 @@ const da: Dict = {
   importBackup: "Importér",
   exportDone: "Fil eksporteret",
   importTitle: "Importér data?",
-  importBody: "Import erstatter dine nuværende registreringer, kategorier og mål. Der laves en sikkerhedskopi først.",
+  importBody:
+    "Import erstatter dine nuværende registreringer, kategorier og mål. Der laves en sikkerhedskopi først.",
   importConfirm: "Importér",
   importDone: "Import færdig: {{entries}} registreringer, {{categories}} kategorier",
   importInvalid: "Filen kunne ikke læses",
@@ -2298,7 +2311,8 @@ const no: Dict = {
   importBackup: "Importer",
   exportDone: "Fil eksportert",
   importTitle: "Importere data?",
-  importBody: "Import erstatter dine nåværende registreringer, kategorier og mål. En sikkerhetskopi lages først.",
+  importBody:
+    "Import erstatter dine nåværende registreringer, kategorier og mål. En sikkerhetskopi lages først.",
   importConfirm: "Importer",
   importDone: "Import ferdig: {{entries}} registreringer, {{categories}} kategorier",
   importInvalid: "Filen kunne ikke leses",
@@ -2517,7 +2531,8 @@ const fi: Dict = {
   importBackup: "Tuo",
   exportDone: "Tiedosto viety",
   importTitle: "Tuodaanko tiedot?",
-  importBody: "Tuonti korvaa nykyiset merkinnät, kategoriat ja tavoitteet. Varmuuskopio luodaan ensin.",
+  importBody:
+    "Tuonti korvaa nykyiset merkinnät, kategoriat ja tavoitteet. Varmuuskopio luodaan ensin.",
   importConfirm: "Tuo",
   importDone: "Tuonti valmis: {{entries}} merkintää, {{categories}} kategoriaa",
   importInvalid: "Tiedostoa ei voitu lukea",
@@ -2613,7 +2628,8 @@ const fi: Dict = {
   recentEmpty: "Ei vielä merkintöjä",
   recentDeleted: "Merkintä poistettu",
   historySection: "Lisää aiempia vuosia",
-  historyIntro: "Lisää kokonaismäärä kategorialle aiemmalta vuodelta, esim. 150 juoksulenkkiä 2025.",
+  historyIntro:
+    "Lisää kokonaismäärä kategorialle aiemmalta vuodelta, esim. 150 juoksulenkkiä 2025.",
   historyYear: "Vuosi",
   historyAdd: "Lisää",
   historyAdded: "Historia lisätty",
@@ -2736,7 +2752,8 @@ const ja: Dict = {
   importBackup: "読み込む",
   exportDone: "ファイルを書き出しました",
   importTitle: "データを読み込みますか？",
-  importBody: "読み込むと現在の記録・カテゴリ・目標が置き換わります。先にバックアップを作成します。",
+  importBody:
+    "読み込むと現在の記録・カテゴリ・目標が置き換わります。先にバックアップを作成します。",
   importConfirm: "読み込む",
   importDone: "読み込み完了：記録 {{entries}} 件、カテゴリ {{categories}} 件",
   importInvalid: "ファイルを読み込めませんでした",

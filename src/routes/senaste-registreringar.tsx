@@ -68,8 +68,6 @@ function SenasteRegistreringar() {
                 className={`stagger-item flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
                 style={{ animationDelay: `${Math.min(index, 12) * 30}ms` }}
               >
-
-
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
                     {categoryLabel(t, { id: entry.categoryId, name: entry.categoryName })}
@@ -126,7 +124,6 @@ function SenasteRegistreringar() {
           <div>
             <p className="text-[15px] font-bold leading-tight text-primary">{t("editEntry")}</p>
 
-
             <label className="mt-3 block text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
               {t("amount")}
             </label>
@@ -180,7 +177,6 @@ function SenasteRegistreringar() {
             </div>
           </div>
         </BottomSheet>
-
       )}
     </main>
   );

@@ -133,7 +133,6 @@ const BACKFILL_WORK_KEY = "vr.backfill.jobb.v3";
 const PRIVATE_CATEGORIES: Category[] = DEFAULT_CATEGORIES.filter((c) => c.area === "privat");
 const BACKFILL_PRIVATE_KEY = "vr.backfill.privat.v2";
 
-
 // ---------------------------------------------------------------------------
 // Low level storage access
 // ---------------------------------------------------------------------------
@@ -605,7 +604,12 @@ function backfillRunningCategory() {
     const next = [...current.value];
     const trainingIndex = next.findIndex((c) => c.id === "p-traning");
     const insertAt =
-      trainingIndex >= 0 ? trainingIndex + 1 : Math.max(next.findIndex((c) => c.area === "privat"), 0);
+      trainingIndex >= 0
+        ? trainingIndex + 1
+        : Math.max(
+            next.findIndex((c) => c.area === "privat"),
+            0,
+          );
     next.splice(insertAt, 0, RUNNING_CATEGORY);
     writeKey(STORAGE_KEYS.categories, next, categoriesSchema);
   }
@@ -668,7 +672,6 @@ function backfillPrivateCategories() {
   }
   writeKey(BACKFILL_PRIVATE_KEY, true, flagSchema);
 }
-
 
 /** Test hook: lets the suite re-run initialization on a fresh storage. */
 export function resetInitializationForTests() {

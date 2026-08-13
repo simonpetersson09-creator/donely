@@ -95,9 +95,10 @@ export function deleteCategoryData(categoryId: string): boolean {
     },
     {
       key: ENTRIES_KEY,
-      value: entries.status === "ok"
-        ? entries.value.filter((entry) => entry.categoryId !== categoryId)
-        : [],
+      value:
+        entries.status === "ok"
+          ? entries.value.filter((entry) => entry.categoryId !== categoryId)
+          : [],
       schema: entriesSchema as unknown as z.ZodType<unknown>,
     },
     { key: GOALS_KEY, value: nextGoals, schema: goalsSchema as unknown as z.ZodType<unknown> },
@@ -298,7 +299,6 @@ export function useEntries() {
   );
 
   return { entries, addEntry, addHistoryEntry, updateEntry, removeEntry, removeEntriesByCategory };
-
 }
 
 /** key: `${year}:${categoryId}` -> yearly target */

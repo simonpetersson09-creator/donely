@@ -3,8 +3,7 @@ import { Directory, Encoding, Filesystem } from "@capacitor/filesystem";
 import { Share } from "@capacitor/share";
 import { exportData } from "./persistence";
 
-export const backupFileName = () =>
-  `donely-${new Date().toISOString().slice(0, 10)}.json`;
+export const backupFileName = () => `donely-${new Date().toISOString().slice(0, 10)}.json`;
 
 /**
  * Saves the backup to disk and (on iOS) opens the native share sheet so the

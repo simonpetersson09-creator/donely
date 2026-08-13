@@ -4,7 +4,6 @@ import {
   Bell,
   CalendarPlus,
   ChevronRight,
-
   Crown,
   Download,
   FileText,
@@ -99,19 +98,15 @@ function Installningar() {
     }
   };
 
-
   const runImport = (json: string) => {
     const result = importData(json);
     if (result.status === "ok") {
       window.dispatchEvent(new CustomEvent(DATA_CHANGED_EVENT));
-      toast.success(
-        t("importDone", { entries: result.entries, categories: result.categories }),
-      );
+      toast.success(t("importDone", { entries: result.entries, categories: result.categories }));
       return;
     }
     toast.error(result.status === "invalid" ? t("importInvalid") : t("importFailed"));
   };
-
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background overflow-x-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
@@ -147,12 +142,10 @@ function Installningar() {
                     <Crown className="size-2.5 shrink-0 text-gold" fill="currentColor" />
                     {t("premiumActive")}
                   </>
+                ) : premium.inTrial ? (
+                  t("trialLeft", { count: premium.trialDaysLeft })
                 ) : (
-                  premium.inTrial ? (
-                    t("trialLeft", { count: premium.trialDaysLeft })
-                  ) : (
-                    t("trialExpired")
-                  )
+                  t("trialExpired")
                 )}
               </span>
               <div className="absolute -top-[3px] left-1/2 size-2.5 -translate-x-1/2 rotate-45 rounded-[1px] bg-primary" />
@@ -176,7 +169,10 @@ function Installningar() {
             className="premium-sheen group w-full overflow-hidden rounded-full border border-premium-border bg-gradient-premium px-3 py-2 text-center shadow-premium transition-transform active:scale-[0.985] disabled:opacity-60 edge-fix"
           >
             <span className="relative z-[2] inline-flex items-center justify-center gap-2 text-[13px] font-semibold leading-[17px] text-gold-foreground">
-              <Crown className="size-3.5 text-gold-deep transition-transform duration-300 group-hover:rotate-12" fill="currentColor" />
+              <Crown
+                className="size-3.5 text-gold-deep transition-transform duration-300 group-hover:rotate-12"
+                fill="currentColor"
+              />
 
               {premium.loading
                 ? t("premiumLoading")
@@ -331,7 +327,6 @@ function Installningar() {
           </Link>
         </section>
 
-
         <section className="mt-3">
           <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
             {t("backupSection")}
@@ -373,10 +368,7 @@ function Installningar() {
               }
             }}
           />
-
         </section>
-
-
 
         <div className="mt-3 pb-[calc(env(safe-area-inset-bottom)+0.5rem)]">
           <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
@@ -419,9 +411,6 @@ function Installningar() {
             </button>
           </div>
 
-
-
-
           <p className="mt-2 text-center text-[8px] font-normal leading-[12px] text-muted-foreground/80">
             Donely · {t("version")} 1.0
           </p>
@@ -462,8 +451,6 @@ function Installningar() {
           </div>
         </div>
       )}
-
-
 
       {confirming && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-8 backdrop-blur-[2px]">

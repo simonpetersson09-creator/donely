@@ -26,11 +26,6 @@ export function inflectCategory(id: string, label: string, count: number): strin
 }
 
 /** "10 möten" – count plus the correctly inflected category name. */
-export function activityPhrase(
-  id: string,
-  label: string,
-  count: number,
-  locale: string,
-): string {
+export function activityPhrase(id: string, label: string, count: number, locale: string): string {
   return `${count.toLocaleString(locale)} ${inflectCategory(id, label, count)}`;
 }

@@ -17,7 +17,7 @@ export function isoWeek(date: Date): number {
   tmp.setHours(0, 0, 0, 0);
   tmp.setDate(tmp.getDate() + 4 - (tmp.getDay() || 7));
   const yearStart = new Date(tmp.getFullYear(), 0, 1);
-  return Math.ceil((((tmp.getTime() - yearStart.getTime()) / 86_400_000) + 1) / 7);
+  return Math.ceil(((tmp.getTime() - yearStart.getTime()) / 86_400_000 + 1) / 7);
 }
 
 export type WeeklyRow = {
