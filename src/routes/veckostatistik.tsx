@@ -73,10 +73,33 @@ function Veckostatistik() {
 
   const [commentOpen, setCommentOpen] = useState(false);
   const [comment, setComment] = useState("");
+  const [cardPreview, setCardPreview] = useState<string | null>(null);
 
   /** "10 möten" – uses proper singular/plural for the category name. */
   const activityLine = (row: (typeof workRows)[number]) =>
     activityPhrase(row.id, row.label, row.total, locale);
+
+  // Live preview of the report card inside the sheet, so the design can be
+  // reviewed both in the web preview and on device before the mail opens.
+  useEffect(() => {
+    if (!commentOpen) return;
+    const id = setTimeout(() => {
+      const card = renderWeeklyReportPng({
+        title: t("reportTitle"),
+        range: mailRange,
+        rows: workRows.map((r) => ({ label: r.label, value: r.total })),
+        total: workRows.reduce((acc, r) => acc + r.total, 0),
+        totalLabel: t("reportTotalLabel"),
+        comment: comment.trim() || undefined,
+        commentHeading: t("mailCommentHeading"),
+        footer: t("reportFooter"),
+      });
+      setCardPreview(card ? `data:image/png;base64,${card.base64}` : null);
+    }, 200);
+    return () => clearTimeout(id);
+  }, [commentOpen, comment, workRows, mailRange, t]);
+
+
 
 
   /**
