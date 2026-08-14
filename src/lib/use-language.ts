@@ -22,7 +22,7 @@ export function useLanguage() {
     setReady(true);
   }, [instance]);
 
-  const language = (instance.language ?? "sv") as LanguageCode;
+  const language = (instance.language ?? "en") as LanguageCode;
 
   const changeLanguage = (code: LanguageCode) => {
     persistLanguage(code);
@@ -35,7 +35,7 @@ export function useLanguage() {
 /** Locale string for Intl formatting, following the active language. */
 export function useLocale() {
   const { i18n: instance } = useTranslation();
-  return localeOf(instance.language ?? "sv");
+  return localeOf(instance.language ?? "en");
 }
 
 /**
