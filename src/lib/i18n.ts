@@ -27,6 +27,8 @@ export const LANGUAGES: {
 ];
 
 export const LANG_KEY = "vr.lang.v1";
+/** Set only when the user picked a language themselves in Settings. */
+export const LANG_MANUAL_KEY = "vr.lang.manual.v1";
 
 export function localeOf(code: string) {
   return LANGUAGES.find((l) => l.code === code)?.locale ?? "en-GB";
@@ -2973,40 +2975,66 @@ const resources = {
 if (!i18n.isInitialized) {
   void i18n.use(initReactI18next).init({
     resources,
-    lng: "sv",
+    lng: "en",
     fallbackLng: "en",
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   });
 }
 
-/** Resolve the stored language, else the device language, else English. */
-export function detectLanguage(): LanguageCode {
-  if (typeof window === "undefined") return "sv";
-  try {
-    const stored = window.localStorage.getItem(LANG_KEY) as LanguageCode | null;
-    if (stored && LANGUAGES.some((l) => l.code === stored)) return stored;
-  } catch {
-    /* ignore */
-  }
+/** Normalizes a BCP-47 tag (sv-SE, nb-NO, en_US) to a supported language, if any. */
+export function matchLanguage(raw: string): LanguageCode | null {
+  const tag = raw.trim().replace("_", "-");
+  if (!tag) return null;
+  const exact = LANGUAGES.find((l) => l.code.toLowerCase() === tag.toLowerCase());
+  if (exact) return exact.code;
+  const base = tag.split("-")[0].toLowerCase();
+  if (base === "pt") return "pt-BR";
+  if (base === "nb" || base === "nn" || base === "no") return "no";
+  if (base === "se") return null; // Northern Sami, not Swedish
+  const match = LANGUAGES.find((l) => l.code.split("-")[0] === base);
+  return match ? match.code : null;
+}
+
+/** The device's preferred language, or English when none is supported. */
+export function deviceLanguage(): LanguageCode {
   const navLangs =
-    typeof navigator !== "undefined" ? (navigator.languages ?? [navigator.language]) : [];
+    typeof navigator !== "undefined"
+      ? (navigator.languages?.length ? navigator.languages : [navigator.language])
+      : [];
   for (const raw of navLangs) {
-    if (!raw) continue;
-    const exact = LANGUAGES.find((l) => l.code.toLowerCase() === raw.toLowerCase());
-    if (exact) return exact.code;
-    const base = raw.split("-")[0].toLowerCase();
-    if (base === "pt") return "pt-BR";
-    if (base === "nb" || base === "nn") return "no";
-    const match = LANGUAGES.find((l) => l.code.split("-")[0] === base);
-    if (match) return match.code;
+    const hit = raw && matchLanguage(raw);
+    if (hit) return hit;
   }
   return "en";
+}
+
+/** The user's own choice from Settings, if one exists. */
+export function storedLanguage(): LanguageCode | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = window.localStorage.getItem(LANG_KEY) as LanguageCode | null;
+    if (!stored || !LANGUAGES.some((l) => l.code === stored)) return null;
+    // Legacy installs only ever wrote this key on a manual switch — keep honoring it.
+    if (window.localStorage.getItem(LANG_MANUAL_KEY) !== "1") {
+      window.localStorage.setItem(LANG_MANUAL_KEY, "1");
+    }
+    return stored;
+  } catch {
+    return null;
+  }
+}
+
+/** A manual choice always wins; otherwise follow the device, falling back to English. */
+export function detectLanguage(): LanguageCode {
+  if (typeof window === "undefined") return "en";
+  return storedLanguage() ?? deviceLanguage();
 }
 
 export function persistLanguage(code: LanguageCode) {
   try {
     window.localStorage.setItem(LANG_KEY, code);
+    window.localStorage.setItem(LANG_MANUAL_KEY, "1");
   } catch {
     /* ignore */
   }
