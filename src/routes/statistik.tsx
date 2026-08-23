@@ -32,6 +32,7 @@ import { Paywall } from "@/components/Paywall";
 import { canMutate, usePremium } from "@/lib/premium";
 import { categoryLabel, useLanguage, useLocale } from "@/lib/use-language";
 import { CategoryDot } from "@/components/CategoryDot";
+import { RecordsSection } from "@/components/RecordsSection";
 
 export const Route = createFileRoute("/statistik")({
   head: () => ({
@@ -219,6 +220,8 @@ function Statistik() {
         onSetGoal={handleSetGoal}
         runKey={year}
       />
+
+      <RecordsSection />
 
       {rows.privat.length === 0 && rows.jobb.length === 0 && (
         <p className="mt-8 px-1 text-center text-[15px] text-muted-foreground">

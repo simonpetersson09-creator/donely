@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { CATEGORY_COLORS, categoryColorValue } from "@/lib/category-colors";
 import { toast } from "sonner";
+import { claimRecord, detectRecords, type PersonalRecord } from "@/lib/records";
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/motion";
 import {
@@ -82,7 +83,7 @@ function Index() {
   const locale = useLocale();
   const { categories, addCategory, renameCategory, setCategoryColor, moveCategory, hydrated } =
     useCategories();
-  const { addEntry, removeEntry } = useEntries();
+  const { entries, addEntry, removeEntry } = useEntries();
   const {
     seen: onboardingSeen,
     markSeen: markOnboardingSeen,
@@ -206,6 +207,22 @@ function Index() {
         },
       },
     });
+
+    // Rekordkoll sker lokalt och deterministiskt på den färska listan, efter
+    // att registreringen redan är sparad — snabbregistreringen påverkas inte.
+    const nextEntries = [
+      {
+        id: entryId,
+        area,
+        categoryId: selected.id,
+        categoryName: selected.name,
+        amount: parsed,
+        createdAt: new Date().toISOString(),
+      },
+      ...entries,
+    ];
+    const record = detectRecords(nextEntries, selected.id).find((r) => claimRecord(r));
+    if (record) showRecordToast(record, name, t);
   }
 
   if (!onboardingHydrated) return null;
@@ -1249,4 +1266,25 @@ function ConfirmDialog({
       </div>
     </div>
   );
+}
+
+const RECORD_TITLE_KEY = {
+  day: "recordNewDay",
+  week: "recordNewWeek",
+  month: "recordNewMonth",
+} as const;
+
+/** Liten, diskret rekordnotis i Donelys stil — ingen konfetti. */
+function showRecordToast(
+  record: PersonalRecord,
+  name: string,
+  t: (key: string, options?: Record<string, unknown>) => string,
+) {
+  window.setTimeout(() => {
+    haptic("success");
+    toast.success(`\u{1F3C6} ${t(RECORD_TITLE_KEY[record.type])}`, {
+      description: `${record.value} ${name} · ${t("recordPrevious", { count: record.previous })}`,
+      duration: 5000,
+    });
+  }, 450);
 }
