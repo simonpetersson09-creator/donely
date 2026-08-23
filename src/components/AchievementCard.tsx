@@ -1,20 +1,32 @@
 import { useEffect, useRef, useState } from "react";
+import { Trophy, Target, Flame, type LucideIcon } from "lucide-react";
 import { useReducedMotion } from "@/lib/motion";
+import { cn } from "@/lib/utils";
+
+type AchievementVariant = "record" | "milestone" | "nearRecord" | "nearMilestone";
+
+const ICONS: Record<AchievementVariant, LucideIcon> = {
+  record: Trophy,
+  milestone: Target,
+  nearRecord: Flame,
+  nearMilestone: Target,
+};
 
 /**
  * Discreet feedback card that slides up from the bottom after a registration.
  * It never blocks the view underneath, disappears on its own after ~3 s and
- * can be swiped away. No confetti — just a small scale-in on the icon.
+ * can be swiped away. iOS-native glassmorphism: frosted card, gradient icon
+ * pill, soft spring transitions, and a subtle right-edge dismiss indicator.
  */
 export function AchievementCard({
-  icon,
+  variant,
   title,
   lines,
   emphatic = false,
   duration = 3200,
   onDismiss,
 }: {
-  icon: string;
+  variant: AchievementVariant;
   title: string;
   lines: string[];
   emphatic?: boolean;
@@ -27,6 +39,8 @@ export function AchievementCard({
   const [drag, setDrag] = useState(0);
   const start = useRef<number | null>(null);
   const closed = useRef(false);
+
+  const Icon = ICONS[variant];
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setShown(true));
@@ -80,44 +94,66 @@ export function AchievementCard({
             ? "opacity 150ms linear"
             : "transform 340ms cubic-bezier(0.22,1,0.36,1), opacity 220ms ease-out",
         }}
-        className="pointer-events-auto w-full max-w-md rounded-3xl border border-border/60 bg-card px-4 py-3.5 shadow-[0_18px_40px_-16px_hsl(0_0%_0%/0.45)]"
+        className="pointer-events-auto w-full max-w-[342px]"
       >
-        <div className="flex items-start gap-3">
-          <span
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-3xl border border-white/25 px-4 py-3.5 shadow-card",
+            "bg-card/80 backdrop-blur-xl",
+          )}
+        >
+          {/* Inner highlight border for the glass edge */}
+          <div
+            className="pointer-events-none absolute inset-0 rounded-3xl border border-white/20"
             aria-hidden
-            className="shrink-0 text-[26px] leading-none"
-            style={
-              reduced
-                ? undefined
-                : {
-                    display: "inline-block",
-                    animation: emphatic
-                      ? "donely-pop 420ms cubic-bezier(0.22,1,0.36,1) 80ms both"
-                      : undefined,
-                  }
-            }
-          >
-            {icon}
-          </span>
-          <div className="min-w-0 flex-1">
-            <p
-              className={
+          />
+
+          <div className="flex items-center gap-3.5">
+            {/* Gradient icon pill */}
+            <span
+              aria-hidden
+              className={cn(
+                "flex size-10 shrink-0 items-center justify-center rounded-full text-primary-foreground",
                 emphatic
-                  ? "text-[15px] font-semibold leading-tight text-primary"
-                  : "text-[15px] font-semibold leading-tight text-foreground"
+                  ? "bg-gradient-to-br from-gold to-gold-deep shadow-gold"
+                  : "bg-gradient-to-br from-primary to-primary/80 shadow-button",
+                reduced ? "" : "scale-in",
+              )}
+              style={
+                reduced
+                  ? undefined
+                  : {
+                      display: "inline-flex",
+                      animation: "donely-pop 420ms cubic-bezier(0.22,1,0.36,1) 80ms both",
+                    }
               }
             >
-              {title}
-            </p>
-            {lines.map((line, i) => (
+              <Icon className="size-5" strokeWidth={2.5} />
+            </span>
+
+            {/* Content */}
+            <div className="min-w-0 flex-1">
               <p
-                key={i}
-                className="mt-0.5 truncate text-[13px] leading-snug text-muted-foreground"
-                title={line}
+                className={cn(
+                  "text-[14px] font-semibold leading-tight tracking-tight",
+                  emphatic ? "text-primary" : "text-foreground",
+                )}
               >
-                {line}
+                {title}
               </p>
-            ))}
+              {lines.map((line, i) => (
+                <p
+                  key={i}
+                  className="mt-0.5 truncate text-[13px] font-medium leading-snug text-muted-foreground"
+                  title={line}
+                >
+                  {line}
+                </p>
+              ))}
+            </div>
+
+            {/* iOS-style dismiss indicator */}
+            <div className="h-8 w-1 shrink-0 rounded-full bg-muted/40" aria-hidden />
           </div>
         </div>
       </div>
