@@ -475,3 +475,13 @@
     opacity: 1;
   }
 }
+
+/* Premium navy pill: strip the default Sonner toast chrome for the
+   registered-activity toast so the custom component controls the look. */
+li[data-sonner-toast]:has([data-registered-toast]) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+

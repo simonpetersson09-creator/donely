@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { CATEGORY_COLORS, categoryColorValue } from "@/lib/category-colors";
 import { toast } from "sonner";
+import { RegisteredToast } from "@/components/RegisteredToast";
+
 import { detectAchievement, type Achievement } from "@/lib/achievements";
 import { AchievementCard } from "@/components/AchievementCard";
 
@@ -200,17 +202,22 @@ function Index() {
       distanceKm !== undefined ? `${formatKm(distanceKm, locale)} km` : null,
       durationMin !== undefined ? formatMinutes(durationMin, locale) : null,
     ].filter(Boolean);
-    toast.success(t("registeredToast", { count: parsed, name }), {
-      description: [area === "jobb" ? t("work") : t("private"), ...extras].join(" · "),
-      duration: 4000,
-      action: {
-        label: t("undoAction"),
-        onClick: () => {
-          removeEntry(entryId);
-          toast.success(t("entryUndone"));
-        },
-      },
-    });
+    const areaLabel = area === "jobb" ? t("work") : t("private");
+    toast.custom(
+      () => (
+        <RegisteredToast
+          title={t("registeredToast", { count: parsed, name })}
+          description={[areaLabel, ...extras].join(" · ")}
+          undoLabel={t("undoAction")}
+          onUndo={() => {
+            removeEntry(entryId);
+            toast.success(t("entryUndone"));
+          }}
+        />
+      ),
+      { duration: 4000 },
+    );
+
 
     // Rekord- och milstolpskoll sker lokalt och deterministiskt på den färska
     // listan, efter att registreringen redan är sparad — snabbregistreringen
