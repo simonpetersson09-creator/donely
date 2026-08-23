@@ -55,7 +55,7 @@ export function WeeklyActivityChart({
       <h3 className="mb-3 text-[15px] font-bold text-primary">{title}</h3>
       <div className="flex h-32 items-end gap-1">
         {days.map((day) => (
-          <div key={day.label} className="flex flex-1 flex-col items-center gap-1">
+          <div key={day.date.toISOString()} className="flex flex-1 flex-col items-center gap-1">
             <span className="text-[13px] font-bold tabular-nums text-card-foreground">
               {day.count}
             </span>
