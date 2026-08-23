@@ -6,6 +6,7 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
+import { WeeklyActivityChart } from "@/components/WeeklyActivityChart";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { activityPhrase } from "@/lib/category-inflection";
