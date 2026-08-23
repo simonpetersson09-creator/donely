@@ -233,7 +233,6 @@ function Index() {
     }
   }
 
-
   if (!onboardingHydrated) return null;
   if (!onboardingSeen) return <Onboarding onStart={markOnboardingSeen} />;
 
@@ -548,7 +547,6 @@ function Index() {
             />
           );
         })()}
-
 
       {showReminderPrompt && (
         <ReminderPrompt
@@ -1362,4 +1360,3 @@ export function achievementContent(
       };
   }
 }
-
