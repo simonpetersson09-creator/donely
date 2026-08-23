@@ -23,7 +23,9 @@ import {
 } from "lucide-react";
 import { CATEGORY_COLORS, categoryColorValue } from "@/lib/category-colors";
 import { toast } from "sonner";
-import { claimRecord, detectRecords, type PersonalRecord } from "@/lib/records";
+import { detectAchievement, type Achievement } from "@/lib/achievements";
+import { AchievementCard } from "@/components/AchievementCard";
+
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/motion";
 import {
