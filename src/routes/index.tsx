@@ -534,6 +534,22 @@ function Index() {
 
       {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
 
+      {feedback &&
+        (() => {
+          const content = achievementContent(feedback.achievement, feedback.name, t);
+          return (
+            <AchievementCard
+              key={`${feedback.achievement.kind}-${feedback.name}`}
+              icon={content.icon}
+              title={content.title}
+              lines={content.lines}
+              emphatic={content.emphatic}
+              onDismiss={() => setFeedback(null)}
+            />
+          );
+        })()}
+
+
       {showReminderPrompt && (
         <ReminderPrompt
           onEnable={(choice) => {
