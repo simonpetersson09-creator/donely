@@ -38,7 +38,6 @@ export const Route = createFileRoute("/veckostatistik")({
 function Veckostatistik() {
   const { t } = useLanguage();
   const locale = useLocale();
-  const currentYear = new Date().getFullYear();
   const { categories } = useCategories();
   const { entries } = useEntries();
 
