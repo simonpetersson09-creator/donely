@@ -2,6 +2,7 @@ import i18n, { localeOf } from "@/lib/i18n";
 import { readStoredCategories, readStoredEntries, type Category, type Entry } from "@/lib/store";
 import { categoryLabel } from "@/lib/use-language";
 import { formatKm, formatMinutes, supportsMetrics } from "@/lib/activity-metrics";
+import { highlightsInSpan } from "@/lib/achievements";
 
 export type DailyRow = {
   id: string;
@@ -123,10 +124,26 @@ export function dailyNotificationContent(language = i18n.language || "sv") {
     month: "short",
   }).format(summary.date);
   const totalText = fixed("dailySummaryTotal", { count: summary.total }) as string;
+  const highlight = highlightsInSpan(
+    readStoredEntries(),
+    readStoredCategories(),
+    "day",
+    summary.date,
+    dayEnd(summary.date),
+  );
+  const note =
+    highlight.records.length > 0
+      ? { icon: "\u{1F3C6}", text: fixed("summaryRecordNote") as string }
+      : highlight.milestones.length > 0
+        ? { icon: "\u{1F3AF}", text: fixed("summaryMilestoneNote") as string }
+        : null;
+  const fullBody = note ? `${note.text}\n${body}` : body;
   return {
-    title: fixed("dailySummaryTitle") as string,
+    title: note
+      ? `${fixed("dailySummaryTitle")} ${note.icon}`
+      : (fixed("dailySummaryTitle") as string),
     subtitle: `${dateText.charAt(0).toLocaleUpperCase(locale)}${dateText.slice(1)} · ${totalText}`,
-    body,
-    bodyLines: body.split("\n"),
+    body: fullBody,
+    bodyLines: fullBody.split("\n"),
   };
 }

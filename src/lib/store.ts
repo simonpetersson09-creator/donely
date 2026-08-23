@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { clearRecordLedger } from "@/lib/records";
+import { clearAchievementLedger } from "@/lib/achievements";
+
 import type { z } from "zod";
 import {
   DEFAULT_CATEGORIES,
@@ -440,6 +442,8 @@ export function clearAllData() {
   if (typeof window === "undefined") return;
   createBackup("delete-all-data");
   clearRecordLedger();
+  clearAchievementLedger();
+
   for (const key of [CATS_KEY, ENTRIES_KEY, GOALS_KEY, ONBOARDING_KEY, LANG_GUIDE_KEY]) {
     try {
       window.localStorage.removeItem(key);

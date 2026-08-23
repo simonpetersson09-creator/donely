@@ -23,7 +23,9 @@ import {
 } from "lucide-react";
 import { CATEGORY_COLORS, categoryColorValue } from "@/lib/category-colors";
 import { toast } from "sonner";
-import { claimRecord, detectRecords, type PersonalRecord } from "@/lib/records";
+import { detectAchievement, type Achievement } from "@/lib/achievements";
+import { AchievementCard } from "@/components/AchievementCard";
+
 import { cn } from "@/lib/utils";
 import { haptic } from "@/lib/motion";
 import {
@@ -77,6 +79,8 @@ function Index() {
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ achievement: Achievement; name: string } | null>(null);
+
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { t } = useLanguage();
@@ -208,8 +212,9 @@ function Index() {
       },
     });
 
-    // Rekordkoll sker lokalt och deterministiskt på den färska listan, efter
-    // att registreringen redan är sparad — snabbregistreringen påverkas inte.
+    // Rekord- och milstolpskoll sker lokalt och deterministiskt på den färska
+    // listan, efter att registreringen redan är sparad — snabbregistreringen
+    // påverkas inte och kortet visas bara ovanpå den befintliga vyn.
     const nextEntries = [
       {
         id: entryId,
@@ -221,8 +226,11 @@ function Index() {
       },
       ...entries,
     ];
-    const record = detectRecords(nextEntries, selected.id).find((r) => claimRecord(r));
-    if (record) showRecordToast(record, name, t);
+    const achievement = detectAchievement(nextEntries, selected.id);
+    if (achievement) {
+      if (achievement.kind === "record" || achievement.kind === "milestone") haptic("success");
+      window.setTimeout(() => setFeedback({ achievement, name }), 420);
+    }
   }
 
   if (!onboardingHydrated) return null;
@@ -524,6 +532,21 @@ function Index() {
       )}
 
       {paywallOpen && <Paywall onClose={() => setPaywallOpen(false)} />}
+
+      {feedback &&
+        (() => {
+          const content = achievementContent(feedback.achievement, feedback.name, t);
+          return (
+            <AchievementCard
+              key={`${feedback.achievement.kind}-${feedback.name}`}
+              icon={content.icon}
+              title={content.title}
+              lines={content.lines}
+              emphatic={content.emphatic}
+              onDismiss={() => setFeedback(null)}
+            />
+          );
+        })()}
 
       {showReminderPrompt && (
         <ReminderPrompt
@@ -1274,17 +1297,66 @@ const RECORD_TITLE_KEY = {
   month: "recordNewMonth",
 } as const;
 
-/** Liten, diskret rekordnotis i Donelys stil — ingen konfetti. */
-function showRecordToast(
-  record: PersonalRecord,
+const PERIOD_KEY = {
+  day: "periodThisDay",
+  week: "periodThisWeek",
+  month: "periodThisMonth",
+} as const;
+
+/** Översätter en achievement till kortets ikon, rubrik och rader. */
+export function achievementContent(
+  achievement: Achievement,
   name: string,
   t: (key: string, options?: Record<string, unknown>) => string,
-) {
-  window.setTimeout(() => {
-    haptic("success");
-    toast.success(`\u{1F3C6} ${t(RECORD_TITLE_KEY[record.type])}`, {
-      description: `${record.value} ${name} · ${t("recordPrevious", { count: record.previous })}`,
-      duration: 5000,
-    });
-  }, 450);
+): { icon: string; title: string; lines: string[]; emphatic: boolean } {
+  switch (achievement.kind) {
+    case "record":
+      return {
+        icon: "\u{1F3C6}",
+        title: t(RECORD_TITLE_KEY[achievement.type]),
+        lines: [
+          t("recordCurrentLine", {
+            count: achievement.value,
+            name,
+            period: t(PERIOD_KEY[achievement.type]),
+          }),
+          t("recordPrevious", { count: achievement.previous }),
+        ],
+        emphatic: true,
+      };
+    case "milestone":
+      return {
+        icon: "\u{1F3AF}",
+        title: t("milestoneTitle"),
+        lines: [t("milestoneLine", { count: achievement.target, name })],
+        emphatic: true,
+      };
+    case "nearRecord":
+      return {
+        icon: "\u{1F525}",
+        title: t("nearRecordTitle"),
+        lines: [
+          t("recordCurrentLine", {
+            count: achievement.current,
+            name,
+            period: t(PERIOD_KEY[achievement.type]),
+          }),
+          t("nearRecordHint", { count: achievement.remaining, record: achievement.target }),
+        ],
+        emphatic: false,
+      };
+    case "nearMilestone":
+      return {
+        icon: "\u{1F3AF}",
+        title: t("nearMilestoneTitle"),
+        lines: [
+          t("nearMilestoneHint", {
+            count: achievement.remaining,
+            target: achievement.target,
+            name,
+          }),
+        ],
+        emphatic: false,
+      };
+  }
 }

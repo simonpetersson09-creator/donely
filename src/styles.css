@@ -460,3 +460,18 @@
     animation-duration: 1ms;
   }
 }
+
+@keyframes donely-pop {
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
