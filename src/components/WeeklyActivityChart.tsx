@@ -6,13 +6,17 @@ export function WeeklyActivityChart({
   entries,
   locale,
   title,
+  from,
 }: {
   entries: Entry[];
   locale: string;
   title: string;
+  /** Any date inside the week to chart. Defaults to the current week. */
+  from?: Date;
 }) {
+  const fromTime = from ? from.getTime() : null;
   const days = useMemo(() => {
-    const start = weekStart();
+    const start = weekStart(fromTime === null ? new Date() : new Date(fromTime));
     const dayFormatter = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
     const daysData = [];
 
@@ -46,7 +50,7 @@ export function WeeklyActivityChart({
       });
     }
     return daysData;
-  }, [entries, locale]);
+  }, [entries, locale, fromTime]);
 
   const max = useMemo(() => Math.max(0, ...days.map((d) => d.count)), [days]);
 
