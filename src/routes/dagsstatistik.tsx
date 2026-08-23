@@ -75,7 +75,7 @@ function Dagsstatistik() {
             <p className="mt-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
           </div>
           <div className="mt-3">
-            <StatsSegmentedControl active="day" />
+            <StatsSegmentedControl active="day" date={search.date} />
           </div>
           <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("dailySummaryEmpty")}</p>
         </>
@@ -93,7 +93,7 @@ function Dagsstatistik() {
           }
         >
           <div className="mt-3">
-            <StatsSegmentedControl active="day" />
+            <StatsSegmentedControl active="day" date={search.date} />
           </div>
         </SummaryBreakdown>
       )}

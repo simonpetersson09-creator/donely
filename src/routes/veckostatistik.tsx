@@ -227,7 +227,7 @@ function Veckostatistik() {
             <p className="mt-1 text-[13px] text-muted-foreground">{range}</p>
           </div>
           <div className="mt-3">
-            <StatsSegmentedControl active="week" />
+            <StatsSegmentedControl active="week" date={search.date} />
           </div>
           <WeeklyActivityChart entries={entries} locale={locale} title={t("weeklyActivityTitle")} />
           <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("weeklySummaryEmpty")}</p>
@@ -264,7 +264,7 @@ function Veckostatistik() {
           }
         >
           <div className="mt-3">
-            <StatsSegmentedControl active="week" />
+            <StatsSegmentedControl active="week" date={search.date} />
           </div>
         </SummaryBreakdown>
       )}
