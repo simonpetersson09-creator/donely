@@ -539,7 +539,7 @@ function Index() {
           return (
             <AchievementCard
               key={`${feedback.achievement.kind}-${feedback.name}`}
-              icon={content.icon}
+              variant={content.variant}
               title={content.title}
               lines={content.lines}
               emphatic={content.emphatic}
