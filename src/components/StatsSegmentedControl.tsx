@@ -39,7 +39,6 @@ export function StatsSegmentedControl({ active }: { active: StatsView }) {
     <div
       className="flex w-full items-center rounded-full bg-secondary p-1 shadow-soft"
       role="tablist"
-      aria-label={t("statsViewSwitcher")}
     >
       {segments.map((segment) => {
         const isActive = active === segment.view;
