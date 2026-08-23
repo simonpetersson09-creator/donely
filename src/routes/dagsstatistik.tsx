@@ -61,6 +61,12 @@ function Dagsstatistik() {
 
       {summary.rows.length === 0 ? (
         <>
+          <div className="mt-3 px-1 text-center">
+            <h1 className="text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
+              {t("dailySummaryTitle")}
+            </h1>
+            <p className="mt-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
+          </div>
           <div className="mt-3">
             <StatsSegmentedControl active="day" />
           </div>

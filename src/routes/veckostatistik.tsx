@@ -200,6 +200,12 @@ function Veckostatistik() {
 
       {summary.rows.length === 0 ? (
         <>
+          <div className="mt-3 px-1 text-center">
+            <h1 className="text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
+              {t("weeklySummaryTitle")}
+            </h1>
+            <p className="mt-1 text-[13px] text-muted-foreground">{range}</p>
+          </div>
           <div className="mt-3">
             <StatsSegmentedControl active="week" />
           </div>
@@ -211,11 +217,13 @@ function Veckostatistik() {
           rows={summary.rows}
           title={t("weeklySummaryTitle")}
           subtitle={<p className="mt-1 text-[13px] text-muted-foreground">{range}</p>}
+          postSummary={
+            <WeeklyActivityChart entries={entries} locale={locale} title={t("weeklyActivityTitle")} />
+          }
         >
           <div className="mt-3">
             <StatsSegmentedControl active="week" />
           </div>
-          <WeeklyActivityChart entries={entries} locale={locale} title={t("weeklyActivityTitle")} />
         </SummaryBreakdown>
       )}
 

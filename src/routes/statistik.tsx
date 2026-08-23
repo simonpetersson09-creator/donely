@@ -138,37 +138,49 @@ function Statistik() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
-      <div className="flex items-center justify-between pb-1 pt-0.5">
+      <div className="pb-1 pt-0.5">
         <BackButton
           fallbackTo="/veckostatistik"
           className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
         >
           {t("back")}
         </BackButton>
+      </div>
 
-        <div className="flex items-center gap-0.5 rounded-full border border-border bg-card px-1 py-0.5 shadow-soft">
-          <button
-            type="button"
-            aria-label={t("prevYear")}
-            disabled={yearIndex >= years.length - 1}
-            onClick={() => setYear(years[yearIndex + 1])}
-            className="flex size-6 items-center justify-center rounded-full text-primary transition-transform active:scale-95 disabled:opacity-30"
-          >
-            <ChevronLeft className="size-3.5" />
-          </button>
-          <span className="min-w-[4ch] text-center text-[13px] font-semibold tabular-nums text-primary">
-            {year}
-          </span>
-          <button
-            type="button"
-            aria-label={t("nextYear")}
-            disabled={yearIndex <= 0}
-            onClick={() => setYear(years[yearIndex - 1])}
-            className="flex size-6 items-center justify-center rounded-full text-primary transition-transform active:scale-95 disabled:opacity-30"
-          >
-            <ChevronRight className="size-3.5" />
-          </button>
+      <div className="mt-3 px-1 text-center">
+        <h1 className="text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
+          {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
+        </h1>
+        <div className="mt-1 flex items-center justify-center">
+          <div className="flex items-center gap-0.5 rounded-full border border-border bg-card px-1 py-0.5 shadow-soft">
+            <button
+              type="button"
+              aria-label={t("prevYear")}
+              disabled={yearIndex >= years.length - 1}
+              onClick={() => setYear(years[yearIndex + 1])}
+              className="flex size-6 items-center justify-center rounded-full text-primary transition-transform active:scale-95 disabled:opacity-30"
+            >
+              <ChevronLeft className="size-3.5" />
+            </button>
+            <span className="min-w-[4ch] text-center text-[13px] font-semibold tabular-nums text-primary">
+              {year}
+            </span>
+            <button
+              type="button"
+              aria-label={t("nextYear")}
+              disabled={yearIndex <= 0}
+              onClick={() => setYear(years[yearIndex - 1])}
+              className="flex size-6 items-center justify-center rounded-full text-primary transition-transform active:scale-95 disabled:opacity-30"
+            >
+              <ChevronRight className="size-3.5" />
+            </button>
+          </div>
         </div>
+      </div>
+
+      {/* Vy-väljare */}
+      <div className="mt-3">
+        <StatsSegmentedControl active="year" />
       </div>
 
       {/* Överblick */}
@@ -187,15 +199,6 @@ function Statistik() {
             tone="work"
           />
         </div>
-      </div>
-
-      <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
-      </h1>
-
-      {/* Vy-väljare */}
-      <div className="mt-3">
-        <StatsSegmentedControl active="year" />
       </div>
 
       <Section
