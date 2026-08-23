@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { BarChart3, Calendar, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { toast } from "sonner";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
-
+import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
@@ -38,7 +38,6 @@ export const Route = createFileRoute("/veckostatistik")({
 function Veckostatistik() {
   const { t } = useLanguage();
   const locale = useLocale();
-  const currentYear = new Date().getFullYear();
   const { categories } = useCategories();
   const { entries } = useEntries();
 
@@ -200,22 +199,8 @@ function Veckostatistik() {
 
       {summary.rows.length === 0 ? (
         <>
-          {/* Snabblänkar till dagsvyn och årsstatistiken */}
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            <Link
-              to="/dagsstatistik"
-              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-            >
-              <Calendar className="size-4" />
-              <span>{t("dailySummaryLink")}</span>
-            </Link>
-            <Link
-              to="/statistik"
-              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-            >
-              <BarChart3 className="size-4" />
-              <span>{currentYear}</span>
-            </Link>
+          <div className="mt-3">
+            <StatsSegmentedControl active="week" />
           </div>
           <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("weeklySummaryEmpty")}</p>
         </>
@@ -225,22 +210,8 @@ function Veckostatistik() {
           title={t("weeklySummaryTitle")}
           subtitle={<p className="mt-1 text-[13px] text-muted-foreground">{range}</p>}
         >
-          {/* Snabblänkar till dagsvyn och årsstatistiken */}
-          <div className="mt-3 grid grid-cols-2 gap-2">
-            <Link
-              to="/dagsstatistik"
-              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-            >
-              <Calendar className="size-4" />
-              <span>{t("dailySummaryLink")}</span>
-            </Link>
-            <Link
-              to="/statistik"
-              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-            >
-              <BarChart3 className="size-4" />
-              <span>{currentYear}</span>
-            </Link>
+          <div className="mt-3">
+            <StatsSegmentedControl active="week" />
           </div>
         </SummaryBreakdown>
       )}

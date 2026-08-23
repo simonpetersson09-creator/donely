@@ -10,13 +10,12 @@ import {
   MapPin,
   Timer,
   Plus,
-  Calendar,
-  CalendarDays,
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { AnimatedProgress } from "@/components/AnimatedProgress";
+import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
 import {
   goalKey,
   deleteCategoryData,
@@ -194,22 +193,9 @@ function Statistik() {
         {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
       </h1>
 
-      {/* Snabblänkar */}
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <Link
-          to="/dagsstatistik"
-          className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-        >
-          <Calendar className="size-4" />
-          <span>{t("dailySummaryLink")}</span>
-        </Link>
-        <Link
-          to="/veckostatistik"
-          className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-        >
-          <CalendarDays className="size-4" />
-          <span>{t("weeklySummaryLink")}</span>
-        </Link>
+      {/* Vy-väljare */}
+      <div className="mt-3">
+        <StatsSegmentedControl active="year" />
       </div>
 
       <Section

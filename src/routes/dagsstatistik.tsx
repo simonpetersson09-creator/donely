@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { BackButton } from "@/components/BackButton";
+import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
@@ -59,7 +60,12 @@ function Dagsstatistik() {
       </div>
 
       {summary.rows.length === 0 ? (
-        <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("dailySummaryEmpty")}</p>
+        <>
+          <div className="mt-3">
+            <StatsSegmentedControl active="day" />
+          </div>
+          <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("dailySummaryEmpty")}</p>
+        </>
       ) : (
         <SummaryBreakdown
           rows={summary.rows}
@@ -67,7 +73,11 @@ function Dagsstatistik() {
           subtitle={
             <p className="mt-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
           }
-        />
+        >
+          <div className="mt-3">
+            <StatsSegmentedControl active="day" />
+          </div>
+        </SummaryBreakdown>
       )}
     </main>
   );
