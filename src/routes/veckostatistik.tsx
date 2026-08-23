@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
@@ -15,8 +16,10 @@ import { renderWeeklyReportPng } from "@/lib/report-card";
 import { composeMail, isNativeMailAvailable, openMailto } from "@/lib/mail-bridge";
 
 import { buildWeeklySummary } from "@/lib/weekly-summary";
+import { summaryDate, validateSummarySearch } from "@/lib/summary-date";
 
 export const Route = createFileRoute("/veckostatistik")({
+  validateSearch: validateSummarySearch,
   head: () => ({
     meta: [
       { title: "Din vecka – Donely" },
@@ -39,14 +42,30 @@ export const Route = createFileRoute("/veckostatistik")({
 
 function Veckostatistik() {
   const { t } = useLanguage();
+  // Deep link from the Friday notification: `?date=YYYY-MM-DD` pins the week.
+  const search = Route.useSearch();
+  const anchor = useMemo(() => summaryDate(search.date), [search.date]);
   const locale = useLocale();
   const { categories } = useCategories();
   const { entries } = useEntries();
 
   const summary = useMemo(
-    () => buildWeeklySummary(entries, categories, t as (key: string) => string),
-    [entries, categories, t],
+    () => buildWeeklySummary(entries, categories, t as (key: string) => string, anchor),
+    [entries, categories, t, anchor],
   );
+
+  /** Previous week's total, for the "vs. last week" line (when data exists). */
+  const previousTotal = useMemo(() => {
+    const before = new Date(summary.start.getTime() - 24 * 3600 * 1000);
+    return buildWeeklySummary(entries, categories, t as (key: string) => string, before).total;
+  }, [entries, categories, t, summary.start]);
+
+  const change = useMemo(() => {
+    if (previousTotal <= 0 || summary.total <= 0) return null;
+    const percent = Math.round(((summary.total - previousTotal) / previousTotal) * 100);
+    if (percent === 0) return null;
+    return { percent, up: percent > 0 };
+  }, [previousTotal, summary.total]);
 
   const range = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" });
@@ -217,12 +236,30 @@ function Veckostatistik() {
         <SummaryBreakdown
           rows={summary.rows}
           title={t("weeklySummaryTitle")}
-          subtitle={<p className="mt-1 text-[13px] text-muted-foreground">{range}</p>}
+          subtitle={
+            <>
+              <p className="mt-1 text-[13px] text-muted-foreground">{range}</p>
+              <p className="mt-0.5 text-[15px] font-semibold text-card-foreground">
+                {t("weeklySummaryTotal", { count: summary.total })}
+              </p>
+              {change && (
+                <p
+                  className={cn(
+                    "mt-0.5 text-[13px] font-medium",
+                    change.up ? "text-gold" : "text-muted-foreground",
+                  )}
+                >
+                  {change.up ? "↑" : "↓"} {Math.abs(change.percent)} % {t("weeklyVsPrevious")}
+                </p>
+              )}
+            </>
+          }
           postSummary={
             <WeeklyActivityChart
               entries={entries}
               locale={locale}
               title={t("weeklyActivityTitle")}
+              from={summary.start}
             />
           }
         >
@@ -232,7 +269,7 @@ function Veckostatistik() {
         </SummaryBreakdown>
       )}
 
-      <RecordsSection />
+      <RecordsSection period={{ type: "week", date: summary.start }} />
 
       <button
         type="button"
