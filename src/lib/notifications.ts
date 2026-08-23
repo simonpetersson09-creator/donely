@@ -561,16 +561,19 @@ function installBridge() {
     }, 400);
   });
 
-  // Swift calls this when the user taps the reminder, so Donely opens straight
-  // on the weekly summary the notification showed.
+  // Swift calls this when the user taps a reminder, so Donely opens straight
+  // on the summary that notification was about — including its `?date=…`, so a
+  // late tap still shows that day / week and not today's numbers.
   w.__donelyOpenRoute = (value: unknown) => {
     const path =
       typeof value === "string"
         ? value
         : (parsePayload<{ route?: string }>(value)?.route ?? REMINDER_ROUTE);
     if (!path.startsWith("/")) return;
-    if (window.location.pathname !== path) window.location.assign(path);
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (current !== path) window.location.assign(path);
   };
+
 
   const onForeground = () => {
     // Re-check the iOS authorization status: the user may have changed it in
