@@ -574,7 +574,6 @@ function installBridge() {
     if (current !== path) window.location.assign(path);
   };
 
-
   const onForeground = () => {
     // Re-check the iOS authorization status: the user may have changed it in
     // the system settings while Donely was in the background.
