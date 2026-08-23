@@ -208,8 +208,9 @@ function Index() {
       },
     });
 
-    // Rekordkoll sker lokalt och deterministiskt på den färska listan, efter
-    // att registreringen redan är sparad — snabbregistreringen påverkas inte.
+    // Rekord- och milstolpskoll sker lokalt och deterministiskt på den färska
+    // listan, efter att registreringen redan är sparad — snabbregistreringen
+    // påverkas inte och kortet visas bara ovanpå den befintliga vyn.
     const nextEntries = [
       {
         id: entryId,
@@ -221,9 +222,13 @@ function Index() {
       },
       ...entries,
     ];
-    const record = detectRecords(nextEntries, selected.id).find((r) => claimRecord(r));
-    if (record) showRecordToast(record, name, t);
+    const achievement = detectAchievement(nextEntries, selected.id);
+    if (achievement) {
+      if (achievement.kind === "record" || achievement.kind === "milestone") haptic("success");
+      window.setTimeout(() => setFeedback({ achievement, name }), 420);
+    }
   }
+
 
   if (!onboardingHydrated) return null;
   if (!onboardingSeen) return <Onboarding onStart={markOnboardingSeen} />;
