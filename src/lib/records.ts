@@ -53,7 +53,8 @@ function isoWeekParts(date: Date): { year: number; week: number } {
 
 /** Stable key for the period of `date` in local time. */
 export function periodKeyOf(type: RecordType, date: Date): string {
-  if (type === "day") return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  if (type === "day")
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
   if (type === "month") return `${date.getFullYear()}-${pad(date.getMonth() + 1)}`;
   const { year, week } = isoWeekParts(date);
   return `${year}-W${pad(week)}`;
@@ -215,7 +216,9 @@ function writeLedger(ledger: Ledger) {
     const keys = Object.keys(ledger);
     const trimmed =
       keys.length > MAX_LEDGER_ENTRIES
-        ? Object.fromEntries(keys.slice(keys.length - MAX_LEDGER_ENTRIES).map((k) => [k, ledger[k]]))
+        ? Object.fromEntries(
+            keys.slice(keys.length - MAX_LEDGER_ENTRIES).map((k) => [k, ledger[k]]),
+          )
         : ledger;
     window.localStorage.setItem(LEDGER_KEY, JSON.stringify(trimmed));
   } catch {
