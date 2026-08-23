@@ -39,14 +39,6 @@ export function WeeklyActivityChart({
         const at = new Date(entry.createdAt).getTime();
         return at >= dayStart.getTime() && at < dayEnd.getTime() ? sum + entry.amount : sum;
       }, 0);
-      const matched = entries
-        .filter((e) => {
-          const at = new Date(e.createdAt).getTime();
-          return at >= dayStart.getTime() && at < dayEnd.getTime();
-        })
-        .map((e) => ({ id: e.id, at: new Date(e.createdAt).toISOString(), amount: e.amount }));
-      // eslint-disable-next-line no-console
-      console.log({ i, dayStart: dayStart.toISOString(), dayEnd: dayEnd.toISOString(), count, matched });
       daysData.push({
         label: dayFormatter.format(dayStart),
         count,
