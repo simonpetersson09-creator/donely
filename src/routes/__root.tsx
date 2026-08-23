@@ -156,6 +156,8 @@ function RootComponent() {
   // Validate / recover the local database once, before any screen reads it.
   useEffect(() => {
     initializeStorage();
+    // Development only: fills the app with demo activities on an empty install.
+    initDevSeed();
   }, []);
 
   return (
