@@ -232,7 +232,7 @@ function notificationText(language: string) {
 }
 
 /** Route the iOS shell should open when the user taps the reminder. */
-export const REMINDER_ROUTE = "/veckostatistik";
+export const REMINDER_ROUTE = "/summary/week";
 
 // ---------------------------------------------------------------------------
 // persistence
@@ -626,7 +626,7 @@ export function useReminder() {
 
 /** One repeating request per weekday (iOS DateComponents: Monday = 2 … Friday = 6). */
 export const DAILY_REMINDER_WEEKDAYS = [2, 3, 4, 5, 6];
-export const DAILY_REMINDER_ROUTE = "/dagsstatistik";
+export const DAILY_REMINDER_ROUTE = "/summary/day";
 const DAILY_ENABLED_KEY = "vr.reminder.daily.v1";
 
 function dailyId(weekday: number) {
