@@ -60,7 +60,7 @@ final class DonelyNotificationBridge: NSObject {
         "openAppSettings",
     ]
 
-    static let defaultRoute = "/veckostatistik"
+    static let defaultRoute = "/summary/week"
 
     private weak var webView: WKWebView?
     private let center = UNUserNotificationCenter.current()
