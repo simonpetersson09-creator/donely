@@ -254,6 +254,14 @@ const sv = {
   dailySummaryTotal_other: "Totalt: {{count}} aktiviteter",
   dailySummaryLink: "Din dag",
   weeklyActivityTitle: "Veckans aktivitet",
+  recordsTitle: "Rekord",
+  recordNewDay: "Nytt dagsrekord!",
+  recordNewWeek: "Nytt veckorekord!",
+  recordNewMonth: "Nytt månadsrekord!",
+  recordPrevious: "Tidigare rekord: {{count}}",
+  recordBestDay: "bästa dagen",
+  recordBestWeek: "bästa veckan",
+  recordBestMonth: "bästa månaden",
 };
 
 type Dict = typeof sv & Record<string, string>;
@@ -478,6 +486,14 @@ const en: Dict = {
   dailySummaryTotal_other: "Total: {{count}} activities",
   dailySummaryLink: "Your day",
   weeklyActivityTitle: "Week's activity",
+  recordsTitle: "Records",
+  recordNewDay: "New daily record!",
+  recordNewWeek: "New weekly record!",
+  recordNewMonth: "New monthly record!",
+  recordPrevious: "Previous record: {{count}}",
+  recordBestDay: "best day",
+  recordBestWeek: "best week",
+  recordBestMonth: "best month",
 };
 
 const de: Dict = {
@@ -703,6 +719,14 @@ const de: Dict = {
   dailySummaryTotal_other: "Gesamt: {{count}} Aktivitäten",
   dailySummaryLink: "Dein Tag",
   weeklyActivityTitle: "Wochenaktivität",
+  recordsTitle: "Rekorde",
+  recordNewDay: "Neuer Tagesrekord!",
+  recordNewWeek: "Neuer Wochenrekord!",
+  recordNewMonth: "Neuer Monatsrekord!",
+  recordPrevious: "Bisheriger Rekord: {{count}}",
+  recordBestDay: "bester Tag",
+  recordBestWeek: "beste Woche",
+  recordBestMonth: "bester Monat",
 };
 
 const fr: Dict = {
@@ -934,6 +958,14 @@ const fr: Dict = {
   dailySummaryTotal_many: "Total : {{count}} activités",
   dailySummaryLink: "Votre journée",
   weeklyActivityTitle: "Activité de la semaine",
+  recordsTitle: "Records",
+  recordNewDay: "Nouveau record du jour !",
+  recordNewWeek: "Nouveau record de la semaine !",
+  recordNewMonth: "Nouveau record du mois !",
+  recordPrevious: "Record précédent : {{count}}",
+  recordBestDay: "meilleur jour",
+  recordBestWeek: "meilleure semaine",
+  recordBestMonth: "meilleur mois",
 };
 
 const es: Dict = {
@@ -1164,6 +1196,14 @@ const es: Dict = {
   dailySummaryTotal_many: "Total: {{count}} actividades",
   dailySummaryLink: "Tu día",
   weeklyActivityTitle: "Actividad semanal",
+  recordsTitle: "Récords",
+  recordNewDay: "¡Nuevo récord diario!",
+  recordNewWeek: "¡Nuevo récord semanal!",
+  recordNewMonth: "¡Nuevo récord mensual!",
+  recordPrevious: "Récord anterior: {{count}}",
+  recordBestDay: "mejor día",
+  recordBestWeek: "mejor semana",
+  recordBestMonth: "mejor mes",
 };
 
 const it: Dict = {
@@ -1393,6 +1433,14 @@ const it: Dict = {
   dailySummaryTotal_many: "Totale: {{count}} attività",
   dailySummaryLink: "La tua giornata",
   weeklyActivityTitle: "Attività settimanale",
+  recordsTitle: "Record",
+  recordNewDay: "Nuovo record giornaliero!",
+  recordNewWeek: "Nuovo record settimanale!",
+  recordNewMonth: "Nuovo record mensile!",
+  recordPrevious: "Record precedente: {{count}}",
+  recordBestDay: "miglior giorno",
+  recordBestWeek: "miglior settimana",
+  recordBestMonth: "miglior mese",
 };
 
 const ptBR: Dict = {
@@ -1622,6 +1670,14 @@ const ptBR: Dict = {
   dailySummaryTotal_many: "Total: {{count}} atividades",
   dailySummaryLink: "Seu dia",
   weeklyActivityTitle: "Atividade semanal",
+  recordsTitle: "Recordes",
+  recordNewDay: "Novo recorde diário!",
+  recordNewWeek: "Novo recorde semanal!",
+  recordNewMonth: "Novo recorde mensal!",
+  recordPrevious: "Recorde anterior: {{count}}",
+  recordBestDay: "melhor dia",
+  recordBestWeek: "melhor semana",
+  recordBestMonth: "melhor mês",
 };
 
 const nl: Dict = {
@@ -1846,6 +1902,14 @@ const nl: Dict = {
   dailySummaryTotal_other: "Totaal: {{count}} activiteiten",
   dailySummaryLink: "Jouw dag",
   weeklyActivityTitle: "Wekelijkse activiteit",
+  recordsTitle: "Records",
+  recordNewDay: "Nieuw dagrecord!",
+  recordNewWeek: "Nieuw weekrecord!",
+  recordNewMonth: "Nieuw maandrecord!",
+  recordPrevious: "Vorig record: {{count}}",
+  recordBestDay: "beste dag",
+  recordBestWeek: "beste week",
+  recordBestMonth: "beste maand",
 };
 
 const pl: Dict = {
@@ -2078,6 +2142,14 @@ const pl: Dict = {
   dailySummaryTotal_other: "Łącznie: {{count}} aktywności",
   dailySummaryLink: "Twój dzień",
   weeklyActivityTitle: "Tygodniowa aktywność",
+  recordsTitle: "Rekordy",
+  recordNewDay: "Nowy rekord dnia!",
+  recordNewWeek: "Nowy rekord tygodnia!",
+  recordNewMonth: "Nowy rekord miesiąca!",
+  recordPrevious: "Poprzedni rekord: {{count}}",
+  recordBestDay: "najlepszy dzień",
+  recordBestWeek: "najlepszy tydzień",
+  recordBestMonth: "najlepszy miesiąc",
 };
 
 const da: Dict = {
@@ -2300,6 +2372,14 @@ const da: Dict = {
   dailySummaryTotal_other: "I alt: {{count}} aktiviteter",
   dailySummaryLink: "Din dag",
   weeklyActivityTitle: "Ugens aktivitet",
+  recordsTitle: "Rekorder",
+  recordNewDay: "Ny dagsrekord!",
+  recordNewWeek: "Ny ugerekord!",
+  recordNewMonth: "Ny månedsrekord!",
+  recordPrevious: "Tidligere rekord: {{count}}",
+  recordBestDay: "bedste dag",
+  recordBestWeek: "bedste uge",
+  recordBestMonth: "bedste måned",
 };
 
 const no: Dict = {
@@ -2522,6 +2602,14 @@ const no: Dict = {
   dailySummaryTotal_other: "Totalt: {{count}} aktiviteter",
   dailySummaryLink: "Dagen din",
   weeklyActivityTitle: "Ukentlig aktivitet",
+  recordsTitle: "Rekorder",
+  recordNewDay: "Ny dagsrekord!",
+  recordNewWeek: "Ny ukerekord!",
+  recordNewMonth: "Ny månedsrekord!",
+  recordPrevious: "Tidligere rekord: {{count}}",
+  recordBestDay: "beste dag",
+  recordBestWeek: "beste uke",
+  recordBestMonth: "beste måned",
 };
 
 const fi: Dict = {
@@ -2745,6 +2833,14 @@ const fi: Dict = {
   dailySummaryTotal_other: "Yhteensä: {{count}} aktiviteettia",
   dailySummaryLink: "Päiväsi",
   weeklyActivityTitle: "Viikon aktiviteetti",
+  recordsTitle: "Ennätykset",
+  recordNewDay: "Uusi päiväennätys!",
+  recordNewWeek: "Uusi viikkoennätys!",
+  recordNewMonth: "Uusi kuukausiennätys!",
+  recordPrevious: "Aiempi ennätys: {{count}}",
+  recordBestDay: "paras päivä",
+  recordBestWeek: "paras viikko",
+  recordBestMonth: "paras kuukausi",
 };
 
 const ja: Dict = {
@@ -2967,6 +3063,14 @@ const ja: Dict = {
   dailySummaryTotal_other: "合計：{{count}} 件のアクティビティ",
   dailySummaryLink: "今日",
   weeklyActivityTitle: "今週の活動",
+  recordsTitle: "記録",
+  recordNewDay: "1日の新記録！",
+  recordNewWeek: "今週の新記録！",
+  recordNewMonth: "今月の新記録！",
+  recordPrevious: "これまでの記録: {{count}}",
+  recordBestDay: "ベストな1日",
+  recordBestWeek: "ベストな週",
+  recordBestMonth: "ベストな月",
 };
 
 const resources = {
