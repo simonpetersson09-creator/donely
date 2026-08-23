@@ -1303,16 +1303,16 @@ const PERIOD_KEY = {
   month: "periodThisMonth",
 } as const;
 
-/** Översätter en achievement till kortets ikon, rubrik och rader. */
+/** Översätter en achievement till kortets variant, rubrik och rader. */
 export function achievementContent(
   achievement: Achievement,
   name: string,
   t: (key: string, options?: Record<string, unknown>) => string,
-): { icon: string; title: string; lines: string[]; emphatic: boolean } {
+): { variant: "record" | "milestone" | "nearRecord" | "nearMilestone"; title: string; lines: string[]; emphatic: boolean } {
   switch (achievement.kind) {
     case "record":
       return {
-        icon: "\u{1F3C6}",
+        variant: "record",
         title: t(RECORD_TITLE_KEY[achievement.type]),
         lines: [
           t("recordCurrentLine", {
@@ -1326,14 +1326,14 @@ export function achievementContent(
       };
     case "milestone":
       return {
-        icon: "\u{1F3AF}",
+        variant: "milestone",
         title: t("milestoneTitle"),
         lines: [t("milestoneLine", { count: achievement.target, name })],
         emphatic: true,
       };
     case "nearRecord":
       return {
-        icon: "\u{1F525}",
+        variant: "nearRecord",
         title: t("nearRecordTitle"),
         lines: [
           t("recordCurrentLine", {
@@ -1347,7 +1347,7 @@ export function achievementContent(
       };
     case "nearMilestone":
       return {
-        icon: "\u{1F3AF}",
+        variant: "nearMilestone",
         title: t("nearMilestoneTitle"),
         lines: [
           t("nearMilestoneHint", {
