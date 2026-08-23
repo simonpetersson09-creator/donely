@@ -6,6 +6,7 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
+import { WeeklyActivityChart } from "@/components/WeeklyActivityChart";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { activityPhrase } from "@/lib/category-inflection";
@@ -202,6 +203,7 @@ function Veckostatistik() {
           <div className="mt-3">
             <StatsSegmentedControl active="week" />
           </div>
+          <WeeklyActivityChart entries={entries} locale={locale} title={t("weeklyActivityTitle")} />
           <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("weeklySummaryEmpty")}</p>
         </>
       ) : (
@@ -213,6 +215,7 @@ function Veckostatistik() {
           <div className="mt-3">
             <StatsSegmentedControl active="week" />
           </div>
+          <WeeklyActivityChart entries={entries} locale={locale} title={t("weeklyActivityTitle")} />
         </SummaryBreakdown>
       )}
 
