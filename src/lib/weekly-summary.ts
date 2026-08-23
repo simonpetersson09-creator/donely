@@ -2,6 +2,7 @@ import i18n, { localeOf } from "@/lib/i18n";
 import { readStoredCategories, readStoredEntries, type Category, type Entry } from "@/lib/store";
 import { categoryLabel } from "@/lib/use-language";
 import { formatKm, formatMinutes, supportsMetrics } from "@/lib/activity-metrics";
+import { highlightsInSpan } from "@/lib/achievements";
 
 /**
  * Shared weekly summary used both for the Friday notification body and for the
@@ -145,10 +146,27 @@ export function weeklyNotificationContent(language = i18n.language || "sv") {
   const weekNo = isoWeek(summary.end);
   const totalText = fixed("weeklySummaryTotal", { count: summary.total }) as string;
   const subtitle = `${fixed("weeklyHeading")} ${weekNo} · ${totalText}`;
+  // Befintlig notis, men texten anpassas när veckan innehöll något extra.
+  const highlight = highlightsInSpan(
+    readStoredEntries(),
+    readStoredCategories(),
+    "week",
+    summary.start,
+    summary.end,
+  );
+  const note =
+    highlight.records.length > 0
+      ? { icon: "\u{1F3C6}", text: fixed("summaryRecordNote") as string }
+      : highlight.milestones.length > 0
+        ? { icon: "\u{1F3AF}", text: fixed("summaryMilestoneNote") as string }
+        : null;
+  const fullBody = note ? `${note.text}\n${body}` : body;
   return {
-    title: fixed("weeklySummaryTitle") as string,
+    title: note
+      ? `${fixed("weeklySummaryTitle")} ${note.icon}`
+      : (fixed("weeklySummaryTitle") as string),
     subtitle,
-    body,
-    bodyLines: body.split("\n"),
+    body: fullBody,
+    bodyLines: fullBody.split("\n"),
   };
 }
