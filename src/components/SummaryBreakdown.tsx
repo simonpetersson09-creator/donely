@@ -18,7 +18,15 @@ export type SummaryRow = {
  * Shared overview + per-area table used by the daily and weekly summaries,
  * mirroring the layout of the yearly statistics page.
  */
-export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
+export function SummaryBreakdown({
+  rows,
+  title,
+  subtitle,
+}: {
+  rows: SummaryRow[];
+  title?: ReactNode;
+  subtitle?: ReactNode;
+}) {
   const { t } = useLanguage();
   const { categories } = useCategories();
 
@@ -48,6 +56,15 @@ export function SummaryBreakdown({ rows }: { rows: SummaryRow[] }) {
           />
         </div>
       </div>
+
+      {title && (
+        <div className="mt-3 px-1 text-center">
+          <h1 className="text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
+            {title}
+          </h1>
+          {subtitle}
+        </div>
+      )}
 
       <SummarySection
         title={t("private")}
