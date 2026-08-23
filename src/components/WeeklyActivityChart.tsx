@@ -1,6 +1,4 @@
 import { useMemo } from "react";
-// eslint-disable-next-line no-console
-console.log("WeeklyActivityChart module loaded");
 import { weekStart } from "@/lib/weekly-summary";
 import type { Entry } from "@/lib/store";
 
