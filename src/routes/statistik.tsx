@@ -172,10 +172,6 @@ function Statistik() {
         </div>
       </div>
 
-      <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
-      </h1>
-
       {/* Överblick */}
       <div className="card-base mt-3 px-3 py-3">
         <div className="grid grid-cols-2 gap-2">
@@ -193,6 +189,10 @@ function Statistik() {
           />
         </div>
       </div>
+
+      <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
+        {isCurrentYear ? t("yearSoFar", { year }) : t("yearFinal", { year })}
+      </h1>
 
       {/* Snabblänkar */}
       <div className="mt-3 grid grid-cols-2 gap-2">
