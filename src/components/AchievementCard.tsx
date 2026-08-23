@@ -113,11 +113,10 @@ export function AchievementCard({
             <span
               aria-hidden
               className={cn(
-                "flex size-10 shrink-0 items-center justify-center rounded-full text-primary-foreground",
+                "flex size-10 shrink-0 items-center justify-center rounded-full",
                 emphatic
-                  ? "bg-gradient-to-br from-gold to-gold-deep shadow-gold"
-                  : "bg-gradient-to-br from-primary to-primary/80 shadow-button",
-                reduced ? "" : "scale-in",
+                  ? "bg-gradient-to-br from-gold to-gold-deep text-primary shadow-gold"
+                  : "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-button",
               )}
               style={
                 reduced
@@ -128,8 +127,9 @@ export function AchievementCard({
                     }
               }
             >
-              <Icon className="size-5" strokeWidth={2.5} />
+              <Icon className="size-[22px]" strokeWidth={2.75} />
             </span>
+
 
             {/* Content */}
             <div className="min-w-0 flex-1">
