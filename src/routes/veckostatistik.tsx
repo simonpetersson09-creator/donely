@@ -198,32 +198,51 @@ function Veckostatistik() {
         </BackButton>
       </div>
 
-      {/* Snabblänkar till dagsvyn och årsstatistiken */}
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <Link
-          to="/dagsstatistik"
-          className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-        >
-          <Calendar className="size-4" />
-          <span>{t("dailySummaryLink")}</span>
-        </Link>
-        <Link
-          to="/statistik"
-          className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
-        >
-          <BarChart3 className="size-4" />
-          <span>{currentYear}</span>
-        </Link>
-      </div>
-
       {summary.rows.length === 0 ? (
-        <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("weeklySummaryEmpty")}</p>
+        <>
+          {/* Snabblänkar till dagsvyn och årsstatistiken */}
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <Link
+              to="/dagsstatistik"
+              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+            >
+              <Calendar className="size-4" />
+              <span>{t("dailySummaryLink")}</span>
+            </Link>
+            <Link
+              to="/statistik"
+              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+            >
+              <BarChart3 className="size-4" />
+              <span>{currentYear}</span>
+            </Link>
+          </div>
+          <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("weeklySummaryEmpty")}</p>
+        </>
       ) : (
         <SummaryBreakdown
           rows={summary.rows}
           title={t("weeklySummaryTitle")}
           subtitle={<p className="mt-1 text-[13px] text-muted-foreground">{range}</p>}
-        />
+        >
+          {/* Snabblänkar till dagsvyn och årsstatistiken */}
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <Link
+              to="/dagsstatistik"
+              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+            >
+              <Calendar className="size-4" />
+              <span>{t("dailySummaryLink")}</span>
+            </Link>
+            <Link
+              to="/statistik"
+              className="flex items-center justify-center gap-1.5 rounded-2xl bg-primary px-3 py-2.5 text-[14px] font-semibold text-primary-foreground transition-colors active:bg-primary/90"
+            >
+              <BarChart3 className="size-4" />
+              <span>{currentYear}</span>
+            </Link>
+          </div>
+        </SummaryBreakdown>
       )}
 
       <button
