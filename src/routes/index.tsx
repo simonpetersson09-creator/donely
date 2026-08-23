@@ -79,6 +79,8 @@ function Index() {
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [feedback, setFeedback] = useState<{ achievement: Achievement; name: string } | null>(null);
+
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { t } = useLanguage();
