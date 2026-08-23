@@ -58,7 +58,8 @@ export function RecordsSection({
                 {categoryLabel(t, category)}
               </p>
               <p className="shrink-0 text-right text-[13px] text-muted-foreground">
-                <span className="text-[16px] font-bold tabular-nums text-primary">{row.value}</span>{" "}
+                <span className="text-[16px] font-bold tabular-nums text-primary">{row.value}</span>
+                {" · "}
                 {t(BEST_KEY[row.type])}
               </p>
             </div>
