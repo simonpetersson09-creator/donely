@@ -22,7 +22,9 @@ import {
   Palette,
 } from "lucide-react";
 import { CATEGORY_COLORS, categoryColorValue } from "@/lib/category-colors";
+import { toast } from "sonner";
 import { RegisteredToast } from "@/components/RegisteredToast";
+
 import { detectAchievement, type Achievement } from "@/lib/achievements";
 import { AchievementCard } from "@/components/AchievementCard";
 
