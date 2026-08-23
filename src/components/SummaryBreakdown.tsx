@@ -23,11 +23,13 @@ export function SummaryBreakdown({
   title,
   subtitle,
   children,
+  postSummary,
 }: {
   rows: SummaryRow[];
   title?: ReactNode;
   subtitle?: ReactNode;
   children?: ReactNode;
+  postSummary?: ReactNode;
 }) {
   const { t } = useLanguage();
   const { categories } = useCategories();
@@ -42,6 +44,16 @@ export function SummaryBreakdown({
 
   return (
     <>
+      {title && (
+        <div className="mt-3 px-1 text-center">
+          <h1 className="text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
+            {title}
+          </h1>
+          {subtitle}
+        </div>
+      )}
+      {children}
+
       <div className="card-base mt-3 px-2 py-2">
         <div className="grid grid-cols-2 gap-2">
           <AreaStat
@@ -59,15 +71,7 @@ export function SummaryBreakdown({
         </div>
       </div>
 
-      {title && (
-        <div className="mt-3 px-1 text-center">
-          <h1 className="text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
-            {title}
-          </h1>
-          {subtitle}
-        </div>
-      )}
-      {children}
+      {postSummary}
 
       <SummarySection
         title={t("private")}
