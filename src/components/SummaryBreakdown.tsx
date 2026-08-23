@@ -67,6 +67,7 @@ export function SummaryBreakdown({
           {subtitle}
         </div>
       )}
+      {children}
 
       <SummarySection
         title={t("private")}
