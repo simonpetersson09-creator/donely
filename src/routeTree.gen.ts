@@ -19,6 +19,7 @@ import { Route as StatistikRouteImport } from './routes/statistik'
 import { Route as VeckostatistikRouteImport } from './routes/veckostatistik'
 import { Route as KategoriIdRouteImport } from './routes/kategori.$id'
 import { Route as SummaryDayRouteImport } from './routes/summary.day'
+import { Route as SummaryWeekRouteImport } from './routes/summary.week'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -70,6 +71,11 @@ const SummaryDayRoute = SummaryDayRouteImport.update({
   path: '/summary/day',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SummaryWeekRoute = SummaryWeekRouteImport.update({
+  id: '/summary/week',
+  path: '/summary/week',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
+  '/summary/week': typeof SummaryWeekRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
+  '/summary/week': typeof SummaryWeekRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
+  '/summary/week': typeof SummaryWeekRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/veckostatistik'
     | '/kategori/$id'
     | '/summary/day'
+    | '/summary/week'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/veckostatistik'
     | '/kategori/$id'
     | '/summary/day'
+    | '/summary/week'
   id:
     | '__root__'
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/veckostatistik'
     | '/kategori/$id'
     | '/summary/day'
+    | '/summary/week'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -158,6 +170,7 @@ export interface RootRouteChildren {
   VeckostatistikRoute: typeof VeckostatistikRoute
   KategoriIdRoute: typeof KategoriIdRoute
   SummaryDayRoute: typeof SummaryDayRoute
+  SummaryWeekRoute: typeof SummaryWeekRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SummaryDayRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/summary/week': {
+      id: '/summary/week'
+      path: '/summary/week'
+      fullPath: '/summary/week'
+      preLoaderRoute: typeof SummaryWeekRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -246,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   VeckostatistikRoute: VeckostatistikRoute,
   KategoriIdRoute: KategoriIdRoute,
   SummaryDayRoute: SummaryDayRoute,
+  SummaryWeekRoute: SummaryWeekRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
