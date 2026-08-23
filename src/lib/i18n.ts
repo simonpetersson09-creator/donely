@@ -253,6 +253,7 @@ const sv = {
   dailySummaryTotal_one: "Totalt: {{count}} aktivitet",
   dailySummaryTotal_other: "Totalt: {{count}} aktiviteter",
   dailySummaryLink: "Din dag",
+  weeklyActivityTitle: "Veckans aktivitet",
 };
 
 type Dict = typeof sv & Record<string, string>;
@@ -476,6 +477,7 @@ const en: Dict = {
   dailySummaryTotal_one: "Total: {{count}} activity",
   dailySummaryTotal_other: "Total: {{count}} activities",
   dailySummaryLink: "Your day",
+  weeklyActivityTitle: "Week's activity",
 };
 
 const de: Dict = {
@@ -700,6 +702,7 @@ const de: Dict = {
   dailySummaryTotal_one: "Gesamt: {{count}} Aktivität",
   dailySummaryTotal_other: "Gesamt: {{count}} Aktivitäten",
   dailySummaryLink: "Dein Tag",
+  weeklyActivityTitle: "Wochenaktivität",
 };
 
 const fr: Dict = {
@@ -930,6 +933,7 @@ const fr: Dict = {
   dailySummaryTotal_other: "Total : {{count}} activités",
   dailySummaryTotal_many: "Total : {{count}} activités",
   dailySummaryLink: "Votre journée",
+  weeklyActivityTitle: "Activité de la semaine",
 };
 
 const es: Dict = {
@@ -1159,6 +1163,7 @@ const es: Dict = {
   dailySummaryTotal_other: "Total: {{count}} actividades",
   dailySummaryTotal_many: "Total: {{count}} actividades",
   dailySummaryLink: "Tu día",
+  weeklyActivityTitle: "Actividad semanal",
 };
 
 const it: Dict = {
@@ -1387,6 +1392,7 @@ const it: Dict = {
   dailySummaryTotal_other: "Totale: {{count}} attività",
   dailySummaryTotal_many: "Totale: {{count}} attività",
   dailySummaryLink: "La tua giornata",
+  weeklyActivityTitle: "Attività settimanale",
 };
 
 const ptBR: Dict = {
@@ -1615,6 +1621,7 @@ const ptBR: Dict = {
   dailySummaryTotal_other: "Total: {{count}} atividades",
   dailySummaryTotal_many: "Total: {{count}} atividades",
   dailySummaryLink: "Seu dia",
+  weeklyActivityTitle: "Atividade semanal",
 };
 
 const nl: Dict = {
@@ -1838,6 +1845,7 @@ const nl: Dict = {
   dailySummaryTotal_one: "Totaal: {{count}} activiteit",
   dailySummaryTotal_other: "Totaal: {{count}} activiteiten",
   dailySummaryLink: "Jouw dag",
+  weeklyActivityTitle: "Wekelijkse activiteit",
 };
 
 const pl: Dict = {
@@ -2069,6 +2077,7 @@ const pl: Dict = {
   dailySummaryTotal_many: "Łącznie: {{count}} aktywności",
   dailySummaryTotal_other: "Łącznie: {{count}} aktywności",
   dailySummaryLink: "Twój dzień",
+  weeklyActivityTitle: "Tygodniowa aktywność",
 };
 
 const da: Dict = {
@@ -2290,6 +2299,7 @@ const da: Dict = {
   dailySummaryTotal_one: "I alt: {{count}} aktivitet",
   dailySummaryTotal_other: "I alt: {{count}} aktiviteter",
   dailySummaryLink: "Din dag",
+  weeklyActivityTitle: "Ugens aktivitet",
 };
 
 const no: Dict = {
@@ -2511,6 +2521,7 @@ const no: Dict = {
   dailySummaryTotal_one: "Totalt: {{count}} aktivitet",
   dailySummaryTotal_other: "Totalt: {{count}} aktiviteter",
   dailySummaryLink: "Dagen din",
+  weeklyActivityTitle: "Ukentlig aktivitet",
 };
 
 const fi: Dict = {
@@ -2733,6 +2744,7 @@ const fi: Dict = {
   dailySummaryTotal_one: "Yhteensä: {{count}} aktiviteetti",
   dailySummaryTotal_other: "Yhteensä: {{count}} aktiviteettia",
   dailySummaryLink: "Päiväsi",
+  weeklyActivityTitle: "Viikon aktiviteetti",
 };
 
 const ja: Dict = {
@@ -2954,6 +2966,7 @@ const ja: Dict = {
   dailySummaryTotal_one: "合計：{{count}} 件のアクティビティ",
   dailySummaryTotal_other: "合計：{{count}} 件のアクティビティ",
   dailySummaryLink: "今日",
+  weeklyActivityTitle: "今週の活動",
 };
 
 const resources = {
