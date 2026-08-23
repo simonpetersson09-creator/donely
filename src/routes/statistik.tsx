@@ -10,13 +10,12 @@ import {
   MapPin,
   Timer,
   Plus,
-  Calendar,
-  CalendarDays,
 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { AnimatedProgress } from "@/components/AnimatedProgress";
+import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
 import {
   goalKey,
   deleteCategoryData,
