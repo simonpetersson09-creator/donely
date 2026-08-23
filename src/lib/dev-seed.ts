@@ -144,12 +144,20 @@ export function clearDevActivities() {
   emit();
 }
 
+/** Dev build, or the Lovable preview sandbox (never the published app). */
+function seedingAllowed(): boolean {
+  if (typeof window === "undefined") return false;
+  if (import.meta.env.DEV) return true;
+  const host = window.location.hostname;
+  return host.includes("id-preview--") || host.endsWith("-dev.lovable.app");
+}
+
 /**
- * Called once at app start. Only does anything in a dev build, and only when
- * there is no activity data yet.
+ * Called once at app start. Only does anything in dev/preview, and only when
+ * there is no activity data yet. Force with `?seed=1`, wipe with `?seed=0`.
  */
 export function initDevSeed() {
-  if (!import.meta.env.DEV || typeof window === "undefined") return;
+  if (!seedingAllowed()) return;
 
   const w = window as unknown as { donely?: Record<string, unknown> };
   w.donely = {
@@ -157,6 +165,18 @@ export function initDevSeed() {
     seed: () => seedDevActivities({ force: true }),
     clear: () => clearDevActivities(),
   };
+
+  const param = new URLSearchParams(window.location.search).get("seed");
+  if (param === "1") {
+    seedDevActivities({ force: true });
+    console.info("[donely/dev] demo activities re-seeded");
+    return;
+  }
+  if (param === "0") {
+    clearDevActivities();
+    console.info("[donely/dev] demo activities cleared");
+    return;
+  }
 
   const already = (() => {
     try {
@@ -171,3 +191,4 @@ export function initDevSeed() {
     console.info("[donely/dev] demo activities seeded — window.donely.clear() to remove them");
   }
 }
+
