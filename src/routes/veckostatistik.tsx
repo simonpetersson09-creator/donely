@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
