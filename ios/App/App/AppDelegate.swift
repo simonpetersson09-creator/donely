@@ -99,7 +99,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let route = response.notification.request.content.userInfo["route"] as? String
-        AppDelegate.pendingNotificationRoute = route ?? DonelyNotificationBridge.defaultRoute
+        AppDelegate.pendingNotificationRoute = DonelyNotificationBridge.route(
+            route, deliveredAt: response.notification.date)
         completionHandler()
     }
 }

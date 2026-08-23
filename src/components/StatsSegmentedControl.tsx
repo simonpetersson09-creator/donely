@@ -31,7 +31,14 @@ const segments: {
   },
 ];
 
-export function StatsSegmentedControl({ active }: { active: StatsView }) {
+export function StatsSegmentedControl({
+  active,
+  date,
+}: {
+  active: StatsView;
+  /** Keeps a notification-pinned date when switching between day and week. */
+  date?: string;
+}) {
   const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
@@ -47,6 +54,7 @@ export function StatsSegmentedControl({ active }: { active: StatsView }) {
           <Link
             key={segment.view}
             to={segment.to}
+            search={date && segment.view !== "year" ? { date } : undefined}
             role="tab"
             aria-selected={isActive}
             className={cn(

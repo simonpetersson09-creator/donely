@@ -6,8 +6,11 @@ import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { buildDailySummary } from "@/lib/daily-summary";
+import { RecordsSection } from "@/components/RecordsSection";
+import { summaryDate, validateSummarySearch } from "@/lib/summary-date";
 
 export const Route = createFileRoute("/dagsstatistik")({
+  validateSearch: validateSummarySearch,
   head: () => ({
     meta: [
       { title: "Din dag – Donely" },
@@ -30,13 +33,17 @@ export const Route = createFileRoute("/dagsstatistik")({
 
 function Dagsstatistik() {
   const { t } = useLanguage();
+  // A notification tap carries the date it fired, so a late tap still shows
+  // that day instead of today.
+  const search = Route.useSearch();
+  const day = useMemo(() => summaryDate(search.date), [search.date]);
   const locale = useLocale();
   const { categories } = useCategories();
   const { entries } = useEntries();
 
   const summary = useMemo(
-    () => buildDailySummary(entries, categories, t as (key: string) => string),
-    [entries, categories, t],
+    () => buildDailySummary(entries, categories, t as (key: string) => string, day),
+    [entries, categories, t, day],
   );
 
   const dateLabel = useMemo(() => {
@@ -68,7 +75,7 @@ function Dagsstatistik() {
             <p className="mt-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
           </div>
           <div className="mt-3">
-            <StatsSegmentedControl active="day" />
+            <StatsSegmentedControl active="day" date={search.date} />
           </div>
           <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("dailySummaryEmpty")}</p>
         </>
@@ -77,14 +84,21 @@ function Dagsstatistik() {
           rows={summary.rows}
           title={t("dailySummaryTitle")}
           subtitle={
-            <p className="mt-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
+            <>
+              <p className="mt-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
+              <p className="mt-0.5 text-[15px] font-semibold text-card-foreground">
+                {t("dailySummaryTotal", { count: summary.total })}
+              </p>
+            </>
           }
         >
           <div className="mt-3">
-            <StatsSegmentedControl active="day" />
+            <StatsSegmentedControl active="day" date={search.date} />
           </div>
         </SummaryBreakdown>
       )}
+
+      <RecordsSection period={{ type: "day", date: summary.date }} />
     </main>
   );
 }

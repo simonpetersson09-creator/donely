@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Trophy } from "lucide-react";
 import { CategoryDot } from "@/components/CategoryDot";
-import { recordHighlights, type RecordType } from "@/lib/records";
+import { recordHighlights, recordsInPeriod, type RecordType } from "@/lib/records";
 import { useCategories, useEntries } from "@/lib/store";
 import { categoryLabel, useLanguage } from "@/lib/use-language";
 
@@ -15,14 +15,26 @@ const BEST_KEY: Record<RecordType, string> = {
  * Compact "Records" list: the single best period per category, largest first.
  * Rendered only when the user has enough history for a record to be relevant.
  */
-export function RecordsSection({ limit = 5 }: { limit?: number }) {
+export function RecordsSection({
+  limit = 5,
+  period,
+}: {
+  limit?: number;
+  /** When set, only records actually set during that period are listed. */
+  period?: { type: RecordType; date: Date };
+}) {
   const { t } = useLanguage();
   const { categories } = useCategories();
   const { entries } = useEntries();
 
+  const periodType = period?.type ?? null;
+  const periodTime = period ? period.date.getTime() : null;
   const rows = useMemo(
-    () => recordHighlights(entries, categories, limit),
-    [entries, categories, limit],
+    () =>
+      periodType && periodTime !== null
+        ? recordsInPeriod(entries, categories, periodType, new Date(periodTime), limit)
+        : recordHighlights(entries, categories, limit),
+    [entries, categories, limit, periodType, periodTime],
   );
 
   if (rows.length === 0) return null;

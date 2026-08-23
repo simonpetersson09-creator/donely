@@ -252,3 +252,23 @@ export function clearRecordLedger() {
     /* ignore */
   }
 }
+
+/**
+ * Records that were actually set during one specific period (the day / week /
+ * month containing `date`) — used by the summary screens opened from a
+ * notification, so a late tap still shows the records of *that* period.
+ */
+export function recordsInPeriod(
+  entries: Entry[],
+  categories: Category[],
+  type: RecordType,
+  date: Date,
+  limit = 5,
+): PersonalRecord[] {
+  const key = periodKeyOf(type, date);
+  return categories
+    .map((category) => bestRecord(entries, category.id, type))
+    .filter((record): record is PersonalRecord => record !== null && record.period === key)
+    .sort((a, b) => b.value - a.value)
+    .slice(0, limit);
+}

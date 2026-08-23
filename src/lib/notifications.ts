@@ -232,7 +232,7 @@ function notificationText(language: string) {
 }
 
 /** Route the iOS shell should open when the user taps the reminder. */
-export const REMINDER_ROUTE = "/veckostatistik";
+export const REMINDER_ROUTE = "/summary/week";
 
 // ---------------------------------------------------------------------------
 // persistence
@@ -561,15 +561,17 @@ function installBridge() {
     }, 400);
   });
 
-  // Swift calls this when the user taps the reminder, so Donely opens straight
-  // on the weekly summary the notification showed.
+  // Swift calls this when the user taps a reminder, so Donely opens straight
+  // on the summary that notification was about — including its `?date=…`, so a
+  // late tap still shows that day / week and not today's numbers.
   w.__donelyOpenRoute = (value: unknown) => {
     const path =
       typeof value === "string"
         ? value
         : (parsePayload<{ route?: string }>(value)?.route ?? REMINDER_ROUTE);
     if (!path.startsWith("/")) return;
-    if (window.location.pathname !== path) window.location.assign(path);
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (current !== path) window.location.assign(path);
   };
 
   const onForeground = () => {
@@ -623,7 +625,7 @@ export function useReminder() {
 
 /** One repeating request per weekday (iOS DateComponents: Monday = 2 … Friday = 6). */
 export const DAILY_REMINDER_WEEKDAYS = [2, 3, 4, 5, 6];
-export const DAILY_REMINDER_ROUTE = "/dagsstatistik";
+export const DAILY_REMINDER_ROUTE = "/summary/day";
 const DAILY_ENABLED_KEY = "vr.reminder.daily.v1";
 
 function dailyId(weekday: number) {

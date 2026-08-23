@@ -60,7 +60,7 @@ final class DonelyNotificationBridge: NSObject {
         "openAppSettings",
     ]
 
-    static let defaultRoute = "/veckostatistik"
+    static let defaultRoute = "/summary/week"
 
     private weak var webView: WKWebView?
     private let center = UNUserNotificationCenter.current()
@@ -193,6 +193,19 @@ final class DonelyNotificationBridge: NSObject {
         evaluate("window.__donelyNotificationError && window.__donelyNotificationError(\(json(message)))")
     }
 
+    /// Appends the notification's own delivery date (`?date=YYYY-MM-DD`, local
+    /// calendar) so a tap hours or days later still opens that day/week.
+    static func route(_ route: String?, deliveredAt date: Date) -> String {
+        let base = route ?? DonelyNotificationBridge.defaultRoute
+        guard !base.contains("?") else { return base }
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar.current
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd"
+        return "\(base)?date=\(formatter.string(from: date))"
+    }
+
     /// Called when the user taps the notification.
     func openRoute(_ route: String) {
         guard webAppReady else {
@@ -268,7 +281,7 @@ extension DonelyNotificationBridge: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let route = response.notification.request.content.userInfo["route"] as? String
-        openRoute(route ?? DonelyNotificationBridge.defaultRoute)
+        openRoute(DonelyNotificationBridge.route(route, deliveredAt: response.notification.date))
         completionHandler()
     }
 }
