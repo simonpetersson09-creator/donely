@@ -263,6 +263,18 @@ const sv = {
   recordBestDay: "bästa dagen",
   recordBestWeek: "bästa veckan",
   recordBestMonth: "bästa månaden",
+  periodThisDay: "idag",
+  periodThisWeek: "den här veckan",
+  periodThisMonth: "den här månaden",
+  nearRecordTitle: "Nära rekord!",
+  nearRecordHint: "Bara {{count}} kvar för att slå ditt rekord på {{record}}.",
+  milestoneTitle: "Milstolpe!",
+  milestoneLine: "Du har registrerat {{count}} {{name}} totalt.",
+  nearMilestoneTitle: "Nästa milstolpe",
+  nearMilestoneHint: "Bara {{count}} kvar till {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Du slog ett personligt rekord.",
+  summaryMilestoneNote: "Du nådde en milstolpe.",
 };
 
 type Dict = typeof sv & Record<string, string>;
@@ -496,6 +508,18 @@ const en: Dict = {
   recordBestDay: "best day",
   recordBestWeek: "best week",
   recordBestMonth: "best month",
+  periodThisDay: "today",
+  periodThisWeek: "this week",
+  periodThisMonth: "this month",
+  nearRecordTitle: "Close to a record!",
+  nearRecordHint: "Only {{count}} left to beat your record of {{record}}.",
+  milestoneTitle: "Milestone!",
+  milestoneLine: "You have logged {{count}} {{name}} in total.",
+  nearMilestoneTitle: "Next milestone",
+  nearMilestoneHint: "Only {{count}} left to reach {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "You set a personal record.",
+  summaryMilestoneNote: "You reached a milestone.",
 };
 
 const de: Dict = {
@@ -730,6 +754,18 @@ const de: Dict = {
   recordBestDay: "bester Tag",
   recordBestWeek: "beste Woche",
   recordBestMonth: "bester Monat",
+  periodThisDay: "heute",
+  periodThisWeek: "diese Woche",
+  periodThisMonth: "diesen Monat",
+  nearRecordTitle: "Nah am Rekord!",
+  nearRecordHint: "Nur noch {{count}} bis zu deinem Rekord von {{record}}.",
+  milestoneTitle: "Meilenstein!",
+  milestoneLine: "Du hast insgesamt {{count}} {{name}} erfasst.",
+  nearMilestoneTitle: "Nächster Meilenstein",
+  nearMilestoneHint: "Nur noch {{count}} bis {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Du hast einen persönlichen Rekord aufgestellt.",
+  summaryMilestoneNote: "Du hast einen Meilenstein erreicht.",
 };
 
 const fr: Dict = {
@@ -970,6 +1006,18 @@ const fr: Dict = {
   recordBestDay: "meilleur jour",
   recordBestWeek: "meilleure semaine",
   recordBestMonth: "meilleur mois",
+  periodThisDay: "aujourd’hui",
+  periodThisWeek: "cette semaine",
+  periodThisMonth: "ce mois-ci",
+  nearRecordTitle: "Proche du record !",
+  nearRecordHint: "Plus que {{count}} pour battre ton record de {{record}}.",
+  milestoneTitle: "Étape franchie !",
+  milestoneLine: "Tu as enregistré {{count}} {{name}} au total.",
+  nearMilestoneTitle: "Prochaine étape",
+  nearMilestoneHint: "Plus que {{count}} pour atteindre {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Tu as battu un record personnel.",
+  summaryMilestoneNote: "Tu as atteint une étape importante.",
 };
 
 const es: Dict = {
@@ -1209,6 +1257,18 @@ const es: Dict = {
   recordBestDay: "mejor día",
   recordBestWeek: "mejor semana",
   recordBestMonth: "mejor mes",
+  periodThisDay: "hoy",
+  periodThisWeek: "esta semana",
+  periodThisMonth: "este mes",
+  nearRecordTitle: "¡Cerca del récord!",
+  nearRecordHint: "Solo faltan {{count}} para superar tu récord de {{record}}.",
+  milestoneTitle: "¡Hito!",
+  milestoneLine: "Has registrado {{count}} {{name}} en total.",
+  nearMilestoneTitle: "Próximo hito",
+  nearMilestoneHint: "Solo faltan {{count}} para llegar a {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Has batido un récord personal.",
+  summaryMilestoneNote: "Has alcanzado un hito.",
 };
 
 const it: Dict = {
@@ -1447,6 +1507,18 @@ const it: Dict = {
   recordBestDay: "miglior giorno",
   recordBestWeek: "miglior settimana",
   recordBestMonth: "miglior mese",
+  periodThisDay: "oggi",
+  periodThisWeek: "questa settimana",
+  periodThisMonth: "questo mese",
+  nearRecordTitle: "Vicino al record!",
+  nearRecordHint: "Mancano solo {{count}} per battere il tuo record di {{record}}.",
+  milestoneTitle: "Traguardo!",
+  milestoneLine: "Hai registrato {{count}} {{name}} in totale.",
+  nearMilestoneTitle: "Prossimo traguardo",
+  nearMilestoneHint: "Mancano solo {{count}} per arrivare a {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Hai stabilito un record personale.",
+  summaryMilestoneNote: "Hai raggiunto un traguardo.",
 };
 
 const ptBR: Dict = {
@@ -1685,6 +1757,18 @@ const ptBR: Dict = {
   recordBestDay: "melhor dia",
   recordBestWeek: "melhor semana",
   recordBestMonth: "melhor mês",
+  periodThisDay: "hoje",
+  periodThisWeek: "esta semana",
+  periodThisMonth: "este mês",
+  nearRecordTitle: "Perto do recorde!",
+  nearRecordHint: "Faltam apenas {{count}} para bater o teu recorde de {{record}}.",
+  milestoneTitle: "Marco alcançado!",
+  milestoneLine: "Registaste {{count}} {{name}} no total.",
+  nearMilestoneTitle: "Próximo marco",
+  nearMilestoneHint: "Faltam apenas {{count}} para chegar a {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Bateste um recorde pessoal.",
+  summaryMilestoneNote: "Alcançaste um marco.",
 };
 
 const nl: Dict = {
@@ -1918,6 +2002,18 @@ const nl: Dict = {
   recordBestDay: "beste dag",
   recordBestWeek: "beste week",
   recordBestMonth: "beste maand",
+  periodThisDay: "vandaag",
+  periodThisWeek: "deze week",
+  periodThisMonth: "deze maand",
+  nearRecordTitle: "Bijna een record!",
+  nearRecordHint: "Nog {{count}} te gaan om je record van {{record}} te verbreken.",
+  milestoneTitle: "Mijlpaal!",
+  milestoneLine: "Je hebt in totaal {{count}} {{name}} geregistreerd.",
+  nearMilestoneTitle: "Volgende mijlpaal",
+  nearMilestoneHint: "Nog {{count}} te gaan tot {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Je hebt een persoonlijk record gezet.",
+  summaryMilestoneNote: "Je hebt een mijlpaal bereikt.",
 };
 
 const pl: Dict = {
@@ -2159,6 +2255,18 @@ const pl: Dict = {
   recordBestDay: "najlepszy dzień",
   recordBestWeek: "najlepszy tydzień",
   recordBestMonth: "najlepszy miesiąc",
+  periodThisDay: "dzisiaj",
+  periodThisWeek: "w tym tygodniu",
+  periodThisMonth: "w tym miesiącu",
+  nearRecordTitle: "Blisko rekordu!",
+  nearRecordHint: "Jeszcze {{count}}, aby pobić rekord {{record}}.",
+  milestoneTitle: "Kamień milowy!",
+  milestoneLine: "Zarejestrowano łącznie {{count}} {{name}}.",
+  nearMilestoneTitle: "Następny kamień milowy",
+  nearMilestoneHint: "Jeszcze {{count}} do {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Pobito rekord osobisty.",
+  summaryMilestoneNote: "Osiągnięto kamień milowy.",
 };
 
 const da: Dict = {
@@ -2390,6 +2498,18 @@ const da: Dict = {
   recordBestDay: "bedste dag",
   recordBestWeek: "bedste uge",
   recordBestMonth: "bedste måned",
+  periodThisDay: "i dag",
+  periodThisWeek: "denne uge",
+  periodThisMonth: "denne måned",
+  nearRecordTitle: "Tæt på rekord!",
+  nearRecordHint: "Kun {{count}} tilbage for at slå din rekord på {{record}}.",
+  milestoneTitle: "Milepæl!",
+  milestoneLine: "Du har registreret {{count}} {{name}} i alt.",
+  nearMilestoneTitle: "Næste milepæl",
+  nearMilestoneHint: "Kun {{count}} tilbage til {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Du satte en personlig rekord.",
+  summaryMilestoneNote: "Du nåede en milepæl.",
 };
 
 const no: Dict = {
@@ -2621,6 +2741,18 @@ const no: Dict = {
   recordBestDay: "beste dag",
   recordBestWeek: "beste uke",
   recordBestMonth: "beste måned",
+  periodThisDay: "i dag",
+  periodThisWeek: "denne uken",
+  periodThisMonth: "denne måneden",
+  nearRecordTitle: "Nær rekord!",
+  nearRecordHint: "Bare {{count}} igjen for å slå rekorden din på {{record}}.",
+  milestoneTitle: "Milepæl!",
+  milestoneLine: "Du har registrert {{count}} {{name}} totalt.",
+  nearMilestoneTitle: "Neste milepæl",
+  nearMilestoneHint: "Bare {{count}} igjen til {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Du satte en personlig rekord.",
+  summaryMilestoneNote: "Du nådde en milepæl.",
 };
 
 const fi: Dict = {
@@ -2853,6 +2985,18 @@ const fi: Dict = {
   recordBestDay: "paras päivä",
   recordBestWeek: "paras viikko",
   recordBestMonth: "paras kuukausi",
+  periodThisDay: "tänään",
+  periodThisWeek: "tällä viikolla",
+  periodThisMonth: "tässä kuussa",
+  nearRecordTitle: "Lähellä ennätystä!",
+  nearRecordHint: "Enää {{count}} ennätykseesi {{record}}.",
+  milestoneTitle: "Virstanpylväs!",
+  milestoneLine: "Olet kirjannut yhteensä {{count}} {{name}}.",
+  nearMilestoneTitle: "Seuraava virstanpylväs",
+  nearMilestoneHint: "Enää {{count}} tavoitteeseen {{target}} {{name}}.",
+  recordCurrentLine: "{{count}} {{name}} {{period}}",
+  summaryRecordNote: "Teit henkilökohtaisen ennätyksen.",
+  summaryMilestoneNote: "Saavutit virstanpylvään.",
 };
 
 const ja: Dict = {
@@ -3084,6 +3228,18 @@ const ja: Dict = {
   recordBestDay: "ベストな1日",
   recordBestWeek: "ベストな週",
   recordBestMonth: "ベストな月",
+  periodThisDay: "今日",
+  periodThisWeek: "今週",
+  periodThisMonth: "今月",
+  nearRecordTitle: "記録まであと少し！",
+  nearRecordHint: "記録 {{record}} まであと {{count}}。",
+  milestoneTitle: "マイルストーン達成！",
+  milestoneLine: "{{name}} を合計 {{count}} 件記録しました。",
+  nearMilestoneTitle: "次のマイルストーン",
+  nearMilestoneHint: "{{target}} {{name}} まであと {{count}}。",
+  recordCurrentLine: "{{count}} {{name}}（{{period}}）",
+  summaryRecordNote: "自己記録を更新しました。",
+  summaryMilestoneNote: "マイルストーンを達成しました。",
 };
 
 const resources = {
