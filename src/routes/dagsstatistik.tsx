@@ -42,8 +42,8 @@ function Dagsstatistik() {
   const { entries } = useEntries();
 
   const summary = useMemo(
-    () => buildDailySummary(entries, categories, t as (key: string) => string),
-    [entries, categories, t],
+    () => buildDailySummary(entries, categories, t as (key: string) => string, day),
+    [entries, categories, t, day],
   );
 
   const dateLabel = useMemo(() => {
