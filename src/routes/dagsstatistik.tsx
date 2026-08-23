@@ -58,17 +58,16 @@ function Dagsstatistik() {
         </BackButton>
       </div>
 
-      <h1 className="mt-3 px-1 text-center text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
-        {t("dailySummaryTitle")}
-      </h1>
-      <p className="mt-1 px-1 text-center text-[13px] capitalize text-muted-foreground">
-        {dateLabel}
-      </p>
-
       {summary.rows.length === 0 ? (
         <p className="mt-8 px-1 text-[15px] text-muted-foreground">{t("dailySummaryEmpty")}</p>
       ) : (
-        <SummaryBreakdown rows={summary.rows} />
+        <SummaryBreakdown
+          rows={summary.rows}
+          title={t("dailySummaryTitle")}
+          subtitle={
+            <p className="mt-1 text-[13px] capitalize text-muted-foreground">{dateLabel}</p>
+          }
+        />
       )}
     </main>
   );
