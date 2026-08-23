@@ -22,10 +22,12 @@ export function SummaryBreakdown({
   rows,
   title,
   subtitle,
+  children,
 }: {
   rows: SummaryRow[];
   title?: ReactNode;
   subtitle?: ReactNode;
+  children?: ReactNode;
 }) {
   const { t } = useLanguage();
   const { categories } = useCategories();
