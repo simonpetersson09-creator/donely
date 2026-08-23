@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import { clearRecordLedger } from "@/lib/records";
+import { clearAchievementLedger } from "@/lib/achievements";
+
 import type { z } from "zod";
 import {
   DEFAULT_CATEGORIES,
