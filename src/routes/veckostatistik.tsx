@@ -2,7 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
@@ -243,12 +242,7 @@ function Veckostatistik() {
                 {t("weeklySummaryTotal", { count: summary.total })}
               </p>
               {change && (
-                <p
-                  className={cn(
-                    "mt-0.5 text-[13px] font-medium",
-                    change.up ? "text-gold" : "text-muted-foreground",
-                  )}
-                >
+                <p className="mt-0.5 text-[13px] font-medium text-card-foreground">
                   {change.up ? "↑" : "↓"} {Math.abs(change.percent)} % {t("weeklyVsPrevious")}
                 </p>
               )}
