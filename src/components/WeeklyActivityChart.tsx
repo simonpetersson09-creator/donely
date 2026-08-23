@@ -39,6 +39,8 @@ export function WeeklyActivityChart({
         const at = new Date(entry.createdAt).getTime();
         return at >= dayStart.getTime() && at < dayEnd.getTime() ? sum + entry.amount : sum;
       }, 0);
+      // eslint-disable-next-line no-console
+      console.log({ i, dayStart: dayStart.toISOString(), dayEnd: dayEnd.toISOString(), count, entries: entries.map((e) => ({ at: new Date(e.createdAt).toISOString(), amount: e.amount })) });
       daysData.push({
         label: dayFormatter.format(dayStart),
         count,
