@@ -3013,7 +3013,9 @@ export function matchLanguage(raw: string): LanguageCode | null {
 export function deviceLanguage(): LanguageCode {
   const navLangs =
     typeof navigator !== "undefined"
-      ? (navigator.languages?.length ? navigator.languages : [navigator.language])
+      ? navigator.languages?.length
+        ? navigator.languages
+        : [navigator.language]
       : [];
   for (const raw of navLangs) {
     const hit = raw && matchLanguage(raw);
