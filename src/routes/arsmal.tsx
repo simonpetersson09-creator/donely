@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Plus, Trash2, X } from "lucide-react";
+import { Check, Plus, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
@@ -162,7 +162,10 @@ function GoalRow({
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
           className="min-w-0 flex-1 bg-transparent text-[15px] font-medium text-card-foreground outline-none placeholder:text-muted-foreground"
-          onBlur={(e) => onUpdateText(e.target.value)}
+          onBlur={(e) => {
+            onUpdateText(e.target.value);
+            onFinishEdit();
+          }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               onUpdateText(e.currentTarget.value);
@@ -176,11 +179,11 @@ function GoalRow({
         />
         <button
           type="button"
-          onClick={() => onRemove()}
-          className="flex size-8 shrink-0 items-center justify-center rounded-full text-destructive transition-colors active:bg-destructive/10"
-          aria-label={t("remove")}
+          onClick={onFinishEdit}
+          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
+          aria-label={t("doneEditing")}
         >
-          <Trash2 className="size-4" />
+          <Check className="size-4" strokeWidth={3} />
         </button>
       </div>
     );
