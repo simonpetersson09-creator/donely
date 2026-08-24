@@ -73,11 +73,11 @@ function Arsmal() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
-      {/* Goals card */}
-      <div className="card-base mt-1 overflow-hidden p-1.5">
+      {/* Goals list — blends with app background, blue accents */}
+      <div className="mt-1 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
         {goals.length === 0 ? (
           <div className="px-3 py-5 text-center">
-            <p className="text-sm font-medium text-card-foreground">{t("emptyGoals")}</p>
+            <p className="text-sm font-medium text-foreground">{t("emptyGoals")}</p>
           </div>
         ) : (
           goals.map((goal, idx) => (
@@ -101,7 +101,7 @@ function Arsmal() {
           onClick={handleAdd}
           className="flex w-full items-center gap-2 rounded-b-2xl px-2.5 py-2 text-primary transition-colors active:bg-secondary"
         >
-          <div className="flex size-5 items-center justify-center">
+          <div className="flex size-5 items-center justify-center rounded-full bg-primary/10 text-primary">
             <Plus className="size-4" strokeWidth={2.5} />
           </div>
           <span className="text-sm font-bold tracking-tight">{t("addGoal")}</span>
@@ -161,7 +161,7 @@ function GoalRow({
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-sm font-medium text-card-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             onUpdateText(e.target.value);
             onFinishEdit();
@@ -218,7 +218,7 @@ function GoalRow({
           "min-w-0 flex-1 truncate text-left text-sm font-medium transition-colors",
           goal.completed
             ? "text-muted-foreground/80 line-through"
-            : "text-card-foreground"
+            : "text-foreground"
         )}
       >
         {goal.text || <span className="italic text-muted-foreground">{t("yearlyGoalPlaceholder")}</span>}
