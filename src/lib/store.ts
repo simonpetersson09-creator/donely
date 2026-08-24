@@ -449,6 +449,7 @@ export function useYearlyGoals() {
 
   const commit = useCallback(
     (next: YearlyGoal[]) => {
+      console.log('[dbg] yg commit', JSON.stringify(next), new Error().stack);
       apply(next);
       writeKey(YEARLY_GOALS_KEY, next, yearlyGoalsSchema);
       emitDataChanged();
