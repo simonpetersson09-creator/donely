@@ -388,7 +388,7 @@ const en: Dict = {
   remove: "Remove",
   doneEditing: "Done",
   archive: "Completed goals",
-  archiveEmpty: "No completed goals yet."
+  archiveEmpty: "No completed goals yet.",
   today: "Today {{time}}",
   yesterday: "Yesterday {{time}}",
   daysAgo: "{{count}} days ago",
@@ -649,7 +649,7 @@ const de: Dict = {
   remove: "Entfernen",
   doneEditing: "Fertig",
   archive: "Erledigte Ziele",
-  archiveEmpty: "Noch keine erledigten Ziele."
+  archiveEmpty: "Noch keine erledigten Ziele.",
   today: "Heute {{time}}",
   yesterday: "Gestern {{time}}",
   daysAgo: "Vor {{count}} Tagen",
@@ -914,7 +914,7 @@ const fr: Dict = {
   remove: "Supprimer",
   doneEditing: "Terminé",
   archive: "Objectifs terminés",
-  archiveEmpty: "Aucun objectif terminé."
+  archiveEmpty: "Aucun objectif terminé.",
   today: "Aujourd’hui {{time}}",
   yesterday: "Hier {{time}}",
   daysAgo: "Il y a {{count}} jours",
@@ -1183,7 +1183,7 @@ const es: Dict = {
   remove: "Eliminar",
   doneEditing: "Listo",
   archive: "Objetivos completados",
-  archiveEmpty: "Aún no hay objetivos completados."
+  archiveEmpty: "Aún no hay objetivos completados.",
   today: "Hoy {{time}}",
   yesterday: "Ayer {{time}}",
   daysAgo: "Hace {{count}} días",
@@ -1452,7 +1452,7 @@ const it: Dict = {
   remove: "Rimuovi",
   doneEditing: "Fatto",
   archive: "Obiettivi completati",
-  archiveEmpty: "Nessun obiettivo completato."
+  archiveEmpty: "Nessun obiettivo completato.",
   today: "Oggi {{time}}",
   yesterday: "Ieri {{time}}",
   daysAgo: "{{count}} giorni fa",
@@ -1720,7 +1720,7 @@ const ptBR: Dict = {
   remove: "Remover",
   doneEditing: "Pronto",
   archive: "Metas concluídas",
-  archiveEmpty: "Nenhuma meta concluída."
+  archiveEmpty: "Nenhuma meta concluída.",
   today: "Hoje {{time}}",
   yesterday: "Ontem {{time}}",
   daysAgo: "Há {{count}} dias",
@@ -1986,7 +1986,7 @@ const nl: Dict = {
   remove: "Verwijderen",
   doneEditing: "Klaar",
   archive: "Voltooide doelen",
-  archiveEmpty: "Nog geen voltooide doelen."
+  archiveEmpty: "Nog geen voltooide doelen.",
   today: "Vandaag {{time}}",
   yesterday: "Gisteren {{time}}",
   daysAgo: "{{count}} dagen geleden",
@@ -2248,7 +2248,7 @@ const pl: Dict = {
   remove: "Usuń",
   doneEditing: "Gotowe",
   archive: "Ukończone cele",
-  archiveEmpty: "Brak ukończonych celów."
+  archiveEmpty: "Brak ukończonych celów.",
   today: "Dzisiaj {{time}}",
   yesterday: "Wczoraj {{time}}",
   daysAgo: "{{count}} dni temu",
@@ -2519,7 +2519,7 @@ const da: Dict = {
   remove: "Fjern",
   doneEditing: "Færdig",
   archive: "Fuldførte mål",
-  archiveEmpty: "Ingen fuldførte mål endnu."
+  archiveEmpty: "Ingen fuldførte mål endnu.",
   today: "I dag {{time}}",
   yesterday: "I går {{time}}",
   daysAgo: "For {{count}} dage siden",
@@ -2780,7 +2780,7 @@ const no: Dict = {
   remove: "Fjern",
   doneEditing: "Ferdig",
   archive: "Fullførte mål",
-  archiveEmpty: "Ingen fullførte mål ennå."
+  archiveEmpty: "Ingen fullførte mål ennå.",
   today: "I dag {{time}}",
   yesterday: "I går {{time}}",
   daysAgo: "For {{count}} dager siden",
@@ -3041,7 +3041,7 @@ const fi: Dict = {
   remove: "Poista",
   doneEditing: "Valmis",
   archive: "Valmiit tavoitteet",
-  archiveEmpty: "Ei valmiita tavoitteita."
+  archiveEmpty: "Ei valmiita tavoitteita.",
   today: "Tänään {{time}}",
   yesterday: "Eilen {{time}}",
   daysAgo: "{{count}} päivää sitten",
@@ -3302,7 +3302,7 @@ const ja: Dict = {
   remove: "削除",
   doneEditing: "完了",
   archive: "完了した目標",
-  archiveEmpty: "完了した目標はまだありません。"
+  archiveEmpty: "完了した目標はまだありません。",
   today: "今日 {{time}}",
   yesterday: "昨日 {{time}}",
   daysAgo: "{{count}}日前",
