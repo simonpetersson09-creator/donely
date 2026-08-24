@@ -94,7 +94,7 @@
   --gold-deep: oklch(0.6 0.12 68);
   --gold-foreground: oklch(0.26 0.04 70);
   --premium-border: oklch(0.55 0.12 70 / 0.6);
-  --completed: oklch(0.42 0.13 38);
+  --completed: oklch(0.52 0.045 245);
   --completed-foreground: oklch(0.99 0.005 80);
   --gradient-gold: linear-gradient(
     135deg,
