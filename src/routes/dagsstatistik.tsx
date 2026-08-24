@@ -6,6 +6,7 @@ import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { buildDailySummary } from "@/lib/daily-summary";
+import { buildDailyInsight } from "@/lib/daily-insight";
 import { summaryDate, validateSummarySearch } from "@/lib/summary-date";
 
 export const Route = createFileRoute("/dagsstatistik")({
@@ -44,6 +45,18 @@ function Dagsstatistik() {
     () => buildDailySummary(entries, categories, t as (key: string) => string, day),
     [entries, categories, t, day],
   );
+
+  const insight = useMemo(() => buildDailyInsight(entries, day), [entries, day]);
+
+  const insightText = useMemo(() => {
+    if (!insight) return null;
+    if (insight.kind === "recordYear") return t("dayInsightRecordYear");
+    if (insight.kind === "best30") return t("dayInsightBest30");
+    if (insight.kind === "bestWeek") return t("dayInsightBestWeek");
+    const arrow = insight.direction === "up" ? "\u2191" : "\u2193";
+    const key = insight.direction === "up" ? "dayInsightAboveAvg" : "dayInsightBelowAvg";
+    return `${arrow} ${t(key, { count: insight.diff })}`;
+  }, [insight, t]);
 
   const dateLabel = useMemo(() => {
     const fmt = new Intl.DateTimeFormat(locale, {
@@ -88,6 +101,11 @@ function Dagsstatistik() {
               <p className="mt-0.5 text-[15px] font-semibold text-card-foreground">
                 {t("dailySummaryTotal", { count: summary.total })}
               </p>
+              {insightText ? (
+                <p className="mt-0.5 text-[13px] font-medium text-muted-foreground">
+                  {insightText}
+                </p>
+              ) : null}
             </>
           }
         >
