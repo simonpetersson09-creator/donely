@@ -430,7 +430,7 @@ function Index() {
         </div>
         <div className="flex items-stretch gap-2">
           <Link
-            to="/veckostatistik"
+            to="/dagsstatistik"
             className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[16px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
           >
             <BarChart3 className="size-5" />
