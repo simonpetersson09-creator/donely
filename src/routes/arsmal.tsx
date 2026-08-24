@@ -192,7 +192,7 @@ function GoalRow({
   return (
     <div
       className={cn(
-        "stagger-item group flex items-center gap-3 px-3 py-3.5 transition-colors active:bg-secondary",
+        "stagger-item group flex items-center gap-2 px-2.5 py-2 transition-colors active:bg-secondary",
         !last && "border-b border-border"
       )}
       style={delay}
@@ -201,7 +201,7 @@ function GoalRow({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+          "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
           goal.completed
             ? "border-primary bg-primary"
             : "border-muted-foreground/40 bg-transparent"
@@ -209,13 +209,13 @@ function GoalRow({
         aria-checked={goal.completed}
         role="checkbox"
       >
-        {goal.completed && <Check className="size-3.5 text-primary-foreground" strokeWidth={3} />}
+        {goal.completed && <Check className="size-3 text-primary-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[15px] font-medium transition-colors",
+          "min-w-0 flex-1 truncate text-left text-sm font-medium transition-colors",
           goal.completed
             ? "text-muted-foreground/80 line-through"
             : "text-card-foreground"
@@ -226,10 +226,10 @@ function GoalRow({
       <button
         type="button"
         onClick={onRemove}
-        className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity group-focus-within:opacity-100 active:bg-secondary active:text-destructive sm:opacity-0 sm:group-hover:opacity-100"
+        className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity group-focus-within:opacity-100 active:bg-secondary active:text-destructive sm:opacity-0 sm:group-hover:opacity-100"
         aria-label={t("remove")}
       >
-        <X className="size-4" />
+        <X className="size-3.5" />
       </button>
     </div>
   );
