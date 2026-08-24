@@ -141,8 +141,8 @@ function SummarySection({
   const locale = useLocale();
   if (rows.length === 0) return null;
   return (
-    <section className="mt-4">
-      <div className="mb-2 flex items-center gap-2 px-1">
+    <section className="mt-3">
+      <div className="mb-1.5 flex items-center gap-2 px-1">
         <span
           className={cn(
             "flex size-6 items-center justify-center rounded-full",
@@ -158,7 +158,7 @@ function SummarySection({
         </h2>
       </div>
       <div className="card-base overflow-hidden">
-        <div className="grid grid-cols-[minmax(0,1fr)_56px] items-center gap-2 border-b border-border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="grid grid-cols-[minmax(0,1fr)_56px] items-center gap-2 border-b border-border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
           <span>{t("activity")}</span>
           <span className="text-center">{t("done")}</span>
         </div>
@@ -170,7 +170,7 @@ function SummarySection({
             <div
               key={row.id}
               className={cn(
-                "stagger-item px-3 py-1.5",
+                "stagger-item px-3 py-1",
                 idx < rows.length - 1 && "border-b border-border",
               )}
               style={{ animationDelay: `${Math.min(idx, 12) * 30}ms` }}
@@ -187,7 +187,7 @@ function SummarySection({
                 </span>
               </div>
               {hasMetrics && (
-                <div className="mt-1 flex flex-wrap items-center gap-1.5 pb-0.5">
+                <div className="mt-0.5 flex flex-wrap items-center gap-1 pb-0">
                   {row.distanceKm > 0 && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium tabular-nums text-card-foreground/80">
                       <MapPin className="size-3 text-primary" />

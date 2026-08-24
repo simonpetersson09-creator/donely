@@ -334,8 +334,8 @@ function Section({
   const { t } = useLanguage();
   if (rows.length === 0) return null;
   return (
-    <section className="mt-5">
-      <div className="mb-2 flex items-center gap-2 px-1">
+    <section className="mt-4">
+      <div className="mb-1.5 flex items-center gap-2 px-1">
         <span
           className={cn(
             "flex size-6 items-center justify-center rounded-full",
@@ -351,7 +351,7 @@ function Section({
         </h2>
       </div>
       <div className="card-base overflow-hidden">
-        <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 border-b border-border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
           <span>{t("activity")}</span>
           <span className="text-center">{t("done")}</span>
           <span className="text-center">{t("goal")}</span>
@@ -409,7 +409,7 @@ function GoalRow({
         !isLast && "border-b border-border",
       )}
     >
-      <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-1.5">
+      <div className="grid grid-cols-[minmax(0,1fr)_56px_56px_28px] items-center gap-2 px-3 py-1">
         <div className="flex min-w-0 items-center gap-2 overflow-hidden">
           <CategoryDot color={category.color} />
           <span className="block truncate text-[14px] font-medium text-card-foreground">
