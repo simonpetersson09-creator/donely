@@ -30,6 +30,17 @@ function Arsmal() {
   const { t } = useLanguage();
   const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
+  // A tap that ends editing must not "fall through" to the row buttons that
+  // appear in the same spot right after the row switches to display mode.
+  const suppressUntilRef = useRef(0);
+  const guard = (fn: () => void) => () => {
+    if (Date.now() < suppressUntilRef.current) return;
+    fn();
+  };
+  const finishEdit = () => {
+    suppressUntilRef.current = Date.now() + 600;
+    setEditingId(null);
+  };
   const activeGoals = goals.filter((g) => !g.completed);
   const completedGoals = goals.filter((g) => g.completed);
   const currentYear = new Date().getFullYear();
