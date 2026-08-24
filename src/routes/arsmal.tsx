@@ -215,20 +215,20 @@ function GoalRow({
       >
         <div
           className={cn(
-            "flex size-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             goal.completed
               ? "border-completed bg-completed"
               : "border-muted-foreground/40 bg-transparent"
           )}
         >
-          {goal.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`goal-input-${goal.id}`}
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[16px] font-medium text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-medium text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
