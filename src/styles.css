@@ -85,8 +85,8 @@
   /* Färgkoder från Sign & Go – varm, premium, lugn palett */
   --accent-work: oklch(0.34 0.06 244);
   --accent-work-soft: oklch(0.92 0.03 200);
-  --accent-life: oklch(0.62 0.14 155);
-  --accent-life-soft: oklch(0.94 0.04 155);
+  --accent-life: oklch(0.6 0.12 45);
+  --accent-life-soft: oklch(0.92 0.04 55);
   --gold: oklch(0.78 0.13 85);
   --gold-soft: oklch(0.88 0.08 92);
   --gold-deep: oklch(0.6 0.12 68);
@@ -134,7 +134,7 @@
   --input: oklch(0.92 0.008 80);
   --ring: oklch(0.34 0.06 244);
   --chart-1: oklch(0.34 0.06 244);
-  --chart-2: oklch(0.62 0.14 155);
+  --chart-2: oklch(0.6 0.12 45);
   --chart-3: oklch(0.78 0.13 85);
   --chart-4: oklch(0.6 0.12 68);
   --chart-5: oklch(0.5 0.015 250);
@@ -151,8 +151,8 @@
 .dark {
   --accent-work: oklch(0.66 0.1 244);
   --accent-work-soft: oklch(0.3 0.05 230);
-  --accent-life: oklch(0.7 0.13 155);
-  --accent-life-soft: oklch(0.3 0.05 155);
+  --accent-life: oklch(0.68 0.11 45);
+  --accent-life-soft: oklch(0.3 0.05 45);
   --gold: oklch(0.82 0.13 88);
   --gold-soft: oklch(0.88 0.08 92);
   --gold-deep: oklch(0.6 0.12 68);
@@ -183,7 +183,7 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.7 0.08 244);
   --chart-1: oklch(0.66 0.1 244);
-  --chart-2: oklch(0.7 0.13 155);
+  --chart-2: oklch(0.68 0.11 45);
   --chart-3: oklch(0.82 0.13 88);
   --chart-4: oklch(0.6 0.12 68);
   --chart-5: oklch(0.72 0.012 250);
