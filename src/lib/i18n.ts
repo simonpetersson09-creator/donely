@@ -3504,9 +3504,9 @@ const resources = {
 if (!i18n.isInitialized) {
   void i18n.use(initReactI18next).init({
     resources,
-    // On the client the stored/device language is applied immediately so the UI
-    // never renders one language and then swaps to another.
-    lng: typeof window === "undefined" ? "en" : detectLanguage(),
+    // Must match the server render so hydration stays clean; the real language is
+    // applied in a layout effect (before paint) by useLanguage().
+    lng: "en",
     fallbackLng: "en",
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
