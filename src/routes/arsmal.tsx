@@ -60,13 +60,13 @@ function Arsmal() {
       <div className="relative flex items-center justify-between pb-3 pt-1">
         <BackButton
           fallbackTo="/"
-          className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-sm font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
         >
           {t("back")}
         </BackButton>
         <div className="absolute inset-x-0 top-1 flex justify-center">
           <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
-            <h1 className="text-sm font-bold tracking-tight text-primary-foreground">
+            <h1 className="text-[13px] font-bold text-primary-foreground">
               {t("yearlyGoals")} {currentYear}
             </h1>
           </div>
