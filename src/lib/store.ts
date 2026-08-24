@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { clearRecordLedger } from "@/lib/records";
 import { clearAchievementLedger } from "@/lib/achievements";
 
@@ -414,13 +414,28 @@ export function useGoals() {
 export function useYearlyGoals() {
   const [goals, setGoals] = useState<YearlyGoal[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const goalsRef = useRef<YearlyGoal[]>([]);
+
+  const apply = useCallback((next: YearlyGoal[]) => {
+    goalsRef.current = next;
+    setGoals(next);
+  }, []);
 
   const readFromStorage = useCallback(() => {
     ready();
     const stored = readKey(YEARLY_GOALS_KEY, yearlyGoalsSchema);
-    if (stored.status === "ok") setGoals(stored.value);
+    if (stored.status === "ok") {
+      // Guard against duplicate ids sneaking in from concurrent writes.
+      const seen = new Set<string>();
+      const unique = stored.value.filter((g) => {
+        if (seen.has(g.id)) return false;
+        seen.add(g.id);
+        return true;
+      });
+      apply(unique);
+    }
     setHydrated(true);
-  }, []);
+  }, [apply]);
 
   useEffect(() => {
     readFromStorage();
@@ -432,30 +447,41 @@ export function useYearlyGoals() {
     return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
   }, [readFromStorage]);
 
-  const commit = useCallback((next: YearlyGoal[]) => {
-    writeKey(YEARLY_GOALS_KEY, next, yearlyGoalsSchema);
-    emitDataChanged();
-    return next;
-  }, []);
+  const commit = useCallback(
+    (next: YearlyGoal[]) => {
+      apply(next);
+      writeKey(YEARLY_GOALS_KEY, next, yearlyGoalsSchema);
+      emitDataChanged();
+      return next;
+    },
+    [apply],
+  );
 
   const addGoal = useCallback(
     (text: string, halfYear: "h1" | "h2") => {
+      const trimmed = text.trim();
+      // Reuse an existing empty draft row instead of stacking a new one.
+      const existingEmpty = goalsRef.current.find((g) => !g.text && !g.completed);
+      if (!trimmed && existingEmpty) return existingEmpty.id;
+
       const goal: YearlyGoal = {
         id: crypto.randomUUID(),
-        text: text.trim(),
+        text: trimmed,
         completed: false,
         halfYear,
         createdAt: new Date().toISOString(),
       };
-      setGoals((prev) => commit([...prev, goal]));
+      commit([...goalsRef.current, goal]);
       return goal.id;
     },
     [commit],
   );
 
+
+
   const toggleGoal = useCallback(
     (id: string) => {
-      setGoals((prev) => commit(prev.map((g) => (g.id === id ? { ...g, completed: !g.completed } : g))));
+      commit(goalsRef.current.map((g) => (g.id === id ? { ...g, completed: !g.completed } : g)));
     },
     [commit],
   );
@@ -463,12 +489,10 @@ export function useYearlyGoals() {
   const updateGoalText = useCallback(
     (id: string, text: string) => {
       const trimmed = text.trim();
-      setGoals((prev) =>
-        commit(
-          trimmed
-            ? prev.map((g) => (g.id === id ? { ...g, text: trimmed } : g))
-            : prev.filter((g) => g.id !== id),
-        ),
+      commit(
+        trimmed
+          ? goalsRef.current.map((g) => (g.id === id ? { ...g, text: trimmed } : g))
+          : goalsRef.current.filter((g) => g.id !== id),
       );
     },
     [commit],
@@ -477,17 +501,18 @@ export function useYearlyGoals() {
   const removeGoal = useCallback(
     (id: string) => {
       createBackup("remove-yearly-goal");
-      setGoals((prev) => commit(prev.filter((g) => g.id !== id)));
+      commit(goalsRef.current.filter((g) => g.id !== id));
     },
     [commit],
   );
 
   const moveGoal = useCallback(
     (id: string, halfYear: "h1" | "h2") => {
-      setGoals((prev) => commit(prev.map((g) => (g.id === id ? { ...g, halfYear } : g))));
+      commit(goalsRef.current.map((g) => (g.id === id ? { ...g, halfYear } : g)));
     },
     [commit],
   );
+
 
   return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, hydrated };
 }
