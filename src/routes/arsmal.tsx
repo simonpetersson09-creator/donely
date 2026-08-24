@@ -75,8 +75,15 @@ function Arsmal() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
+      {/* Active goals heading */}
+      <div className="mt-3 text-center">
+        <h2 className="text-sm font-bold tracking-tight text-primary">
+          {t("activeGoals")}
+        </h2>
+      </div>
+
       {/* Goals list — blends with app background, blue accents */}
-      <div className="mt-1 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
+      <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
         {activeGoals.length === 0 ? (
           <div className="px-3 py-5 text-center">
             <p className="text-sm font-medium text-foreground">{t("emptyGoals")}</p>
