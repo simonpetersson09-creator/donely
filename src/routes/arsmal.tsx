@@ -52,7 +52,8 @@ function Arsmal() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+
       <div className="pb-1 pt-0.5">
         <BackButton
           fallbackTo="/"
@@ -100,18 +101,6 @@ function Arsmal() {
         </button>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-3">
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="inline-flex h-12 w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
-        >
-          <span className="flex size-7 items-center justify-center rounded-full bg-primary-foreground/15 ring-1 ring-primary-foreground/25">
-            <Plus className="size-4" />
-          </span>
-          {t("addGoal")}
-        </button>
-      </div>
     </main>
   );
 }
