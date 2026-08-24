@@ -55,29 +55,29 @@ function Arsmal() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-5 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
 
       {/* Compact header */}
-      <div className="relative flex items-center justify-between pb-4 pt-2">
+      <div className="relative flex items-center justify-between pb-2 pt-1">
         <BackButton
           fallbackTo="/"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-primary transition-colors active:bg-secondary"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full text-primary transition-colors active:bg-secondary"
         >
           <span className="sr-only">{t("back")}</span>
         </BackButton>
-        <div className="absolute inset-x-0 top-2 text-center">
-          <h1 className="text-xl font-bold leading-tight tracking-tight text-primary">
+        <div className="absolute inset-x-0 top-1 text-center">
+          <h1 className="text-lg font-bold leading-tight tracking-tight text-primary">
             {t("yearlyGoals")}
           </h1>
-          <p className="mt-0.5 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+          <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
             {currentYear}
           </p>
         </div>
-        <div className="h-10 w-10" aria-hidden="true" />
+        <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
       {/* Goals card */}
-      <div className="card-base mt-2 overflow-hidden p-2">
+      <div className="card-base mt-1 overflow-hidden p-1.5">
         {goals.length === 0 ? (
-          <div className="px-4 py-8 text-center">
-            <p className="text-[15px] font-medium text-card-foreground">{t("emptyGoals")}</p>
+          <div className="px-3 py-5 text-center">
+            <p className="text-sm font-medium text-card-foreground">{t("emptyGoals")}</p>
           </div>
         ) : (
           goals.map((goal, idx) => (
@@ -99,12 +99,12 @@ function Arsmal() {
         <button
           type="button"
           onClick={handleAdd}
-          className="flex w-full items-center gap-3 rounded-b-2xl px-3 py-3.5 text-primary transition-colors active:bg-secondary"
+          className="flex w-full items-center gap-2 rounded-b-2xl px-2.5 py-2 text-primary transition-colors active:bg-secondary"
         >
-          <div className="flex size-6 items-center justify-center">
-            <Plus className="size-5" strokeWidth={2.5} />
+          <div className="flex size-5 items-center justify-center">
+            <Plus className="size-4" strokeWidth={2.5} />
           </div>
-          <span className="text-[15px] font-bold tracking-tight">{t("addGoal")}</span>
+          <span className="text-sm font-bold tracking-tight">{t("addGoal")}</span>
         </button>
       </div>
 
