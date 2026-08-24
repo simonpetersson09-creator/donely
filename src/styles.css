@@ -151,8 +151,8 @@
 .dark {
   --accent-work: oklch(0.66 0.1 244);
   --accent-work-soft: oklch(0.3 0.05 230);
-  --accent-life: oklch(0.7 0.13 155);
-  --accent-life-soft: oklch(0.3 0.05 155);
+  --accent-life: oklch(0.68 0.11 45);
+  --accent-life-soft: oklch(0.3 0.05 45);
   --gold: oklch(0.82 0.13 88);
   --gold-soft: oklch(0.88 0.08 92);
   --gold-deep: oklch(0.6 0.12 68);
