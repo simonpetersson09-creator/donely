@@ -182,9 +182,12 @@ function GoalRow({
 }) {
   const { t } = useLanguage();
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
+  const committedRef = useRef(false);
 
   // Empty rows are drafts: discard them instead of leaving a blank goal behind.
   const commitText = (value: string) => {
+    if (committedRef.current) return;
+    committedRef.current = true;
     const trimmed = value.trim();
     if (!trimmed) {
       onFinishEdit();
