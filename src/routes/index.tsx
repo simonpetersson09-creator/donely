@@ -650,7 +650,10 @@ function AreaSegmented({
     >
       <span
         aria-hidden
-        className="absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-lg bg-primary shadow-soft transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        className={cn(
+          "absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-lg shadow-soft transition-[transform,background-color] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)]",
+          area === "jobb" ? "bg-accent-work" : "bg-accent-life",
+        )}
         style={{ transform: `translateX(${index * 100}%)` }}
       />
       {options.map((o) => {
@@ -667,7 +670,7 @@ function AreaSegmented({
             }}
             className={cn(
               "relative z-10 flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition-colors duration-200",
-              area === o.value ? "text-primary-foreground" : "text-foreground/60",
+              area === o.value ? "text-white" : "text-foreground/60",
             )}
           >
             <Icon className="size-4" />
