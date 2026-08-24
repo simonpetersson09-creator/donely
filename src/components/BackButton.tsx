@@ -3,8 +3,9 @@ import { ChevronLeft } from "lucide-react";
 import type { ReactNode } from "react";
 
 /**
- * Back control that returns to the previous screen in history.
- * Falls back to `fallbackTo` when there is no history entry (deep link / cold start).
+ * Back control that always returns to the configured parent screen.
+ * This keeps navigation predictable when the user has browsed around
+ * inside the same section (e.g. switching between Day/Week/Year stats).
  */
 export function BackButton({
   children,
@@ -18,14 +19,7 @@ export function BackButton({
   const router = useRouter();
 
   const handleBack = () => {
-    const canGoBack =
-      typeof window !== "undefined" &&
-      (router.history.canGoBack?.() === true || window.history.length > 1);
-    if (canGoBack) {
-      router.history.back();
-    } else {
-      router.navigate({ to: fallbackTo });
-    }
+    router.navigate({ to: fallbackTo });
   };
 
   return (

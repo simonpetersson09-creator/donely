@@ -141,7 +141,7 @@ function Statistik() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+2rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="pb-1 pt-0.5">
         <BackButton
-          fallbackTo="/veckostatistik"
+          fallbackTo="/"
           className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
         >
           {t("back")}
