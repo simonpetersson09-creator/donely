@@ -295,7 +295,7 @@ function GoalRow({
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[14px] font-medium transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
           goal.completed
             ? "text-muted-foreground line-through"
             : "text-primary"
