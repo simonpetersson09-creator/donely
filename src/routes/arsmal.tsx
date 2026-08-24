@@ -180,6 +180,18 @@ function GoalRow({
   const { t } = useLanguage();
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
 
+  // Empty rows are drafts: discard them instead of leaving a blank goal behind.
+  const commitText = (value: string) => {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      onFinishEdit();
+      onRemove();
+      return;
+    }
+    onUpdateText(trimmed);
+    onFinishEdit();
+  };
+
   if (isEditing) {
     return (
       <div
@@ -207,23 +219,23 @@ function GoalRow({
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
           className="min-w-0 flex-1 bg-transparent text-sm font-medium leading-tight text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
-            onUpdateText(e.target.value);
-            onFinishEdit();
+            commitText(e.target.value);
           }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              onUpdateText(e.currentTarget.value);
-              onFinishEdit();
+              e.currentTarget.blur();
             } else if (e.key === "Escape") {
-              onUpdateText(goal.text);
-              onFinishEdit();
+              commitText(goal.text);
             }
           }}
           autoComplete="off"
         />
         <button
           type="button"
-          onClick={onFinishEdit}
+          onClick={() => {
+            const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
+            commitText(el?.value ?? goal.text);
+          }}
           className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
           aria-label={t("doneEditing")}
         >
@@ -270,10 +282,10 @@ function GoalRow({
       <button
         type="button"
         onClick={onRemove}
-        className="flex size-6 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-opacity group-focus-within:opacity-100 active:bg-secondary active:text-destructive sm:opacity-0 sm:group-hover:opacity-100"
+        className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
         aria-label={t("remove")}
       >
-        <X className="size-3" />
+        <X className="size-3.5" strokeWidth={2.5} />
       </button>
     </div>
   );
