@@ -240,7 +240,7 @@ function GoalRow({
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-medium text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -261,7 +261,7 @@ function GoalRow({
             const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
             commitText(el?.value ?? goal.text);
           }}
-          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-bold text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
+          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
