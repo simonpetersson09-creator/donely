@@ -6,7 +6,7 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { StatsSegmentedControl } from "@/components/StatsSegmentedControl";
 import { SummaryBreakdown } from "@/components/SummaryBreakdown";
-import { RecordsSection } from "@/components/RecordsSection";
+
 import { WeeklyActivityChart } from "@/components/WeeklyActivityChart";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
@@ -263,7 +263,7 @@ function Veckostatistik() {
         </SummaryBreakdown>
       )}
 
-      <RecordsSection period={{ type: "week", date: summary.start }} />
+      
 
       <button
         type="button"
