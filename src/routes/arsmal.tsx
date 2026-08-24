@@ -243,7 +243,9 @@ function GoalRow({
         />
         <button
           type="button"
-          onClick={() => {
+          onPointerDown={(e) => {
+            // Commit before the input's blur fires, so the typed value is used.
+            e.preventDefault();
             const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
             commitText(el?.value ?? goal.text);
           }}
