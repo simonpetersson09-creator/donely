@@ -75,8 +75,15 @@ function Arsmal() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
+      {/* Active goals heading */}
+      <div className="mt-3 text-center">
+        <h2 className="text-sm font-bold tracking-tight text-primary">
+          {t("activeGoals")}
+        </h2>
+      </div>
+
       {/* Goals list — blends with app background, blue accents */}
-      <div className="mt-1 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
+      <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
         {activeGoals.length === 0 ? (
           <div className="px-3 py-5 text-center">
             <p className="text-sm font-medium text-foreground">{t("emptyGoals")}</p>
@@ -111,11 +118,11 @@ function Arsmal() {
       </div>
 
       {/* Completed goals — always expanded */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
-        <div className="flex items-center gap-2 px-2.5 py-2">
-          <span className="flex-1 text-left text-sm font-bold tracking-tight text-primary">
+      <div className="mt-5 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
+        <div className="flex items-center justify-center gap-2 px-2.5 py-2">
+          <h2 className="text-sm font-bold tracking-tight text-primary">
             {t("archive")}
-          </span>
+          </h2>
           <span className="text-xs font-semibold tabular-nums text-muted-foreground">
             {completedGoals.length}
           </span>
