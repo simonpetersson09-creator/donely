@@ -200,22 +200,25 @@ export function useCategories() {
     [commit],
   );
 
+
   /**
-   * Moves a category one step up/down *within its own area*. The stored array
-   * order is the manual order used by the picker and the statistics lists.
+   * Reorders a category to an absolute position within its own area.
+   * Used by drag-to-reorder in the category picker.
    */
-  const moveCategory = useCallback(
-    (id: string, direction: -1 | 1) => {
+  const reorderCategory = useCallback(
+    (id: string, newIndex: number) => {
       setCategories((prev) => {
         const current = prev.find((c) => c.id === id);
         if (!current) return prev;
         const sameArea = prev.filter((c) => c.area === current.area);
-        const index = sameArea.findIndex((c) => c.id === id);
-        const target = index + direction;
-        if (target < 0 || target >= sameArea.length) return prev;
-        const neighbour = sameArea[target];
+        const oldIndex = sameArea.findIndex((c) => c.id === id);
+        if (oldIndex === newIndex || newIndex < 0 || newIndex >= sameArea.length) return prev;
+        const reordered = [...sameArea];
+        const [moved] = reordered.splice(oldIndex, 1);
+        reordered.splice(newIndex, 0, moved);
+        const reorderedIter = reordered[Symbol.iterator]();
         const next = prev.map((c) =>
-          c.id === current.id ? neighbour : c.id === neighbour.id ? current : c,
+          c.area === current.area ? reorderedIter.next().value! : c,
         );
         return commit(next);
       });
@@ -229,7 +232,7 @@ export function useCategories() {
     renameCategory,
     setCategoryColor,
     removeCategory,
-    moveCategory,
+    reorderCategory,
     hydrated,
   };
 }

@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, forwardRef } from "react";
 import {
   ArrowRight,
   BarChart3,
@@ -8,9 +8,9 @@ import {
   Check,
   ChevronDown,
   ChevronLeft,
-  ChevronUp,
   CirclePlus,
   Crown,
+  GripVertical,
   Home,
   Lock,
   Minus,
@@ -87,7 +87,7 @@ function Index() {
 
   const { t } = useLanguage();
   const locale = useLocale();
-  const { categories, addCategory, renameCategory, setCategoryColor, moveCategory, hydrated } =
+  const { categories, addCategory, renameCategory, setCategoryColor, reorderCategory, hydrated } =
     useCategories();
   const { entries, addEntry, removeEntry } = useEntries();
   const {
@@ -472,7 +472,7 @@ function Index() {
             setCategoryId(created.id);
             setPickerOpen(false);
           }}
-          onMove={(id, direction) => {
+          onReorder={(id, newIndex) => {
             if (premium.loading) {
               toast.message(t("premiumLoading"));
               return;
@@ -482,7 +482,7 @@ function Index() {
               setPaywallOpen(true);
               return;
             }
-            moveCategory(id, direction);
+            reorderCategory(id, newIndex);
           }}
           onSetColor={(id, color) => {
             if (premium.loading) {
@@ -696,7 +696,7 @@ function CategorySheet({
   onCreate,
   onRename,
   onSetColor,
-  onMove,
+  onReorder,
   onDelete,
   onClose,
 }: {
@@ -707,7 +707,7 @@ function CategorySheet({
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
   onSetColor: (id: string, color: string | null) => void;
-  onMove: (id: string, direction: -1 | 1) => void;
+  onReorder: (id: string, newIndex: number) => void;
   onDelete: (id: string) => void;
   onClose: () => void;
 }) {
@@ -717,6 +717,72 @@ function CategorySheet({
   const [openId, setOpenId] = useState<string | null>(null);
   const [renamingId, setRenamingId] = useState<string | null>(null);
   const [renameValue, setRenameValue] = useState("");
+
+  // Local order mirrors props so drag feels instant; it resets when props change.
+  const [localCategories, setLocalCategories] = useState(categories);
+  useEffect(() => {
+    setLocalCategories(categories);
+  }, [categories]);
+
+  const [drag, setDrag] = useState<{
+    id: string;
+    index: number;
+    startY: number;
+    listTop: number;
+    itemHeight: number;
+  } | null>(null);
+
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleDragStart = (id: string, clientY: number) => {
+    // Close action panels so every row has the same height during the drag.
+    setOpenId(null);
+
+    const index = localCategories.findIndex((c) => c.id === id);
+    if (!listRef.current || index < 0) return;
+
+    const items = Array.from(listRef.current.children).filter(
+      (el) => (el as HTMLElement).dataset.row === "true",
+    ) as HTMLElement[];
+    const row = items[index];
+    if (!row) return;
+
+    const rowRect = row.getBoundingClientRect();
+    setDrag({
+      id,
+      index,
+      startY: clientY,
+      listTop: items[0].getBoundingClientRect().top,
+      itemHeight: rowRect.height + 2, // + space-y-0.5 gap
+    });
+  };
+
+  const handleDragMove = (clientY: number) => {
+    if (!drag) return;
+    const relativeY = clientY - drag.listTop;
+    const rawIndex = Math.round(relativeY / drag.itemHeight);
+    const newIndex = Math.max(0, Math.min(localCategories.length - 1, rawIndex));
+    if (newIndex !== drag.index) {
+      const next = [...localCategories];
+      const [moved] = next.splice(drag.index, 1);
+      next.splice(newIndex, 0, moved);
+      setLocalCategories(next);
+      setDrag({ ...drag, index: newIndex });
+      haptic("light");
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (drag) {
+      const finalIndex = localCategories.findIndex((c) => c.id === drag.id);
+      const originalIndex = categories.findIndex((c) => c.id === drag.id);
+      if (finalIndex !== originalIndex) {
+        onReorder(drag.id, finalIndex);
+      }
+    }
+    setDrag(null);
+  };
 
   return (
     <BottomSheet
@@ -782,11 +848,30 @@ function CategorySheet({
       </p>
 
       <div
+        ref={listRef}
         className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
         style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
         onScroll={() => setOpenId(null)}
+        onPointerMove={(e) => {
+          if (drag) {
+            e.preventDefault();
+            handleDragMove(e.clientY);
+          }
+        }}
+        onPointerUp={(e) => {
+          if (drag) {
+            e.preventDefault();
+            handleDragEnd();
+          }
+        }}
+        onPointerCancel={(e) => {
+          if (drag) {
+            e.preventDefault();
+            handleDragEnd();
+          }
+        }}
       >
-        {categories.map((c, index) =>
+        {localCategories.map((c, index) =>
           renamingId === c.id ? (
             <form
               key={c.id}
@@ -813,18 +898,20 @@ function CategorySheet({
           ) : (
             <CategoryRow
               key={c.id}
+              ref={(el) => {
+                itemRefs.current[index] = el;
+              }}
+              data-row="true"
+              categoryColor={c.color ?? null}
               name={categoryLabel(t, c)}
-              color={c.color ?? null}
               onSetColor={(color) => onSetColor(c.id, color)}
               selected={c.id === selectedId}
               actionsOpen={openId === c.id}
+              dragging={drag?.id === c.id}
               onOpenActions={() => setOpenId(c.id)}
               onCloseActions={() => setOpenId(null)}
-              canMoveUp={index > 0}
-              canMoveDown={index < categories.length - 1}
-              onMoveUp={() => onMove(c.id, -1)}
-              onMoveDown={() => onMove(c.id, 1)}
               onSelect={() => onSelect(c.id)}
+              onStartDrag={(y) => handleDragStart(c.id, y)}
               onRename={() => {
                 setRenameValue(categoryLabel(t, c));
                 setRenamingId(c.id);
@@ -842,37 +929,37 @@ function CategorySheet({
   );
 }
 
-function CategoryRow({
-  name,
-  color,
-  onSetColor,
-  selected,
-  actionsOpen,
-  onOpenActions,
-  onCloseActions,
-  canMoveUp,
-  canMoveDown,
-  onMoveUp,
-  onMoveDown,
-  onSelect,
-  onRename,
-  onDelete,
-}: {
-  name: string;
-  color: string | null;
-  onSetColor: (color: string | null) => void;
-  selected: boolean;
-  actionsOpen: boolean;
-  onOpenActions: () => void;
-  onCloseActions: () => void;
-  canMoveUp: boolean;
-  canMoveDown: boolean;
-  onMoveUp: () => void;
-  onMoveDown: () => void;
-  onSelect: () => void;
-  onRename: () => void;
-  onDelete: () => void;
-}) {
+const CategoryRow = forwardRef(function CategoryRow(
+  {
+    name,
+    categoryColor,
+    onSetColor,
+    selected,
+    actionsOpen,
+    dragging,
+    onOpenActions,
+    onCloseActions,
+    onSelect,
+    onStartDrag,
+    onRename,
+    onDelete,
+    ...rest
+  }: {
+    name: string;
+    categoryColor: string | null;
+    onSetColor: (color: string | null) => void;
+    selected: boolean;
+    actionsOpen: boolean;
+    dragging?: boolean;
+    onOpenActions: () => void;
+    onCloseActions: () => void;
+    onSelect: () => void;
+    onStartDrag: (y: number) => void;
+    onRename: () => void;
+    onDelete: () => void;
+  } & React.HTMLAttributes<HTMLDivElement>,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
   const { t } = useTranslation();
   const renameLabel = t("rename");
   const deleteLabel = t("delete");
@@ -881,7 +968,7 @@ function CategoryRow({
   const moved = useRef(false);
   const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [colorOpen, setColorOpen] = useState(false);
-  const dotColor = categoryColorValue(color);
+  const dotColor = categoryColorValue(categoryColor);
 
   const clearPress = () => {
     if (pressTimer.current) clearTimeout(pressTimer.current);
@@ -889,27 +976,9 @@ function CategoryRow({
   };
 
   return (
-    <div className="rounded-xl">
+    <div ref={ref} {...rest} className="rounded-xl">
       <div className="relative overflow-hidden rounded-xl">
         <div className="absolute inset-y-0 right-0 flex items-center gap-1 pr-1">
-          <button
-            type="button"
-            onClick={onMoveUp}
-            disabled={!canMoveUp}
-            aria-label={t("moveUp")}
-            className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
-          >
-            <ChevronUp className="size-3.5" />
-          </button>
-          <button
-            type="button"
-            onClick={onMoveDown}
-            disabled={!canMoveDown}
-            aria-label={t("moveDown")}
-            className="flex size-8 items-center justify-center rounded-lg bg-secondary text-primary disabled:opacity-30"
-          >
-            <ChevronDown className="size-3.5" />
-          </button>
           <button
             type="button"
             onClick={() => setColorOpen((v) => !v)}
@@ -968,12 +1037,16 @@ function CategoryRow({
             else onSelect();
           }}
           style={{
-            transform: actionsOpen ? "translateX(-186px)" : "translateX(0)",
+            transform: actionsOpen ? "translateX(-112px)" : "translateX(0)",
             WebkitTouchCallout: "none",
             WebkitUserSelect: "none",
             touchAction: "pan-y",
           }}
-          className="relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200 active:bg-secondary"
+          className={cn(
+            "relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200",
+            dragging && "z-10 scale-[1.02] shadow-lg opacity-95",
+            !dragging && "active:bg-secondary",
+          )}
         >
           <span className="flex min-w-0 items-center gap-2">
             <span
@@ -989,9 +1062,17 @@ function CategoryRow({
           {!actionsOpen && (
             <span className="flex shrink-0 items-center gap-1.5">
               {selected && <Check className="size-3.5 text-primary" />}
-              <span aria-hidden className="flex items-center text-muted-foreground/45">
-                <ChevronLeft className="-mr-2 size-3.5" />
-                <ChevronLeft className="size-3.5" />
+              <span
+                aria-label={t("reorder")}
+                onPointerDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onStartDrag(e.clientY);
+                }}
+                className="flex size-8 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-secondary"
+                role="button"
+              >
+                <GripVertical className="size-4" />
               </span>
             </span>
           )}
@@ -1011,7 +1092,7 @@ function CategoryRow({
                 onCloseActions();
               }}
               className={`size-6 rounded-full transition-transform active:scale-90 ${
-                color === c.id ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
+                categoryColor === c.id ? "ring-2 ring-primary ring-offset-2 ring-offset-background" : ""
               }`}
               style={{ backgroundColor: c.value }}
             />
@@ -1031,7 +1112,7 @@ function CategoryRow({
       )}
     </div>
   );
-}
+});
 
 function ReminderPrompt({
   onEnable,
