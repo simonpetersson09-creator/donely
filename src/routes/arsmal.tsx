@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Archive, Check, ChevronDown, Plus, X } from "lucide-react";
+import { Check, Plus, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
@@ -30,9 +30,8 @@ function Arsmal() {
   const { t } = useLanguage();
   const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [archiveOpen, setArchiveOpen] = useState(false);
   const activeGoals = goals.filter((g) => !g.completed);
-  const archivedGoals = goals.filter((g) => g.completed);
+  const completedGoals = goals.filter((g) => g.completed);
   const currentYear = new Date().getFullYear();
 
   const handleAdd = () => {
@@ -111,53 +110,39 @@ function Arsmal() {
         </button>
       </div>
 
-      {/* Archive — completed goals */}
+      {/* Completed goals — always expanded */}
       <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
-        <button
-          type="button"
-          onClick={() => setArchiveOpen((v) => !v)}
-          className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 transition-colors active:bg-secondary"
-        >
-          <div className="flex size-5 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Archive className="size-3" strokeWidth={2.5} />
-          </div>
+        <div className="flex items-center gap-2 px-2.5 py-2">
           <span className="flex-1 text-left text-sm font-bold tracking-tight text-primary">
             {t("archive")}
           </span>
           <span className="text-xs font-semibold tabular-nums text-muted-foreground">
-            {archivedGoals.length}
+            {completedGoals.length}
           </span>
-          <ChevronDown
-            className={cn(
-              "size-4 text-muted-foreground transition-transform",
-              archiveOpen && "rotate-180"
-            )}
-          />
-        </button>
+        </div>
 
-        {archiveOpen &&
-          (archivedGoals.length === 0 ? (
-            <div className="border-t border-border px-3 py-4 text-center">
-              <p className="text-xs font-medium text-muted-foreground">{t("archiveEmpty")}</p>
-            </div>
-          ) : (
-            <div className="border-t border-border">
-              {archivedGoals.map((goal, idx) => (
-                <GoalRow
-                  key={goal.id}
-                  goal={goal}
-                  index={idx}
-                  last={idx === archivedGoals.length - 1}
-                  isEditing={editingId === goal.id}
-                  onToggle={() => toggleGoal(goal.id)}
-                  onStartEdit={() => startEditing(goal.id)}
-                  onUpdateText={(text) => updateGoalText(goal.id, text)}
-                  onRemove={() => removeGoal(goal.id)}
-                  onFinishEdit={() => setEditingId(null)}
-                />
-              ))}
-            </div>
-          ))}
+        {completedGoals.length === 0 ? (
+          <div className="border-t border-border px-3 py-4 text-center">
+            <p className="text-xs font-medium text-muted-foreground">{t("archiveEmpty")}</p>
+          </div>
+        ) : (
+          <div className="border-t border-border">
+            {completedGoals.map((goal, idx) => (
+              <GoalRow
+                key={goal.id}
+                goal={goal}
+                index={idx}
+                last={idx === completedGoals.length - 1}
+                isEditing={editingId === goal.id}
+                onToggle={() => toggleGoal(goal.id)}
+                onStartEdit={() => startEditing(goal.id)}
+                onUpdateText={(text) => updateGoalText(goal.id, text)}
+                onRemove={() => removeGoal(goal.id)}
+                onFinishEdit={() => setEditingId(null)}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
     </main>
