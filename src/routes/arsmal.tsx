@@ -75,17 +75,17 @@ function Arsmal() {
       </div>
 
       {/* Active goals heading */}
-      <div className="mt-3 text-center">
-        <h2 className="text-sm font-bold tracking-tight text-primary">
+      <div className="mt-2 text-center">
+        <h2 className="text-xs font-bold tracking-tight text-primary">
           {t("activeGoals")}
         </h2>
       </div>
 
       {/* Goals list — blends with app background, blue accents */}
-      <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
+      <div className="mt-1 overflow-hidden rounded-2xl border border-border/50 bg-background p-1">
         {activeGoals.length === 0 ? (
-          <div className="px-3 py-5 text-center">
-            <p className="text-sm font-medium text-foreground">{t("emptyGoals")}</p>
+          <div className="px-3 py-3 text-center">
+            <p className="text-xs font-medium text-foreground">{t("emptyGoals")}</p>
           </div>
         ) : (
           activeGoals.map((goal, idx) => (
@@ -107,28 +107,28 @@ function Arsmal() {
         <button
           type="button"
           onClick={handleAdd}
-          className="flex w-full items-center gap-2 rounded-b-2xl px-2.5 py-2 text-primary transition-colors active:bg-secondary"
+          className="flex w-full items-center gap-1.5 rounded-b-2xl px-2 py-1.5 text-primary transition-colors active:bg-secondary"
         >
-          <div className="flex size-5 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Plus className="size-4" strokeWidth={2.5} />
+          <div className="flex size-4 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Plus className="size-3" strokeWidth={2.5} />
           </div>
-          <span className="text-sm font-bold tracking-tight">{t("addGoal")}</span>
+          <span className="text-xs font-bold tracking-tight">{t("addGoal")}</span>
         </button>
       </div>
 
       {/* Completed goals — always expanded */}
-      <div className="mt-5 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
-        <div className="flex items-center justify-center gap-2 px-2.5 py-2">
-          <h2 className="text-sm font-bold tracking-tight text-primary">
+      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background p-1">
+        <div className="flex items-center justify-center gap-1.5 px-2 py-1.5">
+          <h2 className="text-xs font-bold tracking-tight text-primary">
             {t("archive")}
           </h2>
-          <span className="text-xs font-semibold tabular-nums text-muted-foreground">
+          <span className="text-[10px] font-semibold tabular-nums text-muted-foreground">
             {completedGoals.length}
           </span>
         </div>
 
         {completedGoals.length === 0 ? (
-          <div className="border-t border-border px-3 py-4 text-center">
+          <div className="border-t border-border px-3 py-2.5 text-center">
             <p className="text-xs font-medium text-muted-foreground">{t("archiveEmpty")}</p>
           </div>
         ) : (
