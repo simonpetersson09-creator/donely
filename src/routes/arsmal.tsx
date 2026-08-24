@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { Check, Home, Briefcase, Plus, Target, Trash2, X } from "lucide-react";
+import { Check, Home, Briefcase, Plus, Trash2, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { AnimatedNumber } from "@/components/AnimatedNumber";
 import { AnimatedProgress } from "@/components/AnimatedProgress";
