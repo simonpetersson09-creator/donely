@@ -851,7 +851,7 @@ function CategorySheet({
 
       <div
         ref={listRef}
-        className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
+        className="no-scrollbar min-h-0 flex-1 space-y-0 overflow-y-auto overscroll-contain"
         style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
         onScroll={() => setOpenId(null)}
         onPointerMove={(e) => {
