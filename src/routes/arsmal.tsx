@@ -161,7 +161,7 @@ function GoalRow({
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-sm font-medium text-card-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             onUpdateText(e.target.value);
             onFinishEdit();
@@ -218,7 +218,7 @@ function GoalRow({
           "min-w-0 flex-1 truncate text-left text-sm font-medium transition-colors",
           goal.completed
             ? "text-muted-foreground/80 line-through"
-            : "text-card-foreground"
+            : "text-foreground"
         )}
       >
         {goal.text || <span className="italic text-muted-foreground">{t("yearlyGoalPlaceholder")}</span>}
