@@ -121,8 +121,8 @@ function Arsmal() {
         </div>
 
         {completedGoals.length === 0 ? (
-          <div className="px-3 py-2.5 text-center">
-            <p className="text-xs font-medium text-muted-foreground">{t("archiveEmpty")}</p>
+          <div className="px-3 py-3 text-center">
+            <p className="text-xs font-medium text-foreground">{t("archiveEmpty")}</p>
           </div>
         ) : (
           <div className="p-1">
