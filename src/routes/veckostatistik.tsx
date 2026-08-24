@@ -275,7 +275,7 @@ function Veckostatistik() {
         </span>
         {t("shareWorkSummary")}
       </button>
-      <p className="mt-2 px-2 text-center text-[12px] leading-snug text-muted-foreground">
+      <p className="mt-2 px-2 text-center text-[12px] leading-snug text-white">
         {t("shareWorkSummaryHint")}
       </p>
 
