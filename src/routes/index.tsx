@@ -842,9 +842,9 @@ function CategorySheet({
         </button>
       )}
 
-      <div className="mb-2 flex shrink-0 items-center gap-2 rounded-xl bg-primary/10 px-3 py-2.5 text-primary">
+      <div className="mb-1.5 flex shrink-0 items-center gap-2 rounded-xl bg-primary/10 px-3 py-2 text-primary">
         <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/15">
-          <ChevronLeft className="size-4 animate-pulse" />
+          <ChevronLeft className="size-3.5 animate-pulse" />
         </span>
         <p className="text-[13px] font-semibold leading-[16px]">{t("swipeHint")}</p>
       </div>
