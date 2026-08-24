@@ -445,7 +445,7 @@ function Index() {
           </Link>
           <Link
             to="/arsmal"
-            className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[16px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+            className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary text-[16px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
           >
             <Target className="size-5" />
             {t("yearlyGoals")}
