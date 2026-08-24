@@ -52,7 +52,8 @@ function Arsmal() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+
       <div className="pb-1 pt-0.5">
         <BackButton
           fallbackTo="/"
