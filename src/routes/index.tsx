@@ -835,7 +835,7 @@ function CategorySheet({
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="mb-1.5 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
+          className="mb-1 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-1.5 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
         >
           <Plus className="size-3.5" />
           {t("addCategory")}
