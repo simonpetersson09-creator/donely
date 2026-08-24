@@ -147,7 +147,7 @@ function Index() {
     };
   }, []);
 
-  const selected = areaCategories.find((c) => c.id === categoryId);
+  const selected = areaCategories.find((c) => c.id === effectiveCategoryId);
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
   // Distance/duration only make sense for private activity categories.
