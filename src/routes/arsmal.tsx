@@ -118,11 +118,11 @@ function Arsmal() {
       </div>
 
       {/* Completed goals — always expanded */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
-        <div className="flex items-center gap-2 px-2.5 py-2">
-          <span className="flex-1 text-left text-sm font-bold tracking-tight text-primary">
+      <div className="mt-5 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
+        <div className="flex items-center justify-center gap-2 px-2.5 py-2">
+          <h2 className="text-sm font-bold tracking-tight text-primary">
             {t("archive")}
-          </span>
+          </h2>
           <span className="text-xs font-semibold tabular-nums text-muted-foreground">
             {completedGoals.length}
           </span>
