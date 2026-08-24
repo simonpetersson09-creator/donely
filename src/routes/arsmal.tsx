@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Plus, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
@@ -182,9 +182,17 @@ function GoalRow({
 }) {
   const { t } = useLanguage();
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
+  const committedRef = useRef(false);
+
+  useEffect(() => {
+    if (isEditing) committedRef.current = false;
+  }, [isEditing]);
+
 
   // Empty rows are drafts: discard them instead of leaving a blank goal behind.
   const commitText = (value: string) => {
+    if (committedRef.current) return;
+    committedRef.current = true;
     const trimmed = value.trim();
     if (!trimmed) {
       onFinishEdit();
@@ -235,7 +243,9 @@ function GoalRow({
         />
         <button
           type="button"
-          onClick={() => {
+          onPointerDown={(e) => {
+            // Commit before the input's blur fires, so the typed value is used.
+            e.preventDefault();
             const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
             commitText(el?.value ?? goal.text);
           }}
