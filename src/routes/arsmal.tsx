@@ -184,7 +184,7 @@ function GoalRow({
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-2 px-2.5 py-2",
+          "stagger-item flex items-center gap-1.5 px-2 py-1.5",
           !last && "border-b border-border",
           "bg-secondary/50"
         )}
@@ -192,20 +192,20 @@ function GoalRow({
       >
         <div
           className={cn(
-            "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            "flex size-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             goal.completed
               ? "border-completed bg-completed"
               : "border-muted-foreground/40 bg-transparent"
           )}
         >
-          {goal.completed && <Check className="size-3 text-completed-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`goal-input-${goal.id}`}
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-sm font-medium text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-sm font-medium leading-tight text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             onUpdateText(e.target.value);
             onFinishEdit();
@@ -224,10 +224,10 @@ function GoalRow({
         <button
           type="button"
           onClick={onFinishEdit}
-          className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
+          className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
           aria-label={t("doneEditing")}
         >
-          <Check className="size-3.5" strokeWidth={3} />
+          <Check className="size-3" strokeWidth={3} />
         </button>
       </div>
     );
