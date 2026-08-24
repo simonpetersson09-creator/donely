@@ -481,7 +481,7 @@ export function useYearlyGoals() {
 
   const toggleGoal = useCallback(
     (id: string) => {
-      setGoals((prev) => commit(prev.map((g) => (g.id === id ? { ...g, completed: !g.completed } : g))));
+      commit(goalsRef.current.map((g) => (g.id === id ? { ...g, completed: !g.completed } : g)));
     },
     [commit],
   );
@@ -489,12 +489,10 @@ export function useYearlyGoals() {
   const updateGoalText = useCallback(
     (id: string, text: string) => {
       const trimmed = text.trim();
-      setGoals((prev) =>
-        commit(
-          trimmed
-            ? prev.map((g) => (g.id === id ? { ...g, text: trimmed } : g))
-            : prev.filter((g) => g.id !== id),
-        ),
+      commit(
+        trimmed
+          ? goalsRef.current.map((g) => (g.id === id ? { ...g, text: trimmed } : g))
+          : goalsRef.current.filter((g) => g.id !== id),
       );
     },
     [commit],
@@ -503,17 +501,18 @@ export function useYearlyGoals() {
   const removeGoal = useCallback(
     (id: string) => {
       createBackup("remove-yearly-goal");
-      setGoals((prev) => commit(prev.filter((g) => g.id !== id)));
+      commit(goalsRef.current.filter((g) => g.id !== id));
     },
     [commit],
   );
 
   const moveGoal = useCallback(
     (id: string, halfYear: "h1" | "h2") => {
-      setGoals((prev) => commit(prev.map((g) => (g.id === id ? { ...g, halfYear } : g))));
+      commit(goalsRef.current.map((g) => (g.id === id ? { ...g, halfYear } : g)));
     },
     [commit],
   );
+
 
   return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, hydrated };
 }
