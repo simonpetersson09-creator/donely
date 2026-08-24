@@ -151,7 +151,7 @@ function Arsmal() {
         className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
       >
         <Plus className="size-4" strokeWidth={2.5} />
-        <span className="text-sm font-bold tracking-tight">{t("addGoal")}</span>
+        <span className="text-[15px] font-bold">{t("addGoal")}</span>
       </button>
 
     </main>
