@@ -670,7 +670,7 @@ function AreaSegmented({
             }}
             className={cn(
               "relative z-10 flex items-center justify-center gap-1.5 rounded-lg py-2.5 text-[14px] font-semibold transition-colors duration-200",
-              area === o.value ? "text-white" : "text-foreground/60",
+              area === o.value ? "text-primary-foreground" : "text-foreground/60",
             )}
           >
             <Icon className="size-4" />
