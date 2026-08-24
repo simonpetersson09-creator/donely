@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Plus, X } from "lucide-react";
+import { Archive, Check, ChevronDown, Plus, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
@@ -30,6 +30,9 @@ function Arsmal() {
   const { t } = useLanguage();
   const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [archiveOpen, setArchiveOpen] = useState(false);
+  const activeGoals = goals.filter((g) => !g.completed);
+  const archivedGoals = goals.filter((g) => g.completed);
   const currentYear = new Date().getFullYear();
 
   const handleAdd = () => {
