@@ -188,11 +188,11 @@ function GoalRow({
           className={cn(
             "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             goal.completed
-              ? "border-primary bg-primary"
+              ? "border-completed bg-completed"
               : "border-muted-foreground/40 bg-transparent"
           )}
         >
-          {goal.completed && <Check className="size-3 text-primary-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-3 text-completed-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`goal-input-${goal.id}`}
@@ -241,13 +241,13 @@ function GoalRow({
         className={cn(
           "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
           goal.completed
-            ? "border-primary bg-primary"
+            ? "border-completed bg-completed"
             : "border-muted-foreground/40 bg-transparent"
         )}
         aria-checked={goal.completed}
         role="checkbox"
       >
-        {goal.completed && <Check className="size-3 text-primary-foreground" strokeWidth={3} />}
+        {goal.completed && <Check className="size-3 text-completed-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
@@ -255,8 +255,8 @@ function GoalRow({
         className={cn(
           "min-w-0 flex-1 truncate text-left text-sm font-medium transition-colors",
           goal.completed
-            ? "text-muted-foreground/80 line-through"
-            : "text-foreground"
+            ? "text-completed/85 line-through"
+            : "text-primary"
         )}
       >
         {goal.text || <span className="italic text-muted-foreground">{t("yearlyGoalPlaceholder")}</span>}
