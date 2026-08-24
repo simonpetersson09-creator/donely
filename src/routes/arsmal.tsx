@@ -123,17 +123,17 @@ function Arsmal() {
       {/* Completed goals — always expanded */}
       <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-bold text-primary-foreground">
+          <h2 className="text-[13px] font-normal text-primary-foreground">
             {t("archive")}
           </h2>
-          <span className="text-[12px] font-semibold tabular-nums text-primary-foreground/80">
+          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
             {completedGoals.length}
           </span>
         </div>
 
         {completedGoals.length === 0 ? (
           <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-medium text-foreground">{t("archiveEmpty")}</p>
+            <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
           </div>
         ) : (
           <div className="p-1">
