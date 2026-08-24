@@ -835,23 +835,23 @@ function CategorySheet({
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="mb-1.5 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-2 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
+          className="mb-1 flex w-full shrink-0 items-center gap-2 rounded-xl border border-dashed border-border px-3 py-1.5 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
         >
           <Plus className="size-3.5" />
           {t("addCategory")}
         </button>
       )}
 
-      <div className="mb-2 flex shrink-0 items-center gap-2 rounded-xl bg-primary/10 px-3 py-2.5 text-primary">
+      <div className="mb-1.5 flex shrink-0 items-center gap-2 rounded-xl bg-primary/10 px-3 py-2 text-primary">
         <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary/15">
-          <ChevronLeft className="size-4 animate-pulse" />
+          <ChevronLeft className="size-3.5 animate-pulse" />
         </span>
         <p className="text-[13px] font-semibold leading-[16px]">{t("swipeHint")}</p>
       </div>
 
       <div
         ref={listRef}
-        className="no-scrollbar min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain"
+        className="no-scrollbar min-h-0 flex-1 space-y-0 overflow-y-auto overscroll-contain"
         style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
         onScroll={() => setOpenId(null)}
         onPointerMove={(e) => {
@@ -888,7 +888,7 @@ function CategorySheet({
                 autoFocus
                 value={renameValue}
                 onChange={(e) => setRenameValue(e.target.value)}
-                className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-[16px] outline-none focus:border-ring"
+                className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-[16px] outline-none focus:border-ring"
               />
               <button
                 type="submit"
@@ -1045,7 +1045,7 @@ const CategoryRow = forwardRef(function CategoryRow(
             touchAction: "pan-y",
           }}
           className={cn(
-            "relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-2 text-left text-[14px] text-card-foreground transition-transform duration-200",
+            "relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-1.5 text-left text-[14px] text-card-foreground transition-transform duration-200",
             dragging && "z-10 scale-[1.02] shadow-lg opacity-95",
             !dragging && "active:bg-secondary",
           )}
