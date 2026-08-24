@@ -30,6 +30,17 @@ function Arsmal() {
   const { t } = useLanguage();
   const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
+  // A tap that ends editing must not "fall through" to the row buttons that
+  // appear in the same spot right after the row switches to display mode.
+  const suppressUntilRef = useRef(0);
+  const guard = (fn: () => void) => () => {
+    if (Date.now() < suppressUntilRef.current) return;
+    fn();
+  };
+  const finishEdit = () => {
+    suppressUntilRef.current = Date.now() + 600;
+    setEditingId(null);
+  };
   const activeGoals = goals.filter((g) => !g.completed);
   const completedGoals = goals.filter((g) => g.completed);
   const currentYear = new Date().getFullYear();
@@ -98,11 +109,11 @@ function Arsmal() {
                 index={idx}
                 last={idx === activeGoals.length - 1}
                 isEditing={editingId === goal.id}
-                onToggle={() => toggleGoal(goal.id)}
-                onStartEdit={() => startEditing(goal.id)}
+                onToggle={guard(() => toggleGoal(goal.id))}
+                onStartEdit={guard(() => startEditing(goal.id))}
                 onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={() => removeGoal(goal.id)}
-                onFinishEdit={() => setEditingId(null)}
+                onRemove={guard(() => removeGoal(goal.id))}
+                onFinishEdit={finishEdit}
               />
             ))}
           </div>
@@ -133,11 +144,11 @@ function Arsmal() {
                 index={idx}
                 last={idx === completedGoals.length - 1}
                 isEditing={editingId === goal.id}
-                onToggle={() => toggleGoal(goal.id)}
-                onStartEdit={() => startEditing(goal.id)}
+                onToggle={guard(() => toggleGoal(goal.id))}
+                onStartEdit={guard(() => startEditing(goal.id))}
                 onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={() => removeGoal(goal.id)}
-                onFinishEdit={() => setEditingId(null)}
+                onRemove={guard(() => removeGoal(goal.id))}
+                onFinishEdit={finishEdit}
               />
             ))}
           </div>
@@ -195,8 +206,9 @@ function GoalRow({
     committedRef.current = true;
     const trimmed = value.trim();
     if (!trimmed) {
-      onFinishEdit();
+      // Remove before finishing: finishing arms the tap-through guard.
       onRemove();
+      onFinishEdit();
       return;
     }
     onUpdateText(trimmed);
