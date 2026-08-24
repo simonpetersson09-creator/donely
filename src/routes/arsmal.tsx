@@ -239,10 +239,9 @@ function GoalRow({
             const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
             commitText(el?.value ?? goal.text);
           }}
-          className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
-          aria-label={t("doneEditing")}
+          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
-          <Check className="size-3" strokeWidth={3} />
+          {t("doneEditing")}
         </button>
       </div>
     );
