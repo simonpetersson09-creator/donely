@@ -269,7 +269,7 @@ function GoalRow({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
           goal.completed
             ? "border-primary bg-primary shadow-sm"
             : "border-muted-foreground/40 bg-transparent"
@@ -277,13 +277,13 @@ function GoalRow({
         aria-checked={goal.completed}
         role="checkbox"
       >
-        {goal.completed && <Check className="size-3 text-primary-foreground" strokeWidth={3} />}
+        {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[16px] font-medium transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-medium transition-colors",
           goal.completed
             ? "text-muted-foreground line-through"
             : "text-primary"
