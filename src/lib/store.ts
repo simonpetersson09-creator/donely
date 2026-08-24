@@ -232,7 +232,6 @@ export function useCategories() {
     renameCategory,
     setCategoryColor,
     removeCategory,
-    moveCategory,
     reorderCategory,
     hydrated,
   };
