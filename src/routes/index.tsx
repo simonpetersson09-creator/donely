@@ -453,7 +453,7 @@ function Index() {
         <CategorySheet
           area={area}
           categories={areaCategories}
-          selectedId={categoryId}
+          selectedId={effectiveCategoryId}
           onSelect={(id) => {
             setCategoryId(id);
             setPickerOpen(false);
