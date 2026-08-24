@@ -128,6 +128,12 @@ function Historik() {
           ))}
         </div>
 
+        {mode === "month" && (
+          <p className="mt-2 text-center text-[12px] font-medium text-muted-foreground">
+            {t("historyMonthYearLabel", { year: CURRENT_YEAR })}
+          </p>
+        )}
+
         {mode === "year" ? (
           <div className="mt-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
             {YEARS.map((y) => (
