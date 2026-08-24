@@ -74,55 +74,58 @@ function Arsmal() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
-      {/* Active goals heading */}
-      <div className="mt-2 text-center">
-        <h2 className="text-xs font-bold tracking-tight text-primary">
-          {t("activeGoals")}
-        </h2>
-      </div>
+      {/* Active goals */}
+      <div className="mt-2 overflow-hidden rounded-2xl border border-border/50 bg-background">
+        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+          <h2 className="text-xs font-bold tracking-tight text-primary-foreground">
+            {t("activeGoals")}
+          </h2>
+          <span className="text-[10px] font-semibold tabular-nums text-primary-foreground/80">
+            {activeGoals.length}
+          </span>
+        </div>
 
-      {/* Goals list — blends with app background, blue accents */}
-      <div className="mt-1 overflow-hidden rounded-2xl border border-border/50 bg-background p-1">
         {activeGoals.length === 0 ? (
           <div className="px-3 py-3 text-center">
             <p className="text-xs font-medium text-foreground">{t("emptyGoals")}</p>
           </div>
         ) : (
-          activeGoals.map((goal, idx) => (
-            <GoalRow
-              key={goal.id}
-              goal={goal}
-              index={idx}
-              last={idx === activeGoals.length - 1}
-              isEditing={editingId === goal.id}
-              onToggle={() => toggleGoal(goal.id)}
-              onStartEdit={() => startEditing(goal.id)}
-              onUpdateText={(text) => updateGoalText(goal.id, text)}
-              onRemove={() => removeGoal(goal.id)}
-              onFinishEdit={() => setEditingId(null)}
-            />
-          ))
+          <div className="p-1">
+            {activeGoals.map((goal, idx) => (
+              <GoalRow
+                key={goal.id}
+                goal={goal}
+                index={idx}
+                last={idx === activeGoals.length - 1}
+                isEditing={editingId === goal.id}
+                onToggle={() => toggleGoal(goal.id)}
+                onStartEdit={() => startEditing(goal.id)}
+                onUpdateText={(text) => updateGoalText(goal.id, text)}
+                onRemove={() => removeGoal(goal.id)}
+                onFinishEdit={() => setEditingId(null)}
+              />
+            ))}
+          </div>
         )}
-
       </div>
 
       {/* Completed goals — always expanded */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background p-1">
-        <div className="flex items-center justify-center gap-1.5 px-2 py-1.5">
-          <h2 className="text-xs font-bold tracking-tight text-primary">
+      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
+        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+          <h2 className="text-xs font-bold tracking-tight text-primary-foreground">
             {t("archive")}
           </h2>
-          <span className="text-[10px] font-semibold tabular-nums text-muted-foreground">
+          <span className="text-[10px] font-semibold tabular-nums text-primary-foreground/80">
             {completedGoals.length}
           </span>
         </div>
 
         {completedGoals.length === 0 ? (
-          <div className="border-t border-border px-3 py-2.5 text-center">
+          <div className="px-3 py-2.5 text-center">
             <p className="text-xs font-medium text-muted-foreground">{t("archiveEmpty")}</p>
           </div>
         ) : (
-          <div className="border-t border-border">
+          <div className="p-1">
             {completedGoals.map((goal, idx) => (
               <GoalRow
                 key={goal.id}
