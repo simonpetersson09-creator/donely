@@ -223,6 +223,31 @@ export function useCategories() {
     [commit],
   );
 
+  /**
+   * Reorders a category to an absolute position within its own area.
+   * Used by drag-to-reorder in the category picker.
+   */
+  const reorderCategory = useCallback(
+    (id: string, newIndex: number) => {
+      setCategories((prev) => {
+        const current = prev.find((c) => c.id === id);
+        if (!current) return prev;
+        const sameArea = prev.filter((c) => c.area === current.area);
+        const oldIndex = sameArea.findIndex((c) => c.id === id);
+        if (oldIndex === newIndex || newIndex < 0 || newIndex >= sameArea.length) return prev;
+        const reordered = [...sameArea];
+        const [moved] = reordered.splice(oldIndex, 1);
+        reordered.splice(newIndex, 0, moved);
+        const reorderedIter = reordered[Symbol.iterator]();
+        const next = prev.map((c) =>
+          c.area === current.area ? reorderedIter.next().value! : c,
+        );
+        return commit(next);
+      });
+    },
+    [commit],
+  );
+
   return {
     categories,
     addCategory,
@@ -230,6 +255,7 @@ export function useCategories() {
     setCategoryColor,
     removeCategory,
     moveCategory,
+    reorderCategory,
     hydrated,
   };
 }
