@@ -9,16 +9,16 @@ import { useCategories, useEntries, type Area } from "@/lib/store";
 export const Route = createFileRoute("/historik")({
   head: () => ({
     meta: [
-      { title: "Lägg till tidigare år – Donely" },
+      { title: "Lägg till historik – Donely" },
       {
         name: "description",
         content:
-          "Lägg in totalsummor från tidigare år i Donely, till exempel 150 löppass under 2025.",
+          "Lägg in totalsummor från tidigare år eller månader i Donely, till exempel 150 löppass under 2025 eller 30 möten i mars 2026.",
       },
-      { property: "og:title", content: "Lägg till tidigare år – Donely" },
+      { property: "og:title", content: "Lägg till historik – Donely" },
       {
         property: "og:description",
-        content: "Fyll på din Donely-statistik med resultat från tidigare år.",
+        content: "Fyll på din Donely-statistik med resultat från tidigare år och månader.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -28,14 +28,24 @@ export const Route = createFileRoute("/historik")({
 });
 
 const CURRENT_YEAR = new Date().getFullYear();
+const CURRENT_MONTH = new Date().getMonth();
 const YEARS = Array.from({ length: 10 }, (_, i) => CURRENT_YEAR - 1 - i);
+
+/** Localised month labels for the current year (Jan, Feb, ...). */
+function monthLabels(locale: string) {
+  return Array.from({ length: 12 }, (_, i) =>
+    new Date(CURRENT_YEAR, i, 1).toLocaleString(locale, { month: "short" }),
+  );
+}
 
 function Historik() {
   const { t, language } = useLanguage();
   const { categories } = useCategories();
   const { entries, addHistoryEntry, removeEntry } = useEntries();
 
+  const [mode, setMode] = useState<"year" | "month">("year");
   const [year, setYear] = useState(CURRENT_YEAR - 1);
+  const [month, setMonth] = useState(CURRENT_MONTH);
   const [area, setArea] = useState<Area>("privat");
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [amount, setAmount] = useState("");
@@ -45,8 +55,17 @@ function Historik() {
     [categories, area],
   );
 
+  const months = useMemo(() => monthLabels(language), [language]);
+
+  // A historical entry is anything dated before the current month (earlier
+  // months in the current year, or any previous year).
+  const now = new Date();
   const history = useMemo(
-    () => entries.filter((e) => new Date(e.createdAt).getFullYear() < CURRENT_YEAR),
+    () =>
+      entries.filter((e) => {
+        const d = new Date(e.createdAt);
+        return d.getFullYear() < CURRENT_YEAR || d.getMonth() < CURRENT_MONTH;
+      }),
     [entries],
   );
 
@@ -57,9 +76,15 @@ function Historik() {
       toast.error(t("historyInvalid"));
       return;
     }
+
+    const date =
+      mode === "year"
+        ? new Date(year, 11, 31, 12, 0, 0)
+        : new Date(CURRENT_YEAR, month, 1, 12, 0, 0);
+
     addHistoryEntry(
       { area, categoryId: category.id, categoryName: category.name, amount: value },
-      year,
+      date,
     );
     setAmount("");
     setCategoryId(null);
@@ -86,22 +111,62 @@ function Historik() {
 
       <section className="mt-4 rounded-2xl border border-border bg-card p-3.5 shadow-card">
         <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-          {t("historyYear")}
+          {t("historyPeriod")}
         </p>
-        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
-          {YEARS.map((y) => (
+        <div className="flex rounded-xl bg-secondary p-1">
+          {(["year", "month"] as const).map((m) => (
             <button
-              key={y}
+              key={m}
               type="button"
-              onClick={() => setYear(y)}
-              className={`shrink-0 rounded-full px-3.5 py-1.5 text-[14px] font-semibold transition-colors ${
-                y === year ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground"
+              onClick={() => setMode(m)}
+              className={`flex-1 rounded-lg py-2 text-[14px] font-semibold transition-colors ${
+                m === mode ? "bg-card text-primary shadow-button" : "text-muted-foreground"
               }`}
             >
-              {y}
+              {m === "year" ? t("historyYear") : t("historyMonth")}
             </button>
           ))}
         </div>
+
+        {mode === "year" ? (
+          <div className="mt-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+            {YEARS.map((y) => (
+              <button
+                key={y}
+                type="button"
+                onClick={() => setYear(y)}
+                className={`shrink-0 rounded-full px-3.5 py-1.5 text-[14px] font-semibold transition-colors ${
+                  y === year ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground"
+                }`}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-3 -mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+            {months.map((label, index) => {
+              const disabled = index > CURRENT_MONTH;
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  disabled={disabled}
+                  onClick={() => setMonth(index)}
+                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-[14px] font-semibold transition-colors ${
+                    index === month
+                      ? "bg-primary text-primary-foreground"
+                      : disabled
+                        ? "bg-secondary text-muted-foreground opacity-50"
+                        : "bg-secondary text-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         <div className="mt-3 flex rounded-xl bg-secondary p-1">
           {(["privat", "jobb"] as Area[]).map((a) => (
@@ -173,36 +238,43 @@ function Historik() {
               {t("historyEmpty")}
             </p>
           ) : (
-            history.map((entry, index) => (
-              <div
-                key={entry.id}
-                className={`flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
-                    {categoryLabel(t, { id: entry.categoryId, name: entry.categoryName })}
-                    <span className="ml-1 font-normal text-muted-foreground">
-                      ×{entry.amount.toLocaleString(language)}
-                    </span>
-                  </p>
-                  <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
-                    {new Date(entry.createdAt).getFullYear()} ·{" "}
-                    {entry.area === "privat" ? t("private") : t("work")}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  aria-label={t("recentDeleted")}
-                  onClick={() => {
-                    removeEntry(entry.id);
-                    toast.success(t("recentDeleted"));
-                  }}
-                  className="shrink-0 rounded-lg p-2 text-destructive transition-colors active:bg-destructive/10"
+            history.map((entry, index) => {
+              const d = new Date(entry.createdAt);
+              const isYearOnly = d.getMonth() === 11 && d.getDate() === 31;
+              return (
+                <div
+                  key={entry.id}
+                  className={`flex items-center gap-3 px-3 py-2.5 ${index > 0 ? "border-t border-border" : ""}`}
                 >
-                  <Trash2 className="size-[16px]" />
-                </button>
-              </div>
-            ))
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[13px] font-semibold leading-[18px] text-foreground">
+                      {categoryLabel(t, { id: entry.categoryId, name: entry.categoryName })}
+                      <span className="ml-1 font-normal text-muted-foreground">
+                        ×{entry.amount.toLocaleString(language)}
+                      </span>
+                    </p>
+                    <p className="mt-0.5 text-[11px] font-normal leading-[15px] text-muted-foreground">
+                      {isYearOnly
+                        ? d.getFullYear()
+                        : d.toLocaleString(language, { year: "numeric", month: "long" })}
+                      {" · "}
+                      {entry.area === "privat" ? t("private") : t("work")}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label={t("recentDeleted")}
+                    onClick={() => {
+                      removeEntry(entry.id);
+                      toast.success(t("recentDeleted"));
+                    }}
+                    className="shrink-0 rounded-lg p-2 text-destructive transition-colors active:bg-destructive/10"
+                  >
+                    <Trash2 className="size-[16px]" />
+                  </button>
+                </div>
+              );
+            })
           )}
         </div>
       </section>

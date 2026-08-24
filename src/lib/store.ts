@@ -292,13 +292,22 @@ export function useEntries() {
   );
 
   /**
-   * Adds a summed entry for a past year (e.g. "150 runs in 2025"). The entry is
-   * dated Dec 31 12:00 of that year so every yearly statistic picks it up, and
-   * the list stays sorted newest-first.
+   * Adds a summed entry for a past period — either a previous year (e.g. "150
+   * runs in 2025") or a past month in the current year (e.g. "32 meetings in
+   * March 2026"). The entry is dated at 12:00 on the last day of the supplied
+   * period so it is picked up by the matching month/year statistics, and the
+   * list stays sorted newest-first.
    */
   const addHistoryEntry = useCallback(
-    (entry: Omit<Entry, "id" | "createdAt">, year: number) => {
-      const createdAt = new Date(year, 11, 31, 12, 0, 0).toISOString();
+    (entry: Omit<Entry, "id" | "createdAt">, date: Date) => {
+      const createdAt = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        12,
+        0,
+        0,
+      ).toISOString();
       createBackup("add-history-entry");
       setEntries((prev) =>
         commit(
@@ -310,6 +319,7 @@ export function useEntries() {
     },
     [commit],
   );
+
 
   const removeEntry = useCallback(
     (id: string) => {
