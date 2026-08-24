@@ -191,7 +191,6 @@ function GoalRow({
 
   // Empty rows are drafts: discard them instead of leaving a blank goal behind.
   const commitText = (value: string) => {
-    console.log("[dbg] commitText", JSON.stringify(value), committedRef.current);
     if (committedRef.current) return;
     committedRef.current = true;
     const trimmed = value.trim();
@@ -200,7 +199,6 @@ function GoalRow({
       onRemove();
       return;
     }
-    console.log("[dbg] update", trimmed);
     onUpdateText(trimmed);
     onFinishEdit();
   };
