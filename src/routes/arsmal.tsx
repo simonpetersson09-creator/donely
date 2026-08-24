@@ -104,16 +104,6 @@ function Arsmal() {
           ))
         )}
 
-        <button
-          type="button"
-          onClick={handleAdd}
-          className="flex w-full items-center gap-1.5 rounded-b-2xl px-2 py-1.5 text-primary transition-colors active:bg-secondary"
-        >
-          <div className="flex size-4 items-center justify-center rounded-full bg-primary/10 text-primary">
-            <Plus className="size-3" strokeWidth={2.5} />
-          </div>
-          <span className="text-xs font-bold tracking-tight">{t("addGoal")}</span>
-        </button>
       </div>
 
       {/* Completed goals — always expanded */}
