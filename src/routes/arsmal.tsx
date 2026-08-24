@@ -248,8 +248,9 @@ function GoalRow({
   return (
     <div
       className={cn(
-        "stagger-item group flex items-center gap-1.5 px-2 py-1.5 transition-colors active:bg-secondary",
-        !last && "border-b border-border"
+        "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
+        !last && "border-b border-border",
+        goal.completed && "bg-secondary/50"
       )}
       style={delay}
     >
@@ -257,15 +258,15 @@ function GoalRow({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+          "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
           goal.completed
-            ? "border-completed bg-completed"
+            ? "border-primary bg-primary shadow-sm"
             : "border-muted-foreground/40 bg-transparent"
         )}
         aria-checked={goal.completed}
         role="checkbox"
       >
-        {goal.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
+        {goal.completed && <Check className="size-3 text-primary-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
@@ -273,7 +274,7 @@ function GoalRow({
         className={cn(
           "min-w-0 flex-1 truncate text-left text-sm font-medium leading-tight transition-colors",
           goal.completed
-            ? "text-completed/85 line-through"
+            ? "text-muted-foreground line-through"
             : "text-primary"
         )}
       >
