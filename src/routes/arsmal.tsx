@@ -66,7 +66,7 @@ function Arsmal() {
         </BackButton>
         <div className="absolute inset-x-0 top-1 flex justify-center">
           <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
-            <h1 className="text-[13px] font-bold text-primary-foreground">
+            <h1 className="text-[15px] font-bold text-primary-foreground">
               {t("yearlyGoals")} {currentYear}
             </h1>
           </div>
@@ -77,10 +77,10 @@ function Arsmal() {
       {/* Active goals */}
       <div className="mt-2 overflow-hidden rounded-2xl border border-border/50 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[11px] font-bold text-primary-foreground">
+          <h2 className="text-[13px] font-bold text-primary-foreground">
             {t("activeGoals")}
           </h2>
-          <span className="text-[10px] font-semibold tabular-nums text-primary-foreground/80">
+          <span className="text-[12px] font-semibold tabular-nums text-primary-foreground/80">
             {activeGoals.length}
           </span>
         </div>
@@ -112,10 +112,10 @@ function Arsmal() {
       {/* Completed goals — always expanded */}
       <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[11px] font-bold text-primary-foreground">
+          <h2 className="text-[13px] font-bold text-primary-foreground">
             {t("archive")}
           </h2>
-          <span className="text-[10px] font-semibold tabular-nums text-primary-foreground/80">
+          <span className="text-[12px] font-semibold tabular-nums text-primary-foreground/80">
             {completedGoals.length}
           </span>
         </div>
