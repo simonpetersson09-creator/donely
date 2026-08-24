@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useRef, useState } from "react";
-import { Check, Plus, Trash2, X } from "lucide-react";
+import { Check, Home, Briefcase, Plus, Trash2, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
+import { AnimatedNumber } from "@/components/AnimatedNumber";
+import { AnimatedProgress } from "@/components/AnimatedProgress";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
 import { useYearlyGoals, type YearlyGoal } from "@/lib/store";
@@ -63,6 +65,8 @@ function Arsmal() {
     });
   };
 
+  const doneCount = (list: YearlyGoal[]) => list.filter((g) => g.completed).length;
+
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
       <div className="pb-1 pt-0.5">
@@ -81,55 +85,112 @@ function Arsmal() {
         <p className="mt-1 text-[13px] text-muted-foreground">{t("yearlyGoalsSubtitle")}</p>
       </div>
 
-      <div className="mt-5 space-y-4">
-        <HalfYearCard
-          halfYear="h1"
-          title={t("halfYear1")}
-          range={t("halfYear1Range")}
-          goals={h1}
-          tone="life"
-          editingId={editingId}
-          onToggle={toggleGoal}
-          onStartEdit={startEditing}
-          onUpdateText={updateGoalText}
-          onRemove={removeGoal}
-          onFinishEdit={() => setEditingId(null)}
-          onAdd={() => handleAdd("h1")}
-          inputRef={inputRef}
-        />
-        <HalfYearCard
-          halfYear="h2"
-          title={t("halfYear2")}
-          range={t("halfYear2Range")}
-          goals={h2}
-          tone="work"
-          editingId={editingId}
-          onToggle={toggleGoal}
-          onStartEdit={startEditing}
-          onUpdateText={updateGoalText}
-          onRemove={removeGoal}
-          onFinishEdit={() => setEditingId(null)}
-          onAdd={() => handleAdd("h2")}
-          inputRef={inputRef}
-        />
+      {/* Overview tiles – same shape as the statistics summary card. */}
+      <div className="card-base mt-3 px-2 py-2">
+        <div className="grid grid-cols-2 gap-2">
+          <HalfStat
+            icon={<Home className="size-3" />}
+            label={t("halfYear1")}
+            done={doneCount(h1)}
+            total={h1.length}
+            tone="life"
+          />
+          <HalfStat
+            icon={<Briefcase className="size-3" />}
+            label={t("halfYear2")}
+            done={doneCount(h2)}
+            total={h2.length}
+            tone="work"
+          />
+        </div>
       </div>
+
+      <HalfYearSection
+        title={t("halfYear1")}
+        icon={<Home className="size-4" />}
+        range={t("halfYear1Range")}
+        goals={h1}
+        tone="life"
+        editingId={editingId}
+        onToggle={toggleGoal}
+        onStartEdit={startEditing}
+        onUpdateText={updateGoalText}
+        onRemove={removeGoal}
+        onFinishEdit={() => setEditingId(null)}
+        onAdd={() => handleAdd("h1")}
+        inputRef={inputRef}
+      />
+      <HalfYearSection
+        title={t("halfYear2")}
+        icon={<Briefcase className="size-4" />}
+        range={t("halfYear2Range")}
+        goals={h2}
+        tone="work"
+        editingId={editingId}
+        onToggle={toggleGoal}
+        onStartEdit={startEditing}
+        onUpdateText={updateGoalText}
+        onRemove={removeGoal}
+        onFinishEdit={() => setEditingId(null)}
+        onAdd={() => handleAdd("h2")}
+        inputRef={inputRef}
+      />
 
       <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-3">
         <button
           type="button"
           onClick={() => handleAdd(currentHalfYear)}
-          className="flex h-12 w-full max-w-md items-center justify-center gap-2 rounded-full bg-primary px-6 text-[16px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.96]"
+          className="inline-flex h-12 w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-primary px-4 text-[15px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
         >
-          <Plus className="size-4" />
-          <span>{t("addGoal")}</span>
+          <span className="flex size-7 items-center justify-center rounded-full bg-primary-foreground/15 ring-1 ring-primary-foreground/25">
+            <Plus className="size-4" />
+          </span>
+          {t("addGoal")}
         </button>
       </div>
     </main>
   );
 }
 
-function HalfYearCard({
+function HalfStat({
+  icon,
+  label,
+  done,
+  total,
+  tone,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  done: number;
+  total: number;
+  tone: "life" | "work";
+}) {
+  return (
+    <div className="flex items-center justify-center gap-2 rounded-xl bg-secondary/60 px-2 py-1.5">
+      <div
+        className={cn(
+          "flex size-7 shrink-0 items-center justify-center rounded-full",
+          tone === "life"
+            ? "bg-accent-life-soft text-accent-life"
+            : "bg-accent-work-soft text-accent-work",
+        )}
+      >
+        {icon}
+      </div>
+      <div className="min-w-0 text-center">
+        <p className="truncate text-[11px] font-medium text-muted-foreground">{label}</p>
+        <p className="text-[17px] font-bold leading-none tabular-nums text-card-foreground">
+          <AnimatedNumber value={done} />
+          <span className="text-muted-foreground">/{total}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function HalfYearSection({
   title,
+  icon,
   range,
   goals,
   tone,
@@ -142,8 +203,8 @@ function HalfYearCard({
   onAdd,
   inputRef,
 }: {
-  halfYear: "h1" | "h2";
   title: string;
+  icon: React.ReactNode;
   range: string;
   goals: YearlyGoal[];
   tone: "life" | "work";
@@ -161,43 +222,54 @@ function HalfYearCard({
   const total = goals.length;
   const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
-  const badgeSoft = tone === "life" ? "bg-accent-life-soft text-accent-life" : "bg-accent-work-soft text-accent-work";
-  const progressBar = tone === "life" ? "bg-accent-life" : "bg-accent-work";
-
   return (
-    <section className="card-base overflow-hidden p-4">
-      <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <span className={cn("rounded-full px-2.5 py-1 text-[12px] font-bold tracking-wide", badgeSoft)}>
-            {title}
-          </span>
-          <span className="text-[12px] text-muted-foreground">{range}</span>
-        </div>
-        {total > 0 && (
-          <span className="text-[12px] font-semibold tabular-nums text-card-foreground">
-            {completed}/{total}
-          </span>
-        )}
+    <section className="mt-3">
+      <div className="mb-1.5 flex items-center gap-2 px-1">
+        <span
+          className={cn(
+            "flex size-6 items-center justify-center rounded-full",
+            tone === "life"
+              ? "bg-accent-life-soft text-accent-life"
+              : "bg-accent-work-soft text-accent-work",
+          )}
+        >
+          {icon}
+        </span>
+        <h2 className="text-[17px] font-bold leading-tight tracking-[-0.02em] text-primary">
+          {title}
+        </h2>
+        <span className="text-[12px] text-muted-foreground">{range}</span>
       </div>
 
-      {total > 0 && (
-        <div className="mb-4 h-1.5 w-full overflow-hidden rounded-full bg-secondary">
-          <div
-            className={cn("h-full rounded-full transition-all duration-500", progressBar)}
-            style={{ width: `${pct}%` }}
-          />
+      <div className="card-base overflow-hidden p-0">
+        <div className="grid grid-cols-[minmax(0,1fr)_56px] items-center gap-2 border-b border-border px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span>{t("yearlyGoals")}</span>
+          <span className="text-center">{t("done")}</span>
         </div>
-      )}
 
-      <div className="space-y-1">
+        {total > 0 && (
+          <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+            <AnimatedProgress
+              value={pct}
+              runKey={`${tone}-${total}`}
+              className={tone === "life" ? "bg-accent-life" : "bg-accent-work"}
+            />
+            <span className="shrink-0 text-[12px] font-semibold tabular-nums text-card-foreground">
+              {completed}/{total}
+            </span>
+          </div>
+        )}
+
         {goals.length === 0 ? (
-          <p className="py-2 text-[14px] text-muted-foreground">{t("emptyGoals")}</p>
+          <p className="px-3 py-3 text-[14px] text-muted-foreground">{t("emptyGoals")}</p>
         ) : (
-          goals.map((goal) => (
+          goals.map((goal, idx) => (
             <GoalRow
               key={goal.id}
               goal={goal}
               tone={tone}
+              index={idx}
+              last={idx === goals.length - 1}
               isEditing={editingId === goal.id}
               inputRef={inputRef}
               onToggle={() => onToggle(goal.id)}
@@ -208,21 +280,21 @@ function HalfYearCard({
             />
           ))
         )}
-      </div>
 
-      <button
-        type="button"
-        onClick={onAdd}
-        className={cn(
-          "mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl py-2.5 text-[14px] font-semibold transition-colors",
-          tone === "life"
-            ? "bg-accent-life-soft text-accent-life active:bg-accent-life/20"
-            : "bg-accent-work-soft text-accent-work active:bg-accent-work/20",
-        )}
-      >
-        <Plus className="size-3.5" />
-        {t("addGoal")}
-      </button>
+        <button
+          type="button"
+          onClick={onAdd}
+          className={cn(
+            "flex w-full items-center justify-center gap-1.5 border-t border-border py-2.5 text-[14px] font-semibold transition-colors",
+            tone === "life"
+              ? "text-accent-life active:bg-accent-life-soft"
+              : "text-accent-work active:bg-accent-work-soft",
+          )}
+        >
+          <Plus className="size-3.5" />
+          {t("addGoal")}
+        </button>
+      </div>
     </section>
   );
 }
@@ -230,6 +302,8 @@ function HalfYearCard({
 function GoalRow({
   goal,
   tone,
+  index,
+  last,
   isEditing,
   inputRef,
   onToggle,
@@ -240,6 +314,8 @@ function GoalRow({
 }: {
   goal: YearlyGoal;
   tone: "life" | "work";
+  index: number;
+  last: boolean;
   isEditing: boolean;
   inputRef: React.RefObject<HTMLInputElement | null>;
   onToggle: () => void;
@@ -250,11 +326,13 @@ function GoalRow({
 }) {
   const { t } = useLanguage();
   const accent = tone === "life" ? "bg-accent-life border-accent-life" : "bg-accent-work border-accent-work";
+  const rowClass = cn("stagger-item px-3 py-1.5", !last && "border-b border-border");
+  const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
 
   if (isEditing) {
     return (
-      <div className="flex items-center gap-2 rounded-xl bg-secondary/50 px-2 py-1.5">
-        <div className={cn("flex size-5 shrink-0 items-center justify-center rounded-md border-2 border-muted-foreground/40 bg-transparent")}>
+      <div className={cn(rowClass, "flex items-center gap-2 bg-secondary/50")} style={delay}>
+        <div className="flex size-5 shrink-0 items-center justify-center rounded-md border-2 border-muted-foreground/40 bg-transparent">
           {goal.completed && <Check className="size-3 text-primary-foreground" />}
         </div>
         <input
@@ -263,7 +341,7 @@ function GoalRow({
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[15px] text-card-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-medium text-card-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => onUpdateText(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -289,7 +367,7 @@ function GoalRow({
   }
 
   return (
-    <div className="group flex items-center gap-2 rounded-xl px-2 py-1.5 transition-colors active:bg-secondary">
+    <div className={cn(rowClass, "group flex items-center gap-2 transition-colors active:bg-secondary")} style={delay}>
       <button
         type="button"
         onClick={onToggle}
@@ -306,7 +384,7 @@ function GoalRow({
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 text-left text-[15px] transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-medium transition-colors",
           goal.completed ? "text-muted-foreground line-through" : "text-card-foreground",
         )}
       >
