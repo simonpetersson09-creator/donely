@@ -249,8 +249,7 @@ function GoalRow({
     <div
       className={cn(
         "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
-        !last && "border-b border-border",
-        goal.completed && "bg-secondary/50"
+        !last && "border-b border-border"
       )}
       style={delay}
     >
