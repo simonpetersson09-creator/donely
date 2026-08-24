@@ -178,14 +178,10 @@ export function initDevSeed() {
     return;
   }
 
-  const already = (() => {
-    try {
-      return window.localStorage.getItem(SEEDED_FLAG) === "1";
-    } catch {
-      return false;
-    }
-  })();
-  if (already) return;
+  // Re-seed whenever there is no activity data, even if we've seeded before —
+  // otherwise a cleared/fresh browser profile shows empty statistics.
+  const existing = readKey(STORAGE_KEYS.entries, entriesSchema);
+  if (existing.status === "ok" && existing.value.length > 0) return;
 
   if (seedDevActivities()) {
     console.info("[donely/dev] demo activities seeded — window.donely.clear() to remove them");
