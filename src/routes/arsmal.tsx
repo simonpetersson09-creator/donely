@@ -71,13 +71,13 @@ function Arsmal() {
       <div className="relative flex items-center justify-between pb-3 pt-1">
         <BackButton
           fallbackTo="/"
-          className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
         >
           {t("back")}
         </BackButton>
         <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
           <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
-            <h1 className="text-[15px] font-bold text-primary-foreground">
+            <h1 className="text-[15px] font-normal text-primary-foreground">
               {t("yearlyGoals")} {currentYear}
             </h1>
           </div>
@@ -88,17 +88,17 @@ function Arsmal() {
       {/* Active goals */}
       <div className="mt-2 overflow-hidden rounded-2xl border border-border/50 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-bold text-primary-foreground">
+          <h2 className="text-[13px] font-normal text-primary-foreground">
             {t("activeGoals")}
           </h2>
-          <span className="text-[12px] font-semibold tabular-nums text-primary-foreground/80">
+          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
             {activeGoals.length}
           </span>
         </div>
 
         {activeGoals.length === 0 ? (
           <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-medium text-foreground">{t("emptyGoals")}</p>
+            <p className="text-[13px] font-normal text-foreground">{t("emptyGoals")}</p>
           </div>
         ) : (
           <div className="p-1">
@@ -123,17 +123,17 @@ function Arsmal() {
       {/* Completed goals — always expanded */}
       <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-bold text-primary-foreground">
+          <h2 className="text-[13px] font-normal text-primary-foreground">
             {t("archive")}
           </h2>
-          <span className="text-[12px] font-semibold tabular-nums text-primary-foreground/80">
+          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
             {completedGoals.length}
           </span>
         </div>
 
         {completedGoals.length === 0 ? (
           <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-medium text-foreground">{t("archiveEmpty")}</p>
+            <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
           </div>
         ) : (
           <div className="p-1">
@@ -162,7 +162,7 @@ function Arsmal() {
         className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
       >
         <Plus className="size-4" strokeWidth={2.5} />
-        <span className="text-[15px] font-bold">{t("addGoal")}</span>
+        <span className="text-[15px] font-normal">{t("addGoal")}</span>
       </button>
 
     </main>
@@ -240,7 +240,7 @@ function GoalRow({
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-medium text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -261,7 +261,7 @@ function GoalRow({
             const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
             commitText(el?.value ?? goal.text);
           }}
-          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-bold text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
+          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
@@ -295,7 +295,7 @@ function GoalRow({
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[14px] font-medium transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
           goal.completed
             ? "text-muted-foreground line-through"
             : "text-primary"
