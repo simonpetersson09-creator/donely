@@ -24,6 +24,7 @@ export const STORAGE_KEYS = {
   categories: "vr.categories.v1",
   entries: "vr.entries.v1",
   goals: "vr.goals.v1",
+  yearlyGoals: "vr.yearlyGoals.v1",
   onboarding: "vr.onboarding.v1",
   langGuide: "vr.langGuide.v1",
   reminderPrompt: "vr.reminderPrompt.v1",
@@ -39,6 +40,7 @@ const DATA_KEYS = [
   STORAGE_KEYS.categories,
   STORAGE_KEYS.entries,
   STORAGE_KEYS.goals,
+  STORAGE_KEYS.yearlyGoals,
   STORAGE_KEYS.onboarding,
   STORAGE_KEYS.langGuide,
   STORAGE_KEYS.reminderPrompt,
@@ -78,11 +80,20 @@ export const entrySchema = z.object({
 export const categoriesSchema = z.array(categorySchema);
 export const entriesSchema = z.array(entrySchema);
 export const goalsSchema = z.record(z.string(), z.number().finite());
+export const yearlyGoalSchema = z.object({
+  id: z.string().min(1),
+  text: z.string(),
+  completed: z.boolean(),
+  halfYear: z.enum(["h1", "h2"]),
+  createdAt: z.string().min(1),
+});
+export const yearlyGoalsSchema = z.array(yearlyGoalSchema);
 export const flagSchema = z.boolean();
 
 export type Category = z.infer<typeof categorySchema>;
 export type Entry = z.infer<typeof entrySchema>;
 export type Goals = z.infer<typeof goalsSchema>;
+export type YearlyGoal = z.infer<typeof yearlyGoalSchema>;
 
 export type Snapshot = {
   schemaVersion: number;
@@ -90,6 +101,7 @@ export type Snapshot = {
   entries: Entry[];
   categories: Category[];
   goals: Goals;
+  yearlyGoals: YearlyGoal[];
   settings: {
     onboarding: boolean;
     langGuide: boolean;
@@ -104,6 +116,7 @@ export const snapshotSchema = z.object({
   entries: entriesSchema,
   categories: categoriesSchema,
   goals: goalsSchema,
+  yearlyGoals: yearlyGoalsSchema,
   settings: z.object({
     onboarding: z.boolean(),
     langGuide: z.boolean(),
@@ -304,6 +317,8 @@ function schemaFor(key: string): z.ZodType<unknown> {
       return entriesSchema as unknown as z.ZodType<unknown>;
     case STORAGE_KEYS.goals:
       return goalsSchema as unknown as z.ZodType<unknown>;
+    case STORAGE_KEYS.yearlyGoals:
+      return yearlyGoalsSchema as unknown as z.ZodType<unknown>;
     default:
       return flagSchema as unknown as z.ZodType<unknown>;
   }
@@ -326,6 +341,7 @@ export function currentSnapshot(): Snapshot {
   const categories = readKey(STORAGE_KEYS.categories, categoriesSchema);
   const entries = readKey(STORAGE_KEYS.entries, entriesSchema);
   const goals = readKey(STORAGE_KEYS.goals, goalsSchema);
+  const yearlyGoals = readKey(STORAGE_KEYS.yearlyGoals, yearlyGoalsSchema);
   const store = storage();
   let language: string | null = null;
   try {
@@ -339,6 +355,7 @@ export function currentSnapshot(): Snapshot {
     categories: categories.status === "ok" ? categories.value : [],
     entries: entries.status === "ok" ? entries.value : [],
     goals: goals.status === "ok" ? goals.value : {},
+    yearlyGoals: yearlyGoals.status === "ok" ? yearlyGoals.value : [],
     settings: {
       onboarding: readFlag(STORAGE_KEYS.onboarding),
       langGuide: readFlag(STORAGE_KEYS.langGuide),
@@ -394,6 +411,11 @@ export function restoreSnapshot(snapshot: Snapshot): boolean {
       key: STORAGE_KEYS.goals,
       value: s.goals,
       schema: goalsSchema as unknown as z.ZodType<unknown>,
+    },
+    {
+      key: STORAGE_KEYS.yearlyGoals,
+      value: s.yearlyGoals,
+      schema: yearlyGoalsSchema as unknown as z.ZodType<unknown>,
     },
     {
       key: STORAGE_KEYS.onboarding,
@@ -537,11 +559,13 @@ export function initializeStorage(): IntegrityStatus {
   const categories = readKey(STORAGE_KEYS.categories, categoriesSchema);
   const entries = readKey(STORAGE_KEYS.entries, entriesSchema);
   const goals = readKey(STORAGE_KEYS.goals, goalsSchema);
+  const yearlyGoals = readKey(STORAGE_KEYS.yearlyGoals, yearlyGoalsSchema);
 
   const everythingMissing =
     categories.status === "missing" &&
     entries.status === "missing" &&
     goals.status === "missing" &&
+    yearlyGoals.status === "missing" &&
     readSchemaVersion() === null &&
     readBackups().length === 0;
 
@@ -557,6 +581,7 @@ export function initializeStorage(): IntegrityStatus {
   if (categories.status === "corrupt") corrupt.push(STORAGE_KEYS.categories);
   if (entries.status === "corrupt") corrupt.push(STORAGE_KEYS.entries);
   if (goals.status === "corrupt") corrupt.push(STORAGE_KEYS.goals);
+  if (yearlyGoals.status === "corrupt") corrupt.push(STORAGE_KEYS.yearlyGoals);
 
   if (corrupt.length > 0) {
     const backup = latestValidBackup();

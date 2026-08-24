@@ -18,18 +18,21 @@ import {
   subscribeIntegrity,
   writeTransaction,
   writeKey,
+  yearlyGoalsSchema,
   type Category,
   type Entry,
   type Goals,
+  type YearlyGoal,
 } from "@/lib/persistence";
 
 export type Area = "jobb" | "privat";
-export type { Category, Entry, Goals };
+export type { Category, Entry, Goals, YearlyGoal };
 export { DEFAULT_CATEGORIES };
 
 const CATS_KEY = STORAGE_KEYS.categories;
 const ENTRIES_KEY = STORAGE_KEYS.entries;
 const GOALS_KEY = STORAGE_KEYS.goals;
+const YEARLY_GOALS_KEY = STORAGE_KEYS.yearlyGoals;
 const ONBOARDING_KEY = STORAGE_KEYS.onboarding;
 const LANG_GUIDE_KEY = STORAGE_KEYS.langGuide;
 const REMINDER_PROMPT_KEY = STORAGE_KEYS.reminderPrompt;
@@ -408,6 +411,87 @@ export function useGoals() {
   return { goals, setGoal, removeGoal, removeGoalsByCategory, hydrated };
 }
 
+export function useYearlyGoals() {
+  const [goals, setGoals] = useState<YearlyGoal[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+
+  const readFromStorage = useCallback(() => {
+    ready();
+    const stored = readKey(YEARLY_GOALS_KEY, yearlyGoalsSchema);
+    if (stored.status === "ok") setGoals(stored.value);
+    setHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    readFromStorage();
+  }, [readFromStorage]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.addEventListener(DATA_CHANGED_EVENT, readFromStorage);
+    return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
+  }, [readFromStorage]);
+
+  const commit = useCallback((next: YearlyGoal[]) => {
+    writeKey(YEARLY_GOALS_KEY, next, yearlyGoalsSchema);
+    emitDataChanged();
+    return next;
+  }, []);
+
+  const addGoal = useCallback(
+    (text: string, halfYear: "h1" | "h2") => {
+      const goal: YearlyGoal = {
+        id: crypto.randomUUID(),
+        text: text.trim(),
+        completed: false,
+        halfYear,
+        createdAt: new Date().toISOString(),
+      };
+      setGoals((prev) => commit([...prev, goal]));
+      return goal.id;
+    },
+    [commit],
+  );
+
+  const toggleGoal = useCallback(
+    (id: string) => {
+      setGoals((prev) => commit(prev.map((g) => (g.id === id ? { ...g, completed: !g.completed } : g))));
+    },
+    [commit],
+  );
+
+  const updateGoalText = useCallback(
+    (id: string, text: string) => {
+      const trimmed = text.trim();
+      setGoals((prev) =>
+        commit(
+          trimmed
+            ? prev.map((g) => (g.id === id ? { ...g, text: trimmed } : g))
+            : prev.filter((g) => g.id !== id),
+        ),
+      );
+    },
+    [commit],
+  );
+
+  const removeGoal = useCallback(
+    (id: string) => {
+      createBackup("remove-yearly-goal");
+      setGoals((prev) => commit(prev.filter((g) => g.id !== id)));
+    },
+    [commit],
+  );
+
+  const moveGoal = useCallback(
+    (id: string, halfYear: "h1" | "h2") => {
+      setGoals((prev) => commit(prev.map((g) => (g.id === id ? { ...g, halfYear } : g))));
+    },
+    [commit],
+  );
+
+  return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, hydrated };
+}
+
 function useFlag(key: string) {
   const [value, setValue] = useState(false);
   const [hydrated, setHydrated] = useState(false);
@@ -457,7 +541,7 @@ export function clearAllData() {
   clearRecordLedger();
   clearAchievementLedger();
 
-  for (const key of [CATS_KEY, ENTRIES_KEY, GOALS_KEY, ONBOARDING_KEY, LANG_GUIDE_KEY]) {
+  for (const key of [CATS_KEY, ENTRIES_KEY, GOALS_KEY, YEARLY_GOALS_KEY, ONBOARDING_KEY, LANG_GUIDE_KEY]) {
     try {
       window.localStorage.removeItem(key);
     } catch {
