@@ -114,11 +114,17 @@ function Index() {
     [categories, area],
   );
 
+  // Fall back synchronously (not in an effect) so switching area never renders
+  // an intermediate frame without a selected category — that caused a flicker
+  // in the fields below the segmented control.
+  const effectiveCategoryId = areaCategories.some((c) => c.id === categoryId)
+    ? categoryId
+    : (areaCategories[0]?.id ?? null);
+
   useEffect(() => {
-    if (!areaCategories.some((c) => c.id === categoryId)) {
-      setCategoryId(areaCategories[0]?.id ?? null);
-    }
-  }, [areaCategories, categoryId]);
+    if (effectiveCategoryId !== categoryId) setCategoryId(effectiveCategoryId);
+  }, [effectiveCategoryId, categoryId]);
+
 
   useEffect(() => {
     return () => {
