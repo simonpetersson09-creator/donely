@@ -1062,8 +1062,11 @@ const CategoryRow = forwardRef(function CategoryRow(
             <span className="truncate">{name}</span>
           </span>
           {!actionsOpen && (
-            <span className="flex shrink-0 items-center gap-1.5">
+            <span className="flex shrink-0 items-center gap-0.5">
               {selected && <Check className="size-3.5 text-primary" />}
+              <span className="text-muted-foreground/40">
+                <ChevronLeft className="size-3.5" />
+              </span>
               <span
                 aria-label={t("reorder")}
                 onPointerDown={(e) => {
