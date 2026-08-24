@@ -114,11 +114,17 @@ function Index() {
     [categories, area],
   );
 
+  // Fall back synchronously (not in an effect) so switching area never renders
+  // an intermediate frame without a selected category — that caused a flicker
+  // in the fields below the segmented control.
+  const effectiveCategoryId = areaCategories.some((c) => c.id === categoryId)
+    ? categoryId
+    : (areaCategories[0]?.id ?? null);
+
   useEffect(() => {
-    if (!areaCategories.some((c) => c.id === categoryId)) {
-      setCategoryId(areaCategories[0]?.id ?? null);
-    }
-  }, [areaCategories, categoryId]);
+    if (effectiveCategoryId !== categoryId) setCategoryId(effectiveCategoryId);
+  }, [effectiveCategoryId, categoryId]);
+
 
   useEffect(() => {
     return () => {
@@ -141,7 +147,7 @@ function Index() {
     };
   }, []);
 
-  const selected = areaCategories.find((c) => c.id === categoryId);
+  const selected = areaCategories.find((c) => c.id === effectiveCategoryId);
   const parsed = Number.parseInt(amount, 10);
   const valid = Number.isInteger(parsed) && parsed > 0 && !!selected;
   // Distance/duration only make sense for private activity categories.
@@ -447,7 +453,7 @@ function Index() {
         <CategorySheet
           area={area}
           categories={areaCategories}
-          selectedId={categoryId}
+          selectedId={effectiveCategoryId}
           onSelect={(id) => {
             setCategoryId(id);
             setPickerOpen(false);
