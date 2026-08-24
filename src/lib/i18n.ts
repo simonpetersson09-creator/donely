@@ -2617,9 +2617,11 @@ const no: Dict = {
   recentSection: "Siste registreringer",
   recentEmpty: "Ingen registreringer ennå",
   recentDeleted: "Registrering slettet",
-  historySection: "Legg til tidligere år",
-  historyIntro: "Legg til en total per kategori for et tidligere år, f.eks. 150 løpeturer i 2025.",
+  historySection: "Legg til historikk",
+  historyIntro:
+    "Legg til en total per kategori for et tidligere år eller en tidligere måned i år, f.eks. 150 løpeturer i 2025 eller 30 møter i mars 2026.",
   historyYear: "År",
+  historyMonth: "Måned",
   historyAdd: "Legg til",
   historyAdded: "Historikk lagt til",
   historyInvalid: "Velg en kategori og angi et antall",
