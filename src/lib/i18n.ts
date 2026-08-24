@@ -220,7 +220,7 @@ const sv = {
   reminderPromptEnable: "Aktivera påminnelse",
   reminderPromptLater: "Inte nu",
   weeklySummaryTitle: "Din vecka",
-  shareWorkSummary: "Maila jobbsammanställning till din chef",
+  shareWorkSummary: "Dela veckan med chefen",
   shareWorkSummarySubject: "Veckans jobbsammanställning ({{range}})",
   shareWorkSummaryEmpty: "Inga jobbaktiviteter att skicka den här veckan.",
   shareWorkSummaryFailed: "Kunde inte öppna delning.",
