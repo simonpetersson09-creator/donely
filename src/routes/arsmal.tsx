@@ -75,17 +75,17 @@ function Arsmal() {
 
       {/* Goals list — blends with app background, blue accents */}
       <div className="mt-1 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
-        {goals.length === 0 ? (
+        {activeGoals.length === 0 ? (
           <div className="px-3 py-5 text-center">
             <p className="text-sm font-medium text-foreground">{t("emptyGoals")}</p>
           </div>
         ) : (
-          goals.map((goal, idx) => (
+          activeGoals.map((goal, idx) => (
             <GoalRow
               key={goal.id}
               goal={goal}
               index={idx}
-              last={idx === goals.length - 1}
+              last={idx === activeGoals.length - 1}
               isEditing={editingId === goal.id}
               onToggle={() => toggleGoal(goal.id)}
               onStartEdit={() => startEditing(goal.id)}
@@ -108,9 +108,59 @@ function Arsmal() {
         </button>
       </div>
 
+      {/* Archive — completed goals */}
+      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background p-1.5">
+        <button
+          type="button"
+          onClick={() => setArchiveOpen((v) => !v)}
+          className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 transition-colors active:bg-secondary"
+        >
+          <div className="flex size-5 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Archive className="size-3" strokeWidth={2.5} />
+          </div>
+          <span className="flex-1 text-left text-sm font-bold tracking-tight text-primary">
+            {t("archive")}
+          </span>
+          <span className="text-xs font-semibold tabular-nums text-muted-foreground">
+            {archivedGoals.length}
+          </span>
+          <ChevronDown
+            className={cn(
+              "size-4 text-muted-foreground transition-transform",
+              archiveOpen && "rotate-180"
+            )}
+          />
+        </button>
+
+        {archiveOpen &&
+          (archivedGoals.length === 0 ? (
+            <div className="border-t border-border px-3 py-4 text-center">
+              <p className="text-xs font-medium text-muted-foreground">{t("archiveEmpty")}</p>
+            </div>
+          ) : (
+            <div className="border-t border-border">
+              {archivedGoals.map((goal, idx) => (
+                <GoalRow
+                  key={goal.id}
+                  goal={goal}
+                  index={idx}
+                  last={idx === archivedGoals.length - 1}
+                  isEditing={editingId === goal.id}
+                  onToggle={() => toggleGoal(goal.id)}
+                  onStartEdit={() => startEditing(goal.id)}
+                  onUpdateText={(text) => updateGoalText(goal.id, text)}
+                  onRemove={() => removeGoal(goal.id)}
+                  onFinishEdit={() => setEditingId(null)}
+                />
+              ))}
+            </div>
+          ))}
+      </div>
+
     </main>
   );
 }
+
 
 function GoalRow({
   goal,
