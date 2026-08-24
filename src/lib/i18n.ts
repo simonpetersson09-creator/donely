@@ -3506,7 +3506,7 @@ if (!i18n.isInitialized) {
     resources,
     // On the client the stored/device language is applied immediately so the UI
     // never renders one language and then swaps to another.
-    lng: typeof window === "undefined" ? "en" : initialLanguage(),
+    lng: typeof window === "undefined" ? "en" : detectLanguage(),
     fallbackLng: "en",
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
