@@ -56,21 +56,20 @@ function Arsmal() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-5 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
 
-      {/* Compact header */}
-      <div className="relative flex items-center justify-between pb-2 pt-1">
+      {/* iOS-style navigation header */}
+      <div className="relative flex items-center justify-between pb-3 pt-1">
         <BackButton
           fallbackTo="/"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full text-primary transition-colors active:bg-secondary"
+          className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-sm font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
         >
-          <span className="sr-only">{t("back")}</span>
+          {t("back")}
         </BackButton>
-        <div className="absolute inset-x-0 top-1 text-center">
-          <h1 className="text-lg font-bold leading-tight tracking-tight text-primary">
-            {t("yearlyGoals")}
-          </h1>
-          <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
-            {currentYear}
-          </p>
+        <div className="absolute inset-x-0 top-1 flex justify-center">
+          <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
+            <h1 className="text-sm font-bold tracking-tight text-primary-foreground">
+              {t("yearlyGoals")} {currentYear}
+            </h1>
+          </div>
         </div>
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
