@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import i18n, {
   LANGUAGES,
@@ -16,7 +16,11 @@ export function useLanguage() {
   const { t, i18n: instance } = useTranslation();
   const [ready, setReady] = useState(false);
 
-  useEffect(() => {
+  // Layout effect: runs after hydration but before paint, so the language swap
+  // is never visible as an English flash.
+  const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+  useIsomorphicLayoutEffect(() => {
     const next = detectLanguage();
     if (instance.language !== next) void instance.changeLanguage(next);
     setReady(true);

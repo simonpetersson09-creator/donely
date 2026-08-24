@@ -64,7 +64,7 @@ function Arsmal() {
         >
           {t("back")}
         </BackButton>
-        <div className="absolute inset-x-0 top-1 flex justify-center">
+        <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
           <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
             <h1 className="text-[15px] font-bold text-primary-foreground">
               {t("yearlyGoals")} {currentYear}
