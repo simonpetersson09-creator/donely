@@ -221,6 +221,7 @@ const sv = {
   reminderPromptLater: "Inte nu",
   weeklySummaryTitle: "Din vecka",
   shareWorkSummary: "Dela veckan med chefen",
+  shareWorkSummaryHint: "Endast jobbdata från den aktuella veckan skickas.",
   shareWorkSummarySubject: "Veckans jobbsammanställning ({{range}})",
   shareWorkSummaryEmpty: "Inga jobbaktiviteter att skicka den här veckan.",
   shareWorkSummaryFailed: "Kunde inte öppna delning.",
