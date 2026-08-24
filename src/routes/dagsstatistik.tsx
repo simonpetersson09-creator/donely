@@ -6,7 +6,6 @@ import { SummaryBreakdown } from "@/components/SummaryBreakdown";
 import { useCategories, useEntries } from "@/lib/store";
 import { useLanguage, useLocale } from "@/lib/use-language";
 import { buildDailySummary } from "@/lib/daily-summary";
-import { RecordsSection } from "@/components/RecordsSection";
 import { summaryDate, validateSummarySearch } from "@/lib/summary-date";
 
 export const Route = createFileRoute("/dagsstatistik")({
@@ -98,7 +97,6 @@ function Dagsstatistik() {
         </SummaryBreakdown>
       )}
 
-      <RecordsSection period={{ type: "day", date: summary.date }} />
     </main>
   );
 }
