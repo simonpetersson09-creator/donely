@@ -184,6 +184,11 @@ function GoalRow({
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
   const committedRef = useRef(false);
 
+  useEffect(() => {
+    if (isEditing) committedRef.current = false;
+  }, [isEditing]);
+
+
   // Empty rows are drafts: discard them instead of leaving a blank goal behind.
   const commitText = (value: string) => {
     if (committedRef.current) return;
