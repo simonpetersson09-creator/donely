@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ArsmalRouteImport } from './routes/arsmal'
 import { Route as DagsstatistikRouteImport } from './routes/dagsstatistik'
 import { Route as HistorikRouteImport } from './routes/historik'
 import { Route as InstallningarRouteImport } from './routes/installningar'
@@ -24,6 +25,11 @@ import { Route as SummaryWeekRouteImport } from './routes/summary.week'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArsmalRoute = ArsmalRouteImport.update({
+  id: '/arsmal',
+  path: '/arsmal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DagsstatistikRoute = DagsstatistikRouteImport.update({
@@ -79,6 +85,7 @@ const SummaryWeekRoute = SummaryWeekRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/arsmal': typeof ArsmalRoute
   '/dagsstatistik': typeof DagsstatistikRoute
   '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/arsmal': typeof ArsmalRoute
   '/dagsstatistik': typeof DagsstatistikRoute
   '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/arsmal': typeof ArsmalRoute
   '/dagsstatistik': typeof DagsstatistikRoute
   '/historik': typeof HistorikRoute
   '/installningar': typeof InstallningarRoute
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/arsmal'
     | '/dagsstatistik'
     | '/historik'
     | '/installningar'
@@ -134,6 +144,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/arsmal'
     | '/dagsstatistik'
     | '/historik'
     | '/installningar'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/arsmal'
     | '/dagsstatistik'
     | '/historik'
     | '/installningar'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArsmalRoute: typeof ArsmalRoute
   DagsstatistikRoute: typeof DagsstatistikRoute
   HistorikRoute: typeof HistorikRoute
   InstallningarRoute: typeof InstallningarRoute
@@ -180,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arsmal': {
+      id: '/arsmal'
+      path: '/arsmal'
+      fullPath: '/arsmal'
+      preLoaderRoute: typeof ArsmalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dagsstatistik': {
@@ -257,6 +277,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArsmalRoute: ArsmalRoute,
   DagsstatistikRoute: DagsstatistikRoute,
   HistorikRoute: HistorikRoute,
   InstallningarRoute: InstallningarRoute,
