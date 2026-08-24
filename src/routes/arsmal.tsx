@@ -215,20 +215,20 @@ function GoalRow({
       >
         <div
           className={cn(
-            "flex size-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             goal.completed
               ? "border-completed bg-completed"
               : "border-muted-foreground/40 bg-transparent"
           )}
         >
-          {goal.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`goal-input-${goal.id}`}
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[16px] font-medium text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-medium text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -269,7 +269,7 @@ function GoalRow({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
           goal.completed
             ? "border-primary bg-primary shadow-sm"
             : "border-muted-foreground/40 bg-transparent"
@@ -277,13 +277,13 @@ function GoalRow({
         aria-checked={goal.completed}
         role="checkbox"
       >
-        {goal.completed && <Check className="size-3 text-primary-foreground" strokeWidth={3} />}
+        {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[16px] font-medium transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-medium transition-colors",
           goal.completed
             ? "text-muted-foreground line-through"
             : "text-primary"
