@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Check, Plus, Trash2, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
@@ -30,7 +30,7 @@ function Arsmal() {
   const { t } = useLanguage();
   const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const currentYear = new Date().getFullYear();
 
   const handleAdd = () => {
     const month = new Date().getMonth() + 1;
@@ -52,27 +52,33 @@ function Arsmal() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-5 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]">
 
-      <div className="pb-1 pt-0.5">
+      {/* Compact header */}
+      <div className="relative flex items-center justify-between pb-4 pt-2">
         <BackButton
           fallbackTo="/"
-          className="-ml-2 inline-flex items-center gap-1 rounded-full px-2 py-1.5 text-[15px] font-medium text-primary transition-colors active:bg-secondary"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full text-primary transition-colors active:bg-secondary"
         >
-          {t("back")}
+          <span className="sr-only">{t("back")}</span>
         </BackButton>
+        <div className="absolute inset-x-0 top-2 text-center">
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-primary">
+            {t("yearlyGoals")}
+          </h1>
+          <p className="mt-0.5 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+            {currentYear}
+          </p>
+        </div>
+        <div className="h-10 w-10" aria-hidden="true" />
       </div>
 
-      <div className="mt-3 px-1 text-center">
-        <h1 className="text-[26px] font-bold leading-tight tracking-[-0.03em] text-primary">
-          {t("yearlyGoals")}
-        </h1>
-        <p className="mt-1 text-[13px] text-muted-foreground">{t("yearlyGoalsSubtitle")}</p>
-      </div>
-
-      <div className="card-base mt-3 overflow-hidden p-0">
+      {/* Goals card */}
+      <div className="card-base mt-2 overflow-hidden p-2">
         {goals.length === 0 ? (
-          <p className="px-3 py-3 text-[14px] text-muted-foreground">{t("emptyGoals")}</p>
+          <div className="px-4 py-8 text-center">
+            <p className="text-[15px] font-medium text-card-foreground">{t("emptyGoals")}</p>
+          </div>
         ) : (
           goals.map((goal, idx) => (
             <GoalRow
@@ -81,7 +87,6 @@ function Arsmal() {
               index={idx}
               last={idx === goals.length - 1}
               isEditing={editingId === goal.id}
-              inputRef={inputRef}
               onToggle={() => toggleGoal(goal.id)}
               onStartEdit={() => startEditing(goal.id)}
               onUpdateText={(text) => updateGoalText(goal.id, text)}
@@ -94,10 +99,12 @@ function Arsmal() {
         <button
           type="button"
           onClick={handleAdd}
-          className="flex w-full items-center justify-center gap-1.5 border-t border-border py-2.5 text-[14px] font-semibold text-primary transition-colors active:bg-secondary"
+          className="flex w-full items-center gap-3 rounded-b-2xl px-3 py-3.5 text-primary transition-colors active:bg-secondary"
         >
-          <Plus className="size-3.5" />
-          {t("addGoal")}
+          <div className="flex size-6 items-center justify-center">
+            <Plus className="size-5" strokeWidth={2.5} />
+          </div>
+          <span className="text-[15px] font-bold tracking-tight">{t("addGoal")}</span>
         </button>
       </div>
 
@@ -110,7 +117,6 @@ function GoalRow({
   index,
   last,
   isEditing,
-  inputRef,
   onToggle,
   onStartEdit,
   onUpdateText,
@@ -121,7 +127,6 @@ function GoalRow({
   index: number;
   last: boolean;
   isEditing: boolean;
-  inputRef: React.RefObject<HTMLInputElement | null>;
   onToggle: () => void;
   onStartEdit: () => void;
   onUpdateText: (text: string) => void;
@@ -129,22 +134,34 @@ function GoalRow({
   onFinishEdit: () => void;
 }) {
   const { t } = useLanguage();
-  const rowClass = cn("stagger-item px-3 py-1.5", !last && "border-b border-border");
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
 
   if (isEditing) {
     return (
-      <div className={cn(rowClass, "flex items-center gap-2 bg-secondary/50")} style={delay}>
-        <div className="flex size-5 shrink-0 items-center justify-center rounded-md border-2 border-muted-foreground/40 bg-transparent">
-          {goal.completed && <Check className="size-3 text-primary-foreground" />}
+      <div
+        className={cn(
+          "stagger-item flex items-center gap-3 px-3 py-3.5",
+          !last && "border-b border-border",
+          "bg-secondary/50"
+        )}
+        style={delay}
+      >
+        <div
+          className={cn(
+            "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            goal.completed
+              ? "border-primary bg-primary"
+              : "border-muted-foreground/40 bg-transparent"
+          )}
+        >
+          {goal.completed && <Check className="size-3.5 text-primary-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`goal-input-${goal.id}`}
-          ref={inputRef}
           type="text"
           defaultValue={goal.text}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-medium text-card-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[15px] font-medium text-card-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => onUpdateText(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
@@ -170,25 +187,35 @@ function GoalRow({
   }
 
   return (
-    <div className={cn(rowClass, "group flex items-center gap-2 transition-colors active:bg-secondary")} style={delay}>
+    <div
+      className={cn(
+        "stagger-item group flex items-center gap-3 px-3 py-3.5 transition-colors active:bg-secondary",
+        !last && "border-b border-border"
+      )}
+      style={delay}
+    >
       <button
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-5 shrink-0 items-center justify-center rounded-md border-2 transition-colors",
-          goal.completed ? "bg-primary border-primary" : "border-muted-foreground/40 bg-transparent",
+          "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+          goal.completed
+            ? "border-primary bg-primary"
+            : "border-muted-foreground/40 bg-transparent"
         )}
         aria-checked={goal.completed}
         role="checkbox"
       >
-        {goal.completed && <Check className="size-3 text-primary-foreground" />}
+        {goal.completed && <Check className="size-3.5 text-primary-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[14px] font-medium transition-colors",
-          goal.completed ? "text-muted-foreground line-through" : "text-card-foreground",
+          "min-w-0 flex-1 truncate text-left text-[15px] font-medium transition-colors",
+          goal.completed
+            ? "text-muted-foreground/80 line-through"
+            : "text-card-foreground"
         )}
       >
         {goal.text || <span className="italic text-muted-foreground">{t("yearlyGoalPlaceholder")}</span>}
