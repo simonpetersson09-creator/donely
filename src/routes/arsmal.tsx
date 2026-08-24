@@ -206,8 +206,9 @@ function GoalRow({
     committedRef.current = true;
     const trimmed = value.trim();
     if (!trimmed) {
-      onFinishEdit();
+      // Remove before finishing: finishing arms the tap-through guard.
       onRemove();
+      onFinishEdit();
       return;
     }
     onUpdateText(trimmed);
