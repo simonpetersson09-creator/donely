@@ -85,6 +85,8 @@ export const yearlyGoalSchema = z.object({
   text: z.string(),
   completed: z.boolean(),
   halfYear: z.enum(["h1", "h2"]),
+  /** Calendar year the goal belongs to. Optional for pre-migration rows. */
+  year: z.number().int().min(2000).max(3000).optional(),
   createdAt: z.string().min(1),
 });
 export const yearlyGoalsSchema = z.array(yearlyGoalSchema);
