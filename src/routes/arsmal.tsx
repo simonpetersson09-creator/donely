@@ -195,9 +195,16 @@ function GoalRow({
   const { t } = useLanguage();
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
   const committedRef = useRef(false);
+  // Controlled while editing, so a storage sync mid-typing can't wipe the field.
+  const [draft, setDraft] = useState(goal.text);
 
   useEffect(() => {
-    if (isEditing) committedRef.current = false;
+    if (isEditing) {
+      committedRef.current = false;
+      setDraft(goal.text);
+    }
+    // Only reseed when editing starts, never on external text updates.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing]);
 
 
