@@ -433,6 +433,10 @@ export function useYearlyGoals() {
         return true;
       });
       apply(unique);
+      // Persist the cleaned list so duplicates don't linger in storage.
+      if (unique.length !== stored.value.length) {
+        writeKey(YEARLY_GOALS_KEY, unique, yearlyGoalsSchema);
+      }
     }
     setHydrated(true);
   }, [apply]);
