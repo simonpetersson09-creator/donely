@@ -101,14 +101,25 @@ function Veckostatistik() {
 
   // Live preview of the report card inside the sheet, so the design can be
   // reviewed both in the web preview and on device before the mail opens.
+  // Depend on a serialized signature of the rows so the (expensive) canvas
+  // render only re-runs when the numbers actually change.
+  const rowsKey = useMemo(
+    () => JSON.stringify(workRows.map((r) => [r.label, r.total])),
+    [workRows],
+  );
+
   useEffect(() => {
     if (!commentOpen) return;
     const id = setTimeout(() => {
+      const rows = (JSON.parse(rowsKey) as [string, number][]).map(([label, value]) => ({
+        label,
+        value,
+      }));
       const card = renderWeeklyReportPng({
         title: t("reportTitle"),
         range: mailRange,
-        rows: workRows.map((r) => ({ label: r.label, value: r.total })),
-        total: workRows.reduce((acc, r) => acc + r.total, 0),
+        rows,
+        total: rows.reduce((acc, r) => acc + r.value, 0),
         totalLabel: t("reportTotalLabel"),
         comment: comment.trim() || undefined,
         commentHeading: t("mailCommentHeading"),
@@ -117,7 +128,7 @@ function Veckostatistik() {
       setCardPreview(card ? `data:image/png;base64,${card.base64}` : null);
     }, 200);
     return () => clearTimeout(id);
-  }, [commentOpen, comment, workRows, mailRange, t]);
+  }, [commentOpen, comment, rowsKey, mailRange, t]);
 
   /**
    * Builds the weekly report as a PNG and opens the native iOS mail composer
