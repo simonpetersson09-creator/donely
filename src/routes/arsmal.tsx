@@ -246,7 +246,8 @@ function GoalRow({
         <input
           id={`goal-input-${goal.id}`}
           type="text"
-          defaultValue={goal.text}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
           className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
@@ -266,8 +267,7 @@ function GoalRow({
           onPointerDown={(e) => {
             // Commit before the input's blur fires, so the typed value is used.
             e.preventDefault();
-            const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
-            commitText(el?.value ?? goal.text);
+            commitText(draft);
           }}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
