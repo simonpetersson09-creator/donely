@@ -32,13 +32,14 @@ function Arsmal() {
   const [editingId, setEditingId] = useState<string | null>(null);
   // A tap that ends editing must not "fall through" to the row buttons that
   // appear in the same spot right after the row switches to display mode.
-  const suppressUntilRef = useRef(0);
-  const guard = (fn: () => void) => () => {
-    if (Date.now() < suppressUntilRef.current) return;
+  // Per-row, so a tap-through only blocks the row that was just edited.
+  const suppressRef = useRef<Record<string, number>>({});
+  const guard = (id: string, fn: () => void) => () => {
+    if (Date.now() < (suppressRef.current[id] ?? 0)) return;
     fn();
   };
-  const finishEdit = () => {
-    suppressUntilRef.current = Date.now() + 600;
+  const finishEdit = (id: string) => {
+    suppressRef.current[id] = Date.now() + 600;
     setEditingId(null);
   };
   const activeGoals = goals.filter((g) => !g.completed);
