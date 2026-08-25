@@ -110,11 +110,11 @@ function Arsmal() {
                 index={idx}
                 last={idx === activeGoals.length - 1}
                 isEditing={editingId === goal.id}
-                onToggle={guard(() => toggleGoal(goal.id))}
-                onStartEdit={guard(() => startEditing(goal.id))}
+                onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                onStartEdit={guard(goal.id, () => startEditing(goal.id))}
                 onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={guard(() => removeGoal(goal.id))}
-                onFinishEdit={finishEdit}
+                onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                onFinishEdit={() => finishEdit(goal.id)}
               />
             ))}
           </div>
@@ -145,11 +145,11 @@ function Arsmal() {
                 index={idx}
                 last={idx === completedGoals.length - 1}
                 isEditing={editingId === goal.id}
-                onToggle={guard(() => toggleGoal(goal.id))}
-                onStartEdit={guard(() => startEditing(goal.id))}
+                onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                onStartEdit={guard(goal.id, () => startEditing(goal.id))}
                 onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={guard(() => removeGoal(goal.id))}
-                onFinishEdit={finishEdit}
+                onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                onFinishEdit={() => finishEdit(goal.id)}
               />
             ))}
           </div>
