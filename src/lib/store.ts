@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { clearRecordLedger } from "@/lib/records";
 import { clearAchievementLedger } from "@/lib/achievements";
 
@@ -411,31 +418,47 @@ export function useGoals() {
   return { goals, setGoal, removeGoal, removeGoalsByCategory, hydrated };
 }
 
-export function useYearlyGoals() {
-  const [goals, setGoals] = useState<YearlyGoal[]>([]);
+/** Year a goal belongs to; falls back to its creation year for legacy rows. */
+export function yearOfGoal(goal: YearlyGoal): number {
+  if (typeof goal.year === "number") return goal.year;
+  const created = new Date(goal.createdAt);
+  return Number.isNaN(created.getTime()) ? new Date().getFullYear() : created.getFullYear();
+}
+
+/**
+ * Yearly goals for a single calendar year. Storage keeps every year, the hook
+ * only exposes (and lets you edit) the requested one.
+ */
+export function useYearlyGoals(year?: number) {
+  const targetYear = year ?? new Date().getFullYear();
+  const [allGoals, setAllGoals] = useState<YearlyGoal[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const goalsRef = useRef<YearlyGoal[]>([]);
 
   const apply = useCallback((next: YearlyGoal[]) => {
     goalsRef.current = next;
-    setGoals(next);
+    setAllGoals(next);
   }, []);
 
   const readFromStorage = useCallback(() => {
     ready();
     const stored = readKey(YEARLY_GOALS_KEY, yearlyGoalsSchema);
     if (stored.status === "ok") {
-      // Guard against duplicate ids sneaking in from concurrent writes.
+      // Guard against duplicate ids sneaking in from concurrent writes, and
+      // backfill the year on rows written before it existed.
       const seen = new Set<string>();
       const unique = stored.value.filter((g) => {
         if (seen.has(g.id)) return false;
         seen.add(g.id);
         return true;
       });
-      apply(unique);
-      // Persist the cleaned list so duplicates don't linger in storage.
-      if (unique.length !== stored.value.length) {
-        writeKey(YEARLY_GOALS_KEY, unique, yearlyGoalsSchema);
+      const migrated = unique.map((g) =>
+        typeof g.year === "number" ? g : { ...g, year: yearOfGoal(g) },
+      );
+      apply(migrated);
+      // Persist the cleaned/migrated list so it doesn't have to run again.
+      if (unique.length !== stored.value.length || migrated.some((g, i) => g !== unique[i])) {
+        writeKey(YEARLY_GOALS_KEY, migrated, yearlyGoalsSchema);
       }
     }
     setHydrated(true);
@@ -451,6 +474,11 @@ export function useYearlyGoals() {
     return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
   }, [readFromStorage]);
 
+  const goals = useMemo(
+    () => allGoals.filter((g) => yearOfGoal(g) === targetYear),
+    [allGoals, targetYear],
+  );
+
   const commit = useCallback(
     (next: YearlyGoal[]) => {
       apply(next);
@@ -464,8 +492,15 @@ export function useYearlyGoals() {
   const addGoal = useCallback(
     (text: string, halfYear: "h1" | "h2") => {
       const trimmed = text.trim();
-      // Reuse an existing empty draft row instead of stacking a new one.
-      const existingEmpty = goalsRef.current.find((g) => !g.text && !g.completed);
+      // Reuse an existing empty draft row for the same year/half instead of
+      // stacking a new one.
+      const existingEmpty = goalsRef.current.find(
+        (g) =>
+          !g.text &&
+          !g.completed &&
+          g.halfYear === halfYear &&
+          yearOfGoal(g) === targetYear,
+      );
       if (!trimmed && existingEmpty) return existingEmpty.id;
 
       const goal: YearlyGoal = {
@@ -473,12 +508,13 @@ export function useYearlyGoals() {
         text: trimmed,
         completed: false,
         halfYear,
+        year: targetYear,
         createdAt: new Date().toISOString(),
       };
       commit([...goalsRef.current, goal]);
       return goal.id;
     },
-    [commit],
+    [commit, targetYear],
   );
 
 

@@ -32,13 +32,14 @@ function Arsmal() {
   const [editingId, setEditingId] = useState<string | null>(null);
   // A tap that ends editing must not "fall through" to the row buttons that
   // appear in the same spot right after the row switches to display mode.
-  const suppressUntilRef = useRef(0);
-  const guard = (fn: () => void) => () => {
-    if (Date.now() < suppressUntilRef.current) return;
+  // Per-row, so a tap-through only blocks the row that was just edited.
+  const suppressRef = useRef<Record<string, number>>({});
+  const guard = (id: string, fn: () => void) => () => {
+    if (Date.now() < (suppressRef.current[id] ?? 0)) return;
     fn();
   };
-  const finishEdit = () => {
-    suppressUntilRef.current = Date.now() + 600;
+  const finishEdit = (id: string) => {
+    suppressRef.current[id] = Date.now() + 600;
     setEditingId(null);
   };
   const activeGoals = goals.filter((g) => !g.completed);
@@ -109,11 +110,11 @@ function Arsmal() {
                 index={idx}
                 last={idx === activeGoals.length - 1}
                 isEditing={editingId === goal.id}
-                onToggle={guard(() => toggleGoal(goal.id))}
-                onStartEdit={guard(() => startEditing(goal.id))}
+                onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                onStartEdit={guard(goal.id, () => startEditing(goal.id))}
                 onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={guard(() => removeGoal(goal.id))}
-                onFinishEdit={finishEdit}
+                onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                onFinishEdit={() => finishEdit(goal.id)}
               />
             ))}
           </div>
@@ -144,11 +145,11 @@ function Arsmal() {
                 index={idx}
                 last={idx === completedGoals.length - 1}
                 isEditing={editingId === goal.id}
-                onToggle={guard(() => toggleGoal(goal.id))}
-                onStartEdit={guard(() => startEditing(goal.id))}
+                onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                onStartEdit={guard(goal.id, () => startEditing(goal.id))}
                 onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={guard(() => removeGoal(goal.id))}
-                onFinishEdit={finishEdit}
+                onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                onFinishEdit={() => finishEdit(goal.id)}
               />
             ))}
           </div>
@@ -194,9 +195,16 @@ function GoalRow({
   const { t } = useLanguage();
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
   const committedRef = useRef(false);
+  // Controlled while editing, so a storage sync mid-typing can't wipe the field.
+  const [draft, setDraft] = useState(goal.text);
 
   useEffect(() => {
-    if (isEditing) committedRef.current = false;
+    if (isEditing) {
+      committedRef.current = false;
+      setDraft(goal.text);
+    }
+    // Only reseed when editing starts, never on external text updates.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEditing]);
 
 
@@ -238,7 +246,8 @@ function GoalRow({
         <input
           id={`goal-input-${goal.id}`}
           type="text"
-          defaultValue={goal.text}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
           placeholder={goal.text ? "" : t("yearlyGoalPlaceholder")}
           className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
@@ -258,8 +267,7 @@ function GoalRow({
           onPointerDown={(e) => {
             // Commit before the input's blur fires, so the typed value is used.
             e.preventDefault();
-            const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
-            commitText(el?.value ?? goal.text);
+            commitText(draft);
           }}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
