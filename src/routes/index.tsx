@@ -938,6 +938,11 @@ function CategorySheet({
               selected={c.id === selectedId}
               actionsOpen={openId === c.id}
               dragging={drag?.id === c.id}
+              dragOffset={
+                drag?.id === c.id
+                  ? drag.currentY - drag.startY - (drag.index - drag.startIndex) * drag.itemHeight
+                  : 0
+              }
               onOpenActions={() => setOpenId(c.id)}
               onCloseActions={() => setOpenId(null)}
               onSelect={() => onSelect(c.id)}
