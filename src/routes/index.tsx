@@ -972,6 +972,7 @@ const CategoryRow = forwardRef(function CategoryRow(
     selected,
     actionsOpen,
     dragging,
+    dragOffset = 0,
     onOpenActions,
     onCloseActions,
     onSelect,
@@ -986,6 +987,7 @@ const CategoryRow = forwardRef(function CategoryRow(
     selected: boolean;
     actionsOpen: boolean;
     dragging?: boolean;
+    dragOffset?: number;
     onOpenActions: () => void;
     onCloseActions: () => void;
     onSelect: () => void;
