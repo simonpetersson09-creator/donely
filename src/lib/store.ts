@@ -131,6 +131,13 @@ export function useDataIntegrity() {
 export function useCategories() {
   const [categories, setCategories] = useState<Category[]>(DEFAULT_CATEGORIES);
   const [hydrated, setHydrated] = useState(false);
+  // Mirror of the latest state, readable outside React's update queue. All
+  // mutations compute their next list from this ref and commit AFTER setState
+  // — never inside an updater. (Writing storage and emitting the change event
+  // from inside a setState updater re-entered the hook mid-update and could
+  // apply the same append twice.)
+  const categoriesRef = useRef<Category[]>(categories);
+  categoriesRef.current = categories;
 
   const readFromStorage = useCallback(() => {
     ready();
@@ -154,9 +161,10 @@ export function useCategories() {
   }, [readFromStorage]);
 
   const commit = useCallback((next: Category[]) => {
+    categoriesRef.current = next;
+    setCategories(next);
     writeKey(CATS_KEY, next, categoriesSchema);
     emitDataChanged();
-    return next;
   }, []);
 
   const addCategory = useCallback(
@@ -167,7 +175,7 @@ export function useCategories() {
         name: name.trim(),
         area,
       };
-      setCategories((prev) => commit([...prev, category]));
+      commit([...categoriesRef.current, category]);
       return category;
     },
     [commit],
@@ -177,8 +185,8 @@ export function useCategories() {
     (id: string, name: string) => {
       // Only the label changes — the id (and therefore every entry relation)
       // is preserved.
-      setCategories((prev) =>
-        commit(prev.map((c) => (c.id === id ? { ...c, name: name.trim() } : c))),
+      commit(
+        categoriesRef.current.map((c) => (c.id === id ? { ...c, name: name.trim() } : c)),
       );
     },
     [commit],
@@ -186,17 +194,15 @@ export function useCategories() {
 
   const setCategoryColor = useCallback(
     (id: string, color: string | null) => {
-      setCategories((prev) =>
-        commit(
-          prev.map((c) => {
-            if (c.id !== id) return c;
-            if (!color) {
-              const { color: _drop, ...rest } = c;
-              return rest;
-            }
-            return { ...c, color };
-          }),
-        ),
+      commit(
+        categoriesRef.current.map((c) => {
+          if (c.id !== id) return c;
+          if (!color) {
+            const { color: _drop, ...rest } = c;
+            return rest;
+          }
+          return { ...c, color };
+        }),
       );
     },
     [commit],
@@ -205,7 +211,7 @@ export function useCategories() {
   const removeCategory = useCallback(
     (id: string) => {
       createBackup("remove-category");
-      setCategories((prev) => commit(prev.filter((c) => c.id !== id)));
+      commit(categoriesRef.current.filter((c) => c.id !== id));
     },
     [commit],
   );
@@ -217,21 +223,19 @@ export function useCategories() {
    */
   const reorderCategory = useCallback(
     (id: string, newIndex: number) => {
-      setCategories((prev) => {
-        const current = prev.find((c) => c.id === id);
-        if (!current) return prev;
-        const sameArea = prev.filter((c) => c.area === current.area);
-        const oldIndex = sameArea.findIndex((c) => c.id === id);
-        if (oldIndex === newIndex || newIndex < 0 || newIndex >= sameArea.length) return prev;
-        const reordered = [...sameArea];
-        const [moved] = reordered.splice(oldIndex, 1);
-        reordered.splice(newIndex, 0, moved);
-        const reorderedIter = reordered[Symbol.iterator]();
-        const next = prev.map((c) =>
-          c.area === current.area ? reorderedIter.next().value! : c,
-        );
-        return commit(next);
-      });
+      const prev = categoriesRef.current;
+      const current = prev.find((c) => c.id === id);
+      if (!current) return;
+      const sameArea = prev.filter((c) => c.area === current.area);
+      const oldIndex = sameArea.findIndex((c) => c.id === id);
+      if (oldIndex === newIndex || newIndex < 0 || newIndex >= sameArea.length) return;
+      const reordered = [...sameArea];
+      const [moved] = reordered.splice(oldIndex, 1);
+      reordered.splice(newIndex, 0, moved);
+      const reorderedIter = reordered[Symbol.iterator]();
+      commit(
+        prev.map((c) => (c.area === current.area ? reorderedIter.next().value! : c)),
+      );
     },
     [commit],
   );
@@ -254,6 +258,10 @@ function readFlagSeeded(): Category[] {
 
 export function useEntries() {
   const [entries, setEntries] = useState<Entry[]>([]);
+  // Same pattern as useCategories: compute the next list from this ref and
+  // persist AFTER setState, never inside an updater.
+  const entriesRef = useRef<Entry[]>(entries);
+  entriesRef.current = entries;
 
   const readFromStorage = useCallback(() => {
     ready();
@@ -271,19 +279,17 @@ export function useEntries() {
     window.addEventListener(DATA_CHANGED_EVENT, readFromStorage);
     return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
   }, [readFromStorage]);
-
   const commit = useCallback((next: Entry[]) => {
+    entriesRef.current = next;
+    setEntries(next);
     writeKey(ENTRIES_KEY, next, entriesSchema);
     emitDataChanged();
-    return next;
   }, []);
 
   const addEntry = useCallback(
     (entry: Omit<Entry, "id" | "createdAt">) => {
       const id = crypto.randomUUID();
-      setEntries((prev) =>
-        commit([{ ...entry, id, createdAt: new Date().toISOString() }, ...prev]),
-      );
+      commit([{ ...entry, id, createdAt: new Date().toISOString() }, ...entriesRef.current]);
       return id;
     },
     [commit],
@@ -293,12 +299,10 @@ export function useEntries() {
   const updateEntry = useCallback(
     (id: string, patch: { amount?: number; createdAt?: string }) => {
       createBackup("update-entry");
-      setEntries((prev) =>
-        commit(
-          prev
-            .map((e) => (e.id === id ? { ...e, ...patch } : e))
-            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
-        ),
+      commit(
+        entriesRef.current
+          .map((e) => (e.id === id ? { ...e, ...patch } : e))
+          .sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0)),
       );
     },
     [commit],
@@ -322,11 +326,9 @@ export function useEntries() {
         0,
       ).toISOString();
       createBackup("add-history-entry");
-      setEntries((prev) =>
-        commit(
-          [{ ...entry, id: crypto.randomUUID(), createdAt }, ...prev].sort((a, b) =>
-            a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0,
-          ),
+      commit(
+        [{ ...entry, id: crypto.randomUUID(), createdAt }, ...entriesRef.current].sort((a, b) =>
+          a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0,
         ),
       );
     },
@@ -337,7 +339,7 @@ export function useEntries() {
   const removeEntry = useCallback(
     (id: string) => {
       createBackup("remove-entry");
-      setEntries((prev) => commit(prev.filter((e) => e.id !== id)));
+      commit(entriesRef.current.filter((e) => e.id !== id));
     },
     [commit],
   );
@@ -345,7 +347,7 @@ export function useEntries() {
   const removeEntriesByCategory = useCallback(
     (categoryId: string) => {
       createBackup("remove-category-entries");
-      setEntries((prev) => commit(prev.filter((e) => e.categoryId !== categoryId)));
+      commit(entriesRef.current.filter((e) => e.categoryId !== categoryId));
     },
     [commit],
   );
