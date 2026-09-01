@@ -893,27 +893,13 @@ function CategorySheet({
 
       <div
         ref={listRef}
-        className="no-scrollbar min-h-0 flex-1 space-y-0 overflow-y-auto overscroll-contain"
-        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+        className="no-scrollbar min-h-0 flex-1 space-y-0 overflow-y-auto overscroll-contain pb-10"
+        style={{
+          WebkitOverflowScrolling: "touch",
+          // Lock list scrolling while a row is being dragged.
+          touchAction: drag ? "none" : "pan-y",
+        }}
         onScroll={() => setOpenId(null)}
-        onPointerMove={(e) => {
-          if (drag) {
-            e.preventDefault();
-            handleDragMove(e.clientY);
-          }
-        }}
-        onPointerUp={(e) => {
-          if (drag) {
-            e.preventDefault();
-            handleDragEnd();
-          }
-        }}
-        onPointerCancel={(e) => {
-          if (drag) {
-            e.preventDefault();
-            handleDragEnd();
-          }
-        }}
       >
         {localCategories.map((c, index) =>
           renamingId === c.id ? (
