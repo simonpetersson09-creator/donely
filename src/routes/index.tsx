@@ -735,13 +735,18 @@ function CategorySheet({
   const [drag, setDrag] = useState<{
     id: string;
     index: number;
+    startIndex: number;
     startY: number;
-    listTop: number;
+    currentY: number;
     itemHeight: number;
   } | null>(null);
 
   const listRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const dragRef = useRef(drag);
+  dragRef.current = drag;
+  const localRef = useRef(localCategories);
+  localRef.current = localCategories;
 
   const handleDragStart = (id: string, clientY: number) => {
     // Close action panels so every row has the same height during the drag.
@@ -760,37 +765,66 @@ function CategorySheet({
     setDrag({
       id,
       index,
+      startIndex: index,
       startY: clientY,
-      listTop: items[0].getBoundingClientRect().top,
+      currentY: clientY,
       itemHeight: rowRect.height + 2, // + space-y-0.5 gap
     });
   };
 
   const handleDragMove = (clientY: number) => {
-    if (!drag) return;
-    const relativeY = clientY - drag.listTop;
-    const rawIndex = Math.round(relativeY / drag.itemHeight);
-    const newIndex = Math.max(0, Math.min(localCategories.length - 1, rawIndex));
-    if (newIndex !== drag.index) {
-      const next = [...localCategories];
-      const [moved] = next.splice(drag.index, 1);
+    const active = dragRef.current;
+    if (!active || !listRef.current) return;
+    // Measure the first row fresh each move — the list may scroll during drag.
+    const firstRow = listRef.current.querySelector<HTMLElement>('[data-row="true"]');
+    const listTop = firstRow ? firstRow.getBoundingClientRect().top : 0;
+    const relativeY = clientY - listTop;
+    const rawIndex = Math.round(relativeY / active.itemHeight);
+    const list = localRef.current;
+    const newIndex = Math.max(0, Math.min(list.length - 1, rawIndex));
+    if (newIndex !== active.index) {
+      const next = [...list];
+      const [moved] = next.splice(active.index, 1);
       next.splice(newIndex, 0, moved);
       setLocalCategories(next);
-      setDrag({ ...drag, index: newIndex });
+      setDrag({ ...active, index: newIndex, currentY: clientY });
       haptic("light");
+    } else {
+      setDrag({ ...active, currentY: clientY });
     }
   };
 
   const handleDragEnd = () => {
-    if (drag) {
-      const finalIndex = localCategories.findIndex((c) => c.id === drag.id);
-      const originalIndex = categories.findIndex((c) => c.id === drag.id);
+    const active = dragRef.current;
+    if (active) {
+      const finalIndex = localRef.current.findIndex((c) => c.id === active.id);
+      const originalIndex = categories.findIndex((c) => c.id === active.id);
       if (finalIndex !== originalIndex) {
-        onReorder(drag.id, finalIndex);
+        onReorder(active.id, finalIndex);
       }
     }
     setDrag(null);
   };
+
+  // Listen on window: on touch devices the pointer is implicitly captured by
+  // the drag handle, so list-level handlers would never fire.
+  useEffect(() => {
+    if (!drag) return;
+    const move = (e: PointerEvent) => {
+      e.preventDefault();
+      handleDragMove(e.clientY);
+    };
+    const up = () => handleDragEnd();
+    window.addEventListener("pointermove", move, { passive: false });
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drag !== null]);
 
   return (
     <BottomSheet
@@ -859,27 +893,13 @@ function CategorySheet({
 
       <div
         ref={listRef}
-        className="no-scrollbar min-h-0 flex-1 space-y-0 overflow-y-auto overscroll-contain"
-        style={{ WebkitOverflowScrolling: "touch", touchAction: "pan-y" }}
+        className="no-scrollbar min-h-0 flex-1 space-y-0 overflow-y-auto overscroll-contain pb-10"
+        style={{
+          WebkitOverflowScrolling: "touch",
+          // Lock list scrolling while a row is being dragged.
+          touchAction: drag ? "none" : "pan-y",
+        }}
         onScroll={() => setOpenId(null)}
-        onPointerMove={(e) => {
-          if (drag) {
-            e.preventDefault();
-            handleDragMove(e.clientY);
-          }
-        }}
-        onPointerUp={(e) => {
-          if (drag) {
-            e.preventDefault();
-            handleDragEnd();
-          }
-        }}
-        onPointerCancel={(e) => {
-          if (drag) {
-            e.preventDefault();
-            handleDragEnd();
-          }
-        }}
       >
         {localCategories.map((c, index) =>
           renamingId === c.id ? (
@@ -918,6 +938,11 @@ function CategorySheet({
               selected={c.id === selectedId}
               actionsOpen={openId === c.id}
               dragging={drag?.id === c.id}
+              dragOffset={
+                drag?.id === c.id
+                  ? drag.currentY - drag.startY - (drag.index - drag.startIndex) * drag.itemHeight
+                  : 0
+              }
               onOpenActions={() => setOpenId(c.id)}
               onCloseActions={() => setOpenId(null)}
               onSelect={() => onSelect(c.id)}
@@ -947,6 +972,7 @@ const CategoryRow = forwardRef(function CategoryRow(
     selected,
     actionsOpen,
     dragging,
+    dragOffset = 0,
     onOpenActions,
     onCloseActions,
     onSelect,
@@ -961,6 +987,7 @@ const CategoryRow = forwardRef(function CategoryRow(
     selected: boolean;
     actionsOpen: boolean;
     dragging?: boolean;
+    dragOffset?: number;
     onOpenActions: () => void;
     onCloseActions: () => void;
     onSelect: () => void;
@@ -1047,15 +1074,18 @@ const CategoryRow = forwardRef(function CategoryRow(
             else onSelect();
           }}
           style={{
-            transform: actionsOpen ? "translateX(-112px)" : "translateX(0)",
+            transform: `${actionsOpen ? "translateX(-112px)" : "translateX(0)"}${
+              dragging ? ` translateY(${dragOffset}px)` : ""
+            }`,
             WebkitTouchCallout: "none",
             WebkitUserSelect: "none",
             touchAction: "pan-y",
           }}
           className={cn(
-            "relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-1.5 text-left text-[14px] text-card-foreground transition-transform duration-200",
-            dragging && "z-10 scale-[1.02] shadow-lg opacity-95",
-            !dragging && "active:bg-secondary",
+            "relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-1.5 text-left text-[14px] text-card-foreground",
+            dragging
+              ? "z-10 scale-[1.02] shadow-lg opacity-95"
+              : "transition-transform duration-200 active:bg-secondary",
           )}
         >
           <span className="flex min-w-0 items-center gap-2">
@@ -1082,10 +1112,11 @@ const CategoryRow = forwardRef(function CategoryRow(
                   e.stopPropagation();
                   onStartDrag(e.clientY);
                 }}
-                className="flex size-8 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-secondary"
+                style={{ touchAction: "none" }}
+                className="-my-1 flex size-10 items-center justify-center rounded-lg text-muted-foreground/70 active:bg-secondary active:text-primary"
                 role="button"
               >
-                <GripVertical className="size-4" />
+                <GripVertical className="size-[18px]" />
               </span>
             </span>
           )}
