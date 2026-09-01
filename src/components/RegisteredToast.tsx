@@ -16,18 +16,17 @@ export function RegisteredToast({
   return (
     <div
       data-registered-toast
-      className="flex w-full items-center justify-between rounded-full border border-white/10 bg-primary py-2 pl-2 pr-5 shadow-[0_8px_30px_rgb(0,0,0,0.12)] backdrop-blur-md"
+      className="flex w-full items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-card"
     >
-
       <div className="flex items-center gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold shadow-inner">
-          <Check className="size-[18px] text-white" strokeWidth={3} />
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold shadow-inner">
+          <Check className="size-5 text-white" strokeWidth={3} />
         </div>
         <div className="flex flex-col">
-          <span className="text-[14px] font-semibold leading-tight tracking-tight text-white">
+          <span className="text-[15px] font-semibold leading-tight tracking-tight text-card-foreground">
             {title}
           </span>
-          <span className="text-[11px] font-medium uppercase tracking-widest text-gold/80">
+          <span className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
             {description}
           </span>
         </div>
@@ -35,7 +34,7 @@ export function RegisteredToast({
       <button
         type="button"
         onClick={onUndo}
-        className="ml-4 shrink-0 px-2 text-sm font-bold text-gold transition-opacity active:opacity-60"
+        className="ml-4 shrink-0 rounded-lg border border-border px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-gold transition-colors hover:bg-accent active:opacity-60"
       >
         {undoLabel}
       </button>

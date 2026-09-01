@@ -16,7 +16,7 @@ const ICONS: Record<AchievementVariant, LucideIcon> = {
  * Discreet feedback card that slides up from the bottom after a registration.
  * It never blocks the view underneath, disappears on its own after ~3 s and
  * can be swiped away. iOS-native glassmorphism: frosted card, gradient icon
- * pill, soft spring transitions, and a subtle right-edge dismiss indicator.
+ * pill, soft spring transitions, and a top dismiss handle.
  */
 export function AchievementCard({
   variant,
@@ -98,22 +98,26 @@ export function AchievementCard({
       >
         <div
           className={cn(
-            "relative overflow-hidden rounded-3xl border border-white/25 px-4 py-3.5 shadow-card",
-            "bg-card/80 backdrop-blur-xl",
+            "relative overflow-hidden rounded-t-[32px] border border-white/25 bg-card/80 px-5 py-4 shadow-card backdrop-blur-xl",
           )}
         >
           {/* Inner highlight border for the glass edge */}
           <div
-            className="pointer-events-none absolute inset-0 rounded-3xl border border-white/20"
+            className="pointer-events-none absolute inset-0 rounded-t-[32px] border border-white/20"
             aria-hidden
           />
 
-          <div className="flex items-center gap-3.5">
+          {/* iOS-style top dismiss handle */}
+          <div className="flex justify-center pb-3">
+            <div className="h-1 w-9 rounded-full bg-muted/40" aria-hidden />
+          </div>
+
+          <div className="flex flex-col items-center">
             {/* Gradient icon pill */}
             <span
               aria-hidden
               className={cn(
-                "flex size-10 shrink-0 items-center justify-center rounded-full",
+                "flex size-20 shrink-0 items-center justify-center rounded-[24px]",
                 emphatic
                   ? "bg-gradient-to-br from-gold to-gold-deep text-primary shadow-gold"
                   : "bg-gradient-to-br from-primary to-primary/80 text-primary-foreground shadow-button",
@@ -127,33 +131,32 @@ export function AchievementCard({
                     }
               }
             >
-              <Icon className="size-[22px]" strokeWidth={2.75} />
+              <Icon className="size-10" strokeWidth={2.75} />
             </span>
 
+            <p
+              className={cn(
+                "mt-4 text-center text-[17px] font-bold leading-tight tracking-tight",
+                emphatic ? "text-primary" : "text-foreground",
+              )}
+            >
+              {title}
+            </p>
 
-            {/* Content */}
-            <div className="min-w-0 flex-1">
-              <p
-                className={cn(
-                  "text-[14px] font-semibold leading-tight tracking-tight",
-                  emphatic ? "text-primary" : "text-foreground",
-                )}
-              >
-                {title}
-              </p>
+            <div className="mt-4 w-full space-y-px">
               {lines.map((line, i) => (
                 <p
                   key={i}
-                  className="mt-0.5 truncate text-[13px] font-medium leading-snug text-muted-foreground"
+                  className={cn(
+                    "py-3 text-center text-[13px] font-medium leading-snug text-muted-foreground",
+                    i < lines.length - 1 && "border-b border-border",
+                  )}
                   title={line}
                 >
                   {line}
                 </p>
               ))}
             </div>
-
-            {/* iOS-style dismiss indicator */}
-            <div className="h-8 w-1 shrink-0 rounded-full bg-muted/40" aria-hidden />
           </div>
         </div>
       </div>
