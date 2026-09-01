@@ -1112,10 +1112,11 @@ const CategoryRow = forwardRef(function CategoryRow(
                   e.stopPropagation();
                   onStartDrag(e.clientY);
                 }}
-                className="flex size-8 items-center justify-center rounded-lg text-muted-foreground/60 active:bg-secondary"
+                style={{ touchAction: "none" }}
+                className="-my-1 flex size-10 items-center justify-center rounded-lg text-muted-foreground/70 active:bg-secondary active:text-primary"
                 role="button"
               >
-                <GripVertical className="size-4" />
+                <GripVertical className="size-[18px]" />
               </span>
             </span>
           )}
