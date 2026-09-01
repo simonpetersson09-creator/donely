@@ -1074,15 +1074,18 @@ const CategoryRow = forwardRef(function CategoryRow(
             else onSelect();
           }}
           style={{
-            transform: actionsOpen ? "translateX(-112px)" : "translateX(0)",
+            transform: `${actionsOpen ? "translateX(-112px)" : "translateX(0)"}${
+              dragging ? ` translateY(${dragOffset}px)` : ""
+            }`,
             WebkitTouchCallout: "none",
             WebkitUserSelect: "none",
             touchAction: "pan-y",
           }}
           className={cn(
-            "relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-1.5 text-left text-[14px] text-card-foreground transition-transform duration-200",
-            dragging && "z-10 scale-[1.02] shadow-lg opacity-95",
-            !dragging && "active:bg-secondary",
+            "relative flex w-full select-none items-center justify-between rounded-xl bg-card px-3 py-1.5 text-left text-[14px] text-card-foreground",
+            dragging
+              ? "z-10 scale-[1.02] shadow-lg opacity-95"
+              : "transition-transform duration-200 active:bg-secondary",
           )}
         >
           <span className="flex min-w-0 items-center gap-2">
