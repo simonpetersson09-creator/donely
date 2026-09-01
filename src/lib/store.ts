@@ -144,7 +144,16 @@ export function useCategories() {
     // The stored list is always authoritative. Defaults are seeded once by
     // initializeStorage() on a truly empty install — never here.
     const stored = readKey(CATS_KEY, categoriesSchema);
-    if (stored.status === "ok") setCategories(stored.value);
+    if (stored.status === "ok") {
+      // Repair installs affected by the old double-append bug: drop duplicate
+      // ids (first occurrence wins) and persist the cleaned list once.
+      const seen = new Set<string>();
+      const deduped = stored.value.filter((c) => (seen.has(c.id) ? false : (seen.add(c.id), true)));
+      if (deduped.length !== stored.value.length) {
+        writeKey(CATS_KEY, deduped, categoriesSchema);
+      }
+      setCategories(deduped);
+    }
     else if (stored.status === "missing") setCategories(readFlagSeeded());
     // "corrupt" → keep whatever is on screen, do not write anything.
     setHydrated(true);
