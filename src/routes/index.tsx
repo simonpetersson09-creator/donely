@@ -735,13 +735,18 @@ function CategorySheet({
   const [drag, setDrag] = useState<{
     id: string;
     index: number;
+    startIndex: number;
     startY: number;
-    listTop: number;
+    currentY: number;
     itemHeight: number;
   } | null>(null);
 
   const listRef = useRef<HTMLDivElement | null>(null);
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const dragRef = useRef(drag);
+  dragRef.current = drag;
+  const localRef = useRef(localCategories);
+  localRef.current = localCategories;
 
   const handleDragStart = (id: string, clientY: number) => {
     // Close action panels so every row has the same height during the drag.
@@ -760,37 +765,66 @@ function CategorySheet({
     setDrag({
       id,
       index,
+      startIndex: index,
       startY: clientY,
-      listTop: items[0].getBoundingClientRect().top,
+      currentY: clientY,
       itemHeight: rowRect.height + 2, // + space-y-0.5 gap
     });
   };
 
   const handleDragMove = (clientY: number) => {
-    if (!drag) return;
-    const relativeY = clientY - drag.listTop;
-    const rawIndex = Math.round(relativeY / drag.itemHeight);
-    const newIndex = Math.max(0, Math.min(localCategories.length - 1, rawIndex));
-    if (newIndex !== drag.index) {
-      const next = [...localCategories];
-      const [moved] = next.splice(drag.index, 1);
+    const active = dragRef.current;
+    if (!active || !listRef.current) return;
+    // Measure the first row fresh each move — the list may scroll during drag.
+    const firstRow = listRef.current.querySelector<HTMLElement>('[data-row="true"]');
+    const listTop = firstRow ? firstRow.getBoundingClientRect().top : 0;
+    const relativeY = clientY - listTop;
+    const rawIndex = Math.round(relativeY / active.itemHeight);
+    const list = localRef.current;
+    const newIndex = Math.max(0, Math.min(list.length - 1, rawIndex));
+    if (newIndex !== active.index) {
+      const next = [...list];
+      const [moved] = next.splice(active.index, 1);
       next.splice(newIndex, 0, moved);
       setLocalCategories(next);
-      setDrag({ ...drag, index: newIndex });
+      setDrag({ ...active, index: newIndex, currentY: clientY });
       haptic("light");
+    } else {
+      setDrag({ ...active, currentY: clientY });
     }
   };
 
   const handleDragEnd = () => {
-    if (drag) {
-      const finalIndex = localCategories.findIndex((c) => c.id === drag.id);
-      const originalIndex = categories.findIndex((c) => c.id === drag.id);
+    const active = dragRef.current;
+    if (active) {
+      const finalIndex = localRef.current.findIndex((c) => c.id === active.id);
+      const originalIndex = categories.findIndex((c) => c.id === active.id);
       if (finalIndex !== originalIndex) {
-        onReorder(drag.id, finalIndex);
+        onReorder(active.id, finalIndex);
       }
     }
     setDrag(null);
   };
+
+  // Listen on window: on touch devices the pointer is implicitly captured by
+  // the drag handle, so list-level handlers would never fire.
+  useEffect(() => {
+    if (!drag) return;
+    const move = (e: PointerEvent) => {
+      e.preventDefault();
+      handleDragMove(e.clientY);
+    };
+    const up = () => handleDragEnd();
+    window.addEventListener("pointermove", move, { passive: false });
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drag !== null]);
 
   return (
     <BottomSheet
