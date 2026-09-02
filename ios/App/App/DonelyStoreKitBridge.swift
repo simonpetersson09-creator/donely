@@ -115,6 +115,7 @@ final class DonelyStoreKitBridge: NSObject {
         var subscribed = false
         var inTrial = false
         var trialDaysLeft = 0
+        var subscriptionStart: Date?
 
         for await result in Transaction.currentEntitlements {
             guard case .verified(let transaction) = result,
@@ -123,6 +124,13 @@ final class DonelyStoreKitBridge: NSObject {
             if let expiration = transaction.expirationDate, expiration <= Date() { continue }
 
             subscribed = true
+
+            // originalPurchaseDate is the real day the subscription started,
+            // so the review prompt measures 10 days of actual Premium — even
+            // for users who subscribed before this feature existed.
+            if subscriptionStart == nil || transaction.originalPurchaseDate < subscriptionStart! {
+                subscriptionStart = transaction.originalPurchaseDate
+            }
 
             if transaction.offerType == .introductory {
                 inTrial = true
@@ -143,6 +151,10 @@ final class DonelyStoreKitBridge: NSObject {
         }
 
         sendEntitlement(subscribed: subscribed, inTrial: inTrial, trialDaysLeft: trialDaysLeft)
+
+        if subscribed, let subscriptionStart {
+            ReviewPrompt.consider(subscriptionStart: subscriptionStart, webView: webView)
+        }
     }
 
 
