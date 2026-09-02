@@ -82,9 +82,16 @@ function Index() {
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [pressed, setPressed] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [feedback, setFeedback] = useState<{ achievement: Achievement; name: string } | null>(null);
+  const [feedback, setFeedback] = useState<{
+    achievement: Achievement;
+    name: string;
+    id: number;
+  } | null>(null);
 
   const flashTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const feedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const feedbackSeq = useRef(0);
+
 
   const { t } = useLanguage();
   const locale = useLocale();
@@ -130,8 +137,10 @@ function Index() {
   useEffect(() => {
     return () => {
       if (flashTimer.current) clearTimeout(flashTimer.current);
+      if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
     };
   }, []);
+
 
   // Lock scrolling on the home screen — the layout is designed to fit the
   // viewport, and page scroll causes unwanted shifts on iOS.
@@ -243,7 +252,12 @@ function Index() {
     const achievement = detectAchievement(nextEntries, selected.id);
     if (achievement) {
       if (achievement.kind === "record" || achievement.kind === "milestone") haptic("success");
-      window.setTimeout(() => setFeedback({ achievement, name }), 420);
+      if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
+      feedbackTimer.current = setTimeout(
+        () => setFeedback({ achievement, name, id: ++feedbackSeq.current }),
+        420,
+      );
+
     }
   }
 
@@ -559,7 +573,7 @@ function Index() {
           const content = achievementContent(feedback.achievement, feedback.name, t);
           return (
             <AchievementCard
-              key={`${feedback.achievement.kind}-${feedback.name}`}
+              key={feedback.id}
               variant={content.variant}
               title={content.title}
               lines={content.lines}
