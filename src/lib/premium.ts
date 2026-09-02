@@ -338,9 +338,15 @@ if (typeof window !== "undefined") {
 // ---------------------------------------------------------------------------
 
 function localTrialStart(): number {
-  const raw = window.localStorage.getItem(TRIAL_KEY);
+  let raw: string | null = null;
+  try {
+    raw = window.localStorage.getItem(TRIAL_KEY);
+  } catch {
+    /* storage disabled — fall through to a fresh in-memory trial start */
+  }
   const parsed = raw ? Number.parseInt(raw, 10) : Number.NaN;
   if (Number.isFinite(parsed)) return parsed;
+
   const now = Date.now();
   try {
     window.localStorage.setItem(TRIAL_KEY, String(now));
