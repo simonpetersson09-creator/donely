@@ -212,7 +212,28 @@ final class DonelyNotificationBridge: NSObject {
             pendingRoute = route
             return
         }
-        evaluate("window.__donelyOpenRoute && window.__donelyOpenRoute(\(json(route)))")
+        deliverRoute(route, attemptsLeft: 40)
+    }
+
+    /// webAppReady flips when the page finishes loading, but React may still be
+    /// a few hundred ms from installing `window.__donelyOpenRoute`. Retry until
+    /// the handler exists instead of silently dropping the tap.
+    private func deliverRoute(_ route: String, attemptsLeft: Int) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let webView = self.webView else { return }
+            webView.evaluateJavaScript("typeof window.__donelyOpenRoute === 'function'") { [weak self] result, _ in
+                guard let self else { return }
+                if (result as? Bool) == true {
+                    self.evaluate("window.__donelyOpenRoute(\(self.json(route)))")
+                } else if attemptsLeft > 0 {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                        self?.deliverRoute(route, attemptsLeft: attemptsLeft - 1)
+                    }
+                } else {
+                    print("DONELY_NATIVE: openRoute dropped; web handler never installed route=\(route)")
+                }
+            }
+        }
     }
 
     private func evaluate(_ script: String) {
