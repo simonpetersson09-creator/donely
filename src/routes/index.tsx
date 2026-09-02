@@ -573,7 +573,7 @@ function Index() {
           const content = achievementContent(feedback.achievement, feedback.name, t);
           return (
             <AchievementCard
-              key={`${feedback.achievement.kind}-${feedback.name}`}
+              key={feedback.id}
               variant={content.variant}
               title={content.title}
               lines={content.lines}
