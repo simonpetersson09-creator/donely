@@ -137,8 +137,10 @@ function Index() {
   useEffect(() => {
     return () => {
       if (flashTimer.current) clearTimeout(flashTimer.current);
+      if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
     };
   }, []);
+
 
   // Lock scrolling on the home screen — the layout is designed to fit the
   // viewport, and page scroll causes unwanted shifts on iOS.
