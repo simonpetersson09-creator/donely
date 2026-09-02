@@ -8,7 +8,7 @@ export function CategoryDot({ color, className }: { color?: string | null; class
   return (
     <span
       aria-hidden
-      className={cn("inline-block size-2.5 shrink-0 rounded-full", className)}
+      className={cn("inline-block size-3.5 shrink-0 rounded-full", className)}
       style={{ backgroundColor: value }}
     />
   );
