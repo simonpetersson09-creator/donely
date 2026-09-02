@@ -115,6 +115,7 @@ final class DonelyStoreKitBridge: NSObject {
         var subscribed = false
         var inTrial = false
         var trialDaysLeft = 0
+        var subscriptionStart: Date?
 
         for await result in Transaction.currentEntitlements {
             guard case .verified(let transaction) = result,
@@ -123,6 +124,13 @@ final class DonelyStoreKitBridge: NSObject {
             if let expiration = transaction.expirationDate, expiration <= Date() { continue }
 
             subscribed = true
+
+            // originalPurchaseDate is the real day the subscription started,
+            // so the review prompt measures 10 days of actual Premium — even
+            // for users who subscribed before this feature existed.
+            if subscriptionStart == nil || transaction.originalPurchaseDate < subscriptionStart! {
+                subscriptionStart = transaction.originalPurchaseDate
+            }
 
             if transaction.offerType == .introductory {
                 inTrial = true
@@ -143,6 +151,10 @@ final class DonelyStoreKitBridge: NSObject {
         }
 
         sendEntitlement(subscribed: subscribed, inTrial: inTrial, trialDaysLeft: trialDaysLeft)
+
+        if subscribed, let subscriptionStart {
+            ReviewPrompt.consider(subscriptionStart: subscriptionStart, webView: webView)
+        }
     }
 
 
@@ -263,6 +275,72 @@ extension DonelyStoreKitBridge: WKScriptMessageHandler {
             Task { await manageSubscriptions() }
         default:
             break
+        }
+    }
+}
+
+// MARK: - App Store review prompt
+
+/// Shows Apple's native rating prompt once the user has had an active Premium
+/// subscription for at least `requiredDays` days. Apple owns the actual
+/// presentation and throttles it globally (at most ~3 prompts per year), so
+/// the app only decides *when it is appropriate* to ask — never whether the
+/// sheet appears. The prompt is requested at most once per device (Keychain
+/// flag survives reinstall), and it is never shown in the sandbox/TestFlight
+/// or on first launch — the request is delayed a few seconds after the
+/// entitlement push so it never interrupts the purchase flow itself.
+@available(iOS 15.0, *)
+enum ReviewPrompt {
+    static let requiredDays = 10
+    private static let requestedAccount = "app.donely.review.requested"
+
+    static func consider(subscriptionStart: Date, webView: WKWebView?) {
+        guard !hasRequested() else { return }
+        let days = Int(Date().timeIntervalSince(subscriptionStart) / 86_400)
+        guard days >= requiredDays else { return }
+        markRequested()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+            guard let scene = webView?.window?.windowScene
+                ?? UIApplication.shared.connectedScenes
+                    .compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive })
+            else { return }
+            if #available(iOS 16.0, *) {
+                AppStore.requestReview(in: scene)
+            } else {
+                SKStoreReviewController.requestReview(in: scene)
+            }
+        }
+    }
+
+    // Keychain flags (survive reinstall, like TrialClock)
+
+    private static func query() -> [String: Any] {
+        [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: "app.donely.mobile",
+            kSecAttrAccount as String: requestedAccount,
+        ]
+    }
+
+    private static func hasRequested() -> Bool {
+        var q = query()
+        q[kSecReturnData as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        return SecItemCopyMatching(q as CFDictionary, &item) == errSecSuccess
+    }
+
+    private static func markRequested() {
+        guard let data = "1".data(using: .utf8) else { return }
+        let q = query()
+        if SecItemCopyMatching(q as CFDictionary, nil) == errSecSuccess {
+            SecItemUpdate(q as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        } else {
+            var add = q
+            add[kSecValueData as String] = data
+            add[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
+            SecItemAdd(add as CFDictionary, nil)
         }
     }
 }
