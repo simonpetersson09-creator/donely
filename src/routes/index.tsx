@@ -252,7 +252,12 @@ function Index() {
     const achievement = detectAchievement(nextEntries, selected.id);
     if (achievement) {
       if (achievement.kind === "record" || achievement.kind === "milestone") haptic("success");
-      window.setTimeout(() => setFeedback({ achievement, name }), 420);
+      if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
+      feedbackTimer.current = setTimeout(
+        () => setFeedback({ achievement, name, id: ++feedbackSeq.current }),
+        420,
+      );
+
     }
   }
 
