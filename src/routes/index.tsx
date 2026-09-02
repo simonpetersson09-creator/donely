@@ -1105,7 +1105,7 @@ const CategoryRow = forwardRef(function CategoryRow(
           <span className="flex min-w-0 items-center gap-2">
             <span
               aria-hidden
-              className="size-2.5 shrink-0 rounded-full border"
+              className="size-3.5 shrink-0 rounded-full border"
               style={{
                 backgroundColor: dotColor ?? "transparent",
                 borderColor: dotColor ?? "var(--border)",
