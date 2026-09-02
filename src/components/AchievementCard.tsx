@@ -42,15 +42,21 @@ export function AchievementCard({
 
   const Icon = ICONS[variant];
 
+  // Keeps `close()` fresh without re-arming the auto-dismiss timer.
+  const closeRef = useRef<() => void>(() => {});
+  const exitTimer = useRef<number | null>(null);
+
   useEffect(() => {
     const raf = requestAnimationFrame(() => setShown(true));
     return () => cancelAnimationFrame(raf);
   }, []);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => close(), duration);
-    return () => window.clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const timer = window.setTimeout(() => closeRef.current(), duration);
+    return () => {
+      window.clearTimeout(timer);
+      if (exitTimer.current !== null) window.clearTimeout(exitTimer.current);
+    };
   }, [duration]);
 
   function close() {
@@ -61,8 +67,11 @@ export function AchievementCard({
       return;
     }
     setClosing(true);
-    window.setTimeout(onDismiss, 220);
+    exitTimer.current = window.setTimeout(onDismiss, 220);
   }
+
+  closeRef.current = close;
+
 
   const offset = closing ? 140 : shown ? drag : 140;
 
