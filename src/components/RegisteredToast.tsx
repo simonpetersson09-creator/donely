@@ -18,15 +18,15 @@ export function RegisteredToast({
       data-registered-toast
       className="flex w-full items-center justify-between rounded-2xl border border-border bg-card p-4 shadow-card"
     >
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold shadow-inner">
           <Check className="size-5 text-white" strokeWidth={3} />
         </div>
-        <div className="flex flex-col">
-          <span className="text-[15px] font-semibold leading-tight tracking-tight text-card-foreground">
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate text-[15px] font-semibold leading-tight tracking-tight text-card-foreground">
             {title}
           </span>
-          <span className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+          <span className="truncate text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
             {description}
           </span>
         </div>
