@@ -13,6 +13,7 @@
     "test": "vitest run",
     "cap:sync": "npx cap sync ios",
     "ios:pull": "node scripts/ios-pull.mjs",
+    "icon": "node scripts/update-icon.mjs",
     "cap:open": "npx cap open ios"
   },
   "dependencies": {
