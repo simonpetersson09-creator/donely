@@ -141,7 +141,7 @@ final class DonelyStoreKitBridge: NSObject {
             }
         }
 
-        // Not subscribed: grant the 7-day free trial locally. Apple's own
+        // Not subscribed: grant the 14-day free trial locally. Apple's own
         // introductory offer only starts once the user buys, so without this
         // the app would demand Premium from the very first launch.
         if !subscribed {
@@ -345,13 +345,13 @@ enum ReviewPrompt {
     }
 }
 
-// MARK: - Local 7-day trial
+// MARK: - Local 14-day trial
 
 /// First-launch trial clock. The start date is written to the Keychain so the
 /// trial cannot be reset by deleting and reinstalling the app, with a
 /// UserDefaults mirror for fast reads.
 enum TrialClock {
-    static let trialDays = 7
+    static let trialDays = 14
     private static let key = "app.donely.trial.start"
 
     static func daysLeft() -> Int {

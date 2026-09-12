@@ -26,7 +26,7 @@ export function RegisterScreen({ amount, pressed }: { amount: number; pressed: b
       <div className="flex flex-col items-center">
         <div className="relative mb-3 rounded-full bg-primary px-4 py-1.5">
           <span className="flex items-center gap-1.5 text-[15px] font-semibold text-primary-foreground">
-            <Crown className="size-3.5 text-gold" fill="currentColor" />7 dagar gratis
+            <Crown className="size-3.5 text-gold" fill="currentColor" />14 dagar gratis
           </span>
           <div className="absolute -bottom-[4px] left-5 size-3 rotate-45 rounded-[1px] bg-primary" />
         </div>
