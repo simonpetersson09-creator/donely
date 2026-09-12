@@ -44,7 +44,7 @@ Appen anropar redan en iOS-brygga i `src/lib/premium.ts`:
 - `restorePurchase` – återställ köp
 - `openManageSubscriptions` – Apples hanteringssida
 
-I App Store Connect: skapa en auto-förnyande prenumeration, 29 kr/månad, med **7 dagars gratis introduktionserbjudande**. Product ID förslag: `app.donely.premium.monthly`.
+I App Store Connect: skapa en auto-förnyande prenumeration, 29 kr/månad, med **14 dagars gratis introduktionserbjudande**. Product ID förslag: `app.donely.premium.monthly`.
 I iOS-skalet: implementera `WKScriptMessageHandler` för namnen ovan och skicka tillbaka entitlement-status till webbvyn.
 
 ## 5. Checklista före inlämning
@@ -133,7 +133,7 @@ abonnemang) är aldrig låsta – endast `canMutate()` styr skrivning.
 
 1. **Provperioden får aldrig startas av appen.** `inTrial` ska härledas från
    `Product.SubscriptionInfo.Status` / `RenewalInfo` respektive
-   `Transaction.offer` (introductory offer, 7 dagar) – inte från något lokalt datum.
+   `Transaction.offer` (introductory offer, 14 dagar) – inte från något lokalt datum.
 2. `trialDaysLeft` beräknas från transaktionens `expirationDate`.
 3. Skicka entitlement vid appstart, vid `requestEntitlement`, vid
    `Transaction.updates` och när appen blir aktiv igen.
@@ -173,7 +173,7 @@ dev-tickern eller av återställning.
 
 ### StoreKit 2 i Swift – KLART (`ios/App/App/DonelyStoreKitBridge.swift`)
 - `Transaction.currentEntitlements` → `__donelySetEntitlement`. ✅
-- Provperiod: 7 dagar ges lokalt vid första start (`TrialClock`, startdatum i Keychain så den överlever ominstallation). Efter köp gäller Apples eget introduktionserbjudande via `offerType == .introductory`. ✅
+- Provperiod: 14 dagar ges lokalt vid första start (`TrialClock`, startdatum i Keychain så den överlever ominstallation). Efter köp gäller Apples eget introduktionserbjudande via `offerType == .introductory`. ✅
 - `Product.products(for: ["donely.premium.monthly"])` → `__donelySetProduct({ id, displayPrice })`. ✅
 - `product.purchase()` med alla utfall → `__donelyPurchaseResult(status, message?)`. ✅
 - `AppStore.sync()` för återställning → `restored` / `nothingToRestore`. ✅
