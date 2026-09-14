@@ -593,7 +593,17 @@ export function useWeeklyTodos() {
   const [allTodos, setAllTodos] = useState<WeeklyTodo[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const todosRef = useRef<WeeklyTodo[]>([]);
-  const currentWeekStart = weekStartKey();
+  // Re-evaluated on a timer so the list resets by itself when the week rolls
+  // over at Sunday 23:59 → Monday 00:00, even if the app stays open.
+  const [currentWeekStart, setCurrentWeekStart] = useState(() => weekStartKey());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const next = weekStartKey();
+      setCurrentWeekStart((prev) => (prev === next ? prev : next));
+    }, 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   const apply = useCallback((next: WeeklyTodo[]) => {
     todosRef.current = next;
