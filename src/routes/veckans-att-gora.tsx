@@ -160,7 +160,7 @@ function VeckansAttGora() {
                 last={idx === activeTodos.length - 1}
                 isEditing={editingId === todo.id}
                 variant="card"
-                onToggle={() => toggleTodo(todo.id)}
+                onToggle={() => handleToggle(todo.id, todo.completed)}
                 onStartEdit={guard(todo.id, () => startEditing(todo.id))}
                 onUpdateText={(text) => updateTodoText(todo.id, text)}
                 onRemove={guard(todo.id, () => removeTodo(todo.id))}
@@ -196,7 +196,7 @@ function VeckansAttGora() {
                 last={idx === completedTodos.length - 1}
                 isEditing={editingId === todo.id}
                 variant="compact"
-                onToggle={() => toggleTodo(todo.id)}
+                onToggle={() => handleToggle(todo.id, todo.completed)}
                 onStartEdit={guard(todo.id, () => startEditing(todo.id))}
                 onUpdateText={(text) => updateTodoText(todo.id, text)}
                 onRemove={guard(todo.id, () => removeTodo(todo.id))}
