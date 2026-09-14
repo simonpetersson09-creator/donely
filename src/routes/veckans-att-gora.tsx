@@ -56,20 +56,6 @@ function VeckansAttGora() {
     });
   };
 
-  const commitQuickAdd = () => {
-    if (quickCommitRef.current) return;
-    quickCommitRef.current = true;
-    const trimmed = quickDraft.trim();
-    if (trimmed) {
-      addTodo(trimmed);
-    }
-    setQuickDraft("");
-    quickInputRef.current?.blur();
-    queueMicrotask(() => {
-      quickCommitRef.current = false;
-    });
-  };
-
   const startEditing = (id: string) => {
     setEditingId(id);
     requestAnimationFrame(() => {
