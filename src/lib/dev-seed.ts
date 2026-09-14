@@ -232,8 +232,13 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   emit();
-  return shouldSeedEntries || storedYearlyGoals.value.length === 0 || storedWeeklyTodos.value.length === 0;
+  return (
+    shouldSeedEntries ||
+    storedYearlyGoals.value?.length === 0 ||
+    storedWeeklyTodos.value?.length === 0
+  );
 }
+
 
 
 
