@@ -241,8 +241,16 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   emit();
-  return shouldSeedEntries || yearlyGoalsEmpty || weeklyTodosEmpty;
+  const seededAnything = shouldSeedEntries || goalsEmpty || yearlyGoalsEmpty || weeklyTodosEmpty;
+  console.info("[donely/dev] seedDevActivities seededAnything=", seededAnything, {
+    shouldSeedEntries,
+    goalsEmpty,
+    yearlyGoalsEmpty,
+    weeklyTodosEmpty,
+  });
+  return seededAnything;
 }
+
 
 
 
