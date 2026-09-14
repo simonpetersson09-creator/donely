@@ -44,7 +44,7 @@ Appen anropar redan en iOS-brygga i `src/lib/premium.ts`:
 - `restorePurchase` – återställ köp
 - `openManageSubscriptions` – Apples hanteringssida
 
-I App Store Connect: skapa en auto-förnyande prenumeration, 29 kr/månad, med **14 dagars gratis introduktionserbjudande**. Product ID förslag: `app.donely.premium.monthly`.
+I App Store Connect: skapa en auto-förnyande prenumeration, 19 kr/månad, med **14 dagars gratis introduktionserbjudande**. Product ID: `se.shiningdays.donely.premium.monthly`.
 I iOS-skalet: implementera `WKScriptMessageHandler` för namnen ovan och skicka tillbaka entitlement-status till webbvyn.
 
 ## 5. Checklista före inlämning
@@ -90,8 +90,8 @@ JS → Swift (`WKScriptMessageHandler`, `webkit.messageHandlers`):
 | --- | --- | --- |
 | `bridgeReady` | `{ version: 1 }` | Skicka entitlement + produkt till webbvyn |
 | `requestEntitlement` | `{}` | Läs `Transaction.currentEntitlements` och svara med entitlement |
-| `requestProduct` | `{ product: "donely.premium.monthly" }` | `Product.products(for:)` och svara med `displayPrice` |
-| `purchasePremium` | `{ product: "donely.premium.monthly" }` | `product.purchase()` |
+| `requestProduct` | `{ product: "se.shiningdays.donely.premium.monthly" }` | `Product.products(for:)` och svara med `displayPrice` |
+| `purchasePremium` | `{ product: "se.shiningdays.donely.premium.monthly" }` | `product.purchase()` |
 | `restorePurchase` | `{}` | `try await AppStore.sync()` + verifiera entitlement |
 | `manageSubscription` | `{}` | `showManageSubscriptions(in:)` |
 | `requestReview` | `{}` | `AppStore.requestReview(in:)` |
@@ -103,7 +103,7 @@ Swift → JS (kör via `webView.evaluateJavaScript`):
 
 ```js
 window.__donelySetEntitlement({ subscribed: Bool, inTrial: Bool, trialDaysLeft: Int })
-window.__donelySetProduct({ id: "donely.premium.monthly", displayPrice: "29 kr" }) // eller null
+window.__donelySetProduct({ id: "se.shiningdays.donely.premium.monthly", displayPrice: "19 kr" }) // eller null
 window.__donelyPurchaseResult(status, message?)
 ```
 
@@ -139,8 +139,8 @@ abonnemang) är aldrig låsta – endast `canMutate()` styr skrivning.
    `Transaction.updates` och när appen blir aktiv igen.
 4. Skicka `pending` för `.pending` (Ask to Buy) och `cancelled` för `.userCancelled`.
 5. Verifiera alltid `VerificationResult` innan entitlement rapporteras.
-6. Konfigurera produkten `donely.premium.monthly` i App Store Connect med ett
-   7-dagars introduktionserbjudande (gratis provperiod).
+6. Konfigurera produkten `se.shiningdays.donely.premium.monthly` i App Store Connect med ett
+    14-dagars introduktionserbjudande (gratis provperiod).
 7. Priset i UI kommer enbart från `displayPrice` – inga hårdkodade belopp.
 
 ## Verifierat återställningsflöde (webbläge) – 2026-07-31
@@ -168,13 +168,13 @@ dev-tickern eller av återställning.
 - Trial-start och nedräkning från `vr.trial.v1` i localStorage.
 - `purchasePremium()` sätter `vr.premium.v1` och rapporterar `success` efter 400 ms.
 - `restorePurchase()` läser befintlig status och rapporterar `restored` / `nothingToRestore`.
-- Pris: `FALLBACK_PRICE` ("29 kr") i stället för `product.displayPrice`.
+- Pris: `FALLBACK_PRICE` ("19 kr") i stället för `product.displayPrice`.
 - `openManageSubscriptions()` öppnar apps.apple.com i ny flik.
 
 ### StoreKit 2 i Swift – KLART (`ios/App/App/DonelyStoreKitBridge.swift`)
 - `Transaction.currentEntitlements` → `__donelySetEntitlement`. ✅
 - Provperiod: 14 dagar ges lokalt vid första start (`TrialClock`, startdatum i Keychain så den överlever ominstallation). Efter köp gäller Apples eget introduktionserbjudande via `offerType == .introductory`. ✅
-- `Product.products(for: ["donely.premium.monthly"])` → `__donelySetProduct({ id, displayPrice })`. ✅
+- `Product.products(for: ["se.shiningdays.donely.premium.monthly"])` → `__donelySetProduct({ id, displayPrice })`. ✅
 - `product.purchase()` med alla utfall → `__donelyPurchaseResult(status, message?)`. ✅
 - `AppStore.sync()` för återställning → `restored` / `nothingToRestore`. ✅
 - `AppStore.showManageSubscriptions(in:)` för abonnemangshantering. ✅
