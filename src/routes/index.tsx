@@ -417,7 +417,7 @@ function Index() {
         <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
           <Link
             to="/dagsstatistik"
-            className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[13px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[15px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
           >
             <BarChart3 className="size-4 shrink-0" />
             <span className="truncate">{t("statistics")}</span>
@@ -431,11 +431,11 @@ function Index() {
             onClick={register}
             aria-label={locked ? `${t("register")} — ${t("premiumRequired")}` : t("register")}
             className={cn(
-              "relative flex h-12 items-center justify-center overflow-hidden rounded-xl text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-shadow duration-200 ease-out active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
+              "relative flex h-12 items-center justify-center overflow-hidden rounded-xl text-[15px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-shadow duration-200 ease-out active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
               pressed && "press-spring",
               locked
                 ? "bg-primary/85 text-primary-foreground"
-                : "bg-primary text-primary-foreground",
+                : "bg-gradient-gold text-gold-foreground shadow-gold premium-sheen",
             )}
           >
             <span className="inline-flex items-center justify-center gap-2">
@@ -460,14 +460,14 @@ function Index() {
 
           <Link
             to="/arsmal"
-            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[13px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[15px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
           >
             <Target className="size-4 shrink-0" />
             <span className="truncate">{t("yearlyGoals")}</span>
           </Link>
           <Link
             to="/veckans-att-gora"
-            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[13px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[15px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
           >
             <ListTodo className="size-4 shrink-0" />
             <span className="truncate">{t("weeklyTodos")}</span>
