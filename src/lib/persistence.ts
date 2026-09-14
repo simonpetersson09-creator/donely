@@ -99,6 +99,8 @@ export const weeklyTodoSchema = z.object({
   completed: z.boolean(),
   /** ISO date string (Monday) of the week this todo belongs to. */
   weekStart: z.string().min(1),
+  /** Entry created when the todo was ticked off (1 point on a category). */
+  entryId: z.string().min(1).optional(),
   createdAt: z.string().min(1),
 });
 export const weeklyTodosSchema = z.array(weeklyTodoSchema);

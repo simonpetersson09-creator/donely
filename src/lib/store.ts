@@ -593,7 +593,17 @@ export function useWeeklyTodos() {
   const [allTodos, setAllTodos] = useState<WeeklyTodo[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const todosRef = useRef<WeeklyTodo[]>([]);
-  const currentWeekStart = weekStartKey();
+  // Re-evaluated on a timer so the list resets by itself when the week rolls
+  // over at Sunday 23:59 → Monday 00:00, even if the app stays open.
+  const [currentWeekStart, setCurrentWeekStart] = useState(() => weekStartKey());
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      const next = weekStartKey();
+      setCurrentWeekStart((prev) => (prev === next ? prev : next));
+    }, 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   const apply = useCallback((next: WeeklyTodo[]) => {
     todosRef.current = next;
@@ -643,6 +653,15 @@ export function useWeeklyTodos() {
     [apply],
   );
 
+  // Completed todos are wiped when the week turns (Sunday 23:59 → Monday
+  // 00:00). Unfinished ones from earlier weeks stay in storage untouched.
+  useEffect(() => {
+    if (!hydrated) return;
+    const hasStale = todosRef.current.some((t) => t.completed && t.weekStart !== currentWeekStart);
+    if (!hasStale) return;
+    commit(todosRef.current.filter((t) => !(t.completed && t.weekStart !== currentWeekStart)));
+  }, [hydrated, currentWeekStart, commit]);
+
   const addTodo = useCallback(
     (text: string) => {
       const trimmed = text.trim();
@@ -664,9 +683,31 @@ export function useWeeklyTodos() {
     [commit, currentWeekStart],
   );
 
-  const toggleTodo = useCallback(
+  /** Ticks a todo off and links it to the entry that gave it its point. */
+  const completeTodo = useCallback(
+    (id: string, entryId?: string) => {
+      commit(
+        todosRef.current.map((t) =>
+          t.id === id ? { ...t, completed: true, ...(entryId ? { entryId } : {}) } : t,
+        ),
+      );
+    },
+    [commit],
+  );
+
+  /**
+   * Un-ticks a todo and returns the id of the entry that was created when it
+   * was completed, so the caller can remove the point again.
+   */
+  const uncompleteTodo = useCallback(
     (id: string) => {
-      commit(todosRef.current.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
+      const target = todosRef.current.find((t) => t.id === id);
+      commit(
+        todosRef.current.map((t) =>
+          t.id === id ? { ...t, completed: false, entryId: undefined } : t,
+        ),
+      );
+      return target?.entryId;
     },
     [commit],
   );
@@ -694,7 +735,8 @@ export function useWeeklyTodos() {
   return {
     todos,
     addTodo,
-    toggleTodo,
+    completeTodo,
+    uncompleteTodo,
     updateTodoText,
     removeTodo,
     hydrated,

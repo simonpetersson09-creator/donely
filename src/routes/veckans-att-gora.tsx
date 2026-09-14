@@ -2,9 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
+import { BottomSheet } from "@/components/BottomSheet";
+import { CategoryDot } from "@/components/CategoryDot";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
-import { useWeeklyTodos } from "@/lib/store";
+import { useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
 
@@ -30,8 +32,38 @@ export const Route = createFileRoute("/veckans-att-gora")({
 
 function VeckansAttGora() {
   const { t } = useLanguage();
-  const { todos, addTodo, toggleTodo, updateTodoText, removeTodo } = useWeeklyTodos();
+  const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, removeTodo } =
+    useWeeklyTodos();
+  const { categories } = useCategories();
+  const { addEntry, removeEntry } = useEntries();
   const [editingId, setEditingId] = useState<string | null>(null);
+  // Id of the todo waiting for the user to pick which activity gets the point.
+  const [pendingId, setPendingId] = useState<string | null>(null);
+
+  const handleToggle = (id: string, completed: boolean) => {
+    if (completed) {
+      const entryId = uncompleteTodo(id);
+      if (entryId) removeEntry(entryId);
+      return;
+    }
+    setPendingId(id);
+  };
+
+  const handlePickCategory = (categoryId: string) => {
+    const id = pendingId;
+    setPendingId(null);
+    if (!id) return;
+    const category = categories.find((c) => c.id === categoryId);
+    if (!category) return;
+    const entryId = addEntry({
+      area: category.area,
+      categoryId: category.id,
+      categoryName: category.name,
+      amount: 1,
+    });
+    completeTodo(id, entryId);
+  };
+
   const suppressRef = useRef<Record<string, number>>({});
   const guard = (id: string, fn: () => void) => () => {
     if (Date.now() < (suppressRef.current[id] ?? 0)) return;
@@ -128,7 +160,7 @@ function VeckansAttGora() {
                 last={idx === activeTodos.length - 1}
                 isEditing={editingId === todo.id}
                 variant="card"
-                onToggle={() => toggleTodo(todo.id)}
+                onToggle={() => handleToggle(todo.id, todo.completed)}
                 onStartEdit={guard(todo.id, () => startEditing(todo.id))}
                 onUpdateText={(text) => updateTodoText(todo.id, text)}
                 onRemove={guard(todo.id, () => removeTodo(todo.id))}
@@ -164,7 +196,7 @@ function VeckansAttGora() {
                 last={idx === completedTodos.length - 1}
                 isEditing={editingId === todo.id}
                 variant="compact"
-                onToggle={() => toggleTodo(todo.id)}
+                onToggle={() => handleToggle(todo.id, todo.completed)}
                 onStartEdit={guard(todo.id, () => startEditing(todo.id))}
                 onUpdateText={(text) => updateTodoText(todo.id, text)}
                 onRemove={guard(todo.id, () => removeTodo(todo.id))}
@@ -184,6 +216,51 @@ function VeckansAttGora() {
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addTodo")}</span>
       </button>
+
+      {pendingId && (
+        <BottomSheet onClose={() => setPendingId(null)} label={t("todoPickCategory")}>
+          <div className="px-4 pb-2">
+            <h2 className="text-center text-[15px] font-semibold text-foreground">
+              {t("todoPickCategory")}
+            </h2>
+            <p className="mt-1 text-center text-[12px] font-normal text-muted-foreground">
+              {t("todoPointHint")}
+            </p>
+          </div>
+          <div className="max-h-[50vh] overflow-y-auto px-3 pb-4">
+            {(["jobb", "privat"] as const).map((area) => {
+              const list = categories.filter((c) => c.area === area);
+              if (list.length === 0) return null;
+              return (
+                <div key={area} className="mt-2">
+                  <p className="px-2 pb-1 text-[12px] font-normal uppercase tracking-wide text-muted-foreground">
+                    {area === "jobb" ? t("work") : t("private")}
+                  </p>
+                  <div className="overflow-hidden rounded-2xl border border-border/50">
+                    {list.map((c, i) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => handlePickCategory(c.id)}
+                        className={cn(
+                          "flex w-full items-center gap-2 bg-background px-3 py-2.5 text-left transition-colors active:bg-secondary",
+                          i !== list.length - 1 && "border-b border-border",
+                        )}
+                      >
+                        <CategoryDot color={c.color} />
+                        <span className="min-w-0 flex-1 truncate text-[14px] font-normal text-foreground">
+                          {c.name}
+                        </span>
+                        <span className="text-[13px] font-semibold text-gold">+1</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </BottomSheet>
+      )}
     </main>
   );
 }
