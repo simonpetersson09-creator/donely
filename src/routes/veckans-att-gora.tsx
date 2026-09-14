@@ -333,14 +333,23 @@ function TodoRow({
           }}
           className={cn(
             "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
-            isCompact
-              ? "text-muted-foreground line-through decoration-border"
-              : todo.completed
-                ? "text-muted-foreground line-through decoration-border"
-                : "text-primary"
+            isCompact || todo.completed ? "text-muted-foreground" : "text-primary"
           )}
         >
-          {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
+          <span className="relative inline-block">
+            {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
+            {(isCompact || todo.completed) && (
+              <svg
+                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/60"
+                viewBox="0 0 100 20"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <line x1="0" y1="5" x2="100" y2="15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                <line x1="0" y1="15" x2="100" y2="5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            )}
+          </span>
         </button>
         <button
           type="button"
