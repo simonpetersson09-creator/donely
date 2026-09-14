@@ -35,7 +35,7 @@ export const TRIAL_DAYS = 14;
 export const PRODUCT_ID = "se.shiningdays.donely.premium.monthly";
 
 /** Fallback price shown only until StoreKit reports the real localized price. */
-export const FALLBACK_PRICE = "29 kr";
+export const FALLBACK_PRICE = "19 kr";
 
 /**
  * The localStorage trial/premium fallback is development-only. In a production
