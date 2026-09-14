@@ -327,7 +327,7 @@ function GoalRow({
             {goal.text || <span className="italic text-muted-foreground">{t("yearlyGoalPlaceholder")}</span>}
             {goal.completed && (
               <svg
-                className="pointer-events-none absolute inset-0 h-full w-full text-gold/60"
+                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/60"
                 viewBox="0 0 100 20"
                 preserveAspectRatio="none"
                 aria-hidden="true"
