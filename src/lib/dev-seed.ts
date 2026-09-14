@@ -197,16 +197,21 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   const existing = readKey(STORAGE_KEYS.entries, entriesSchema);
-  if (!force && existing.status === "ok" && existing.value.length > 0) return false;
-  if (!force && existing.status === "corrupt") return false;
+  const shouldSeedEntries =
+    force || existing.status === "missing" || (existing.status === "ok" && existing.value.length === 0);
+  if (existing.status === "corrupt" && !force) return false;
 
-  const entries = buildEntries(categories);
-  writeKey(STORAGE_KEYS.entries, entries, entriesSchema);
+  if (shouldSeedEntries) {
+    const entries = buildEntries(categories);
+    writeKey(STORAGE_KEYS.entries, entries, entriesSchema);
+  }
 
   const storedGoals = readKey(STORAGE_KEYS.goals, goalsSchema);
-  const goals = { ...buildGoals(new Date().getFullYear()) };
-  if (storedGoals.status === "ok") Object.assign(goals, storedGoals.value);
-  writeKey(STORAGE_KEYS.goals, goals, goalsSchema);
+  if (force || storedGoals.status === "missing" || storedGoals.value.length === 0) {
+    const goals = { ...buildGoals(new Date().getFullYear()) };
+    if (storedGoals.status === "ok") Object.assign(goals, storedGoals.value);
+    writeKey(STORAGE_KEYS.goals, goals, goalsSchema);
+  }
 
   const year = new Date().getFullYear();
 
@@ -227,8 +232,9 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   emit();
-  return true;
+  return shouldSeedEntries || storedYearlyGoals.value.length === 0 || storedWeeklyTodos.value.length === 0;
 }
+
 
 
 /** Removes every seeded activity again (keeps categories). */
