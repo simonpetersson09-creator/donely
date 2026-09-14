@@ -1,11 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, Plus, X } from "lucide-react";
+import { Check, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
 import { useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
+import { useSwipeDelete } from "@/hooks/use-swipe-delete";
 
 export const Route = createFileRoute("/veckans-att-gora")({
   head: () => ({
@@ -214,6 +215,10 @@ function TodoRow({
   const delay = useMemo(() => ({ animationDelay: `${Math.min(index, 12) * 30}ms` }), [index]);
   const committedRef = useRef(false);
   const [draft, setDraft] = useState(todo.text);
+  const { offset, dragging, handlers, confirmDelete, shouldTriggerAction } = useSwipeDelete({
+    onDelete: onRemove,
+    enabled: !isEditing,
+  });
 
   useEffect(() => {
     if (isEditing) {
@@ -287,85 +292,71 @@ function TodoRow({
     );
   }
 
-  if (variant === "compact") {
-    return (
+  const foregroundBg = variant === "compact" ? "bg-card/80" : "bg-background";
+  const isCompact = variant === "compact";
+
+  return (
+    <div className="relative overflow-hidden" style={delay}>
+      {/* Swipe-revealed delete action */}
+      <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
+        <button
+          type="button"
+          onClick={confirmDelete}
+          className="flex size-10 items-center justify-center rounded-full bg-destructive-foreground/20 text-destructive-foreground transition-transform active:scale-90"
+          aria-label={t("remove")}
+        >
+          <Trash2 className="size-5" strokeWidth={2} />
+        </button>
+      </div>
+
       <div
+        {...handlers}
         className={cn(
           "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
+          foregroundBg,
           !last && "border-b border-border"
         )}
-        style={delay}
+        style={{
+          transform: `translateX(${offset}px)`,
+          transition: dragging ? "none" : "transform 200ms ease-out",
+          touchAction: "pan-y",
+        }}
       >
         <button
           type="button"
-          onClick={onStartEdit}
-          className="min-w-0 flex-1 truncate text-left text-[14px] font-normal text-muted-foreground line-through decoration-border"
+          onClick={() => {
+            if (shouldTriggerAction()) onStartEdit();
+          }}
+          className={cn(
+            "min-w-0 flex-1 truncate text-left text-[14px] transition-colors",
+            isCompact
+              ? "font-normal text-muted-foreground line-through decoration-border"
+              : todo.completed
+                ? "font-normal text-muted-foreground line-through"
+                : "font-semibold text-primary"
+          )}
         >
           {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
         </button>
         <button
           type="button"
-          onClick={onRemove}
-          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
-          aria-label={t("remove")}
-        >
-          <X className="size-3.5" strokeWidth={2.5} />
-        </button>
-        <button
-          type="button"
-          onClick={onToggle}
-          className="flex size-[18px] shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
+          onClick={() => {
+            if (shouldTriggerAction()) onToggle();
+          }}
+          className={cn(
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
+            isCompact || todo.completed
+              ? "border-transparent bg-gradient-gold shadow-sm"
+              : "border-2 border-muted-foreground/40 bg-transparent"
+          )}
           aria-checked={todo.completed}
           role="checkbox"
         >
-          <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
+          {(isCompact || todo.completed) && (
+            <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
+          )}
         </button>
       </div>
-    );
-  }
-
-  return (
-    <div
-      className={cn(
-        "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
-        !last && "border-b border-border",
-      )}
-      style={delay}
-    >
-      <button
-        type="button"
-        onClick={onStartEdit}
-        className={cn(
-          "min-w-0 flex-1 truncate text-left text-[14px] font-semibold transition-colors",
-          todo.completed
-            ? "font-normal text-muted-foreground line-through"
-            : "text-primary"
-        )}
-      >
-        {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
-      </button>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
-        aria-label={t("remove")}
-      >
-        <X className="size-3.5" strokeWidth={2.5} />
-      </button>
-      <button
-        type="button"
-        onClick={onToggle}
-        className={cn(
-          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
-          todo.completed
-            ? "border-transparent bg-gradient-gold shadow-sm"
-            : "border-muted-foreground/40 bg-transparent"
-        )}
-        aria-checked={todo.completed}
-        role="checkbox"
-      >
-        {todo.completed && <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />}
-      </button>
     </div>
   );
 }
