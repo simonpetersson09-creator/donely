@@ -283,19 +283,23 @@ function GoalRow({
     enabled: !isEditing,
   });
 
+  const showDelete = offset !== 0;
+
   return (
     <div className="relative overflow-hidden" style={delay}>
       {/* Swipe-revealed delete action */}
-      <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
-        <button
-          type="button"
-          onClick={confirmDelete}
-          className="flex size-10 items-center justify-center rounded-full bg-destructive-foreground/20 text-destructive-foreground transition-transform active:scale-90"
-          aria-label={t("remove")}
-        >
-          <Trash2 className="size-5" strokeWidth={2} />
-        </button>
-      </div>
+      {showDelete && (
+        <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
+          <button
+            type="button"
+            onClick={confirmDelete}
+            className="flex size-10 items-center justify-center rounded-full bg-destructive-foreground/20 text-destructive-foreground transition-transform active:scale-90"
+            aria-label={t("remove")}
+          >
+            <Trash2 className="size-5" strokeWidth={2} />
+          </button>
+        </div>
+      )}
 
       <div
         {...handlers}
