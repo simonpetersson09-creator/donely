@@ -146,45 +146,48 @@ function buildYearlyGoals(year: number): YearlyGoal[] {
 
 function buildWeeklyTodos(): WeeklyTodo[] {
   const monday = weekStart(new Date());
+  // Match the date-only key used by useWeeklyTodos (weekStartKey).
+  const weekKey = monday.toISOString().split("T")[0]!;
   const createdAt = new Date().toISOString();
   return [
     {
       id: "dev-todo-1",
       text: "Skicka veckorapport till teamet",
       completed: false,
-      weekStart: monday.toISOString(),
+      weekStart: weekKey,
       createdAt,
     },
     {
       id: "dev-todo-2",
       text: "Planera nästa veckas möten",
       completed: false,
-      weekStart: monday.toISOString(),
+      weekStart: weekKey,
       createdAt,
     },
     {
       id: "dev-todo-3",
       text: "Gå igenom feedback från användare",
       completed: false,
-      weekStart: monday.toISOString(),
+      weekStart: weekKey,
       createdAt,
     },
     {
       id: "dev-todo-4",
       text: "Uppdatera app-ikonen",
       completed: true,
-      weekStart: monday.toISOString(),
+      weekStart: weekKey,
       createdAt,
     },
     {
       id: "dev-todo-5",
       text: "Skriv månadsbrev",
       completed: true,
-      weekStart: monday.toISOString(),
+      weekStart: weekKey,
       createdAt,
     },
   ];
 }
+
 
 /** Writes the demo activities (and matching yearly goals / weekly todos). */
 export function seedDevActivities({ force = false }: { force?: boolean } = {}): boolean {
