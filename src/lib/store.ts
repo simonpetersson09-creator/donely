@@ -674,9 +674,31 @@ export function useWeeklyTodos() {
     [commit, currentWeekStart],
   );
 
-  const toggleTodo = useCallback(
+  /** Ticks a todo off and links it to the entry that gave it its point. */
+  const completeTodo = useCallback(
+    (id: string, entryId?: string) => {
+      commit(
+        todosRef.current.map((t) =>
+          t.id === id ? { ...t, completed: true, ...(entryId ? { entryId } : {}) } : t,
+        ),
+      );
+    },
+    [commit],
+  );
+
+  /**
+   * Un-ticks a todo and returns the id of the entry that was created when it
+   * was completed, so the caller can remove the point again.
+   */
+  const uncompleteTodo = useCallback(
     (id: string) => {
-      commit(todosRef.current.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
+      const target = todosRef.current.find((t) => t.id === id);
+      commit(
+        todosRef.current.map((t) =>
+          t.id === id ? { ...t, completed: false, entryId: undefined } : t,
+        ),
+      );
+      return target?.entryId;
     },
     [commit],
   );
