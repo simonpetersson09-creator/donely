@@ -283,20 +283,20 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-2 bg-secondary/60 px-3.5 py-3",
-          !last && "border-b border-border/50",
+          "stagger-item flex items-center gap-1.5 bg-secondary/50 px-2 py-1.5",
+          !last && "border-b border-border",
         )}
         style={delay}
       >
         <div
           className={cn(
-            "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             todo.completed
               ? "border-completed bg-completed"
               : "border-muted-foreground/40 bg-transparent"
           )}
         >
-          {todo.completed && <Check className="size-3 text-completed-foreground" strokeWidth={3} />}
+          {todo.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`todo-input-${todo.id}`}
@@ -304,7 +304,7 @@ function TodoRow({
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={todo.text ? "" : t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[15px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -323,7 +323,7 @@ function TodoRow({
             e.preventDefault();
             commitText(draft);
           }}
-          className="shrink-0 rounded-lg bg-primary px-3 py-1 text-[13px] font-normal text-primary-foreground transition-colors active:bg-primary/90"
+          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
