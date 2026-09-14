@@ -7,14 +7,6 @@ import { useLanguage } from "@/lib/use-language";
 import { useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
 
-function useHydrated() {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
-  return hydrated;
-}
-
 export const Route = createFileRoute("/veckans-att-gora")({
   head: () => ({
     meta: [
