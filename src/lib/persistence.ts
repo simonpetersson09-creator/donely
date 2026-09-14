@@ -111,21 +111,7 @@ export type Goals = z.infer<typeof goalsSchema>;
 export type YearlyGoal = z.infer<typeof yearlyGoalSchema>;
 export type WeeklyTodo = z.infer<typeof weeklyTodoSchema>;
 
-export type Snapshot = {
-  schemaVersion: number;
-  timestamp: string;
-  entries: Entry[];
-  categories: Category[];
-  goals: Goals;
-  yearlyGoals: YearlyGoal[];
-  weeklyTodos: WeeklyTodo[];
-  settings: {
-    onboarding: boolean;
-    langGuide: boolean;
-    reminderPrompt: boolean;
-    language: string | null;
-  };
-};
+export type Snapshot = z.infer<typeof snapshotSchema>;
 
 export const snapshotSchema = z.object({
   schemaVersion: z.number().int().nonnegative(),
