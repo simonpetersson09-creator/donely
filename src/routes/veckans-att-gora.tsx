@@ -264,7 +264,7 @@ function TodoRow({
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={todo.text ? "" : t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-semibold text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
