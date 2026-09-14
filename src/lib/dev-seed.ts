@@ -241,15 +241,9 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   emit();
-  const seededAnything = shouldSeedEntries || goalsEmpty || yearlyGoalsEmpty || weeklyTodosEmpty;
-  console.info("[donely/dev] seedDevActivities seededAnything=", seededAnything, {
-    shouldSeedEntries,
-    goalsEmpty,
-    yearlyGoalsEmpty,
-    weeklyTodosEmpty,
-  });
-  return seededAnything;
+  return shouldSeedEntries || goalsEmpty || yearlyGoalsEmpty || weeklyTodosEmpty;
 }
+
 
 
 
