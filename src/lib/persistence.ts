@@ -394,7 +394,9 @@ export function readFlag(key: string): boolean {
 
 export function readBackups(): Snapshot[] {
   const result = readKey(STORAGE_KEYS.backups, z.array(snapshotSchema));
-  return result.status === "ok" ? result.value : [];
+  return result.status === "ok"
+    ? result.value.map((s) => ({ ...s, weeklyTodos: s.weeklyTodos ?? [] }))
+    : [];
 }
 
 /**
