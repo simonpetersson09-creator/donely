@@ -274,8 +274,8 @@ function Index() {
       data-donely-app-ready
       className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]"
     >
-      <div className="flex shrink-0 items-end justify-center pb-4 pt-16">
-        <div className="relative translate-y-[94px]">
+      <div className="flex shrink-0 items-end justify-center pb-2 pt-6">
+        <div className="relative">
           <div className="absolute -right-6 -top-9 z-10">
             <div className="relative rounded-full bg-primary px-3 py-1 shadow-[0_6px_16px_-8px_hsl(0_0%_0%/0.45)]">
               <span className="flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold leading-[14px] tracking-wide text-primary-foreground">
@@ -305,11 +305,7 @@ function Index() {
 
       <div
         className={cn(
-          "flex flex-1 flex-col justify-center gap-3",
-          // När km/min-fälten för träning visas blir innehållet högre — dra
-          // då inte ner det lika långt så att fälten inte hamnar bakom
-          // knapparna längst ner.
-          showMetrics ? "translate-y-[36px]" : "translate-y-[80px]",
+          "flex flex-1 flex-col justify-end gap-3 pb-2",
         )}
       >
         {/* Område */}
