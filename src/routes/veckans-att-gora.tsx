@@ -255,7 +255,7 @@ function TodoRow({
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={todo.text ? "" : t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-semibold text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -292,7 +292,7 @@ function TodoRow({
     );
   }
 
-  const foregroundBg = variant === "compact" ? "bg-card/80" : "bg-background";
+  const foregroundBg = "bg-background";
   const isCompact = variant === "compact";
 
   const showDelete = offset !== 0;
@@ -332,12 +332,12 @@ function TodoRow({
             if (shouldTriggerAction()) onStartEdit();
           }}
           className={cn(
-            "min-w-0 flex-1 truncate text-left text-[14px] transition-colors",
+            "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
             isCompact
-              ? "font-normal text-muted-foreground line-through decoration-border"
+              ? "text-muted-foreground line-through decoration-border"
               : todo.completed
-                ? "font-normal text-muted-foreground line-through"
-                : "font-semibold text-primary"
+                ? "text-muted-foreground line-through"
+                : "text-primary"
           )}
         >
           {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
