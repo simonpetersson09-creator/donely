@@ -264,7 +264,7 @@ function TodoRow({
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={todo.text ? "" : t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-semibold text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -354,9 +354,9 @@ function TodoRow({
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-semibold transition-colors",
           todo.completed
-            ? "text-muted-foreground line-through"
+            ? "font-normal text-muted-foreground line-through"
             : "text-primary"
         )}
       >
