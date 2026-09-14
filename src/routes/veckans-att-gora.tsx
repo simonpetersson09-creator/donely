@@ -153,13 +153,7 @@ function VeckansAttGora() {
             {t("weeklyTodos")}
           </h2>
           <p className="mt-0.5 text-[13px] font-normal text-muted-foreground">
-            {t("weeklyTodos")} {currentWeek} · {totalCount}
-            {hydrated && (
-              <>
-                {" "}
-                {t("weeklyTasksCount", { count: totalCount }).replace(/^\d+\s*/, "")}
-              </>
-            )}
+            {t("weeklyTodos")} {currentWeek} · {t("weeklyTasksCount", { count: totalCount })}
           </p>
         </div>
         <ProgressRing total={totalCount} completed={completedCount} />
