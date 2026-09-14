@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Plus, X } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
@@ -27,10 +27,64 @@ export const Route = createFileRoute("/veckans-att-gora")({
   component: VeckansAttGora,
 });
 
+const RING_RADIUS = 20;
+const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
+
+function ProgressRing({
+  total,
+  completed,
+  className,
+}: {
+  total: number;
+  completed: number;
+  className?: string;
+}) {
+  const pct = total === 0 ? 0 : completed / total;
+  const offset = RING_CIRCUMFERENCE * (1 - pct);
+  const label = total === 0 ? "0%" : `${Math.round(pct * 100)}%`;
+
+  return (
+    <div className={cn("relative flex items-center justify-center", className)}>
+      <svg
+        className="size-12 -rotate-90"
+        viewBox="0 0 48 48"
+        aria-hidden="true"
+      >
+        <circle
+          cx="24"
+          cy="24"
+          r={RING_RADIUS}
+          className="text-muted/60"
+          stroke="currentColor"
+          strokeWidth="4"
+          fill="transparent"
+        />
+        <circle
+          cx="24"
+          cy="24"
+          r={RING_RADIUS}
+          className="text-gold"
+          stroke="currentColor"
+          strokeWidth="4"
+          fill="transparent"
+          strokeDasharray={RING_CIRCUMFERENCE}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="absolute text-[10px] font-semibold text-foreground">
+        {label}
+      </span>
+    </div>
+  );
+}
+
 function VeckansAttGora() {
   const { t } = useLanguage();
   const { todos, addTodo, toggleTodo, updateTodoText, removeTodo } = useWeeklyTodos();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [quickDraft, setQuickDraft] = useState("");
+  const quickInputRef = useRef<HTMLInputElement>(null);
   const suppressRef = useRef<Record<string, number>>({});
   const guard = (id: string, fn: () => void) => () => {
     if (Date.now() < (suppressRef.current[id] ?? 0)) return;
@@ -43,14 +97,25 @@ function VeckansAttGora() {
   const activeTodos = todos.filter((t) => !t.completed);
   const completedTodos = todos.filter((t) => t.completed);
   const currentWeek = isoWeek(new Date());
+  const totalCount = todos.length;
+  const completedCount = completedTodos.length;
 
-  const handleAdd = () => {
-    const id = addTodo("");
+  const handleAdd = (text = "") => {
+    const id = addTodo(text);
     setEditingId(id);
     requestAnimationFrame(() => {
       const el = document.getElementById(`todo-input-${id}`) as HTMLInputElement | null;
       el?.focus();
     });
+  };
+
+  const commitQuickAdd = () => {
+    const trimmed = quickDraft.trim();
+    if (trimmed) {
+      addTodo(trimmed);
+    }
+    setQuickDraft("");
+    quickInputRef.current?.blur();
   };
 
   const startEditing = (id: string) => {
@@ -81,23 +146,59 @@ function VeckansAttGora() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
+      {/* Summary header card */}
+      <div className="mt-2 flex items-center justify-between rounded-2xl bg-card p-4 shadow-soft">
+        <div>
+          <h2 className="text-[19px] font-semibold text-foreground">
+            {t("weeklyTodos")}
+          </h2>
+          <p className="mt-0.5 text-[13px] font-normal text-muted-foreground">
+            {t("weeklyTodos")} {currentWeek} · {t("weeklyTasksCount", { count: totalCount })}
+          </p>
+        </div>
+        <ProgressRing total={totalCount} completed={completedCount} />
+      </div>
+
+      {/* Quick add */}
+      <div className="mt-3 flex items-center gap-3 rounded-2xl border border-border/50 bg-card px-3 py-2.5 shadow-soft">
+        <div className="flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/30" />
+        <input
+          ref={quickInputRef}
+          type="text"
+          value={quickDraft}
+          onChange={(e) => setQuickDraft(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              commitQuickAdd();
+            } else if (e.key === "Escape") {
+              setQuickDraft("");
+              quickInputRef.current?.blur();
+            }
+          }}
+          onBlur={commitQuickAdd}
+          placeholder={t("todoPlaceholder")}
+          className="min-w-0 flex-1 bg-transparent text-[15px] font-normal text-foreground outline-none placeholder:text-muted-foreground/60"
+          autoComplete="off"
+        />
+      </div>
+
       {/* Active todos */}
-      <div className="mt-2 overflow-hidden rounded-2xl border border-border/50 bg-background">
-        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-normal text-primary-foreground">
+      <div className="mt-4 space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
             {t("activeTodos")}
           </h2>
-          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
+          <span className="text-[11px] font-semibold tabular-nums text-muted-foreground">
             {activeTodos.length}
           </span>
         </div>
 
         {activeTodos.length === 0 ? (
-          <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
+          <div className="rounded-2xl border border-border/50 bg-card px-4 py-6 text-center shadow-soft">
+            <p className="text-[13px] font-normal text-muted-foreground">{t("emptyTodos")}</p>
           </div>
         ) : (
-          <div className="p-1">
+          <div className="space-y-2.5">
             {activeTodos.map((todo, idx) => (
               <TodoRow
                 key={todo.id}
@@ -105,6 +206,7 @@ function VeckansAttGora() {
                 index={idx}
                 last={idx === activeTodos.length - 1}
                 isEditing={editingId === todo.id}
+                variant="card"
                 onToggle={() => toggleTodo(todo.id)}
                 onStartEdit={guard(todo.id, () => startEditing(todo.id))}
                 onUpdateText={(text) => updateTodoText(todo.id, text)}
@@ -117,22 +219,22 @@ function VeckansAttGora() {
       </div>
 
       {/* Completed todos */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
-        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-normal text-primary-foreground">
+      <div className="mt-5 space-y-3">
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
             {t("completedTodos")}
           </h2>
-          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
+          <span className="text-[11px] font-semibold tabular-nums text-muted-foreground">
             {completedTodos.length}
           </span>
         </div>
 
         {completedTodos.length === 0 ? (
-          <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
+          <div className="rounded-2xl border border-border/50 bg-card px-4 py-4 text-center">
+            <p className="text-[13px] font-normal text-muted-foreground">{t("archiveTodosEmpty")}</p>
           </div>
         ) : (
-          <div className="p-1">
+          <div className="space-y-1">
             {completedTodos.map((todo, idx) => (
               <TodoRow
                 key={todo.id}
@@ -140,6 +242,7 @@ function VeckansAttGora() {
                 index={idx}
                 last={idx === completedTodos.length - 1}
                 isEditing={editingId === todo.id}
+                variant="compact"
                 onToggle={() => toggleTodo(todo.id)}
                 onStartEdit={guard(todo.id, () => startEditing(todo.id))}
                 onUpdateText={(text) => updateTodoText(todo.id, text)}
@@ -154,8 +257,8 @@ function VeckansAttGora() {
       {/* Add todo button */}
       <button
         type="button"
-        onClick={handleAdd}
-        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
+        onClick={() => handleAdd()}
+        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
       >
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addTodo")}</span>
@@ -169,6 +272,7 @@ function TodoRow({
   index,
   last,
   isEditing,
+  variant,
   onToggle,
   onStartEdit,
   onUpdateText,
@@ -179,6 +283,7 @@ function TodoRow({
   index: number;
   last: boolean;
   isEditing: boolean;
+  variant: "card" | "compact";
   onToggle: () => void;
   onStartEdit: () => void;
   onUpdateText: (text: string) => void;
@@ -186,7 +291,7 @@ function TodoRow({
   onFinishEdit: () => void;
 }) {
   const { t } = useLanguage();
-  const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
+  const delay = useMemo(() => ({ animationDelay: `${Math.min(index, 12) * 30}ms` }), [index]);
   const committedRef = useRef(false);
   const [draft, setDraft] = useState(todo.text);
 
@@ -195,8 +300,7 @@ function TodoRow({
       committedRef.current = false;
       setDraft(todo.text);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEditing]);
+  }, [isEditing, todo.text]);
 
   const commitText = (value: string) => {
     if (committedRef.current) return;
@@ -215,21 +319,20 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-1.5 px-2 py-1.5",
-          !last && "border-b border-border",
-          "bg-secondary/50",
+          "stagger-item flex items-center gap-2 rounded-2xl border border-border/50 bg-secondary/60 px-3 py-2.5",
+          variant === "card" && "shadow-soft"
         )}
         style={delay}
       >
         <div
           className={cn(
-            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             todo.completed
               ? "border-completed bg-completed"
-              : "border-muted-foreground/40 bg-transparent",
+              : "border-muted-foreground/40 bg-transparent"
           )}
         >
-          {todo.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
+          {todo.completed && <Check className="size-3 text-completed-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`todo-input-${todo.id}`}
@@ -237,7 +340,7 @@ function TodoRow({
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={todo.text ? "" : t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[15px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -256,9 +359,46 @@ function TodoRow({
             e.preventDefault();
             commitText(draft);
           }}
-          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
+          className="shrink-0 rounded-full bg-primary px-3 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
+        </button>
+      </div>
+    );
+  }
+
+  if (variant === "compact") {
+    return (
+      <div
+        className={cn(
+          "stagger-item group flex items-center gap-3 rounded-xl px-2 py-2 transition-colors active:bg-secondary/60",
+          !last && "border-b border-border/40"
+        )}
+        style={delay}
+      >
+        <button
+          type="button"
+          onClick={onToggle}
+          className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-completed bg-completed transition-all active:scale-90"
+          aria-checked={todo.completed}
+          role="checkbox"
+        >
+          <Check className="size-3.5 text-completed-foreground" strokeWidth={3} />
+        </button>
+        <button
+          type="button"
+          onClick={onStartEdit}
+          className="min-w-0 flex-1 truncate text-left text-[14px] font-normal text-muted-foreground line-through"
+        >
+          {todo.text || <span className="italic text-muted-foreground/70">{t("todoPlaceholder")}</span>}
+        </button>
+        <button
+          type="button"
+          onClick={onRemove}
+          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
+          aria-label={t("remove")}
+        >
+          <X className="size-3.5" strokeWidth={2.5} />
         </button>
       </div>
     );
@@ -267,8 +407,8 @@ function TodoRow({
   return (
     <div
       className={cn(
-        "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
-        !last && "border-b border-border",
+        "stagger-item group relative flex items-center gap-3 rounded-2xl border border-border/50 bg-card p-3 shadow-soft transition-all active:scale-[0.99] active:bg-secondary/30",
+        "border-l-4 border-l-gold"
       )}
       style={delay}
     >
@@ -276,35 +416,35 @@ function TodoRow({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+          "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
           todo.completed
-            ? "border-primary bg-primary shadow-sm"
-            : "border-muted-foreground/40 bg-transparent",
+            ? "border-completed bg-completed"
+            : "border-muted-foreground/40 bg-transparent"
         )}
         aria-checked={todo.completed}
         role="checkbox"
       >
-        {todo.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
+        {todo.completed && <Check className="size-3.5 text-completed-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[15px] font-normal transition-colors",
           todo.completed
             ? "text-muted-foreground line-through"
-            : "text-primary",
+            : "text-foreground"
         )}
       >
-        {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
+        {todo.text || <span className="italic text-muted-foreground/70">{t("todoPlaceholder")}</span>}
       </button>
       <button
         type="button"
         onClick={onRemove}
-        className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
+        className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
         aria-label={t("remove")}
       >
-        <X className="size-3.5" strokeWidth={2.5} />
+        <X className="size-4" strokeWidth={2.5} />
       </button>
     </div>
   );
