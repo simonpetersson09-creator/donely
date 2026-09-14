@@ -371,8 +371,8 @@ function TodoRow({
   return (
     <div
       className={cn(
-        "stagger-item group relative flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-secondary/40",
-        !last && "border-b border-border/50",
+        "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
+        !last && "border-b border-border",
       )}
       style={delay}
     >
@@ -380,7 +380,7 @@ function TodoRow({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
           todo.completed
             ? "border-transparent bg-gradient-gold shadow-sm"
             : "border-muted-foreground/40 bg-transparent"
@@ -388,27 +388,27 @@ function TodoRow({
         aria-checked={todo.completed}
         role="checkbox"
       >
-        {todo.completed && <Check className="size-3.5 text-gold-foreground" strokeWidth={3} />}
+        {todo.completed && <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[15px] font-normal transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
           todo.completed
             ? "text-muted-foreground line-through"
-            : "text-foreground"
+            : "text-primary"
         )}
       >
-        {todo.text || <span className="italic text-muted-foreground/70">{t("todoPlaceholder")}</span>}
+        {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
       </button>
       <button
         type="button"
         onClick={onRemove}
-        className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
+        className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
         aria-label={t("remove")}
       >
-        <X className="size-4" strokeWidth={2.5} />
+        <X className="size-3.5" strokeWidth={2.5} />
       </button>
     </div>
   );
