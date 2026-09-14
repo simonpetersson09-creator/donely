@@ -266,13 +266,13 @@ function GoalRow({
         </button>
         <div
           className={cn(
-            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            "flex size-3.5 shrink-0 items-center justify-center rounded-full transition-colors",
             goal.completed
-              ? "border-completed bg-completed"
-              : "border-muted-foreground/40 bg-transparent"
+              ? "border-transparent bg-gradient-gold"
+              : "border-2 border-muted-foreground/40 bg-transparent"
           )}
         >
-          {goal.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-2 text-gold-foreground" strokeWidth={3} />}
         </div>
       </div>
     );
@@ -333,15 +333,15 @@ function GoalRow({
             if (shouldTriggerAction()) onToggle();
           }}
           className={cn(
-            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
             goal.completed
-              ? "border-primary bg-primary shadow-sm"
-              : "border-muted-foreground/40 bg-transparent"
+              ? "border-transparent bg-gradient-gold shadow-sm"
+              : "border-2 border-muted-foreground/40 bg-transparent"
           )}
           aria-checked={goal.completed}
           role="checkbox"
         >
-          {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />}
         </button>
       </div>
     </div>
