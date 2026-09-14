@@ -81,7 +81,6 @@ function ProgressRing({
 
 function VeckansAttGora() {
   const { t } = useLanguage();
-  const hydrated = useHydrated();
   const { todos, addTodo, toggleTodo, updateTodoText, removeTodo } = useWeeklyTodos();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [quickDraft, setQuickDraft] = useState("");
