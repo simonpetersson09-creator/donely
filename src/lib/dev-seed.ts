@@ -18,13 +18,19 @@ import {
   categoriesSchema,
   entriesSchema,
   goalsSchema,
+  yearlyGoalsSchema,
+  weeklyTodosSchema,
   readKey,
   writeKey,
   type Category,
   type Entry,
   type Goals,
+  type YearlyGoal,
+  type WeeklyTodo,
 } from "@/lib/persistence";
 import { DATA_CHANGED_EVENT } from "@/lib/store";
+import { weekStart } from "@/lib/weekly-summary";
+
 
 const SEEDED_FLAG = "vr.dev.seeded.v1";
 
@@ -100,7 +106,90 @@ function buildGoals(year: number): Goals {
   };
 }
 
-/** Writes the demo activities (and matching yearly goals). */
+function buildYearlyGoals(year: number): YearlyGoal[] {
+  const now = new Date().toISOString();
+  return [
+    {
+      id: "dev-goal-1",
+      text: "Avsluta tre stora projekt på jobbet",
+      completed: false,
+      halfYear: "h2",
+      year,
+      createdAt: now,
+    },
+    {
+      id: "dev-goal-2",
+      text: "Springa ett lopp under 50 minuter",
+      completed: false,
+      halfYear: "h2",
+      year,
+      createdAt: now,
+    },
+    {
+      id: "dev-goal-3",
+      text: "Lansera appen på App Store",
+      completed: true,
+      halfYear: "h1",
+      year,
+      createdAt: now,
+    },
+    {
+      id: "dev-goal-4",
+      text: "Meditera minst 5 dagar i veckan",
+      completed: true,
+      halfYear: "h1",
+      year,
+      createdAt: now,
+    },
+  ];
+}
+
+function buildWeeklyTodos(): WeeklyTodo[] {
+  const monday = weekStart(new Date());
+  // Match the date-only key used by useWeeklyTodos (weekStartKey).
+  const weekKey = monday.toISOString().split("T")[0]!;
+  const createdAt = new Date().toISOString();
+  return [
+    {
+      id: "dev-todo-1",
+      text: "Skicka veckorapport till teamet",
+      completed: false,
+      weekStart: weekKey,
+      createdAt,
+    },
+    {
+      id: "dev-todo-2",
+      text: "Planera nästa veckas möten",
+      completed: false,
+      weekStart: weekKey,
+      createdAt,
+    },
+    {
+      id: "dev-todo-3",
+      text: "Gå igenom feedback från användare",
+      completed: false,
+      weekStart: weekKey,
+      createdAt,
+    },
+    {
+      id: "dev-todo-4",
+      text: "Uppdatera app-ikonen",
+      completed: true,
+      weekStart: weekKey,
+      createdAt,
+    },
+    {
+      id: "dev-todo-5",
+      text: "Skriv månadsbrev",
+      completed: true,
+      weekStart: weekKey,
+      createdAt,
+    },
+  ];
+}
+
+
+/** Writes the demo activities (and matching yearly goals / weekly todos). */
 export function seedDevActivities({ force = false }: { force?: boolean } = {}): boolean {
   if (typeof window === "undefined") return false;
 
@@ -111,16 +200,42 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   const existing = readKey(STORAGE_KEYS.entries, entriesSchema);
-  if (!force && existing.status === "ok" && existing.value.length > 0) return false;
-  if (!force && existing.status === "corrupt") return false;
+  const shouldSeedEntries =
+    force || existing.status === "missing" || (existing.status === "ok" && existing.value.length === 0);
+  if (existing.status === "corrupt" && !force) return false;
 
-  const entries = buildEntries(categories);
-  writeKey(STORAGE_KEYS.entries, entries, entriesSchema);
+  if (shouldSeedEntries) {
+    const entries = buildEntries(categories);
+    writeKey(STORAGE_KEYS.entries, entries, entriesSchema);
+  }
 
   const storedGoals = readKey(STORAGE_KEYS.goals, goalsSchema);
-  const goals = { ...buildGoals(new Date().getFullYear()) };
-  if (storedGoals.status === "ok") Object.assign(goals, storedGoals.value);
-  writeKey(STORAGE_KEYS.goals, goals, goalsSchema);
+  const goalsEmpty =
+    storedGoals.status === "missing" ||
+    (storedGoals.status === "ok" && storedGoals.value.length === 0);
+  if (force || goalsEmpty) {
+    const goals = { ...buildGoals(new Date().getFullYear()) };
+    if (storedGoals.status === "ok") Object.assign(goals, storedGoals.value);
+    writeKey(STORAGE_KEYS.goals, goals, goalsSchema);
+  }
+
+  const year = new Date().getFullYear();
+
+  const storedYearlyGoals = readKey(STORAGE_KEYS.yearlyGoals, yearlyGoalsSchema);
+  const yearlyGoalsEmpty =
+    storedYearlyGoals.status === "missing" ||
+    (storedYearlyGoals.status === "ok" && storedYearlyGoals.value.length === 0);
+  if (force || yearlyGoalsEmpty) {
+    writeKey(STORAGE_KEYS.yearlyGoals, buildYearlyGoals(year), yearlyGoalsSchema);
+  }
+
+  const storedWeeklyTodos = readKey(STORAGE_KEYS.weeklyTodos, weeklyTodosSchema);
+  const weeklyTodosEmpty =
+    storedWeeklyTodos.status === "missing" ||
+    (storedWeeklyTodos.status === "ok" && storedWeeklyTodos.value.length === 0);
+  if (force || weeklyTodosEmpty) {
+    writeKey(STORAGE_KEYS.weeklyTodos, buildWeeklyTodos(), weeklyTodosSchema);
+  }
 
   try {
     window.localStorage.setItem(SEEDED_FLAG, "1");
@@ -129,13 +244,21 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   emit();
-  return true;
+  return shouldSeedEntries || goalsEmpty || yearlyGoalsEmpty || weeklyTodosEmpty;
 }
+
+
+
+
+
+
 
 /** Removes every seeded activity again (keeps categories). */
 export function clearDevActivities() {
   if (typeof window === "undefined") return;
   writeKey(STORAGE_KEYS.entries, [], entriesSchema);
+  writeKey(STORAGE_KEYS.yearlyGoals, [], yearlyGoalsSchema);
+  writeKey(STORAGE_KEYS.weeklyTodos, [], weeklyTodosSchema);
   try {
     window.localStorage.removeItem(SEEDED_FLAG);
   } catch {
@@ -143,6 +266,7 @@ export function clearDevActivities() {
   }
   emit();
 }
+
 
 /** Dev build, or the Lovable preview sandbox (never the published app). */
 function seedingAllowed(): boolean {
@@ -153,8 +277,9 @@ function seedingAllowed(): boolean {
 }
 
 /**
- * Called once at app start. Only does anything in dev/preview, and only when
- * there is no activity data yet. Force with `?seed=1`, wipe with `?seed=0`.
+ * Called once at app start. Only does anything in dev/preview. Force with
+ * `?seed=1`, wipe with `?seed=0`. Backfills any missing demo dataset without
+ * overwriting existing user data.
  */
 export function initDevSeed() {
   if (!seedingAllowed()) return;
@@ -178,13 +303,9 @@ export function initDevSeed() {
     return;
   }
 
-  // Re-seed whenever there is no activity data, even if we've seeded before —
-  // otherwise a cleared/fresh browser profile shows empty statistics.
-  const existing = readKey(STORAGE_KEYS.entries, entriesSchema);
-  if (existing.status === "ok" && existing.value.length > 0) return;
-
   if (seedDevActivities()) {
-    console.info("[donely/dev] demo activities seeded — window.donely.clear() to remove them");
+    console.info("[donely/dev] demo data seeded — window.donely.clear() to remove them");
   }
 }
+
 
