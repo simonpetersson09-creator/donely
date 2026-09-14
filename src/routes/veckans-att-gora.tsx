@@ -103,77 +103,73 @@ function VeckansAttGora() {
       </section>
 
       {/* Active todos */}
-      <section className="mt-4">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="text-[13px] font-normal text-foreground">
+      <section className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
+        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+          <h2 className="text-[13px] font-normal text-primary-foreground">
             {t("activeTodos")}
           </h2>
-          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
+          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
             {activeTodos.length}
           </span>
         </div>
 
         {activeTodos.length === 0 ? (
           <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-muted-foreground">{t("emptyTodos")}</p>
+            <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
           </div>
         ) : (
-          <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background">
-            <div className="p-1">
-              {activeTodos.map((todo, idx) => (
-                <TodoRow
-                  key={todo.id}
-                  todo={todo}
-                  index={idx}
-                  last={idx === activeTodos.length - 1}
-                  isEditing={editingId === todo.id}
-                  variant="card"
-                  onToggle={() => toggleTodo(todo.id)}
-                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                  onUpdateText={(text) => updateTodoText(todo.id, text)}
-                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                  onFinishEdit={() => finishEdit(todo.id)}
-                />
-              ))}
-            </div>
+          <div className="p-1">
+            {activeTodos.map((todo, idx) => (
+              <TodoRow
+                key={todo.id}
+                todo={todo}
+                index={idx}
+                last={idx === activeTodos.length - 1}
+                isEditing={editingId === todo.id}
+                variant="card"
+                onToggle={() => toggleTodo(todo.id)}
+                onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                onUpdateText={(text) => updateTodoText(todo.id, text)}
+                onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                onFinishEdit={() => finishEdit(todo.id)}
+              />
+            ))}
           </div>
         )}
       </section>
 
       {/* Completed todos */}
-      <section className="mt-3">
-        <div className="flex items-center justify-between px-1">
-          <h2 className="text-[13px] font-normal text-foreground">
+      <section className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
+        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+          <h2 className="text-[13px] font-normal text-primary-foreground">
             {t("completedTodos")}
           </h2>
-          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
+          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
             {completedTodos.length}
           </span>
         </div>
 
         {completedTodos.length === 0 ? (
           <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-muted-foreground">{t("archiveTodosEmpty")}</p>
+            <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
           </div>
         ) : (
-          <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background">
-            <div className="p-1">
-              {completedTodos.map((todo, idx) => (
-                <TodoRow
-                  key={todo.id}
-                  todo={todo}
-                  index={idx}
-                  last={idx === completedTodos.length - 1}
-                  isEditing={editingId === todo.id}
-                  variant="compact"
-                  onToggle={() => toggleTodo(todo.id)}
-                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                  onUpdateText={(text) => updateTodoText(todo.id, text)}
-                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                  onFinishEdit={() => finishEdit(todo.id)}
-                />
-              ))}
-            </div>
+          <div className="p-1">
+            {completedTodos.map((todo, idx) => (
+              <TodoRow
+                key={todo.id}
+                todo={todo}
+                index={idx}
+                last={idx === completedTodos.length - 1}
+                isEditing={editingId === todo.id}
+                variant="compact"
+                onToggle={() => toggleTodo(todo.id)}
+                onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                onUpdateText={(text) => updateTodoText(todo.id, text)}
+                onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                onFinishEdit={() => finishEdit(todo.id)}
+              />
+            ))}
           </div>
         )}
       </section>
