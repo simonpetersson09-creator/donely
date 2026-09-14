@@ -334,9 +334,9 @@ function TodoRow({
           className={cn(
             "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
             isCompact
-              ? "text-muted-foreground line-through decoration-gold decoration-2"
+              ? "text-muted-foreground line-through decoration-border"
               : todo.completed
-                ? "text-muted-foreground line-through decoration-gold decoration-2"
+                ? "text-muted-foreground line-through decoration-border"
                 : "text-primary"
           )}
         >
