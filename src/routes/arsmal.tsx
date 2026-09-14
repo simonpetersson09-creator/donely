@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Check, Plus, X } from "lucide-react";
+import { Check, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
 import { useYearlyGoals } from "@/lib/store";
+import { useSwipeDelete } from "@/hooks/use-swipe-delete";
 
 export const Route = createFileRoute("/arsmal")({
   head: () => ({
@@ -277,48 +278,72 @@ function GoalRow({
     );
   }
 
+  const { offset, dragging, handlers, confirmDelete, shouldTriggerAction } = useSwipeDelete({
+    onDelete: onRemove,
+    enabled: !isEditing,
+  });
+
+  const showDelete = offset !== 0;
+
   return (
-    <div
-      className={cn(
-        "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
-        !last && "border-b border-border"
+    <div className="relative overflow-hidden" style={delay}>
+      {/* Swipe-revealed delete action */}
+      {showDelete && (
+        <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
+          <button
+            type="button"
+            onClick={confirmDelete}
+            className="flex size-10 items-center justify-center rounded-full bg-destructive-foreground/20 text-destructive-foreground transition-transform active:scale-90"
+            aria-label={t("remove")}
+          >
+            <Trash2 className="size-5" strokeWidth={2} />
+          </button>
+        </div>
       )}
-      style={delay}
-    >
-      <button
-        type="button"
-        onClick={onStartEdit}
+
+      <div
+        {...handlers}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
-          goal.completed
-            ? "text-muted-foreground line-through"
-            : "text-primary"
+          "stagger-item group flex items-center gap-2 bg-background px-2 py-1.5 transition-colors active:bg-secondary",
+          !last && "border-b border-border"
         )}
+        style={{
+          transform: `translateX(${offset}px)`,
+          transition: dragging ? "none" : "transform 200ms ease-out",
+          touchAction: "pan-y",
+        }}
       >
-        {goal.text || <span className="italic text-muted-foreground">{t("yearlyGoalPlaceholder")}</span>}
-      </button>
-      <button
-        type="button"
-        onClick={onRemove}
-        className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
-        aria-label={t("remove")}
-      >
-        <X className="size-3.5" strokeWidth={2.5} />
-      </button>
-      <button
-        type="button"
-        onClick={onToggle}
-        className={cn(
-          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
-          goal.completed
-            ? "border-primary bg-primary shadow-sm"
-            : "border-muted-foreground/40 bg-transparent"
-        )}
-        aria-checked={goal.completed}
-        role="checkbox"
-      >
-        {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
-      </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (shouldTriggerAction()) onStartEdit();
+          }}
+          className={cn(
+            "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
+            goal.completed
+              ? "text-muted-foreground line-through"
+              : "text-primary"
+          )}
+        >
+          {goal.text || <span className="italic text-muted-foreground">{t("yearlyGoalPlaceholder")}</span>}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            if (shouldTriggerAction()) onToggle();
+          }}
+          className={cn(
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+            goal.completed
+              ? "border-primary bg-primary shadow-sm"
+              : "border-muted-foreground/40 bg-transparent"
+          )}
+          aria-checked={goal.completed}
+          role="checkbox"
+        >
+          {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
+        </button>
+      </div>
     </div>
   );
 }
