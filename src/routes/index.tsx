@@ -303,7 +303,15 @@ function Index() {
         </div>
       </div>
 
-      <div className="flex flex-1 translate-y-[80px] flex-col justify-center gap-3">
+      <div
+        className={cn(
+          "flex flex-1 flex-col justify-center gap-3",
+          // När km/min-fälten för träning visas blir innehållet högre — dra
+          // då inte ner det lika långt så att fälten inte hamnar bakom
+          // knapparna längst ner.
+          showMetrics ? "translate-y-[36px]" : "translate-y-[80px]",
+        )}
+      >
         {/* Område */}
         <AreaSegmented
           area={area}
