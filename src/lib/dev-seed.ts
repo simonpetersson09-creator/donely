@@ -207,7 +207,10 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   const storedGoals = readKey(STORAGE_KEYS.goals, goalsSchema);
-  if (force || storedGoals.status === "missing" || storedGoals.value.length === 0) {
+  const goalsEmpty =
+    storedGoals.status === "missing" ||
+    (storedGoals.status === "ok" && storedGoals.value.length === 0);
+  if (force || goalsEmpty) {
     const goals = { ...buildGoals(new Date().getFullYear()) };
     if (storedGoals.status === "ok") Object.assign(goals, storedGoals.value);
     writeKey(STORAGE_KEYS.goals, goals, goalsSchema);
@@ -216,12 +219,18 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   const year = new Date().getFullYear();
 
   const storedYearlyGoals = readKey(STORAGE_KEYS.yearlyGoals, yearlyGoalsSchema);
-  if (force || storedYearlyGoals.status === "missing" || storedYearlyGoals.value.length === 0) {
+  const yearlyGoalsEmpty =
+    storedYearlyGoals.status === "missing" ||
+    (storedYearlyGoals.status === "ok" && storedYearlyGoals.value.length === 0);
+  if (force || yearlyGoalsEmpty) {
     writeKey(STORAGE_KEYS.yearlyGoals, buildYearlyGoals(year), yearlyGoalsSchema);
   }
 
   const storedWeeklyTodos = readKey(STORAGE_KEYS.weeklyTodos, weeklyTodosSchema);
-  if (force || storedWeeklyTodos.status === "missing" || storedWeeklyTodos.value.length === 0) {
+  const weeklyTodosEmpty =
+    storedWeeklyTodos.status === "missing" ||
+    (storedWeeklyTodos.status === "ok" && storedWeeklyTodos.value.length === 0);
+  if (force || weeklyTodosEmpty) {
     writeKey(STORAGE_KEYS.weeklyTodos, buildWeeklyTodos(), weeklyTodosSchema);
   }
 
@@ -232,12 +241,9 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   }
 
   emit();
-  return (
-    shouldSeedEntries ||
-    storedYearlyGoals.value?.length === 0 ||
-    storedWeeklyTodos.value?.length === 0
-  );
+  return shouldSeedEntries || yearlyGoalsEmpty || weeklyTodosEmpty;
 }
+
 
 
 
