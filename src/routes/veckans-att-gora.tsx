@@ -189,7 +189,7 @@ function VeckansAttGora() {
           <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
             {t("completedTodos")}
           </h2>
-          <span className="text-[11px] font-semibold tabular-nums text-muted-foreground">
+          <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-semibold tabular-nums text-muted-foreground">
             {completedTodos.length}
           </span>
         </div>
@@ -199,7 +199,7 @@ function VeckansAttGora() {
             <p className="text-[13px] font-normal text-muted-foreground">{t("archiveTodosEmpty")}</p>
           </div>
         ) : (
-          <div className="mt-2 overflow-hidden rounded-xl bg-card">
+          <div className="mt-2 overflow-hidden rounded-3xl border border-border/50 bg-card/80 shadow-soft backdrop-blur-sm">
             {completedTodos.map((todo, idx) => (
               <TodoRow
                 key={todo.id}
@@ -336,7 +336,7 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item group flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-secondary/60",
+          "stagger-item group flex items-center gap-3 px-4 py-3.5 transition-colors active:bg-secondary/40",
           !last && "border-b border-border/50"
         )}
         style={delay}
@@ -344,23 +344,23 @@ function TodoRow({
         <button
           type="button"
           onClick={onToggle}
-          className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-completed bg-completed transition-all active:scale-90"
+          className="flex size-6 shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
           aria-checked={todo.completed}
           role="checkbox"
         >
-          <Check className="size-3.5 text-completed-foreground" strokeWidth={3} />
+          <Check className="size-3.5 text-gold-foreground" strokeWidth={3} />
         </button>
         <button
           type="button"
           onClick={onStartEdit}
-          className="min-w-0 flex-1 truncate text-left text-[14px] font-normal text-muted-foreground line-through"
+          className="min-w-0 flex-1 truncate text-left text-[15px] font-normal text-muted-foreground/80 line-through decoration-border"
         >
           {todo.text || <span className="italic text-muted-foreground/70">{t("todoPlaceholder")}</span>}
         </button>
         <button
           type="button"
           onClick={onRemove}
-          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
+          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/30 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
           aria-label={t("remove")}
         >
           <X className="size-3.5" strokeWidth={2.5} />
@@ -383,13 +383,13 @@ function TodoRow({
         className={cn(
           "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
           todo.completed
-            ? "border-completed bg-completed"
+            ? "border-transparent bg-gradient-gold shadow-sm"
             : "border-muted-foreground/40 bg-transparent"
         )}
         aria-checked={todo.completed}
         role="checkbox"
       >
-        {todo.completed && <Check className="size-3.5 text-completed-foreground" strokeWidth={3} />}
+        {todo.completed && <Check className="size-3.5 text-gold-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
