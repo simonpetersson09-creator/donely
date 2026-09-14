@@ -235,6 +235,8 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
 export function clearDevActivities() {
   if (typeof window === "undefined") return;
   writeKey(STORAGE_KEYS.entries, [], entriesSchema);
+  writeKey(STORAGE_KEYS.yearlyGoals, [], yearlyGoalsSchema);
+  writeKey(STORAGE_KEYS.weeklyTodos, [], weeklyTodosSchema);
   try {
     window.localStorage.removeItem(SEEDED_FLAG);
   } catch {
@@ -242,6 +244,7 @@ export function clearDevActivities() {
   }
   emit();
 }
+
 
 /** Dev build, or the Lovable preview sandbox (never the published app). */
 function seedingAllowed(): boolean {
