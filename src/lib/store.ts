@@ -735,7 +735,8 @@ export function useWeeklyTodos() {
   return {
     todos,
     addTodo,
-    toggleTodo,
+    completeTodo,
+    uncompleteTodo,
     updateTodoText,
     removeTodo,
     hydrated,
