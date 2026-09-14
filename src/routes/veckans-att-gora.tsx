@@ -31,9 +31,6 @@ function VeckansAttGora() {
   const { t } = useLanguage();
   const { todos, addTodo, toggleTodo, updateTodoText, removeTodo } = useWeeklyTodos();
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [quickDraft, setQuickDraft] = useState("");
-  const quickInputRef = useRef<HTMLInputElement>(null);
-  const quickCommitRef = useRef(false);
   const suppressRef = useRef<Record<string, number>>({});
   const guard = (id: string, fn: () => void) => () => {
     if (Date.now() < (suppressRef.current[id] ?? 0)) return;
@@ -56,20 +53,6 @@ function VeckansAttGora() {
     requestAnimationFrame(() => {
       const el = document.getElementById(`todo-input-${id}`) as HTMLInputElement | null;
       el?.focus();
-    });
-  };
-
-  const commitQuickAdd = () => {
-    if (quickCommitRef.current) return;
-    quickCommitRef.current = true;
-    const trimmed = quickDraft.trim();
-    if (trimmed) {
-      addTodo(trimmed);
-    }
-    setQuickDraft("");
-    quickInputRef.current?.blur();
-    queueMicrotask(() => {
-      quickCommitRef.current = false;
     });
   };
 
@@ -118,29 +101,6 @@ function VeckansAttGora() {
           />
         </div>
       </section>
-
-      {/* Quick add */}
-      <div className="mt-3 flex items-center gap-2 rounded-xl bg-card px-3 py-2 shadow-soft">
-        <Plus className="size-4 shrink-0 text-primary" strokeWidth={2.5} />
-        <input
-          ref={quickInputRef}
-          type="text"
-          value={quickDraft}
-          onChange={(e) => setQuickDraft(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              commitQuickAdd();
-            } else if (e.key === "Escape") {
-              setQuickDraft("");
-              quickInputRef.current?.blur();
-            }
-          }}
-          onBlur={commitQuickAdd}
-          placeholder={t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground/60"
-          autoComplete="off"
-        />
-      </div>
 
       {/* Active todos */}
       <section className="mt-4">
