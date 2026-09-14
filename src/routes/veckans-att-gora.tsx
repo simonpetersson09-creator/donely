@@ -32,8 +32,38 @@ export const Route = createFileRoute("/veckans-att-gora")({
 
 function VeckansAttGora() {
   const { t } = useLanguage();
-  const { todos, addTodo, toggleTodo, updateTodoText, removeTodo } = useWeeklyTodos();
+  const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, removeTodo } =
+    useWeeklyTodos();
+  const { categories } = useCategories();
+  const { addEntry, removeEntry } = useEntries();
   const [editingId, setEditingId] = useState<string | null>(null);
+  // Id of the todo waiting for the user to pick which activity gets the point.
+  const [pendingId, setPendingId] = useState<string | null>(null);
+
+  const handleToggle = (id: string, completed: boolean) => {
+    if (completed) {
+      const entryId = uncompleteTodo(id);
+      if (entryId) removeEntry(entryId);
+      return;
+    }
+    setPendingId(id);
+  };
+
+  const handlePickCategory = (categoryId: string) => {
+    const id = pendingId;
+    setPendingId(null);
+    if (!id) return;
+    const category = categories.find((c) => c.id === categoryId);
+    if (!category) return;
+    const entryId = addEntry({
+      area: category.area,
+      categoryId: category.id,
+      categoryName: category.name,
+      amount: 1,
+    });
+    completeTodo(id, entryId);
+  };
+
   const suppressRef = useRef<Record<string, number>>({});
   const guard = (id: string, fn: () => void) => () => {
     if (Date.now() < (suppressRef.current[id] ?? 0)) return;
