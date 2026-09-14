@@ -233,16 +233,6 @@ function GoalRow({
         )}
         style={delay}
       >
-        <div
-          className={cn(
-            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-            goal.completed
-              ? "border-completed bg-completed"
-              : "border-muted-foreground/40 bg-transparent"
-          )}
-        >
-          {goal.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
-        </div>
         <input
           id={`goal-input-${goal.id}`}
           type="text"
@@ -273,6 +263,16 @@ function GoalRow({
         >
           {t("doneEditing")}
         </button>
+        <div
+          className={cn(
+            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            goal.completed
+              ? "border-completed bg-completed"
+              : "border-muted-foreground/40 bg-transparent"
+          )}
+        >
+          {goal.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
+        </div>
       </div>
     );
   }
@@ -285,20 +285,6 @@ function GoalRow({
       )}
       style={delay}
     >
-      <button
-        type="button"
-        onClick={onToggle}
-        className={cn(
-          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
-          goal.completed
-            ? "border-primary bg-primary shadow-sm"
-            : "border-muted-foreground/40 bg-transparent"
-        )}
-        aria-checked={goal.completed}
-        role="checkbox"
-      >
-        {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
-      </button>
       <button
         type="button"
         onClick={onStartEdit}
@@ -318,6 +304,20 @@ function GoalRow({
         aria-label={t("remove")}
       >
         <X className="size-3.5" strokeWidth={2.5} />
+      </button>
+      <button
+        type="button"
+        onClick={onToggle}
+        className={cn(
+          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+          goal.completed
+            ? "border-primary bg-primary shadow-sm"
+            : "border-muted-foreground/40 bg-transparent"
+        )}
+        aria-checked={goal.completed}
+        role="checkbox"
+      >
+        {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
       </button>
     </div>
   );
