@@ -274,8 +274,9 @@ function seedingAllowed(): boolean {
 }
 
 /**
- * Called once at app start. Only does anything in dev/preview, and only when
- * there is no activity data yet. Force with `?seed=1`, wipe with `?seed=0`.
+ * Called once at app start. Only does anything in dev/preview. Force with
+ * `?seed=1`, wipe with `?seed=0`. Backfills any missing demo dataset without
+ * overwriting existing user data.
  */
 export function initDevSeed() {
   if (!seedingAllowed()) return;
@@ -299,13 +300,9 @@ export function initDevSeed() {
     return;
   }
 
-  // Re-seed whenever there is no activity data, even if we've seeded before —
-  // otherwise a cleared/fresh browser profile shows empty statistics.
-  const existing = readKey(STORAGE_KEYS.entries, entriesSchema);
-  if (existing.status === "ok" && existing.value.length > 0) return;
-
   if (seedDevActivities()) {
-    console.info("[donely/dev] demo activities seeded — window.donely.clear() to remove them");
+    console.info("[donely/dev] demo data seeded — window.donely.clear() to remove them");
   }
 }
+
 
