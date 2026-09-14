@@ -27,64 +27,13 @@ export const Route = createFileRoute("/veckans-att-gora")({
   component: VeckansAttGora,
 });
 
-const RING_RADIUS = 20;
-const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
-
-function ProgressRing({
-  total,
-  completed,
-  className,
-}: {
-  total: number;
-  completed: number;
-  className?: string;
-}) {
-  const pct = total === 0 ? 0 : completed / total;
-  const offset = RING_CIRCUMFERENCE * (1 - pct);
-  const label = total === 0 ? "0%" : `${Math.round(pct * 100)}%`;
-
-  return (
-    <div className={cn("relative flex items-center justify-center", className)}>
-      <svg
-        className="size-12 -rotate-90"
-        viewBox="0 0 48 48"
-        aria-hidden="true"
-      >
-        <circle
-          cx="24"
-          cy="24"
-          r={RING_RADIUS}
-          className="text-muted/60"
-          stroke="currentColor"
-          strokeWidth="4"
-          fill="transparent"
-        />
-        <circle
-          cx="24"
-          cy="24"
-          r={RING_RADIUS}
-          className="text-gold"
-          stroke="currentColor"
-          strokeWidth="4"
-          fill="transparent"
-          strokeDasharray={RING_CIRCUMFERENCE}
-          strokeDashoffset={offset}
-          strokeLinecap="round"
-        />
-      </svg>
-      <span className="absolute text-[10px] font-semibold text-foreground">
-        {label}
-      </span>
-    </div>
-  );
-}
-
 function VeckansAttGora() {
   const { t } = useLanguage();
   const { todos, addTodo, toggleTodo, updateTodoText, removeTodo } = useWeeklyTodos();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [quickDraft, setQuickDraft] = useState("");
   const quickInputRef = useRef<HTMLInputElement>(null);
+  const quickCommitRef = useRef(false);
   const suppressRef = useRef<Record<string, number>>({});
   const guard = (id: string, fn: () => void) => () => {
     if (Date.now() < (suppressRef.current[id] ?? 0)) return;
@@ -99,6 +48,7 @@ function VeckansAttGora() {
   const currentWeek = isoWeek(new Date());
   const totalCount = todos.length;
   const completedCount = completedTodos.length;
+  const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
 
   const handleAdd = (text = "") => {
     const id = addTodo(text);
@@ -110,12 +60,17 @@ function VeckansAttGora() {
   };
 
   const commitQuickAdd = () => {
+    if (quickCommitRef.current) return;
+    quickCommitRef.current = true;
     const trimmed = quickDraft.trim();
     if (trimmed) {
       addTodo(trimmed);
     }
     setQuickDraft("");
     quickInputRef.current?.blur();
+    queueMicrotask(() => {
+      quickCommitRef.current = false;
+    });
   };
 
   const startEditing = (id: string) => {
@@ -146,22 +101,32 @@ function VeckansAttGora() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
-      {/* Summary header card */}
-      <div className="mt-2 flex items-center justify-between rounded-2xl bg-card p-4 shadow-soft">
-        <div>
-          <h2 className="text-[19px] font-semibold text-foreground">
-            {t("weeklyTodos")}
-          </h2>
-          <p className="mt-0.5 text-[13px] font-normal text-muted-foreground">
-            {t("weeklyTodos")} {currentWeek} · {t("weeklyTasksCount", { count: totalCount })}
-          </p>
+      {/* Quiet weekly overview */}
+      <section className="mt-4 px-1" aria-labelledby="week-heading">
+        <div className="flex items-end justify-between gap-4">
+          <div className="min-w-0">
+            <h2 id="week-heading" className="text-[22px] font-semibold text-foreground">
+              {t("weeklyTodos")}
+            </h2>
+            <p className="mt-0.5 text-[13px] text-muted-foreground">
+              {t("weeklyTodos")} {currentWeek}
+            </p>
+          </div>
+          <span className="shrink-0 pb-0.5 text-[13px] font-semibold tabular-nums text-muted-foreground">
+            {completedCount}/{totalCount}
+          </span>
         </div>
-        <ProgressRing total={totalCount} completed={completedCount} />
-      </div>
+        <div className="mt-3 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+          <div
+            className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </section>
 
       {/* Quick add */}
-      <div className="mt-3 flex items-center gap-3 rounded-2xl border border-border/50 bg-card px-3 py-2.5 shadow-soft">
-        <div className="flex size-5 shrink-0 items-center justify-center rounded-full border-2 border-muted-foreground/30" />
+      <div className="mt-5 flex items-center gap-3 rounded-xl bg-card px-3.5 py-3 shadow-soft">
+        <Plus className="size-4 shrink-0 text-primary" strokeWidth={2.5} />
         <input
           ref={quickInputRef}
           type="text"
@@ -183,7 +148,7 @@ function VeckansAttGora() {
       </div>
 
       {/* Active todos */}
-      <div className="mt-4 space-y-3">
+      <section className="mt-6">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
             {t("activeTodos")}
@@ -194,11 +159,11 @@ function VeckansAttGora() {
         </div>
 
         {activeTodos.length === 0 ? (
-          <div className="rounded-2xl border border-border/50 bg-card px-4 py-6 text-center shadow-soft">
+          <div className="px-4 py-6 text-center">
             <p className="text-[13px] font-normal text-muted-foreground">{t("emptyTodos")}</p>
           </div>
         ) : (
-          <div className="space-y-2.5">
+          <div className="mt-2 overflow-hidden rounded-xl bg-card shadow-soft">
             {activeTodos.map((todo, idx) => (
               <TodoRow
                 key={todo.id}
@@ -216,10 +181,10 @@ function VeckansAttGora() {
             ))}
           </div>
         )}
-      </div>
+      </section>
 
       {/* Completed todos */}
-      <div className="mt-5 space-y-3">
+      <section className="mt-6">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
             {t("completedTodos")}
@@ -230,11 +195,11 @@ function VeckansAttGora() {
         </div>
 
         {completedTodos.length === 0 ? (
-          <div className="rounded-2xl border border-border/50 bg-card px-4 py-4 text-center">
+          <div className="px-4 py-5 text-center">
             <p className="text-[13px] font-normal text-muted-foreground">{t("archiveTodosEmpty")}</p>
           </div>
         ) : (
-          <div className="space-y-1">
+          <div className="mt-2 overflow-hidden rounded-xl bg-card">
             {completedTodos.map((todo, idx) => (
               <TodoRow
                 key={todo.id}
@@ -252,13 +217,13 @@ function VeckansAttGora() {
             ))}
           </div>
         )}
-      </div>
+      </section>
 
       {/* Add todo button */}
       <button
         type="button"
         onClick={() => handleAdd()}
-        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
+        className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-[0.98] active:bg-primary/90"
       >
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addTodo")}</span>
@@ -319,8 +284,8 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-2 rounded-2xl border border-border/50 bg-secondary/60 px-3 py-2.5",
-          variant === "card" && "shadow-soft"
+          "stagger-item flex items-center gap-2 bg-secondary/60 px-3.5 py-3",
+          !last && "border-b border-border/50",
         )}
         style={delay}
       >
@@ -359,7 +324,7 @@ function TodoRow({
             e.preventDefault();
             commitText(draft);
           }}
-          className="shrink-0 rounded-full bg-primary px-3 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
+          className="shrink-0 rounded-lg bg-primary px-3 py-1 text-[13px] font-normal text-primary-foreground transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
@@ -371,8 +336,8 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item group flex items-center gap-3 rounded-xl px-2 py-2 transition-colors active:bg-secondary/60",
-          !last && "border-b border-border/40"
+          "stagger-item group flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-secondary/60",
+          !last && "border-b border-border/50"
         )}
         style={delay}
       >
@@ -407,8 +372,8 @@ function TodoRow({
   return (
     <div
       className={cn(
-        "stagger-item group relative flex items-center gap-3 rounded-2xl border border-border/50 bg-card p-3 shadow-soft transition-all active:scale-[0.99] active:bg-secondary/30",
-        "border-l-4 border-l-gold"
+        "stagger-item group relative flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-secondary/40",
+        !last && "border-b border-border/50",
       )}
       style={delay}
     >
