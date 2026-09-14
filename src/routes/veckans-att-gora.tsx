@@ -181,37 +181,39 @@ function VeckansAttGora() {
       </section>
 
       {/* Completed todos */}
-      <section className="mt-6">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-1">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
+          <h2 className="text-[13px] font-normal text-foreground">
             {t("completedTodos")}
           </h2>
-          <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-semibold tabular-nums text-muted-foreground">
+          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
             {completedTodos.length}
           </span>
         </div>
 
         {completedTodos.length === 0 ? (
-          <div className="px-4 py-5 text-center">
+          <div className="px-3 py-3 text-center">
             <p className="text-[13px] font-normal text-muted-foreground">{t("archiveTodosEmpty")}</p>
           </div>
         ) : (
-          <div className="mt-2 overflow-hidden rounded-3xl border border-border/50 bg-card/80 shadow-soft backdrop-blur-sm">
-            {completedTodos.map((todo, idx) => (
-              <TodoRow
-                key={todo.id}
-                todo={todo}
-                index={idx}
-                last={idx === completedTodos.length - 1}
-                isEditing={editingId === todo.id}
-                variant="compact"
-                onToggle={() => toggleTodo(todo.id)}
-                onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                onUpdateText={(text) => updateTodoText(todo.id, text)}
-                onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                onFinishEdit={() => finishEdit(todo.id)}
-              />
-            ))}
+          <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background">
+            <div className="p-1">
+              {completedTodos.map((todo, idx) => (
+                <TodoRow
+                  key={todo.id}
+                  todo={todo}
+                  index={idx}
+                  last={idx === completedTodos.length - 1}
+                  isEditing={editingId === todo.id}
+                  variant="compact"
+                  onToggle={() => toggleTodo(todo.id)}
+                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                  onUpdateText={(text) => updateTodoText(todo.id, text)}
+                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                  onFinishEdit={() => finishEdit(todo.id)}
+                />
+              ))}
+            </div>
           </div>
         )}
       </section>
