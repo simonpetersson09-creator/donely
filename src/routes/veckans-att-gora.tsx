@@ -335,31 +335,31 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item group flex items-center gap-3 px-4 py-3.5 transition-colors active:bg-secondary/40",
-          !last && "border-b border-border/50"
+          "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
+          !last && "border-b border-border"
         )}
         style={delay}
       >
         <button
           type="button"
           onClick={onToggle}
-          className="flex size-6 shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
+          className="flex size-[18px] shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
           aria-checked={todo.completed}
           role="checkbox"
         >
-          <Check className="size-3.5 text-gold-foreground" strokeWidth={3} />
+          <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
         </button>
         <button
           type="button"
           onClick={onStartEdit}
-          className="min-w-0 flex-1 truncate text-left text-[15px] font-normal text-muted-foreground/80 line-through decoration-border"
+          className="min-w-0 flex-1 truncate text-left text-[14px] font-normal text-muted-foreground line-through decoration-border"
         >
-          {todo.text || <span className="italic text-muted-foreground/70">{t("todoPlaceholder")}</span>}
+          {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
         </button>
         <button
           type="button"
           onClick={onRemove}
-          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/30 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
+          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
           aria-label={t("remove")}
         >
           <X className="size-3.5" strokeWidth={2.5} />
