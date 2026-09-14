@@ -25,6 +25,7 @@ export const STORAGE_KEYS = {
   entries: "vr.entries.v1",
   goals: "vr.goals.v1",
   yearlyGoals: "vr.yearlyGoals.v1",
+  weeklyTodos: "vr.weeklyTodos.v1",
   onboarding: "vr.onboarding.v1",
   langGuide: "vr.langGuide.v1",
   reminderPrompt: "vr.reminderPrompt.v1",
@@ -41,6 +42,7 @@ const DATA_KEYS = [
   STORAGE_KEYS.entries,
   STORAGE_KEYS.goals,
   STORAGE_KEYS.yearlyGoals,
+  STORAGE_KEYS.weeklyTodos,
   STORAGE_KEYS.onboarding,
   STORAGE_KEYS.langGuide,
   STORAGE_KEYS.reminderPrompt,
@@ -90,12 +92,24 @@ export const yearlyGoalSchema = z.object({
   createdAt: z.string().min(1),
 });
 export const yearlyGoalsSchema = z.array(yearlyGoalSchema);
+
+export const weeklyTodoSchema = z.object({
+  id: z.string().min(1),
+  text: z.string(),
+  completed: z.boolean(),
+  /** ISO date string (Monday) of the week this todo belongs to. */
+  weekStart: z.string().min(1),
+  createdAt: z.string().min(1),
+});
+export const weeklyTodosSchema = z.array(weeklyTodoSchema);
+
 export const flagSchema = z.boolean();
 
 export type Category = z.infer<typeof categorySchema>;
 export type Entry = z.infer<typeof entrySchema>;
 export type Goals = z.infer<typeof goalsSchema>;
 export type YearlyGoal = z.infer<typeof yearlyGoalSchema>;
+export type WeeklyTodo = z.infer<typeof weeklyTodoSchema>;
 
 export type Snapshot = {
   schemaVersion: number;
@@ -104,6 +118,7 @@ export type Snapshot = {
   categories: Category[];
   goals: Goals;
   yearlyGoals: YearlyGoal[];
+  weeklyTodos: WeeklyTodo[];
   settings: {
     onboarding: boolean;
     langGuide: boolean;
@@ -119,6 +134,7 @@ export const snapshotSchema = z.object({
   categories: categoriesSchema,
   goals: goalsSchema,
   yearlyGoals: yearlyGoalsSchema,
+  weeklyTodos: weeklyTodosSchema.default([]),
   settings: z.object({
     onboarding: z.boolean(),
     langGuide: z.boolean(),
@@ -321,6 +337,8 @@ function schemaFor(key: string): z.ZodType<unknown> {
       return goalsSchema as unknown as z.ZodType<unknown>;
     case STORAGE_KEYS.yearlyGoals:
       return yearlyGoalsSchema as unknown as z.ZodType<unknown>;
+    case STORAGE_KEYS.weeklyTodos:
+      return weeklyTodosSchema as unknown as z.ZodType<unknown>;
     default:
       return flagSchema as unknown as z.ZodType<unknown>;
   }
@@ -344,6 +362,7 @@ export function currentSnapshot(): Snapshot {
   const entries = readKey(STORAGE_KEYS.entries, entriesSchema);
   const goals = readKey(STORAGE_KEYS.goals, goalsSchema);
   const yearlyGoals = readKey(STORAGE_KEYS.yearlyGoals, yearlyGoalsSchema);
+  const weeklyTodos = readKey(STORAGE_KEYS.weeklyTodos, weeklyTodosSchema);
   const store = storage();
   let language: string | null = null;
   try {
@@ -358,6 +377,7 @@ export function currentSnapshot(): Snapshot {
     entries: entries.status === "ok" ? entries.value : [],
     goals: goals.status === "ok" ? goals.value : {},
     yearlyGoals: yearlyGoals.status === "ok" ? yearlyGoals.value : [],
+    weeklyTodos: weeklyTodos.status === "ok" ? weeklyTodos.value : [],
     settings: {
       onboarding: readFlag(STORAGE_KEYS.onboarding),
       langGuide: readFlag(STORAGE_KEYS.langGuide),
@@ -418,6 +438,11 @@ export function restoreSnapshot(snapshot: Snapshot): boolean {
       key: STORAGE_KEYS.yearlyGoals,
       value: s.yearlyGoals,
       schema: yearlyGoalsSchema as unknown as z.ZodType<unknown>,
+    },
+    {
+      key: STORAGE_KEYS.weeklyTodos,
+      value: s.weeklyTodos,
+      schema: weeklyTodosSchema as unknown as z.ZodType<unknown>,
     },
     {
       key: STORAGE_KEYS.onboarding,
@@ -563,11 +588,14 @@ export function initializeStorage(): IntegrityStatus {
   const goals = readKey(STORAGE_KEYS.goals, goalsSchema);
   const yearlyGoals = readKey(STORAGE_KEYS.yearlyGoals, yearlyGoalsSchema);
 
+  const weeklyTodos = readKey(STORAGE_KEYS.weeklyTodos, weeklyTodosSchema);
+
   const everythingMissing =
     categories.status === "missing" &&
     entries.status === "missing" &&
     goals.status === "missing" &&
     yearlyGoals.status === "missing" &&
+    weeklyTodos.status === "missing" &&
     readSchemaVersion() === null &&
     readBackups().length === 0;
 
@@ -584,6 +612,7 @@ export function initializeStorage(): IntegrityStatus {
   if (entries.status === "corrupt") corrupt.push(STORAGE_KEYS.entries);
   if (goals.status === "corrupt") corrupt.push(STORAGE_KEYS.goals);
   if (yearlyGoals.status === "corrupt") corrupt.push(STORAGE_KEYS.yearlyGoals);
+  if (weeklyTodos.status === "corrupt") corrupt.push(STORAGE_KEYS.weeklyTodos);
 
   if (corrupt.length > 0) {
     const backup = latestValidBackup();

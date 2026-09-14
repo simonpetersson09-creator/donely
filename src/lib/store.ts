@@ -26,20 +26,23 @@ import {
   writeTransaction,
   writeKey,
   yearlyGoalsSchema,
+  weeklyTodosSchema,
   type Category,
   type Entry,
   type Goals,
   type YearlyGoal,
+  type WeeklyTodo,
 } from "@/lib/persistence";
 
 export type Area = "jobb" | "privat";
-export type { Category, Entry, Goals, YearlyGoal };
+export type { Category, Entry, Goals, YearlyGoal, WeeklyTodo };
 export { DEFAULT_CATEGORIES };
 
 const CATS_KEY = STORAGE_KEYS.categories;
 const ENTRIES_KEY = STORAGE_KEYS.entries;
 const GOALS_KEY = STORAGE_KEYS.goals;
 const YEARLY_GOALS_KEY = STORAGE_KEYS.yearlyGoals;
+const WEEKLY_TODOS_KEY = STORAGE_KEYS.weeklyTodos;
 const ONBOARDING_KEY = STORAGE_KEYS.onboarding;
 const LANG_GUIDE_KEY = STORAGE_KEYS.langGuide;
 const REMINDER_PROMPT_KEY = STORAGE_KEYS.reminderPrompt;
@@ -566,6 +569,136 @@ export function useYearlyGoals(year?: number) {
 
 
   return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, hydrated };
+}
+
+/** Monday 00:00 local time for the week containing `from`. */
+function weekStart(from: Date = new Date()): Date {
+  const d = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  const shift = (d.getDay() + 6) % 7; // Monday = 0
+  d.setDate(d.getDate() - shift);
+  return d;
+}
+
+function weekStartKey(from: Date = new Date()): string {
+  const d = weekStart(from);
+  return d.toISOString().split("T")[0]!;
+}
+
+/**
+ * Simple weekly todo list scoped to the current ISO week. Todos from previous
+ * weeks stay in storage but are not shown, so each Monday starts with a clean
+ * list without losing history.
+ */
+export function useWeeklyTodos() {
+  const [allTodos, setAllTodos] = useState<WeeklyTodo[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+  const todosRef = useRef<WeeklyTodo[]>([]);
+  const currentWeekStart = weekStartKey();
+
+  const apply = useCallback((next: WeeklyTodo[]) => {
+    todosRef.current = next;
+    setAllTodos(next);
+  }, []);
+
+  const readFromStorage = useCallback(() => {
+    ready();
+    const stored = readKey(WEEKLY_TODOS_KEY, weeklyTodosSchema);
+    if (stored.status === "ok") {
+      const seen = new Set<string>();
+      const unique = stored.value.filter((t) => {
+        if (seen.has(t.id)) return false;
+        seen.add(t.id);
+        return true;
+      });
+      apply(unique);
+      if (unique.length !== stored.value.length) {
+        writeKey(WEEKLY_TODOS_KEY, unique, weeklyTodosSchema);
+      }
+    }
+    setHydrated(true);
+  }, [apply]);
+
+  useEffect(() => {
+    readFromStorage();
+  }, [readFromStorage]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.addEventListener(DATA_CHANGED_EVENT, readFromStorage);
+    return () => window.removeEventListener(DATA_CHANGED_EVENT, readFromStorage);
+  }, [readFromStorage]);
+
+  const todos = useMemo(
+    () => allTodos.filter((t) => t.weekStart === currentWeekStart),
+    [allTodos, currentWeekStart],
+  );
+
+  const commit = useCallback(
+    (next: WeeklyTodo[]) => {
+      apply(next);
+      writeKey(WEEKLY_TODOS_KEY, next, weeklyTodosSchema);
+      emitDataChanged();
+      return next;
+    },
+    [apply],
+  );
+
+  const addTodo = useCallback(
+    (text: string) => {
+      const trimmed = text.trim();
+      const existingEmpty = todosRef.current.find(
+        (t) => !t.text && !t.completed && t.weekStart === currentWeekStart,
+      );
+      if (!trimmed && existingEmpty) return existingEmpty.id;
+
+      const todo: WeeklyTodo = {
+        id: crypto.randomUUID(),
+        text: trimmed,
+        completed: false,
+        weekStart: currentWeekStart,
+        createdAt: new Date().toISOString(),
+      };
+      commit([...todosRef.current, todo]);
+      return todo.id;
+    },
+    [commit, currentWeekStart],
+  );
+
+  const toggleTodo = useCallback(
+    (id: string) => {
+      commit(todosRef.current.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)));
+    },
+    [commit],
+  );
+
+  const updateTodoText = useCallback(
+    (id: string, text: string) => {
+      const trimmed = text.trim();
+      commit(
+        trimmed
+          ? todosRef.current.map((t) => (t.id === id ? { ...t, text: trimmed } : t))
+          : todosRef.current.filter((t) => t.id !== id),
+      );
+    },
+    [commit],
+  );
+
+  const removeTodo = useCallback(
+    (id: string) => {
+      createBackup("remove-weekly-todo");
+      commit(todosRef.current.filter((t) => t.id !== id));
+    },
+    [commit],
+  );
+
+  return {
+    todos,
+    addTodo,
+    toggleTodo,
+    updateTodoText,
+    removeTodo,
+    hydrated,
+  };
 }
 
 function useFlag(key: string) {
