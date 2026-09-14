@@ -233,16 +233,6 @@ function GoalRow({
         )}
         style={delay}
       >
-        <div
-          className={cn(
-            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-            goal.completed
-              ? "border-completed bg-completed"
-              : "border-muted-foreground/40 bg-transparent"
-          )}
-        >
-          {goal.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
-        </div>
         <input
           id={`goal-input-${goal.id}`}
           type="text"
@@ -273,6 +263,16 @@ function GoalRow({
         >
           {t("doneEditing")}
         </button>
+        <div
+          className={cn(
+            "flex size-3.5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            goal.completed
+              ? "border-completed bg-completed"
+              : "border-muted-foreground/40 bg-transparent"
+          )}
+        >
+          {goal.completed && <Check className="size-2 text-completed-foreground" strokeWidth={3} />}
+        </div>
       </div>
     );
   }
