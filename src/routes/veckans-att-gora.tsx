@@ -140,11 +140,11 @@ function VeckansAttGora() {
 
       {/* Completed todos */}
       <section className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
-        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-normal text-primary-foreground">
+        <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
+          <h2 className="text-[13px] font-normal text-gold-foreground">
             {t("completedTodos")}
           </h2>
-          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
+          <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
             {completedTodos.length}
           </span>
         </div>
