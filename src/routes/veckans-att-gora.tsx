@@ -244,16 +244,6 @@ function TodoRow({
         )}
         style={delay}
       >
-        <div
-          className={cn(
-            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-            todo.completed
-              ? "border-completed bg-completed"
-              : "border-muted-foreground/40 bg-transparent"
-          )}
-        >
-          {todo.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
-        </div>
         <input
           id={`todo-input-${todo.id}`}
           type="text"
@@ -283,6 +273,16 @@ function TodoRow({
         >
           {t("doneEditing")}
         </button>
+        <div
+          className={cn(
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            todo.completed
+              ? "border-completed bg-completed"
+              : "border-muted-foreground/40 bg-transparent"
+          )}
+        >
+          {todo.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
+        </div>
       </div>
     );
   }
