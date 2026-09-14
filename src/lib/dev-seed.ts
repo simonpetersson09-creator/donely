@@ -106,7 +106,87 @@ function buildGoals(year: number): Goals {
   };
 }
 
-/** Writes the demo activities (and matching yearly goals). */
+function buildYearlyGoals(year: number): YearlyGoal[] {
+  const now = new Date().toISOString();
+  return [
+    {
+      id: "dev-goal-1",
+      text: "Avsluta tre stora projekt på jobbet",
+      completed: false,
+      halfYear: "h2",
+      year,
+      createdAt: now,
+    },
+    {
+      id: "dev-goal-2",
+      text: "Springa ett lopp under 50 minuter",
+      completed: false,
+      halfYear: "h2",
+      year,
+      createdAt: now,
+    },
+    {
+      id: "dev-goal-3",
+      text: "Lansera appen på App Store",
+      completed: true,
+      halfYear: "h1",
+      year,
+      createdAt: now,
+    },
+    {
+      id: "dev-goal-4",
+      text: "Meditera minst 5 dagar i veckan",
+      completed: true,
+      halfYear: "h1",
+      year,
+      createdAt: now,
+    },
+  ];
+}
+
+function buildWeeklyTodos(): WeeklyTodo[] {
+  const monday = weekStart(new Date());
+  const createdAt = new Date().toISOString();
+  return [
+    {
+      id: "dev-todo-1",
+      text: "Skicka veckorapport till teamet",
+      completed: false,
+      weekStart: monday.toISOString(),
+      createdAt,
+    },
+    {
+      id: "dev-todo-2",
+      text: "Planera nästa veckas möten",
+      completed: false,
+      weekStart: monday.toISOString(),
+      createdAt,
+    },
+    {
+      id: "dev-todo-3",
+      text: "Gå igenom feedback från användare",
+      completed: false,
+      weekStart: monday.toISOString(),
+      createdAt,
+    },
+    {
+      id: "dev-todo-4",
+      text: "Uppdatera app-ikonen",
+      completed: true,
+      weekStart: monday.toISOString(),
+      createdAt,
+    },
+    {
+      id: "dev-todo-5",
+      text: "Skriv månadsbrev",
+      completed: true,
+      weekStart: monday.toISOString(),
+      createdAt,
+    },
+  ];
+}
+
+/** Writes the demo activities (and matching yearly goals / weekly todos). */
 export function seedDevActivities({ force = false }: { force?: boolean } = {}): boolean {
   if (typeof window === "undefined") return false;
 
@@ -128,6 +208,18 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   if (storedGoals.status === "ok") Object.assign(goals, storedGoals.value);
   writeKey(STORAGE_KEYS.goals, goals, goalsSchema);
 
+  const year = new Date().getFullYear();
+
+  const storedYearlyGoals = readKey(STORAGE_KEYS.yearlyGoals, yearlyGoalsSchema);
+  if (force || storedYearlyGoals.status === "missing" || storedYearlyGoals.value.length === 0) {
+    writeKey(STORAGE_KEYS.yearlyGoals, buildYearlyGoals(year), yearlyGoalsSchema);
+  }
+
+  const storedWeeklyTodos = readKey(STORAGE_KEYS.weeklyTodos, weeklyTodosSchema);
+  if (force || storedWeeklyTodos.status === "missing" || storedWeeklyTodos.value.length === 0) {
+    writeKey(STORAGE_KEYS.weeklyTodos, buildWeeklyTodos(), weeklyTodosSchema);
+  }
+
   try {
     window.localStorage.setItem(SEEDED_FLAG, "1");
   } catch {
@@ -137,6 +229,7 @@ export function seedDevActivities({ force = false }: { force?: boolean } = {}): 
   emit();
   return true;
 }
+
 
 /** Removes every seeded activity again (keeps categories). */
 export function clearDevActivities() {
