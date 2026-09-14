@@ -2,9 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
+import { BottomSheet } from "@/components/BottomSheet";
+import { CategoryDot } from "@/components/CategoryDot";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
-import { useWeeklyTodos } from "@/lib/store";
+import { useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
 
