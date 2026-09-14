@@ -414,7 +414,15 @@ function Index() {
             <Check className="size-3.5" /> {t("registered")}
           </span>
         </div>
-        <div className="flex items-stretch gap-2">
+        <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
+          <Link
+            to="/dagsstatistik"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[13px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+          >
+            <BarChart3 className="size-4 shrink-0" />
+            <span className="truncate">{t("statistics")}</span>
+          </Link>
+
           <button
             type="button"
             disabled={!valid && !locked}
@@ -423,7 +431,7 @@ function Index() {
             onClick={register}
             aria-label={locked ? `${t("register")} — ${t("premiumRequired")}` : t("register")}
             className={cn(
-              "relative flex-1 overflow-hidden rounded-xl py-3 text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-shadow duration-200 ease-out active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
+              "relative flex h-12 items-center justify-center overflow-hidden rounded-xl text-[16px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-shadow duration-200 ease-out active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
               pressed && "press-spring",
               locked
                 ? "bg-primary/85 text-primary-foreground"
@@ -449,15 +457,7 @@ function Index() {
           >
             <Settings className="size-[20px]" />
           </Link>
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          <Link
-            to="/dagsstatistik"
-            className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[13px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
-          >
-            <BarChart3 className="size-4 shrink-0" />
-            <span className="truncate">{t("statistics")}</span>
-          </Link>
+
           <Link
             to="/arsmal"
             className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[13px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
