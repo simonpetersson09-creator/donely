@@ -120,7 +120,7 @@ function VeckansAttGora() {
       </section>
 
       {/* Quick add */}
-      <div className="mt-5 flex items-center gap-3 rounded-xl bg-card px-3.5 py-3 shadow-soft">
+      <div className="mt-3 flex items-center gap-2 rounded-xl bg-card px-3 py-2 shadow-soft">
         <Plus className="size-4 shrink-0 text-primary" strokeWidth={2.5} />
         <input
           ref={quickInputRef}
@@ -137,7 +137,7 @@ function VeckansAttGora() {
           }}
           onBlur={commitQuickAdd}
           placeholder={t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[15px] font-normal text-foreground outline-none placeholder:text-muted-foreground/60"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground/60"
           autoComplete="off"
         />
       </div>
