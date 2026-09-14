@@ -101,22 +101,17 @@ function VeckansAttGora() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
-      {/* Quiet weekly overview */}
-      <section className="mt-4 px-1" aria-labelledby="week-heading">
-        <div className="flex items-end justify-between gap-4">
-          <div className="min-w-0">
-            <h2 id="week-heading" className="text-[22px] font-semibold text-foreground">
-              {t("weeklyTodos")}
-            </h2>
-            <p className="mt-0.5 text-[13px] text-muted-foreground">
-              {t("weeklyTodos")} {currentWeek}
-            </p>
-          </div>
-          <span className="shrink-0 pb-0.5 text-[13px] font-semibold tabular-nums text-muted-foreground">
+      {/* Compact weekly overview */}
+      <section className="mt-2 px-1" aria-labelledby="week-heading">
+        <div className="flex items-center justify-between">
+          <h2 id="week-heading" className="text-[13px] font-normal text-foreground">
+            {t("weeklyTodos")} {currentWeek}
+          </h2>
+          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
             {completedCount}/{totalCount}
           </span>
         </div>
-        <div className="mt-3 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
           <div
             className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
             style={{ width: `${progress}%` }}
@@ -125,7 +120,7 @@ function VeckansAttGora() {
       </section>
 
       {/* Quick add */}
-      <div className="mt-5 flex items-center gap-3 rounded-xl bg-card px-3.5 py-3 shadow-soft">
+      <div className="mt-3 flex items-center gap-2 rounded-xl bg-card px-3 py-2 shadow-soft">
         <Plus className="size-4 shrink-0 text-primary" strokeWidth={2.5} />
         <input
           ref={quickInputRef}
@@ -142,79 +137,83 @@ function VeckansAttGora() {
           }}
           onBlur={commitQuickAdd}
           placeholder={t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[15px] font-normal text-foreground outline-none placeholder:text-muted-foreground/60"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground/60"
           autoComplete="off"
         />
       </div>
 
       {/* Active todos */}
-      <section className="mt-6">
+      <section className="mt-4">
         <div className="flex items-center justify-between px-1">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
+          <h2 className="text-[13px] font-normal text-foreground">
             {t("activeTodos")}
           </h2>
-          <span className="text-[11px] font-semibold tabular-nums text-muted-foreground">
+          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
             {activeTodos.length}
           </span>
         </div>
 
         {activeTodos.length === 0 ? (
-          <div className="px-4 py-6 text-center">
+          <div className="px-3 py-3 text-center">
             <p className="text-[13px] font-normal text-muted-foreground">{t("emptyTodos")}</p>
           </div>
         ) : (
-          <div className="mt-2 overflow-hidden rounded-xl bg-card shadow-soft">
-            {activeTodos.map((todo, idx) => (
-              <TodoRow
-                key={todo.id}
-                todo={todo}
-                index={idx}
-                last={idx === activeTodos.length - 1}
-                isEditing={editingId === todo.id}
-                variant="card"
-                onToggle={() => toggleTodo(todo.id)}
-                onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                onUpdateText={(text) => updateTodoText(todo.id, text)}
-                onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                onFinishEdit={() => finishEdit(todo.id)}
-              />
-            ))}
+          <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background">
+            <div className="p-1">
+              {activeTodos.map((todo, idx) => (
+                <TodoRow
+                  key={todo.id}
+                  todo={todo}
+                  index={idx}
+                  last={idx === activeTodos.length - 1}
+                  isEditing={editingId === todo.id}
+                  variant="card"
+                  onToggle={() => toggleTodo(todo.id)}
+                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                  onUpdateText={(text) => updateTodoText(todo.id, text)}
+                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                  onFinishEdit={() => finishEdit(todo.id)}
+                />
+              ))}
+            </div>
           </div>
         )}
       </section>
 
       {/* Completed todos */}
-      <section className="mt-6">
+      <section className="mt-3">
         <div className="flex items-center justify-between px-1">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.08em] text-muted-foreground">
+          <h2 className="text-[13px] font-normal text-foreground">
             {t("completedTodos")}
           </h2>
-          <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-semibold tabular-nums text-muted-foreground">
+          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
             {completedTodos.length}
           </span>
         </div>
 
         {completedTodos.length === 0 ? (
-          <div className="px-4 py-5 text-center">
+          <div className="px-3 py-3 text-center">
             <p className="text-[13px] font-normal text-muted-foreground">{t("archiveTodosEmpty")}</p>
           </div>
         ) : (
-          <div className="mt-2 overflow-hidden rounded-3xl border border-border/50 bg-card/80 shadow-soft backdrop-blur-sm">
-            {completedTodos.map((todo, idx) => (
-              <TodoRow
-                key={todo.id}
-                todo={todo}
-                index={idx}
-                last={idx === completedTodos.length - 1}
-                isEditing={editingId === todo.id}
-                variant="compact"
-                onToggle={() => toggleTodo(todo.id)}
-                onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                onUpdateText={(text) => updateTodoText(todo.id, text)}
-                onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                onFinishEdit={() => finishEdit(todo.id)}
-              />
-            ))}
+          <div className="mt-1.5 overflow-hidden rounded-2xl border border-border/50 bg-background">
+            <div className="p-1">
+              {completedTodos.map((todo, idx) => (
+                <TodoRow
+                  key={todo.id}
+                  todo={todo}
+                  index={idx}
+                  last={idx === completedTodos.length - 1}
+                  isEditing={editingId === todo.id}
+                  variant="compact"
+                  onToggle={() => toggleTodo(todo.id)}
+                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                  onUpdateText={(text) => updateTodoText(todo.id, text)}
+                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                  onFinishEdit={() => finishEdit(todo.id)}
+                />
+              ))}
+            </div>
           </div>
         )}
       </section>
@@ -223,7 +222,7 @@ function VeckansAttGora() {
       <button
         type="button"
         onClick={() => handleAdd()}
-        className="mt-5 flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-[0.98] active:bg-primary/90"
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
       >
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addTodo")}</span>
@@ -284,20 +283,20 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-2 bg-secondary/60 px-3.5 py-3",
-          !last && "border-b border-border/50",
+          "stagger-item flex items-center gap-1.5 bg-secondary/50 px-2 py-1.5",
+          !last && "border-b border-border",
         )}
         style={delay}
       >
         <div
           className={cn(
-            "flex size-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             todo.completed
               ? "border-completed bg-completed"
               : "border-muted-foreground/40 bg-transparent"
           )}
         >
-          {todo.completed && <Check className="size-3 text-completed-foreground" strokeWidth={3} />}
+          {todo.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
         </div>
         <input
           id={`todo-input-${todo.id}`}
@@ -305,7 +304,7 @@ function TodoRow({
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={todo.text ? "" : t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[15px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
+          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground"
           onBlur={(e) => {
             commitText(e.target.value);
           }}
@@ -324,7 +323,7 @@ function TodoRow({
             e.preventDefault();
             commitText(draft);
           }}
-          className="shrink-0 rounded-lg bg-primary px-3 py-1 text-[13px] font-normal text-primary-foreground transition-colors active:bg-primary/90"
+          className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
@@ -336,31 +335,31 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item group flex items-center gap-3 px-4 py-3.5 transition-colors active:bg-secondary/40",
-          !last && "border-b border-border/50"
+          "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
+          !last && "border-b border-border"
         )}
         style={delay}
       >
         <button
           type="button"
           onClick={onToggle}
-          className="flex size-6 shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
+          className="flex size-[18px] shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
           aria-checked={todo.completed}
           role="checkbox"
         >
-          <Check className="size-3.5 text-gold-foreground" strokeWidth={3} />
+          <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
         </button>
         <button
           type="button"
           onClick={onStartEdit}
-          className="min-w-0 flex-1 truncate text-left text-[15px] font-normal text-muted-foreground/80 line-through decoration-border"
+          className="min-w-0 flex-1 truncate text-left text-[14px] font-normal text-muted-foreground line-through decoration-border"
         >
-          {todo.text || <span className="italic text-muted-foreground/70">{t("todoPlaceholder")}</span>}
+          {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
         </button>
         <button
           type="button"
           onClick={onRemove}
-          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/30 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
+          className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
           aria-label={t("remove")}
         >
           <X className="size-3.5" strokeWidth={2.5} />
@@ -372,8 +371,8 @@ function TodoRow({
   return (
     <div
       className={cn(
-        "stagger-item group relative flex items-center gap-3 px-3.5 py-3 transition-colors active:bg-secondary/40",
-        !last && "border-b border-border/50",
+        "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
+        !last && "border-b border-border",
       )}
       style={delay}
     >
@@ -381,7 +380,7 @@ function TodoRow({
         type="button"
         onClick={onToggle}
         className={cn(
-          "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
+          "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-all active:scale-90",
           todo.completed
             ? "border-transparent bg-gradient-gold shadow-sm"
             : "border-muted-foreground/40 bg-transparent"
@@ -389,27 +388,27 @@ function TodoRow({
         aria-checked={todo.completed}
         role="checkbox"
       >
-        {todo.completed && <Check className="size-3.5 text-gold-foreground" strokeWidth={3} />}
+        {todo.completed && <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />}
       </button>
       <button
         type="button"
         onClick={onStartEdit}
         className={cn(
-          "min-w-0 flex-1 truncate text-left text-[15px] font-normal transition-colors",
+          "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
           todo.completed
             ? "text-muted-foreground line-through"
-            : "text-foreground"
+            : "text-primary"
         )}
       >
-        {todo.text || <span className="italic text-muted-foreground/70">{t("todoPlaceholder")}</span>}
+        {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
       </button>
       <button
         type="button"
         onClick={onRemove}
-        className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground/60 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
+        className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-all active:scale-90 active:bg-destructive/10 active:text-destructive"
         aria-label={t("remove")}
       >
-        <X className="size-4" strokeWidth={2.5} />
+        <X className="size-3.5" strokeWidth={2.5} />
       </button>
     </div>
   );
