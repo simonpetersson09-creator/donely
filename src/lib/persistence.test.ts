@@ -179,6 +179,7 @@ describe("backups", () => {
       "schemaVersion",
       "settings",
       "timestamp",
+      "weeklyTodos",
       "yearlyGoals",
     ]);
     expect(JSON.stringify(snapshot)).not.toContain("premium");

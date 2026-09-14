@@ -12,6 +12,7 @@ import {
   Crown,
   GripVertical,
   Home,
+  ListTodo,
   Lock,
   Minus,
   Pencil,
@@ -449,22 +450,29 @@ function Index() {
             <Settings className="size-[20px]" />
           </Link>
         </div>
-        <div className="flex items-stretch gap-2">
+        <div className="grid grid-cols-4 gap-2">
           <Link
             to="/dagsstatistik"
-            className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[16px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[13px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
           >
-            <BarChart3 className="size-5" />
-            {t("statistics")}
+            <BarChart3 className="size-4 shrink-0" />
+            <span className="truncate">{t("statistics")}</span>
           </Link>
           <Link
             to="/arsmal"
-            className="flex h-12 flex-1 items-center justify-center gap-2 rounded-xl bg-primary text-[16px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[13px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
           >
-            <Target className="size-5" />
-            {t("yearlyGoals")}
+            <Target className="size-4 shrink-0" />
+            <span className="truncate">{t("yearlyGoals")}</span>
           </Link>
-          <div className="relative shrink-0">
+          <Link
+            to="/veckans-att-gora"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[13px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
+          >
+            <ListTodo className="size-4 shrink-0" />
+            <span className="truncate">{t("weeklyTodos")}</span>
+          </Link>
+          <div className="relative flex justify-center">
             <LanguageSwitcher />
             {!guideSeen && guideHydrated && <LanguageGuideBubble onClose={markGuideSeen} />}
           </div>

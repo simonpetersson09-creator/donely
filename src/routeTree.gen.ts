@@ -17,6 +17,7 @@ import { Route as InstallningarRouteImport } from './routes/installningar'
 import { Route as PromoRouteImport } from './routes/promo'
 import { Route as SenasteRegistreringarRouteImport } from './routes/senaste-registreringar'
 import { Route as StatistikRouteImport } from './routes/statistik'
+import { Route as VeckansAttGoraRouteImport } from './routes/veckans-att-gora'
 import { Route as VeckostatistikRouteImport } from './routes/veckostatistik'
 import { Route as KategoriIdRouteImport } from './routes/kategori.$id'
 import { Route as SummaryDayRouteImport } from './routes/summary.day'
@@ -62,6 +63,11 @@ const StatistikRoute = StatistikRouteImport.update({
   path: '/statistik',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VeckansAttGoraRoute = VeckansAttGoraRouteImport.update({
+  id: '/veckans-att-gora',
+  path: '/veckans-att-gora',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VeckostatistikRoute = VeckostatistikRouteImport.update({
   id: '/veckostatistik',
   path: '/veckostatistik',
@@ -92,6 +98,7 @@ export interface FileRoutesByFullPath {
   '/promo': typeof PromoRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
+  '/veckans-att-gora': typeof VeckansAttGoraRoute
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
   '/promo': typeof PromoRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
+  '/veckans-att-gora': typeof VeckansAttGoraRoute
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
@@ -121,6 +129,7 @@ export interface FileRoutesById {
   '/promo': typeof PromoRoute
   '/senaste-registreringar': typeof SenasteRegistreringarRoute
   '/statistik': typeof StatistikRoute
+  '/veckans-att-gora': typeof VeckansAttGoraRoute
   '/veckostatistik': typeof VeckostatistikRoute
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
@@ -137,6 +146,7 @@ export interface FileRouteTypes {
     | '/promo'
     | '/senaste-registreringar'
     | '/statistik'
+    | '/veckans-att-gora'
     | '/veckostatistik'
     | '/kategori/$id'
     | '/summary/day'
@@ -151,6 +161,7 @@ export interface FileRouteTypes {
     | '/promo'
     | '/senaste-registreringar'
     | '/statistik'
+    | '/veckans-att-gora'
     | '/veckostatistik'
     | '/kategori/$id'
     | '/summary/day'
@@ -165,6 +176,7 @@ export interface FileRouteTypes {
     | '/promo'
     | '/senaste-registreringar'
     | '/statistik'
+    | '/veckans-att-gora'
     | '/veckostatistik'
     | '/kategori/$id'
     | '/summary/day'
@@ -180,6 +192,7 @@ export interface RootRouteChildren {
   PromoRoute: typeof PromoRoute
   SenasteRegistreringarRoute: typeof SenasteRegistreringarRoute
   StatistikRoute: typeof StatistikRoute
+  VeckansAttGoraRoute: typeof VeckansAttGoraRoute
   VeckostatistikRoute: typeof VeckostatistikRoute
   KategoriIdRoute: typeof KategoriIdRoute
   SummaryDayRoute: typeof SummaryDayRoute
@@ -244,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StatistikRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/veckans-att-gora': {
+      id: '/veckans-att-gora'
+      path: '/veckans-att-gora'
+      fullPath: '/veckans-att-gora'
+      preLoaderRoute: typeof VeckansAttGoraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/veckostatistik': {
       id: '/veckostatistik'
       path: '/veckostatistik'
@@ -284,6 +304,7 @@ const rootRouteChildren: RootRouteChildren = {
   PromoRoute: PromoRoute,
   SenasteRegistreringarRoute: SenasteRegistreringarRoute,
   StatistikRoute: StatistikRoute,
+  VeckansAttGoraRoute: VeckansAttGoraRoute,
   VeckostatistikRoute: VeckostatistikRoute,
   KategoriIdRoute: KategoriIdRoute,
   SummaryDayRoute: SummaryDayRoute,
