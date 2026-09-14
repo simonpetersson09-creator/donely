@@ -18,13 +18,19 @@ import {
   categoriesSchema,
   entriesSchema,
   goalsSchema,
+  yearlyGoalsSchema,
+  weeklyTodosSchema,
   readKey,
   writeKey,
   type Category,
   type Entry,
   type Goals,
+  type YearlyGoal,
+  type WeeklyTodo,
 } from "@/lib/persistence";
 import { DATA_CHANGED_EVENT } from "@/lib/store";
+import { weekStart } from "@/lib/weekly-summary";
+
 
 const SEEDED_FLAG = "vr.dev.seeded.v1";
 
