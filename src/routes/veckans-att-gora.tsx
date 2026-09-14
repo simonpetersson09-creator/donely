@@ -31,9 +31,6 @@ function VeckansAttGora() {
   const { t } = useLanguage();
   const { todos, addTodo, toggleTodo, updateTodoText, removeTodo } = useWeeklyTodos();
   const [editingId, setEditingId] = useState<string | null>(null);
-  const [quickDraft, setQuickDraft] = useState("");
-  const quickInputRef = useRef<HTMLInputElement>(null);
-  const quickCommitRef = useRef(false);
   const suppressRef = useRef<Record<string, number>>({});
   const guard = (id: string, fn: () => void) => () => {
     if (Date.now() < (suppressRef.current[id] ?? 0)) return;
