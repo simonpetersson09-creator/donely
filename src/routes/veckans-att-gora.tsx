@@ -298,15 +298,6 @@ function TodoRow({
       >
         <button
           type="button"
-          onClick={onToggle}
-          className="flex size-[18px] shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
-          aria-checked={todo.completed}
-          role="checkbox"
-        >
-          <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
-        </button>
-        <button
-          type="button"
           onClick={onStartEdit}
           className="min-w-0 flex-1 truncate text-left text-[14px] font-normal text-muted-foreground line-through decoration-border"
         >
@@ -319,6 +310,15 @@ function TodoRow({
           aria-label={t("remove")}
         >
           <X className="size-3.5" strokeWidth={2.5} />
+        </button>
+        <button
+          type="button"
+          onClick={onToggle}
+          className="flex size-[18px] shrink-0 items-center justify-center rounded-full border-transparent bg-gradient-gold shadow-sm transition-all active:scale-90"
+          aria-checked={todo.completed}
+          role="checkbox"
+        >
+          <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
         </button>
       </div>
     );
