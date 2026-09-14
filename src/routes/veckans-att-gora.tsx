@@ -102,29 +102,6 @@ function VeckansAttGora() {
         </div>
       </section>
 
-      {/* Quick add */}
-      <div className="mt-3 flex items-center gap-2 rounded-xl bg-card px-3 py-2 shadow-soft">
-        <Plus className="size-4 shrink-0 text-primary" strokeWidth={2.5} />
-        <input
-          ref={quickInputRef}
-          type="text"
-          value={quickDraft}
-          onChange={(e) => setQuickDraft(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              commitQuickAdd();
-            } else if (e.key === "Escape") {
-              setQuickDraft("");
-              quickInputRef.current?.blur();
-            }
-          }}
-          onBlur={commitQuickAdd}
-          placeholder={t("todoPlaceholder")}
-          className="min-w-0 flex-1 bg-transparent text-[14px] font-normal text-foreground outline-none placeholder:text-muted-foreground/60"
-          autoComplete="off"
-        />
-      </div>
-
       {/* Active todos */}
       <section className="mt-4">
         <div className="flex items-center justify-between px-1">
