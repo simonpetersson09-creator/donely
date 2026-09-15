@@ -21,6 +21,7 @@ import { DataIntegrityNotice } from "@/components/DataIntegrityNotice";
 import { initializeStorage } from "@/lib/persistence";
 import { initDevSeed } from "@/lib/dev-seed";
 import { EdgeSwipeBack } from "@/components/EdgeSwipeBack";
+import { pingAppOpen } from "@/lib/telemetry";
 
 function NotFoundComponent() {
   const { t } = useTranslation();
@@ -158,6 +159,8 @@ function RootComponent() {
     initializeStorage();
     // Development only: fills the app with demo activities on an empty install.
     initDevSeed();
+    // Anonymous "app opened" ping (no personal data).
+    pingAppOpen();
   }, []);
 
   return (
