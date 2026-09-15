@@ -225,6 +225,22 @@ function VeckansAttGora() {
         </section>
       </div>
 
+      {/* Bottom progress bar */}
+      <div className="shrink-0 px-1 pt-2">
+        <div className="flex items-center justify-between">
+          <span className="text-[12px] font-normal text-muted-foreground">{t("completedTodos")}</span>
+          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
+            {completedCount}/{totalCount}
+          </span>
+        </div>
+        <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+          <div
+            className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
       {/* Add todo button */}
       <button
         type="button"
