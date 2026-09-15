@@ -440,7 +440,7 @@ function GoalRow({
   if (isEditing) {
     return (
       <div
-        className="stagger-item flex min-h-8 items-center gap-1.5 rounded-full bg-secondary/50 px-2 py-0.5"
+        className="stagger-item flex min-h-8 items-center gap-1.5 rounded-sm bg-secondary/50 px-2 py-0.5"
         style={delay}
       >
         <PriorityIndicator className="shrink-0" />
@@ -518,7 +518,7 @@ function GoalRow({
   const showDelete = offset !== 0;
 
   return (
-    <div className="relative h-8 overflow-hidden rounded-2xl">
+    <div className="relative h-8 overflow-hidden rounded-sm">
       {/* Swipe-revealed delete action */}
       {showDelete && (
         <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
@@ -550,7 +550,7 @@ function GoalRow({
           if (offset === 0 && shouldTriggerAction()) onStartEdit();
         }}
         className={cn(
-          "stagger-item group flex h-8 items-center gap-2 rounded-2xl bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
+          "stagger-item group flex h-8 items-center gap-2 rounded-sm bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
           goal.completed && "bg-muted/40 active:bg-muted/60"
         )}
         style={delay}
