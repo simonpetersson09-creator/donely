@@ -343,16 +343,18 @@ function GoalRow({
   onToggle,
   onStartEdit,
   onUpdateText,
+  onSetPriority,
   onRemove,
   onFinishEdit,
 }: {
-  goal: { id: string; text: string; completed: boolean };
+  goal: { id: string; text: string; completed: boolean; priority?: Priority };
   index: number;
   last: boolean;
   isEditing: boolean;
   onToggle: () => void;
   onStartEdit: () => void;
   onUpdateText: (text: string) => void;
+  onSetPriority: (priority: Priority) => void;
   onRemove: () => void;
   onFinishEdit: () => void;
 }) {
@@ -400,6 +402,22 @@ function GoalRow({
   // Preventing default on both pointerdown and mousedown keeps the input focused
   // (no blur → no premature commit) across Chromium, Safari and iOS WKWebView.
   const keepFocus = (e: { preventDefault: () => void }) => e.preventDefault();
+
+  // Changing priority re-groups (remounts) the row, so save the typed text first.
+  const pickPriority = (p: Priority) => {
+    const value = readInputValue().trim();
+    if (value) onUpdateText(value);
+    onSetPriority(p);
+  };
+
+  const priority = goal.priority ?? "medium";
+
+  const PriorityIndicator = ({ className }: { className?: string }) => (
+    <span
+      className={cn("inline-block h-5 w-1 rounded-full", priorityBarClass(priority), className)}
+      aria-hidden="true"
+    />
+  );
 
   if (isEditing) {
     return (
