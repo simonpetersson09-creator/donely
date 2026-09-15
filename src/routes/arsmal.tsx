@@ -524,20 +524,22 @@ function GoalRow({
         </div>
       )}
 
-      {/* Entrance animation lives on this wrapper — its fill-mode transform would
-          otherwise override the swipe translateX on the inner row. */}
-      <div className="stagger-item" style={delay}>
+      {/* Swipe translate lives on this wrapper; the entrance animation stays on
+          the inner row so the animation's fill-mode transform never overrides it. */}
       <div
-        {...handlers}
-        className={cn(
-          "group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
-          !last && "border-b border-primary/10"
-        )}
         style={{
           transform: `translateX(${offset}px)`,
           transition: dragging ? "none" : "transform 200ms ease-out",
           touchAction: "pan-y",
         }}
+      >
+      <div
+        {...handlers}
+        className={cn(
+          "stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
+          !last && "border-b border-primary/10"
+        )}
+        style={delay}
       >
         {!goal.completed && (
           <button
