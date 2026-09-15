@@ -242,7 +242,7 @@ function VeckansAttGora() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
                 </div>
               ) : (
-                <div className="p-0.5">
+                <div className="flex flex-col gap-1.5 p-0.5">
                   {completedTodos.map((todo, idx) => (
                     <TodoRow
                       key={todo.id}
@@ -579,7 +579,6 @@ function TodoRow({
     );
   }
 
-  const foregroundBg = "bg-background";
   const isCompact = variant === "compact";
 
   const showDelete = offset !== 0;
@@ -612,8 +611,8 @@ function TodoRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 px-2 py-1 transition-colors active:bg-secondary",
-          foregroundBg
+          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-3 py-2.5 transition-colors active:bg-secondary/50",
+          isCompact && "bg-muted/40 active:bg-muted/60"
         )}
         style={delay}
       >
