@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, Plus, Trash2 } from "lucide-react";
+import { Check, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { CategoryDot } from "@/components/CategoryDot";
@@ -39,6 +39,7 @@ function VeckansAttGora() {
   const [editingId, setEditingId] = useState<string | null>(null);
   // Id of the todo waiting for the user to pick which activity gets the point.
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [completedExpanded, setCompletedExpanded] = useState(false);
 
   const handleToggle = (id: string, completed: boolean) => {
     if (completed) {
@@ -174,37 +175,52 @@ function VeckansAttGora() {
 
         {/* Completed todos */}
         <section className="mt-6 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-          <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
+          <button
+            type="button"
+            onClick={() => setCompletedExpanded((v) => !v)}
+            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-1.5"
+            aria-expanded={completedExpanded}
+          >
             <h2 className="text-[13px] font-normal text-gold-foreground">
               {t("completedTodos")}
             </h2>
             <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
               {completedTodos.length}
             </span>
-          </div>
+            <ChevronDown
+              className={cn(
+                "size-4 text-gold-foreground/80 transition-transform",
+                completedExpanded && "rotate-180"
+              )}
+            />
+          </button>
 
-          {completedTodos.length === 0 ? (
-            <div className="px-3 py-3 text-center">
-              <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
-            </div>
-          ) : (
-            <div className="p-1">
-              {completedTodos.map((todo, idx) => (
-                <TodoRow
-                  key={todo.id}
-                  todo={todo}
-                  index={idx}
-                  last={idx === completedTodos.length - 1}
-                  isEditing={editingId === todo.id}
-                  variant="compact"
-                  onToggle={() => handleToggle(todo.id, todo.completed)}
-                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                  onUpdateText={(text) => updateTodoText(todo.id, text)}
-                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                  onFinishEdit={() => finishEdit(todo.id)}
-                />
-              ))}
-            </div>
+          {completedExpanded && (
+            <>
+              {completedTodos.length === 0 ? (
+                <div className="px-3 py-3 text-center">
+                  <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
+                </div>
+              ) : (
+                <div className="p-1">
+                  {completedTodos.map((todo, idx) => (
+                    <TodoRow
+                      key={todo.id}
+                      todo={todo}
+                      index={idx}
+                      last={idx === completedTodos.length - 1}
+                      isEditing={editingId === todo.id}
+                      variant="compact"
+                      onToggle={() => handleToggle(todo.id, todo.completed)}
+                      onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                      onUpdateText={(text) => updateTodoText(todo.id, text)}
+                      onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                      onFinishEdit={() => finishEdit(todo.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </section>
       </div>

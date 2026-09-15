@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { Check, Plus, Trash2 } from "lucide-react";
+import { Check, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
@@ -31,6 +31,7 @@ function Arsmal() {
   const { t } = useLanguage();
   const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [completedExpanded, setCompletedExpanded] = useState(false);
   // A tap that ends editing must not "fall through" to the row buttons that
   // appear in the same spot right after the row switches to display mode.
   // Per-row, so a tap-through only blocks the row that was just edited.
@@ -142,38 +143,53 @@ function Arsmal() {
           )}
         </div>
 
-        {/* Completed goals — always expanded */}
+        {/* Completed goals — collapsed by default */}
         <div className="mt-6 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-          <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
+          <button
+            type="button"
+            onClick={() => setCompletedExpanded((v) => !v)}
+            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-1.5"
+            aria-expanded={completedExpanded}
+          >
             <h2 className="text-[13px] font-normal text-gold-foreground">
               {t("archive")}
             </h2>
             <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
               {completedGoals.length}
             </span>
-          </div>
+            <ChevronDown
+              className={cn(
+                "size-4 text-gold-foreground/80 transition-transform",
+                completedExpanded && "rotate-180"
+              )}
+            />
+          </button>
 
-          {completedGoals.length === 0 ? (
-            <div className="px-3 py-3 text-center">
-              <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
-            </div>
-          ) : (
-            <div className="p-1">
-              {completedGoals.map((goal, idx) => (
-                <GoalRow
-                  key={goal.id}
-                  goal={goal}
-                  index={idx}
-                  last={idx === completedGoals.length - 1}
-                  isEditing={editingId === goal.id}
-                  onToggle={guard(goal.id, () => toggleGoal(goal.id))}
-                  onStartEdit={guard(goal.id, () => startEditing(goal.id))}
-                  onUpdateText={(text) => updateGoalText(goal.id, text)}
-                  onRemove={guard(goal.id, () => removeGoal(goal.id))}
-                  onFinishEdit={() => finishEdit(goal.id)}
-                />
-              ))}
-            </div>
+          {completedExpanded && (
+            <>
+              {completedGoals.length === 0 ? (
+                <div className="px-3 py-3 text-center">
+                  <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
+                </div>
+              ) : (
+                <div className="p-1">
+                  {completedGoals.map((goal, idx) => (
+                    <GoalRow
+                      key={goal.id}
+                      goal={goal}
+                      index={idx}
+                      last={idx === completedGoals.length - 1}
+                      isEditing={editingId === goal.id}
+                      onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                      onStartEdit={guard(goal.id, () => startEditing(goal.id))}
+                      onUpdateText={(text) => updateGoalText(goal.id, text)}
+                      onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                      onFinishEdit={() => finishEdit(goal.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
