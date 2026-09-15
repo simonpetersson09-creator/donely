@@ -535,7 +535,10 @@ function GoalRow({
       >
       <div
         {...handlers}
-        className="stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary"
+        className={cn(
+          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-3 py-2.5 transition-colors active:bg-secondary/50",
+          goal.completed && "bg-muted/40 active:bg-muted/60"
+        )}
         style={delay}
       >
         {!goal.completed && (
