@@ -30,6 +30,27 @@ export const Route = createFileRoute("/veckans-att-gora")({
   component: VeckansAttGora,
 });
 
+const PRIORITIES = ["high", "medium", "low"] as const;
+type Priority = (typeof PRIORITIES)[number];
+
+function priorityLabel(t: (key: string) => string, priority: Priority) {
+  if (priority === "high") return t("priorityHigh");
+  if (priority === "medium") return t("priorityMedium");
+  return t("priorityLow");
+}
+
+function priorityBarClass(priority: Priority) {
+  if (priority === "high") return "bg-gold/80";
+  if (priority === "medium") return "bg-primary/60";
+  return "bg-muted-foreground/30";
+}
+
+function nextPriority(priority: Priority): Priority {
+  if (priority === "high") return "medium";
+  if (priority === "medium") return "low";
+  return "high";
+}
+
 function VeckansAttGora() {
   const { t } = useLanguage();
   const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, setTodoPriority, removeTodo } =
@@ -98,6 +119,16 @@ function VeckansAttGora() {
     });
   };
 
+  // Groups active todos by priority. Empty groups are skipped.
+  const grouped = useMemo(() => {
+    const groups: { priority: Priority; items: typeof activeTodos }[] = [];
+    for (const priority of PRIORITIES) {
+      const items = activeTodos.filter((t) => (t.priority ?? "medium") === priority);
+      if (items.length > 0) groups.push({ priority, items });
+    }
+    return groups;
+  }, [activeTodos]);
+
   return (
     <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background px-5 pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
       <div className="flex-1 overflow-y-auto pb-4">
@@ -137,20 +168,37 @@ function VeckansAttGora() {
             </div>
           ) : (
             <div className="p-1">
-              {activeTodos.map((todo, idx) => (
-                <TodoRow
-                  key={todo.id}
-                  todo={todo}
-                  index={idx}
-                  last={idx === activeTodos.length - 1}
-                  isEditing={editingId === todo.id}
-                  variant="card"
-                  onToggle={() => handleToggle(todo.id, todo.completed)}
-                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                  onUpdateText={(text) => updateTodoText(todo.id, text)}
-                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                  onFinishEdit={() => finishEdit(todo.id)}
-                />
+              {grouped.map((group, groupIdx) => (
+                <div key={group.priority} className={groupIdx > 0 ? "mt-4" : undefined}>
+                  <div className="flex items-center gap-1.5 px-2 pb-1">
+                    <span
+                      className={cn("h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
+                      aria-hidden="true"
+                    />
+                    <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
+                      {priorityLabel(t, group.priority)}
+                    </span>
+                    <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
+                      {group.items.length}
+                    </span>
+                  </div>
+                  {group.items.map((todo, idx) => (
+                    <TodoRow
+                      key={todo.id}
+                      todo={todo}
+                      index={idx}
+                      last={idx === group.items.length - 1}
+                      isEditing={editingId === todo.id}
+                      variant="card"
+                      onToggle={() => handleToggle(todo.id, todo.completed)}
+                      onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                      onUpdateText={(text) => updateTodoText(todo.id, text)}
+                      onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
+                      onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                      onFinishEdit={() => finishEdit(todo.id)}
+                    />
+                  ))}
+                </div>
               ))}
             </div>
           )}
@@ -197,6 +245,7 @@ function VeckansAttGora() {
                       onToggle={() => handleToggle(todo.id, todo.completed)}
                       onStartEdit={guard(todo.id, () => startEditing(todo.id))}
                       onUpdateText={(text) => updateTodoText(todo.id, text)}
+                      onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
                       onRemove={guard(todo.id, () => removeTodo(todo.id))}
                       onFinishEdit={() => finishEdit(todo.id)}
                     />
@@ -291,10 +340,11 @@ function TodoRow({
   onToggle,
   onStartEdit,
   onUpdateText,
+  onSetPriority,
   onRemove,
   onFinishEdit,
 }: {
-  todo: { id: string; text: string; completed: boolean };
+  todo: { id: string; text: string; completed: boolean; priority?: Priority };
   index: number;
   last: boolean;
   isEditing: boolean;
@@ -302,6 +352,7 @@ function TodoRow({
   onToggle: () => void;
   onStartEdit: () => void;
   onUpdateText: (text: string) => void;
+  onSetPriority: (priority: Priority) => void;
   onRemove: () => void;
   onFinishEdit: () => void;
 }) {
@@ -334,15 +385,25 @@ function TodoRow({
     onFinishEdit();
   };
 
+  const priority = todo.priority ?? "medium";
+
+  const PriorityIndicator = ({ className }: { className?: string }) => (
+    <span
+      className={cn("h-5 w-1 rounded-full", priorityBarClass(priority), className)}
+      aria-hidden="true"
+    />
+  );
+
   if (isEditing) {
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-1.5 bg-secondary/50 px-2 py-1.5",
+          "stagger-item flex items-center gap-2 bg-secondary/50 px-2 py-1.5",
           !last && "border-b border-primary/10",
         )}
         style={delay}
       >
+        <PriorityIndicator className="shrink-0" />
         <input
           id={`todo-input-${todo.id}`}
           type="text"
@@ -362,6 +423,25 @@ function TodoRow({
           }}
           autoComplete="off"
         />
+        <div className="flex shrink-0 items-center gap-1">
+          {PRIORITIES.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => onSetPriority(p)}
+              className={cn(
+                "flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-medium transition-colors",
+                priority === p
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-muted-foreground"
+              )}
+              aria-label={priorityLabel(t, p)}
+              title={priorityLabel(t, p)}
+            >
+              {p === "high" ? "H" : p === "medium" ? "M" : "L"}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           onPointerDown={(e) => {
@@ -420,6 +500,15 @@ function TodoRow({
           touchAction: "pan-y",
         }}
       >
+        <button
+          type="button"
+          onClick={() => onSetPriority(nextPriority(priority))}
+          className="shrink-0 rounded p-0.5 transition-colors active:bg-secondary"
+          aria-label={`${t("priority")}: ${priorityLabel(t, priority)}`}
+          title={`${t("priority")}: ${priorityLabel(t, priority)}`}
+        >
+          <PriorityIndicator />
+        </button>
         <button
           type="button"
           onClick={() => {
