@@ -62,9 +62,9 @@ export function useSwipeDelete({
       }
       // Only allow swiping left; right-swipe snaps back immediately.
       const next = Math.min(0, Math.max(-revealWidth, deltaX));
-      setOffset(next);
+      applyOffset(next);
     },
-    [enabled, dragging, revealWidth]
+    [enabled, dragging, revealWidth, applyOffset]
   );
 
   const onPointerUp = useCallback(
@@ -72,21 +72,21 @@ export function useSwipeDelete({
       if (!enabled) return;
       setDragging(false);
       (e.currentTarget as Element).releasePointerCapture?.(e.pointerId);
-      if (offset <= -threshold) {
-        setOffset(-revealWidth);
+      if (offsetRef.current <= -threshold) {
+        applyOffset(-revealWidth);
       } else {
-        setOffset(0);
+        applyOffset(0);
         movedRef.current = false;
       }
     },
-    [enabled, offset, threshold, revealWidth]
+    [enabled, threshold, revealWidth, applyOffset]
   );
 
   const onPointerCancel = useCallback(() => {
     setDragging(false);
-    setOffset(0);
+    applyOffset(0);
     movedRef.current = false;
-  }, []);
+  }, [applyOffset]);
 
   const shouldTriggerAction = useCallback(() => {
     const didMove = movedRef.current;
