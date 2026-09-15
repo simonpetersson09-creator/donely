@@ -440,7 +440,7 @@ function GoalRow({
   if (isEditing) {
     return (
       <div
-        className="stagger-item flex items-center gap-1.5 rounded-full bg-secondary/50 px-2 py-0.5"
+        className="stagger-item flex min-h-8 items-center gap-1.5 rounded-full bg-secondary/50 px-2 py-0.5"
         style={delay}
       >
         <PriorityIndicator className="shrink-0" />
@@ -550,7 +550,7 @@ function GoalRow({
           if (offset === 0 && shouldTriggerAction()) onStartEdit();
         }}
         className={cn(
-          "stagger-item group flex items-center gap-2 rounded-full bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
+          "stagger-item group flex min-h-8 items-center gap-2 rounded-full bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
           goal.completed && "bg-muted/40 active:bg-muted/60"
         )}
         style={delay}
