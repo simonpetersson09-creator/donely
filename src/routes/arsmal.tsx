@@ -194,6 +194,24 @@ function Arsmal() {
         </div>
       </div>
 
+      {/* Bottom progress bar */}
+      <div className="shrink-0 px-1 pt-2">
+        <div className="flex items-center justify-between">
+          <span className="text-[12px] font-normal text-muted-foreground">{t("archive")}</span>
+          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
+            {completedGoals.length}/{goals.length}
+          </span>
+        </div>
+        <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+          <div
+            className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
+            style={{
+              width: `${goals.length === 0 ? 0 : (completedGoals.length / goals.length) * 100}%`,
+            }}
+          />
+        </div>
+      </div>
+
       {/* Add goal button at bottom */}
       <button
         type="button"
