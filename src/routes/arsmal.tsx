@@ -515,11 +515,6 @@ function GoalRow({
     );
   }
 
-  const { offset, dragging, handlers, confirmDelete, shouldTriggerAction } = useSwipeDelete({
-    onDelete: onRemove,
-    enabled: !isEditing,
-  });
-
   const showDelete = offset !== 0;
 
   return (
