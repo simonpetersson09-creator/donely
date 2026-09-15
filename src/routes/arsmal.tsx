@@ -147,7 +147,7 @@ function Arsmal() {
             <div className="p-0.5">
               {grouped.map((group, groupIdx) => (
                 <div key={group.priority} className={groupIdx > 0 ? "mt-3" : undefined}>
-                  <div className="flex items-center justify-center gap-1.5 px-2 pb-0.5">
+                  <div className="flex items-center justify-start gap-1.5 px-3 pb-0.5">
                     <span
                       className={cn("inline-block h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
                       aria-hidden="true"
@@ -425,11 +425,7 @@ function GoalRow({
   if (isEditing) {
     return (
       <div
-        className={cn(
-          "stagger-item flex items-center gap-1.5 px-2 py-1",
-          !last && "border-b border-primary/10",
-          "bg-secondary/50"
-        )}
+        className="stagger-item flex items-center gap-1.5 px-2 py-1 bg-secondary/50"
         style={delay}
       >
         <PriorityIndicator className="shrink-0" />
@@ -538,10 +534,7 @@ function GoalRow({
       >
       <div
         {...handlers}
-        className={cn(
-          "stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
-          !last && "border-b border-primary/10"
-        )}
+        className="stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary"
         style={delay}
       >
         {!goal.completed && (
