@@ -665,7 +665,7 @@ export function useWeeklyTodos() {
   }, [hydrated, currentWeekStart, commit]);
 
   const addTodo = useCallback(
-    (text: string) => {
+    (text: string, priority: TodoPriority = "medium") => {
       const trimmed = text.trim();
       const existingEmpty = todosRef.current.find(
         (t) => !t.text && !t.completed && t.weekStart === currentWeekStart,
@@ -677,7 +677,7 @@ export function useWeeklyTodos() {
         text: trimmed,
         completed: false,
         weekStart: currentWeekStart,
-        priority: "medium",
+        priority,
         createdAt: new Date().toISOString(),
       };
       commit([...todosRef.current, todo]);
