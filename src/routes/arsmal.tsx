@@ -131,7 +131,7 @@ function Arsmal() {
 
 
         {/* Active goals */}
-        <div className="mt-10 overflow-hidden rounded-2xl bg-background">
+        <div className="mt-10 rounded-2xl bg-background">
           <div className="flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-1 shadow-sm">
             <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeGoals")}
@@ -184,7 +184,7 @@ function Arsmal() {
         </div>
 
         {/* Completed goals — collapsed by default */}
-        <div className="mt-6 overflow-hidden rounded-2xl bg-background">
+        <div className="mt-6 rounded-2xl bg-background">
           <button
             type="button"
             onClick={() => setCompletedExpanded((v) => !v)}
