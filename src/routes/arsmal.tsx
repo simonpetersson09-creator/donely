@@ -429,6 +429,7 @@ function GoalRow({
         )}
         style={delay}
       >
+        <PriorityIndicator className="shrink-0" />
         <input
           id={`goal-input-${goal.id}`}
           type="text"
@@ -448,6 +449,27 @@ function GoalRow({
           }}
           autoComplete="off"
         />
+        <div className="flex shrink-0 items-center gap-1">
+          {PRIORITIES.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onPointerDown={keepFocus}
+              onMouseDown={keepFocus}
+              onClick={() => pickPriority(p)}
+              className={cn(
+                "flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-medium transition-colors",
+                priority === p
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-muted-foreground"
+              )}
+              aria-label={priorityLabel(t, p)}
+              title={priorityLabel(t, p)}
+            >
+              {p === "high" ? "H" : p === "medium" ? "M" : "L"}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           onPointerDown={keepFocus}
