@@ -108,7 +108,7 @@ function Arsmal() {
       </section>
 
       {/* Active goals */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
+      <div className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
           <h2 className="text-[13px] font-normal text-primary-foreground">
             {t("activeGoals")}
@@ -143,7 +143,7 @@ function Arsmal() {
       </div>
 
       {/* Completed goals — always expanded */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
+      <div className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
           <h2 className="text-[13px] font-normal text-gold-foreground">
             {t("archive")}
@@ -249,7 +249,7 @@ function GoalRow({
       <div
         className={cn(
           "stagger-item flex items-center gap-1.5 px-2 py-1.5",
-          !last && "border-b border-border",
+          !last && "border-b border-primary/10",
           "bg-secondary/50"
         )}
         style={delay}
@@ -325,7 +325,7 @@ function GoalRow({
         {...handlers}
         className={cn(
           "stagger-item group flex items-center gap-2 bg-background px-2 py-1.5 transition-colors active:bg-secondary",
-          !last && "border-b border-border"
+          !last && "border-b border-primary/10"
         )}
         style={{
           transform: `translateX(${offset}px)`,
