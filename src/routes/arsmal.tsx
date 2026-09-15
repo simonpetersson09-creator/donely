@@ -158,21 +158,23 @@ function Arsmal() {
                     </div>
                     <div className={cn("mt-1.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
-                  {group.items.map((goal, idx) => (
-                    <GoalRow
-                      key={goal.id}
-                      goal={goal}
-                      index={idx}
-                      last={idx === group.items.length - 1}
-                      isEditing={editingId === goal.id}
-                      onToggle={guard(goal.id, () => toggleGoal(goal.id))}
-                      onStartEdit={guard(goal.id, () => startEditing(goal.id))}
-                      onUpdateText={(text) => updateGoalText(goal.id, text)}
-                      onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
-                      onRemove={guard(goal.id, () => removeGoal(goal.id))}
-                      onFinishEdit={() => finishEdit(goal.id)}
-                    />
-                  ))}
+                  <div className="flex flex-col gap-1.5">
+                    {group.items.map((goal, idx) => (
+                      <GoalRow
+                        key={goal.id}
+                        goal={goal}
+                        index={idx}
+                        last={idx === group.items.length - 1}
+                        isEditing={editingId === goal.id}
+                        onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                        onStartEdit={guard(goal.id, () => startEditing(goal.id))}
+                        onUpdateText={(text) => updateGoalText(goal.id, text)}
+                        onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
+                        onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                        onFinishEdit={() => finishEdit(goal.id)}
+                      />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
