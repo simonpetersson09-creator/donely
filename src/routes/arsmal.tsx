@@ -48,6 +48,7 @@ export const Route = createFileRoute("/arsmal")({
     ],
   }),
   component: Arsmal,
+  errorComponent: RouteErrorRecovery,
 });
 
 function Arsmal() {
