@@ -509,7 +509,7 @@ function GoalRow({
   const showDelete = offset !== 0;
 
   return (
-    <div className="relative overflow-hidden" style={delay}>
+    <div className="relative overflow-hidden">
       {/* Swipe-revealed delete action */}
       {showDelete && (
         <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
@@ -524,10 +524,13 @@ function GoalRow({
         </div>
       )}
 
+      {/* Entrance animation lives on this wrapper — its fill-mode transform would
+          otherwise override the swipe translateX on the inner row. */}
+      <div className="stagger-item" style={delay}>
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
+          "group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
           !last && "border-b border-primary/10"
         )}
         style={{
@@ -589,6 +592,7 @@ function GoalRow({
         >
           {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
         </button>
+      </div>
       </div>
     </div>
   );
