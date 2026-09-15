@@ -422,6 +422,12 @@ function GoalRow({
     onSetPriority(p);
   };
 
+  // Hooks must run on every render — keep this above the editing early return.
+  const { offset, dragging, handlers, confirmDelete, shouldTriggerAction } = useSwipeDelete({
+    onDelete: onRemove,
+    enabled: !isEditing,
+  });
+
   const priority = goal.priority ?? "medium";
 
   const PriorityIndicator = ({ className }: { className?: string }) => (
