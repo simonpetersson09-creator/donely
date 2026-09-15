@@ -306,6 +306,10 @@ const sv = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Du slog ett personligt rekord.",
   summaryMilestoneNote: "Du nådde en milstolpe.",
+  priority: "Prioritet",
+  priorityHigh: "Hög",
+  priorityMedium: "Medel",
+  priorityLow: "Låg",
 };
 
 type Dict = typeof sv & Record<string, string>;
@@ -582,6 +586,10 @@ const en: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "You set a personal record.",
   summaryMilestoneNote: "You reached a milestone.",
+  priority: "Priority",
+  priorityHigh: "High",
+  priorityMedium: "Medium",
+  priorityLow: "Low",
 };
 
 const de: Dict = {
@@ -858,6 +866,10 @@ const de: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Du hast einen persönlichen Rekord aufgestellt.",
   summaryMilestoneNote: "Du hast einen Meilenstein erreicht.",
+  priority: "Priorität",
+  priorityHigh: "Hoch",
+  priorityMedium: "Mittel",
+  priorityLow: "Niedrig",
 };
 
 const fr: Dict = {
@@ -1140,6 +1152,10 @@ const fr: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Tu as battu un record personnel.",
   summaryMilestoneNote: "Tu as atteint une étape importante.",
+  priority: "Priorité",
+  priorityHigh: "Haute",
+  priorityMedium: "Moyenne",
+  priorityLow: "Basse",
 };
 
 const es: Dict = {
@@ -1422,6 +1438,10 @@ const es: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Has batido un récord personal.",
   summaryMilestoneNote: "Has alcanzado un hito.",
+  priority: "Prioridad",
+  priorityHigh: "Alta",
+  priorityMedium: "Media",
+  priorityLow: "Baja",
 };
 
 const it: Dict = {
@@ -1703,6 +1723,10 @@ const it: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Hai stabilito un record personale.",
   summaryMilestoneNote: "Hai raggiunto un traguardo.",
+  priority: "Priorità",
+  priorityHigh: "Alta",
+  priorityMedium: "Media",
+  priorityLow: "Bassa",
 };
 
 const ptBR: Dict = {
@@ -1984,6 +2008,10 @@ const ptBR: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Bateste um recorde pessoal.",
   summaryMilestoneNote: "Alcançaste um marco.",
+  priority: "Prioridade",
+  priorityHigh: "Alta",
+  priorityMedium: "Média",
+  priorityLow: "Baixa",
 };
 
 const nl: Dict = {
@@ -2259,6 +2287,10 @@ const nl: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Je hebt een persoonlijk record gezet.",
   summaryMilestoneNote: "Je hebt een mijlpaal bereikt.",
+  priority: "Prioriteit",
+  priorityHigh: "Hoog",
+  priorityMedium: "Gemiddeld",
+  priorityLow: "Laag",
 };
 
 const pl: Dict = {
@@ -2547,6 +2579,10 @@ const pl: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Pobito rekord osobisty.",
   summaryMilestoneNote: "Osiągnięto kamień milowy.",
+  priority: "Priorytet",
+  priorityHigh: "Wysoki",
+  priorityMedium: "Średni",
+  priorityLow: "Niski",
 };
 
 const da: Dict = {
@@ -2821,6 +2857,10 @@ const da: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Du satte en personlig rekord.",
   summaryMilestoneNote: "Du nåede en milepæl.",
+  priority: "Prioritet",
+  priorityHigh: "Høj",
+  priorityMedium: "Mellem",
+  priorityLow: "Lav",
 };
 
 const no: Dict = {
@@ -3095,6 +3135,10 @@ const no: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Du satte en personlig rekord.",
   summaryMilestoneNote: "Du nådde en milepæl.",
+  priority: "Prioritet",
+  priorityHigh: "Høy",
+  priorityMedium: "Middels",
+  priorityLow: "Lav",
 };
 
 const fi: Dict = {
@@ -3369,6 +3413,10 @@ const fi: Dict = {
   recordCurrentLine: "{{count}} {{name}} {{period}}",
   summaryRecordNote: "Teit henkilökohtaisen ennätyksen.",
   summaryMilestoneNote: "Saavutit virstanpylvään.",
+  priority: "Prioriteetti",
+  priorityHigh: "Korkea",
+  priorityMedium: "Keskitaso",
+  priorityLow: "Matala",
 };
 
 const ja: Dict = {
@@ -3643,6 +3691,10 @@ const ja: Dict = {
   recordCurrentLine: "{{count}} {{name}}（{{period}}）",
   summaryRecordNote: "自己記録を更新しました。",
   summaryMilestoneNote: "マイルストーンを達成しました。",
+  priority: "優先度",
+  priorityHigh: "高",
+  priorityMedium: "中",
+  priorityLow: "低",
 };
 
 const resources = {
