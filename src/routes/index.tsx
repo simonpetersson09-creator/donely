@@ -428,11 +428,11 @@ function Index() {
           </Link>
 
           <Link
-            to="/dagsstatistik"
-            className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[15px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+            to="/arsmal"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[15px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
           >
-            <BarChart3 className="size-4 shrink-0" />
-            <span className="truncate">{t("statistics")}</span>
+            <Target className="size-4 shrink-0" />
+            <span className="truncate">{t("yearlyGoals")}</span>
           </Link>
 
           <button
@@ -468,18 +468,19 @@ function Index() {
           </div>
 
           <Link
-            to="/arsmal"
-            className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[15px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
-          >
-            <Target className="size-4 shrink-0" />
-            <span className="truncate">{t("yearlyGoals")}</span>
-          </Link>
-          <Link
             to="/veckans-att-gora"
             className="flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[15px] font-semibold text-primary-foreground shadow-button transition-transform duration-200 active:scale-[0.98]"
           >
             <ListTodo className="size-4 shrink-0" />
             <span className="truncate">{t("weeklyTodos")}</span>
+          </Link>
+
+          <Link
+            to="/dagsstatistik"
+            className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[15px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
+          >
+            <BarChart3 className="size-4 shrink-0" />
+            <span className="truncate">{t("statistics")}</span>
           </Link>
         </div>
       </div>
