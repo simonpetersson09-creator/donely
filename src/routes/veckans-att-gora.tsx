@@ -5,9 +5,9 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { CategoryDot } from "@/components/CategoryDot";
 import { cn } from "@/lib/utils";
-import { useLanguage, useLocale } from "@/lib/use-language";
+import { useLanguage } from "@/lib/use-language";
 import { useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
-import { isoWeek, weekStart } from "@/lib/weekly-summary";
+import { isoWeek } from "@/lib/weekly-summary";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
 
 export const Route = createFileRoute("/veckans-att-gora")({
@@ -51,31 +51,8 @@ function nextPriority(priority: Priority): Priority {
   return "high";
 }
 
-function weekDateRange(from: Date, locale: string) {
-  const start = weekStart(from);
-  const end = new Date(start);
-  end.setDate(end.getDate() + 6);
-
-  const day = new Intl.DateTimeFormat(locale, { day: "numeric" });
-  const dayMonth = new Intl.DateTimeFormat(locale, { day: "numeric", month: "long" });
-  const dayMonthYear = new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-  if (start.getFullYear() !== end.getFullYear()) {
-    return `${dayMonthYear.format(start)}–${dayMonthYear.format(end)}`;
-  }
-  if (start.getMonth() !== end.getMonth()) {
-    return `${dayMonth.format(start)}–${dayMonth.format(end)}`;
-  }
-  return `${day.format(start)}–${dayMonth.format(end)}`;
-}
-
 function VeckansAttGora() {
   const { t } = useLanguage();
-  const locale = useLocale();
   const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, setTodoPriority, removeTodo } =
     useWeeklyTodos();
   const { categories } = useCategories();
@@ -125,9 +102,7 @@ function VeckansAttGora() {
   };
   const activeTodos = todos.filter((t) => !t.completed);
   const completedTodos = todos.filter((t) => t.completed);
-  const displayedWeek = useMemo(() => new Date(), []);
-  const currentWeek = isoWeek(displayedWeek);
-  const currentWeekDates = weekDateRange(displayedWeek, locale);
+  const currentWeek = isoWeek(new Date());
   const totalCount = todos.length;
   const completedCount = completedTodos.length;
   const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
@@ -173,25 +148,24 @@ function VeckansAttGora() {
     <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background px-5 pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
       <div className="flex-1 overflow-y-auto pb-4">
         {/* iOS-style navigation header */}
-        <div className="flex flex-col items-center pt-1">
-          <div className="inline-flex items-center rounded-full bg-primary px-5 py-2 shadow-button">
-            <h1 className="text-[16px] font-normal text-primary-foreground">
-              {t("weeklyTodos")} {currentWeek}
-            </h1>
+        <div className="relative flex items-center justify-center pb-3 pt-1">
+          <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
+            <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
+              <h1 className="text-[15px] font-normal text-primary-foreground">
+                {t("weeklyTodos")} {currentWeek}
+              </h1>
+            </div>
           </div>
-          <p className="mt-2 text-[13px] font-normal text-muted-foreground">
-            {currentWeekDates}
-          </p>
         </div>
 
 
         {/* Active todos */}
-        <section className="mt-6 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-          <div className="flex items-center justify-center gap-2 bg-primary px-3 py-2.5">
-            <h2 className="text-[15px] font-normal text-primary-foreground">
+        <section className="mt-10 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+            <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeTodos")}
             </h2>
-            <span className="inline-flex min-w-6 items-center justify-center rounded-full bg-primary-foreground/15 px-1.5 py-0.5 text-[12px] font-normal tabular-nums text-primary-foreground/90">
+            <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
               {activeTodos.length}
             </span>
           </div>
@@ -201,20 +175,25 @@ function VeckansAttGora() {
               <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
             </div>
           ) : (
-            <div>
+            <div className="p-0.5">
               {grouped.map((group, groupIdx) => (
-                <div
-                  key={group.priority}
-                  className={cn(groupIdx > 0 && "border-t border-primary/10 pt-3")}
-                >
-                  <div className="flex items-center gap-2 px-4 pb-1.5 pt-3">
-                    <span className="text-[11px] font-normal uppercase text-muted-foreground">
+                <div key={group.priority} className={groupIdx > 0 ? "mt-4" : undefined}>
+                  <div className="flex items-center justify-center gap-1.5 px-2 pb-0.5">
+                    <span
+                      className={cn("inline-block h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
+                      aria-hidden="true"
+                    />
+                    <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
                       {priorityLabel(t, group.priority)}
                     </span>
                     <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
                       {group.items.length}
                     </span>
                   </div>
+                  <div
+                    className={cn("h-1 w-full rounded-full", priorityBarClass(group.priority))}
+                    aria-hidden="true"
+                  />
                   {group.items.map((todo, idx) => (
                     <TodoRow
                       key={todo.id}
@@ -242,7 +221,7 @@ function VeckansAttGora() {
           <button
             type="button"
             onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex min-h-10 w-full items-center justify-center gap-1.5 bg-gold px-3 py-2"
+            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-1.5"
             aria-expanded={completedExpanded}
           >
             <h2 className="text-[13px] font-normal text-gold-foreground">
@@ -639,7 +618,7 @@ function TodoRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex min-h-[52px] items-center gap-2 px-3 py-1.5 transition-colors active:bg-secondary",
+          "stagger-item group flex items-center gap-2 px-2 py-1 transition-colors active:bg-secondary",
           foregroundBg,
           !last && "border-b border-primary/10"
         )}
@@ -648,7 +627,7 @@ function TodoRow({
         <button
           type="button"
           onClick={() => onSetPriority(nextPriority(priority))}
-          className="flex min-h-11 w-5 shrink-0 items-center justify-start rounded transition-colors active:bg-secondary"
+          className="shrink-0 rounded p-0.5 transition-colors active:bg-secondary"
           aria-label={`${t("priority")}: ${priorityLabel(t, priority)}`}
           title={`${t("priority")}: ${priorityLabel(t, priority)}`}
         >
@@ -660,7 +639,7 @@ function TodoRow({
             if (shouldTriggerAction()) onStartEdit();
           }}
           className={cn(
-            "min-w-0 flex-1 whitespace-normal break-words py-1 text-left text-[14px] font-normal leading-5 transition-colors",
+            "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
             isCompact || todo.completed ? "text-muted-foreground" : "text-primary"
           )}
         >
@@ -685,22 +664,18 @@ function TodoRow({
           onClick={() => {
             if (shouldTriggerAction()) onToggle();
           }}
-           className="flex size-11 shrink-0 items-center justify-center rounded-full transition-transform active:scale-95"
-           aria-checked={todo.completed}
-           role="checkbox"
-         >
-           <span
-             className={cn(
-               "flex size-[22px] items-center justify-center rounded-full transition-colors",
+          className={cn(
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
             isCompact || todo.completed
               ? "border-transparent bg-primary shadow-sm"
               : "border-2 border-muted-foreground/40 bg-transparent"
-             )}
-           >
-             {(isCompact || todo.completed) && (
-               <Check className="size-3 text-primary-foreground" strokeWidth={3} />
-             )}
-           </span>
+          )}
+          aria-checked={todo.completed}
+          role="checkbox"
+        >
+          {(isCompact || todo.completed) && (
+            <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />
+          )}
         </button>
       </div>
       </div>
