@@ -260,13 +260,76 @@ function Arsmal() {
       {/* Add goal button at bottom */}
       <button
         type="button"
-        onClick={handleAdd}
+        onClick={openAddPopup}
         className="shrink-0 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2"
       >
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addGoal")}</span>
       </button>
 
+      {addOpen && (
+        <BottomSheet onClose={closeAddPopup} label={t("addGoal")}>
+          <div className="px-4 pb-2">
+            <h2 className="text-center text-[15px] font-semibold text-foreground">{t("addGoal")}</h2>
+          </div>
+          <div className="px-4 pb-6 pt-2">
+            <input
+              ref={(el) => {
+                if (el) requestAnimationFrame(() => el.focus());
+              }}
+              type="text"
+              value={addText}
+              onChange={(e) => setAddText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") submitAddPopup();
+                if (e.key === "Escape") closeAddPopup();
+              }}
+              placeholder={t("yearlyGoalPlaceholder")}
+              className="w-full rounded-xl border border-border bg-background px-3 py-3 text-[16px] font-normal text-foreground outline-none ring-primary focus:border-primary focus:ring-1"
+            />
+            <div className="mt-4">
+              <p className="mb-2 text-[12px] font-normal uppercase tracking-wide text-muted-foreground">
+                {t("priority")}
+              </p>
+              <div className="flex gap-2">
+                {PRIORITIES.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setAddPriority(p)}
+                    className={cn(
+                      "flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-[13px] font-medium transition-colors",
+                      addPriority === p
+                        ? "border-transparent bg-primary text-primary-foreground"
+                        : "border-border bg-secondary text-foreground",
+                    )}
+                  >
+                    <span className={cn("inline-block h-4 w-1 rounded-full", priorityBarClass(p))} />
+                    {priorityLabel(t, p)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mt-5 flex gap-2">
+              <button
+                type="button"
+                onClick={closeAddPopup}
+                className="flex-1 rounded-xl border border-border bg-background py-3 text-[15px] font-medium text-foreground transition-colors active:bg-secondary"
+              >
+                {t("cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={submitAddPopup}
+                disabled={!addText.trim()}
+                className="flex-1 rounded-xl bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-colors active:bg-primary/90 disabled:opacity-40"
+              >
+                {t("save")}
+              </button>
+            </div>
+          </div>
+        </BottomSheet>
+      )}
     </main>
   );
 }
