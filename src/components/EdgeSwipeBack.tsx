@@ -58,7 +58,7 @@ export function EdgeSwipeBack({ children }: { children: ReactNode }) {
       // Root screen has nothing to return to.
       if (typeof window === "undefined") return false;
       if (window.location.pathname === "/") return false;
-      return window.history.length > 1;
+      return true;
     };
 
     const onTouchStart = (event: TouchEvent) => {
@@ -115,7 +115,7 @@ export function EdgeSwipeBack({ children }: { children: ReactNode }) {
         window.setTimeout(() => {
           surface.style.transition = "";
           surface.style.transform = "";
-          router.history.back();
+          router.navigate({ to: parentPath(window.location.pathname) });
         }, 200);
       } else {
         reset(true);
