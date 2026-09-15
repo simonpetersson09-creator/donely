@@ -250,7 +250,7 @@ function Index() {
       },
       ...entries,
     ];
-    const achievement = detectAchievement(nextEntries, selected.id);
+    const achievement = detectAchievement(nextEntries, selected.id, new Date(), parsed);
     if (achievement) {
       if (achievement.kind === "record" || achievement.kind === "milestone") haptic("success");
       if (feedbackTimer.current) clearTimeout(feedbackTimer.current);
