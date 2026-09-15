@@ -422,7 +422,7 @@ function Index() {
           <Link
             to="/installningar"
             aria-label={t("settings")}
-            className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-card transition-transform duration-200 active:scale-[0.95]"
+            className="press-down flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-card transition-shadow duration-200 active:shadow-soft"
           >
             <Settings className="size-[20px]" />
           </Link>
