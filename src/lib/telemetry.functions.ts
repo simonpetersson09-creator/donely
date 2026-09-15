@@ -10,7 +10,7 @@ export type TelemetryOverview = {
 
 export const getTelemetryOverview = createServerFn({ method: "GET" }).handler(
   async (): Promise<TelemetryOverview> => {
-    const { requireUnlocked } = await import("@/lib/usage-gate.functions");
+    const { requireUnlocked } = await import("@/lib/usage-gate.server");
     await requireUnlocked();
     const { createClient } = await import("@supabase/supabase-js");
     const url = process.env["SUPABASE_URL"];
