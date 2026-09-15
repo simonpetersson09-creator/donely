@@ -161,7 +161,7 @@ function VeckansAttGora() {
 
         {/* Active todos */}
         <section className="mt-10 overflow-hidden rounded-2xl bg-background">
-          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-0.5">
+          <div className="flex items-center justify-center gap-1.5 rounded-full bg-primary px-3 py-0.5">
             <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeTodos")}
             </h2>
@@ -177,7 +177,7 @@ function VeckansAttGora() {
           ) : (
             <div className="p-0">
               {grouped.map((group, groupIdx) => (
-                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : undefined}>
+                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : "mt-4"}>
                   <div className="flex flex-col items-center px-3 pb-0.5">
                     <div className="flex items-center justify-center gap-1.5">
                       <span className="text-[11px] font-medium uppercase tracking-normal text-muted-foreground">
@@ -218,7 +218,7 @@ function VeckansAttGora() {
           <button
             type="button"
             onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-0.5"
+            className="flex w-full items-center justify-center gap-1.5 rounded-full bg-gold px-3 py-0.5"
             aria-expanded={completedExpanded}
           >
             <h2 className="text-[13px] font-normal text-gold-foreground">
