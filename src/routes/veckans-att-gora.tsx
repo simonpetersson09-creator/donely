@@ -171,6 +171,10 @@ function VeckansAttGora() {
               {grouped.map((group, groupIdx) => (
                 <div key={group.priority} className={groupIdx > 0 ? "mt-4" : undefined}>
                   <div className="flex items-center justify-center gap-1.5 px-2 pb-1">
+                    <span
+                      className={cn("inline-block h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
+                      aria-hidden="true"
+                    />
                     <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
                       {priorityLabel(t, group.priority)}
                     </span>
@@ -382,16 +386,31 @@ function TodoRow({
   };
 
   // Reads the live input value so "Klar" never loses typed text (stale draft / ghost taps).
-  const commitFromInput = () => {
+  const readInputValue = () => {
     const el = document.getElementById(`todo-input-${todo.id}`) as HTMLInputElement | null;
-    commitText(el?.value ?? draft, { removeIfEmpty: false });
+    return el?.value ?? draft;
   };
+
+  const commitFromInput = () => {
+    commitText(readInputValue(), { removeIfEmpty: false });
+  };
+
+  // Changing priority re-groups (remounts) the row, so save the typed text first.
+  const pickPriority = (p: Priority) => {
+    const value = readInputValue().trim();
+    if (value) onUpdateText(value);
+    onSetPriority(p);
+  };
+
+  // Preventing default on both pointerdown and mousedown keeps the input focused
+  // (no blur → no premature commit) across Chromium, Safari and iOS WKWebView.
+  const keepFocus = (e: { preventDefault: () => void }) => e.preventDefault();
 
   const priority = todo.priority ?? "medium";
 
   const PriorityIndicator = ({ className }: { className?: string }) => (
     <span
-      className={cn("h-5 w-1 rounded-full", priorityBarClass(priority), className)}
+      className={cn("inline-block h-5 w-1 rounded-full", priorityBarClass(priority), className)}
       aria-hidden="true"
     />
   );
@@ -430,11 +449,9 @@ function TodoRow({
             <button
               key={p}
               type="button"
-              onPointerDown={(e) => {
-                e.preventDefault();
-                onSetPriority(p);
-              }}
-              onClick={() => onSetPriority(p)}
+              onPointerDown={keepFocus}
+              onMouseDown={keepFocus}
+              onClick={() => pickPriority(p)}
               className={cn(
                 "flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-medium transition-colors",
                 priority === p
@@ -450,10 +467,8 @@ function TodoRow({
         </div>
         <button
           type="button"
-          onPointerDown={(e) => {
-            e.preventDefault();
-            commitFromInput();
-          }}
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
           onClick={commitFromInput}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
@@ -461,8 +476,9 @@ function TodoRow({
         </button>
         <button
           type="button"
-          onPointerDown={(e) => {
-            e.preventDefault();
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
+          onClick={() => {
             commitFromInput();
             onToggle();
           }}
