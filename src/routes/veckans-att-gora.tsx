@@ -119,23 +119,6 @@ function VeckansAttGora() {
           <div className="h-9 w-9" aria-hidden="true" />
         </div>
 
-        {/* Compact weekly overview */}
-        <section className="mt-2 px-1" aria-labelledby="week-heading">
-          <div className="flex items-center justify-between">
-            <h2 id="week-heading" className="text-[13px] font-normal text-foreground">
-              {t("weeklyTodos")} {currentWeek}
-            </h2>
-            <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
-              {completedCount}/{totalCount}
-            </span>
-          </div>
-          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
-            <div
-              className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-        </section>
 
         {/* Active todos */}
         <section className="mt-6 overflow-hidden rounded-2xl border border-primary/10 bg-background">
