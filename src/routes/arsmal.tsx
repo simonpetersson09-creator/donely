@@ -158,21 +158,23 @@ function Arsmal() {
                     </div>
                     <div className={cn("mt-1.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
-                  {group.items.map((goal, idx) => (
-                    <GoalRow
-                      key={goal.id}
-                      goal={goal}
-                      index={idx}
-                      last={idx === group.items.length - 1}
-                      isEditing={editingId === goal.id}
-                      onToggle={guard(goal.id, () => toggleGoal(goal.id))}
-                      onStartEdit={guard(goal.id, () => startEditing(goal.id))}
-                      onUpdateText={(text) => updateGoalText(goal.id, text)}
-                      onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
-                      onRemove={guard(goal.id, () => removeGoal(goal.id))}
-                      onFinishEdit={() => finishEdit(goal.id)}
-                    />
-                  ))}
+                  <div className="flex flex-col gap-1.5">
+                    {group.items.map((goal, idx) => (
+                      <GoalRow
+                        key={goal.id}
+                        goal={goal}
+                        index={idx}
+                        last={idx === group.items.length - 1}
+                        isEditing={editingId === goal.id}
+                        onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                        onStartEdit={guard(goal.id, () => startEditing(goal.id))}
+                        onUpdateText={(text) => updateGoalText(goal.id, text)}
+                        onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
+                        onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                        onFinishEdit={() => finishEdit(goal.id)}
+                      />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
@@ -208,7 +210,7 @@ function Arsmal() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
                 </div>
               ) : (
-                <div className="p-0.5">
+                <div className="flex flex-col gap-1.5 p-0.5">
                   {completedGoals.map((goal, idx) => (
                     <GoalRow
                       key={goal.id}
@@ -533,7 +535,10 @@ function GoalRow({
       >
       <div
         {...handlers}
-        className="stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary"
+        className={cn(
+          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-3 py-2.5 transition-colors active:bg-secondary/50",
+          goal.completed && "bg-muted/40 active:bg-muted/60"
+        )}
         style={delay}
       >
         {!goal.completed && (
