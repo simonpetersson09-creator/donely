@@ -536,11 +536,16 @@ function GoalRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
+          "stagger-item group relative flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
           !last && "border-b border-primary/10"
         )}
         style={delay}
       >
+        {/* Subtle swipe hint */}
+        <span
+          className="pointer-events-none absolute right-1.5 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-primary/35"
+          aria-hidden="true"
+        />
         {!goal.completed && (
           <button
             type="button"
