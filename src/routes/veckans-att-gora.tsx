@@ -41,7 +41,7 @@ function priorityLabel(t: (key: string) => string, priority: Priority) {
 
 function priorityBarClass(priority: Priority) {
   if (priority === "high") return "bg-red-500/80";
-  if (priority === "medium") return "bg-orange-500/80";
+  if (priority === "medium") return "bg-blue-500/80";
   return "bg-yellow-500/80";
 }
 
