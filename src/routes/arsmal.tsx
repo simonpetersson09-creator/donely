@@ -130,7 +130,7 @@ function Arsmal() {
 
         {/* Active goals */}
         <div className="mt-10 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1">
+          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-0.5">
             <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeGoals")}
             </h2>
@@ -140,14 +140,14 @@ function Arsmal() {
           </div>
 
           {activeGoals.length === 0 ? (
-            <div className="px-3 py-2 text-center">
+            <div className="px-3 py-1.5 text-center">
               <p className="text-[13px] font-normal text-foreground">{t("emptyGoals")}</p>
             </div>
           ) : (
             <div className="p-0">
               {grouped.map((group, groupIdx) => (
-                <div key={group.priority} className={groupIdx > 0 ? "mt-4" : undefined}>
-                  <div className="flex flex-col items-center px-3 pb-1">
+                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : undefined}>
+                  <div className="flex flex-col items-center px-3 pb-0.5">
                     <div className="flex items-center justify-center gap-1.5">
                       <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
                         {priorityLabel(t, group.priority)}
@@ -156,9 +156,9 @@ function Arsmal() {
                         {group.items.length}
                       </span>
                     </div>
-                    <div className={cn("mt-1 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
+                    <div className={cn("mt-0.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
-                  <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-col gap-px">
                     {group.items.map((goal, idx) => (
                       <GoalRow
                         key={goal.id}
@@ -186,7 +186,7 @@ function Arsmal() {
           <button
             type="button"
             onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-1"
+            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-0.5"
             aria-expanded={completedExpanded}
           >
             <h2 className="text-[13px] font-normal text-gold-foreground">
@@ -206,11 +206,11 @@ function Arsmal() {
           {completedExpanded && (
             <>
               {completedGoals.length === 0 ? (
-                <div className="px-3 py-2 text-center">
+                <div className="px-3 py-1.5 text-center">
                   <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-0.5 p-0">
+                <div className="flex flex-col gap-px p-0">
                   {completedGoals.map((goal, idx) => (
                     <GoalRow
                       key={goal.id}
@@ -536,7 +536,7 @@ function GoalRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-2 py-1.5 transition-colors active:bg-secondary/50",
+          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-2 py-1 transition-colors active:bg-secondary/50",
           goal.completed && "bg-muted/40 active:bg-muted/60"
         )}
         style={delay}
@@ -558,7 +558,7 @@ function GoalRow({
             if (shouldTriggerAction()) onStartEdit();
           }}
           className={cn(
-            "min-w-0 flex-1 truncate text-left text-[14px] font-normal transition-colors",
+            "min-w-0 flex-1 truncate text-left text-[13px] font-normal transition-colors",
             goal.completed ? "text-muted-foreground" : "text-primary"
           )}
         >
