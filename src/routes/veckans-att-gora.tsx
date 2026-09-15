@@ -61,6 +61,11 @@ function VeckansAttGora() {
   // Id of the todo waiting for the user to pick which activity gets the point.
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [completedExpanded, setCompletedExpanded] = useState(false);
+  // Add-task popup state.
+  const [addOpen, setAddOpen] = useState(false);
+  const [addText, setAddText] = useState("");
+  const [addPriority, setAddPriority] = useState<Priority>("medium");
+  const addInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleToggle = (id: string, completed: boolean) => {
     if (completed) {
