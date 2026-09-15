@@ -360,7 +360,7 @@ function GoalRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 bg-background px-2 py-1.5 transition-colors active:bg-secondary",
+          "stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
           !last && "border-b border-primary/10"
         )}
         style={{
@@ -396,19 +396,20 @@ function GoalRow({
         </button>
         <button
           type="button"
+          onPointerDown={(e) => e.stopPropagation()}
           onClick={() => {
             if (shouldTriggerAction()) onToggle();
           }}
           className={cn(
             "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
             goal.completed
-              ? "border-transparent bg-gradient-gold shadow-sm"
+              ? "border-transparent bg-primary shadow-sm"
               : "border-2 border-muted-foreground/40 bg-transparent"
           )}
           aria-checked={goal.completed}
           role="checkbox"
         >
-          {goal.completed && <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
         </button>
       </div>
     </div>
