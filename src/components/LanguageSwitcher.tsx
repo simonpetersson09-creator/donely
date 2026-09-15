@@ -38,7 +38,7 @@ export function LanguageSwitcher() {
         <div
           role="listbox"
           aria-label={t("language")}
-          className="absolute bottom-full right-0 z-50 mb-2 max-h-[45dvh] w-56 origin-bottom-right overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-1 shadow-card duration-200 animate-in fade-in slide-in-from-bottom-2 zoom-in-95"
+          className="absolute bottom-full left-0 z-50 mb-2 max-h-[45dvh] w-56 origin-bottom-left overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card p-1 shadow-card duration-200 animate-in fade-in slide-in-from-bottom-2 zoom-in-95"
         >
           {languages.map((l) => {
             const active = l.code === language;
