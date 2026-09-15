@@ -28,7 +28,6 @@ describe("detectAchievement milestones", () => {
   });
 
   it("never celebrates a long-passed milestone", () => {
-    localStorage.clear();
     // Total 300 before, +1 now -> no milestone crossed.
     const entries = [entry(1, 0), ...Array.from({ length: 30 }, (_, i) => entry(10, i + 40))];
     const found = detectAchievement(entries, cat, new Date(), 1);
@@ -36,7 +35,6 @@ describe("detectAchievement milestones", () => {
   });
 
   it("celebrates the milestone actually crossed", () => {
-    localStorage.clear();
     const entries = [entry(5, 0), ...Array.from({ length: 4 }, (_, i) => entry(5, i + 40))];
     const found = detectAchievement(entries, cat, new Date(), 5);
     expect(found).toMatchObject({ kind: "milestone", target: 25 });
