@@ -48,7 +48,7 @@ const DATA_KEYS = [
   STORAGE_KEYS.reminderPrompt,
 ] as const;
 
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 export const MAX_BACKUPS = 3;
 
 // ---------------------------------------------------------------------------
@@ -93,6 +93,7 @@ export const yearlyGoalSchema = z.object({
 });
 export const yearlyGoalsSchema = z.array(yearlyGoalSchema);
 
+export const todoPrioritySchema = z.enum(["high", "medium", "low"]);
 export const weeklyTodoSchema = z.object({
   id: z.string().min(1),
   text: z.string(),
@@ -101,6 +102,8 @@ export const weeklyTodoSchema = z.object({
   weekStart: z.string().min(1),
   /** Entry created when the todo was ticked off (1 point on a category). */
   entryId: z.string().min(1).optional(),
+  /** Priority level shown on the left of active todo rows. Defaults to medium. */
+  priority: todoPrioritySchema.default("medium"),
   createdAt: z.string().min(1),
 });
 export const weeklyTodosSchema = z.array(weeklyTodoSchema);
@@ -500,8 +503,14 @@ export type Migration = {
  * reshape fields. Ids are always preserved.
  */
 export const MIGRATIONS: Migration[] = [
-  // Example of the required shape (kept empty on purpose for v1):
-  // { to: 2, description: "add note field", run: (s) => ({ ...s, entries: s.entries.map(e => ({ ...e })) }) },
+  {
+    to: 2,
+    description: "add default priority to weekly todos",
+    run: (s) => ({
+      ...s,
+      weeklyTodos: s.weeklyTodos.map((t) => ({ ...t, priority: t.priority ?? "medium" })),
+    }),
+  },
 ];
 
 export type MigrationOutcome =
