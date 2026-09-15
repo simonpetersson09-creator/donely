@@ -98,120 +98,122 @@ function VeckansAttGora() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-5 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
-      {/* iOS-style navigation header */}
-      <div className="relative flex items-center justify-between pb-3 pt-1">
-        <BackButton
-          fallbackTo="/"
-          className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
-        >
-          {t("back")}
-        </BackButton>
-        <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
-          <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
-            <h1 className="text-[15px] font-normal text-primary-foreground">
+    <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background px-5 pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
+      <div className="flex-1 overflow-y-auto pb-4">
+        {/* iOS-style navigation header */}
+        <div className="relative flex items-center justify-between pb-3 pt-1">
+          <BackButton
+            fallbackTo="/"
+            className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          >
+            {t("back")}
+          </BackButton>
+          <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
+            <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
+              <h1 className="text-[15px] font-normal text-primary-foreground">
+                {t("weeklyTodos")} {currentWeek}
+              </h1>
+            </div>
+          </div>
+          <div className="h-9 w-9" aria-hidden="true" />
+        </div>
+
+        {/* Compact weekly overview */}
+        <section className="mt-2 px-1" aria-labelledby="week-heading">
+          <div className="flex items-center justify-between">
+            <h2 id="week-heading" className="text-[13px] font-normal text-foreground">
               {t("weeklyTodos")} {currentWeek}
-            </h1>
+            </h2>
+            <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
+              {completedCount}/{totalCount}
+            </span>
           </div>
-        </div>
-        <div className="h-9 w-9" aria-hidden="true" />
+          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+            <div
+              className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </section>
+
+        {/* Active todos */}
+        <section className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+            <h2 className="text-[13px] font-normal text-primary-foreground">
+              {t("activeTodos")}
+            </h2>
+            <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
+              {activeTodos.length}
+            </span>
+          </div>
+
+          {activeTodos.length === 0 ? (
+            <div className="px-3 py-3 text-center">
+              <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
+            </div>
+          ) : (
+            <div className="p-1">
+              {activeTodos.map((todo, idx) => (
+                <TodoRow
+                  key={todo.id}
+                  todo={todo}
+                  index={idx}
+                  last={idx === activeTodos.length - 1}
+                  isEditing={editingId === todo.id}
+                  variant="card"
+                  onToggle={() => handleToggle(todo.id, todo.completed)}
+                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                  onUpdateText={(text) => updateTodoText(todo.id, text)}
+                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                  onFinishEdit={() => finishEdit(todo.id)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+
+        {/* Completed todos */}
+        <section className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+          <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
+            <h2 className="text-[13px] font-normal text-gold-foreground">
+              {t("completedTodos")}
+            </h2>
+            <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
+              {completedTodos.length}
+            </span>
+          </div>
+
+          {completedTodos.length === 0 ? (
+            <div className="px-3 py-3 text-center">
+              <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
+            </div>
+          ) : (
+            <div className="p-1">
+              {completedTodos.map((todo, idx) => (
+                <TodoRow
+                  key={todo.id}
+                  todo={todo}
+                  index={idx}
+                  last={idx === completedTodos.length - 1}
+                  isEditing={editingId === todo.id}
+                  variant="compact"
+                  onToggle={() => handleToggle(todo.id, todo.completed)}
+                  onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                  onUpdateText={(text) => updateTodoText(todo.id, text)}
+                  onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                  onFinishEdit={() => finishEdit(todo.id)}
+                />
+              ))}
+            </div>
+          )}
+        </section>
       </div>
-
-      {/* Compact weekly overview */}
-      <section className="mt-2 px-1" aria-labelledby="week-heading">
-        <div className="flex items-center justify-between">
-          <h2 id="week-heading" className="text-[13px] font-normal text-foreground">
-            {t("weeklyTodos")} {currentWeek}
-          </h2>
-          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
-            {completedCount}/{totalCount}
-          </span>
-        </div>
-        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
-          <div
-            className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </section>
-
-      {/* Active todos */}
-      <section className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-normal text-primary-foreground">
-            {t("activeTodos")}
-          </h2>
-          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
-            {activeTodos.length}
-          </span>
-        </div>
-
-        {activeTodos.length === 0 ? (
-          <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
-          </div>
-        ) : (
-          <div className="p-1">
-            {activeTodos.map((todo, idx) => (
-              <TodoRow
-                key={todo.id}
-                todo={todo}
-                index={idx}
-                last={idx === activeTodos.length - 1}
-                isEditing={editingId === todo.id}
-                variant="card"
-                onToggle={() => handleToggle(todo.id, todo.completed)}
-                onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                onUpdateText={(text) => updateTodoText(todo.id, text)}
-                onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                onFinishEdit={() => finishEdit(todo.id)}
-              />
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* Completed todos */}
-      <section className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-        <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
-          <h2 className="text-[13px] font-normal text-gold-foreground">
-            {t("completedTodos")}
-          </h2>
-          <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
-            {completedTodos.length}
-          </span>
-        </div>
-
-        {completedTodos.length === 0 ? (
-          <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
-          </div>
-        ) : (
-          <div className="p-1">
-            {completedTodos.map((todo, idx) => (
-              <TodoRow
-                key={todo.id}
-                todo={todo}
-                index={idx}
-                last={idx === completedTodos.length - 1}
-                isEditing={editingId === todo.id}
-                variant="compact"
-                onToggle={() => handleToggle(todo.id, todo.completed)}
-                onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                onUpdateText={(text) => updateTodoText(todo.id, text)}
-                onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                onFinishEdit={() => finishEdit(todo.id)}
-              />
-            ))}
-          </div>
-        )}
-      </section>
 
       {/* Add todo button */}
       <button
         type="button"
         onClick={() => handleAdd()}
-        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
+        className="shrink-0 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2"
       >
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addTodo")}</span>

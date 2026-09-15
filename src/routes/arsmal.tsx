@@ -67,121 +67,122 @@ function Arsmal() {
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background px-5 pb-[calc(env(safe-area-inset-bottom)+1rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
+    <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background px-5 pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
+      <div className="flex-1 overflow-y-auto pb-4">
+        {/* iOS-style navigation header */}
+        <div className="relative flex items-center justify-between pb-3 pt-1">
+          <BackButton
+            fallbackTo="/"
+            className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          >
+            {t("back")}
+          </BackButton>
+          <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
+            <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
+              <h1 className="text-[15px] font-normal text-primary-foreground">
+                {t("yearlyGoals")} {currentYear}
+              </h1>
+            </div>
+          </div>
+          <div className="h-9 w-9" aria-hidden="true" />
+        </div>
 
-      {/* iOS-style navigation header */}
-      <div className="relative flex items-center justify-between pb-3 pt-1">
-        <BackButton
-          fallbackTo="/"
-          className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
-        >
-          {t("back")}
-        </BackButton>
-        <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
-          <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
-            <h1 className="text-[15px] font-normal text-primary-foreground">
+        {/* Yearly progress overview */}
+        <section className="mt-2 px-1" aria-labelledby="year-heading">
+          <div className="flex items-center justify-between">
+            <h2 id="year-heading" className="text-[13px] font-normal text-foreground">
               {t("yearlyGoals")} {currentYear}
-            </h1>
+            </h2>
+            <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
+              {completedGoals.length}/{goals.length}
+            </span>
           </div>
-        </div>
-        <div className="h-9 w-9" aria-hidden="true" />
-      </div>
-
-      {/* Yearly progress overview */}
-      <section className="mt-2 px-1" aria-labelledby="year-heading">
-        <div className="flex items-center justify-between">
-          <h2 id="year-heading" className="text-[13px] font-normal text-foreground">
-            {t("yearlyGoals")} {currentYear}
-          </h2>
-          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
-            {completedGoals.length}/{goals.length}
-          </span>
-        </div>
-        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
-          <div
-            className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
-            style={{
-              width: `${goals.length === 0 ? 0 : (completedGoals.length / goals.length) * 100}%`,
-            }}
-          />
-        </div>
-      </section>
-
-      {/* Active goals */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-        <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
-          <h2 className="text-[13px] font-normal text-primary-foreground">
-            {t("activeGoals")}
-          </h2>
-          <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
-            {activeGoals.length}
-          </span>
-        </div>
-
-        {activeGoals.length === 0 ? (
-          <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-foreground">{t("emptyGoals")}</p>
+          <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+            <div
+              className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
+              style={{
+                width: `${goals.length === 0 ? 0 : (completedGoals.length / goals.length) * 100}%`,
+              }}
+            />
           </div>
-        ) : (
-          <div className="p-1">
-            {activeGoals.map((goal, idx) => (
-              <GoalRow
-                key={goal.id}
-                goal={goal}
-                index={idx}
-                last={idx === activeGoals.length - 1}
-                isEditing={editingId === goal.id}
-                onToggle={guard(goal.id, () => toggleGoal(goal.id))}
-                onStartEdit={guard(goal.id, () => startEditing(goal.id))}
-                onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={guard(goal.id, () => removeGoal(goal.id))}
-                onFinishEdit={() => finishEdit(goal.id)}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+        </section>
 
-      {/* Completed goals — always expanded */}
-      <div className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-        <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
-          <h2 className="text-[13px] font-normal text-gold-foreground">
-            {t("archive")}
-          </h2>
-          <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
-            {completedGoals.length}
-          </span>
+        {/* Active goals */}
+        <div className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+            <h2 className="text-[13px] font-normal text-primary-foreground">
+              {t("activeGoals")}
+            </h2>
+            <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
+              {activeGoals.length}
+            </span>
+          </div>
+
+          {activeGoals.length === 0 ? (
+            <div className="px-3 py-3 text-center">
+              <p className="text-[13px] font-normal text-foreground">{t("emptyGoals")}</p>
+            </div>
+          ) : (
+            <div className="p-1">
+              {activeGoals.map((goal, idx) => (
+                <GoalRow
+                  key={goal.id}
+                  goal={goal}
+                  index={idx}
+                  last={idx === activeGoals.length - 1}
+                  isEditing={editingId === goal.id}
+                  onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                  onStartEdit={guard(goal.id, () => startEditing(goal.id))}
+                  onUpdateText={(text) => updateGoalText(goal.id, text)}
+                  onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                  onFinishEdit={() => finishEdit(goal.id)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {completedGoals.length === 0 ? (
-          <div className="px-3 py-3 text-center">
-            <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
+        {/* Completed goals — always expanded */}
+        <div className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+          <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
+            <h2 className="text-[13px] font-normal text-gold-foreground">
+              {t("archive")}
+            </h2>
+            <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
+              {completedGoals.length}
+            </span>
           </div>
-        ) : (
-          <div className="p-1">
-            {completedGoals.map((goal, idx) => (
-              <GoalRow
-                key={goal.id}
-                goal={goal}
-                index={idx}
-                last={idx === completedGoals.length - 1}
-                isEditing={editingId === goal.id}
-                onToggle={guard(goal.id, () => toggleGoal(goal.id))}
-                onStartEdit={guard(goal.id, () => startEditing(goal.id))}
-                onUpdateText={(text) => updateGoalText(goal.id, text)}
-                onRemove={guard(goal.id, () => removeGoal(goal.id))}
-                onFinishEdit={() => finishEdit(goal.id)}
-              />
-            ))}
-          </div>
-        )}
+
+          {completedGoals.length === 0 ? (
+            <div className="px-3 py-3 text-center">
+              <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
+            </div>
+          ) : (
+            <div className="p-1">
+              {completedGoals.map((goal, idx) => (
+                <GoalRow
+                  key={goal.id}
+                  goal={goal}
+                  index={idx}
+                  last={idx === completedGoals.length - 1}
+                  isEditing={editingId === goal.id}
+                  onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                  onStartEdit={guard(goal.id, () => startEditing(goal.id))}
+                  onUpdateText={(text) => updateGoalText(goal.id, text)}
+                  onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                  onFinishEdit={() => finishEdit(goal.id)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Add goal button at bottom */}
       <button
         type="button"
         onClick={handleAdd}
-        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
+        className="shrink-0 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2"
       >
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addGoal")}</span>
