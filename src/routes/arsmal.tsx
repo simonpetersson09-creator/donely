@@ -569,11 +569,7 @@ function GoalRow({
             <PriorityIndicator />
           </button>
         )}
-        <button
-          type="button"
-          onClick={() => {
-            if (shouldTriggerAction()) onStartEdit();
-          }}
+        <div
           className={cn(
             "min-w-0 flex-1 truncate text-left text-[13px] font-normal transition-colors",
             goal.completed ? "text-muted-foreground" : "text-primary"
