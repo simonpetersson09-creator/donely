@@ -452,9 +452,9 @@ function TodoRow({
           type="button"
           onPointerDown={(e) => {
             e.preventDefault();
-            commitText(draft);
+            commitFromInput();
           }}
-          onClick={() => commitText(draft)}
+          onClick={commitFromInput}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
@@ -463,7 +463,7 @@ function TodoRow({
           type="button"
           onPointerDown={(e) => {
             e.preventDefault();
-            commitText(draft);
+            commitFromInput();
             onToggle();
           }}
           className={cn(
