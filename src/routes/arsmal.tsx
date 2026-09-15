@@ -440,7 +440,7 @@ function GoalRow({
   if (isEditing) {
     return (
       <div
-        className="stagger-item flex items-center gap-1.5 px-2 py-0.5 bg-secondary/50"
+        className="stagger-item flex items-center gap-1.5 rounded-full bg-secondary/50 px-2 py-0.5"
         style={delay}
       >
         <PriorityIndicator className="shrink-0" />
@@ -518,7 +518,7 @@ function GoalRow({
   const showDelete = offset !== 0;
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden rounded-full">
       {/* Swipe-revealed delete action */}
       {showDelete && (
         <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
