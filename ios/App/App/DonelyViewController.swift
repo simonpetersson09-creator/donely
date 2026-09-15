@@ -43,6 +43,9 @@ final class DonelyViewController: CAPBridgeViewController {
         print("DONELY_CAPACITOR: super.viewDidLoad returned webView=\(String(describing: webView)) bridge=\(String(describing: bridge))")
         edgesForExtendedLayout = .all
         extendedLayoutIncludesOpaqueBars = true
+        // Keep the web view under the status bar / Dynamic Island and above
+        // the home indicator so the web app can use viewport-fit=cover safely.
+        layoutWebViewEdgeToEdge()
         applyAppBackgroundColor()
         installNotificationBridge()
         installDiagnosticsOverlay()
@@ -243,8 +246,24 @@ final class DonelyViewController: CAPBridgeViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        // Re-apply edge-to-edge layout on every rotation / safe-area change.
+        layoutWebViewEdgeToEdge()
         applyAppBackgroundColor()
         diagnosticsOverlay?.bringToFront()
+    }
+
+    /// Pins the WKWebView to the controller's view edges. This is required for
+    /// viewport-fit=cover: the web app itself adds env(safe-area-inset-*)
+    /// padding, so the native layer must expose the full screen.
+    private func layoutWebViewEdgeToEdge() {
+        guard let webView = webView, webView.superview === view else { return }
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            webView.topAnchor.constraint(equalTo: view.topAnchor),
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+        ])
     }
 
     override func traitCollectionDidChange(_ previous: UITraitCollection?) {
