@@ -246,19 +246,33 @@ function GoalRow({
 
 
   // Empty rows are drafts: discard them instead of leaving a blank goal behind.
-  const commitText = (value: string) => {
+  const commitText = (value: string, { removeIfEmpty = true }: { removeIfEmpty?: boolean } = {}) => {
     if (committedRef.current) return;
     committedRef.current = true;
     const trimmed = value.trim();
     if (!trimmed) {
       // Remove before finishing: finishing arms the tap-through guard.
-      onRemove();
+      if (removeIfEmpty) onRemove();
       onFinishEdit();
       return;
     }
     onUpdateText(trimmed);
     onFinishEdit();
   };
+
+  // Reads the live input value so "Klar" never loses typed text (stale draft / ghost taps).
+  const readInputValue = () => {
+    const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
+    return el?.value ?? draft;
+  };
+
+  const commitFromInput = () => {
+    commitText(readInputValue(), { removeIfEmpty: false });
+  };
+
+  // Preventing default on both pointerdown and mousedown keeps the input focused
+  // (no blur → no premature commit) across Chromium, Safari and iOS WKWebView.
+  const keepFocus = (e: { preventDefault: () => void }) => e.preventDefault();
 
   if (isEditing) {
     return (
