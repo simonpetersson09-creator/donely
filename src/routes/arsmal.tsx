@@ -210,7 +210,7 @@ function Arsmal() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
                 </div>
               ) : (
-                <div className="p-0.5">
+                <div className="flex flex-col gap-1.5 p-0.5">
                   {completedGoals.map((goal, idx) => (
                     <GoalRow
                       key={goal.id}
