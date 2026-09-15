@@ -496,7 +496,7 @@ function TodoRow({
 
   const PriorityIndicator = ({ className }: { className?: string }) => (
     <span
-      className={cn("inline-block h-5 w-1 rounded-full", priorityBarClass(priority), className)}
+      className={cn("block h-5 w-1 self-center rounded-full", priorityBarClass(priority), className)}
       aria-hidden="true"
     />
   );
@@ -619,7 +619,7 @@ function TodoRow({
         <button
           type="button"
           onClick={() => onSetPriority(nextPriority(priority))}
-          className="shrink-0 rounded p-0.5 transition-colors active:bg-secondary"
+          className="flex shrink-0 items-center justify-center rounded p-0.5 transition-colors active:bg-secondary"
           aria-label={`${t("priority")}: ${priorityLabel(t, priority)}`}
           title={`${t("priority")}: ${priorityLabel(t, priority)}`}
         >
