@@ -156,7 +156,7 @@ function Arsmal() {
                         {group.items.length}
                       </span>
                     </div>
-                    <div className={cn("mt-1.5 h-px w-14 rounded-full", priorityBarClass(group.priority))} />
+                    <div className={cn("mt-1.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
                   {group.items.map((goal, idx) => (
                     <GoalRow
