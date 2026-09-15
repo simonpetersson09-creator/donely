@@ -1,11 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
+import { BottomSheet } from "@/components/BottomSheet";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
 import { useYearlyGoals } from "@/lib/store";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
+
+const PRIORITIES = ["high", "medium", "low"] as const;
+type Priority = (typeof PRIORITIES)[number];
+
+function priorityLabel(t: (key: string) => string, priority: Priority) {
+  if (priority === "high") return t("priorityHigh");
+  if (priority === "medium") return t("priorityMedium");
+  return t("priorityLow");
+}
+
+function priorityBarClass(priority: Priority) {
+  if (priority === "high") return "bg-red-500/80";
+  if (priority === "medium") return "bg-blue-500/80";
+  return "bg-yellow-500/80";
+}
+
+function nextPriority(priority: Priority): Priority {
+  if (priority === "high") return "medium";
+  if (priority === "medium") return "low";
+  return "high";
+}
 
 export const Route = createFileRoute("/arsmal")({
   head: () => ({
