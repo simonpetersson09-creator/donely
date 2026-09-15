@@ -191,7 +191,7 @@ function VeckansAttGora() {
                     </div>
                     <div className={cn("mt-0.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
-                  <div className="flex flex-col gap-px">
+                  <div className="flex flex-col gap-1">
                     {group.items.map((todo, idx) => (
                       <TodoRow
                         key={todo.id}
@@ -244,7 +244,7 @@ function VeckansAttGora() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-px p-0">
+                <div className="flex flex-col gap-1 p-0">
                   {completedTodos.map((todo, idx) => (
                     <TodoRow
                       key={todo.id}
@@ -512,7 +512,7 @@ function TodoRow({
   if (isEditing) {
     return (
       <div
-        className="stagger-item flex min-h-8 items-center gap-2 rounded-sm bg-secondary/50 px-2 py-0.5"
+        className="stagger-item flex min-h-8 items-center gap-2 rounded-full bg-secondary/50 px-2 py-0.5"
         style={delay}
       >
         <PriorityIndicator className="shrink-0" />
@@ -592,7 +592,7 @@ function TodoRow({
   const showDelete = offset !== 0;
 
   return (
-    <div className="relative h-8 overflow-hidden rounded-sm">
+    <div className="relative h-8 overflow-hidden rounded-full">
       {/* Swipe-revealed delete action */}
       {showDelete && (
         <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
@@ -624,7 +624,7 @@ function TodoRow({
           if (offset === 0 && shouldTriggerAction()) onStartEdit();
         }}
         className={cn(
-          "stagger-item group flex h-8 items-center gap-2 rounded-sm bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
+          "stagger-item group flex h-8 items-center gap-2 rounded-full bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
           isCompact && "bg-muted/40 active:bg-muted/60"
         )}
         style={delay}
