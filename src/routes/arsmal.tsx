@@ -105,7 +105,7 @@ function Arsmal() {
               <p className="text-[13px] font-normal text-foreground">{t("emptyGoals")}</p>
             </div>
           ) : (
-            <div className="p-1">
+            <div className="p-0.5">
               {activeGoals.map((goal, idx) => (
                 <GoalRow
                   key={goal.id}
@@ -153,7 +153,7 @@ function Arsmal() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
                 </div>
               ) : (
-                <div className="p-1">
+                <div className="p-0.5">
                   {completedGoals.map((goal, idx) => (
                     <GoalRow
                       key={goal.id}
