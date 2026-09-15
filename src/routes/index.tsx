@@ -274,7 +274,7 @@ function Index() {
       data-donely-app-ready
       className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden px-4 pb-[calc(env(safe-area-inset-bottom)+0.5rem)] pt-[calc(env(safe-area-inset-top)+0.5rem)]"
     >
-      <div className="mt-[2cm] flex shrink-0 items-end justify-center pb-2 pt-6">
+      <div className="mt-[3cm] flex shrink-0 items-end justify-center pb-2 pt-6">
         <div className="relative">
           <div className="absolute -right-6 -top-9 z-10">
             <div className="relative rounded-full bg-primary px-3 py-1 shadow-[0_6px_16px_-8px_hsl(0_0%_0%/0.45)]">
