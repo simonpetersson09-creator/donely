@@ -618,6 +618,11 @@ function TodoRow({
       >
       <div
         {...handlers}
+        role="button"
+        tabIndex={0}
+        onClick={() => {
+          if (offset === 0 && shouldTriggerAction()) onStartEdit();
+        }}
         className={cn(
           "stagger-item group flex items-center gap-2 rounded-full bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
           isCompact && "bg-muted/40 active:bg-muted/60"
@@ -626,18 +631,18 @@ function TodoRow({
       >
         <button
           type="button"
-          onClick={() => onSetPriority(nextPriority(priority))}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            onSetPriority(nextPriority(priority));
+          }}
           className="flex shrink-0 items-center justify-center rounded p-0.5 transition-colors active:bg-secondary"
           aria-label={`${t("priority")}: ${priorityLabel(t, priority)}`}
           title={`${t("priority")}: ${priorityLabel(t, priority)}`}
         >
           <PriorityIndicator />
         </button>
-        <button
-          type="button"
-          onClick={() => {
-            if (shouldTriggerAction()) onStartEdit();
-          }}
+        <div
           className={cn(
             "min-w-0 flex-1 truncate text-left text-[13px] font-normal transition-colors",
             isCompact || todo.completed ? "text-muted-foreground" : "text-primary"
