@@ -1,11 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
+import { BottomSheet } from "@/components/BottomSheet";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
 import { useYearlyGoals } from "@/lib/store";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
+
+const PRIORITIES = ["high", "medium", "low"] as const;
+type Priority = (typeof PRIORITIES)[number];
+
+function priorityLabel(t: (key: string) => string, priority: Priority) {
+  if (priority === "high") return t("priorityHigh");
+  if (priority === "medium") return t("priorityMedium");
+  return t("priorityLow");
+}
+
+function priorityBarClass(priority: Priority) {
+  if (priority === "high") return "bg-red-500/80";
+  if (priority === "medium") return "bg-blue-500/80";
+  return "bg-yellow-500/80";
+}
+
+function nextPriority(priority: Priority): Priority {
+  if (priority === "high") return "medium";
+  if (priority === "medium") return "low";
+  return "high";
+}
 
 export const Route = createFileRoute("/arsmal")({
   head: () => ({
@@ -29,9 +51,13 @@ export const Route = createFileRoute("/arsmal")({
 
 function Arsmal() {
   const { t } = useLanguage();
-  const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
+  const { goals, addGoal, toggleGoal, updateGoalText, removeGoal, setGoalPriority } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [completedExpanded, setCompletedExpanded] = useState(false);
+  // Add-goal popup state.
+  const [addOpen, setAddOpen] = useState(false);
+  const [addText, setAddText] = useState("");
+  const [addPriority, setAddPriority] = useState<Priority>("medium");
   // A tap that ends editing must not "fall through" to the row buttons that
   // appear in the same spot right after the row switches to display mode.
   // Per-row, so a tap-through only blocks the row that was just edited.
@@ -48,16 +74,36 @@ function Arsmal() {
   const completedGoals = goals.filter((g) => g.completed);
   const currentYear = new Date().getFullYear();
 
-  const handleAdd = () => {
+  const openAddPopup = () => {
+    setAddText("");
+    setAddPriority("medium");
+    setAddOpen(true);
+  };
+
+  const closeAddPopup = () => {
+    setAddOpen(false);
+    setAddText("");
+    setAddPriority("medium");
+  };
+
+  const submitAddPopup = () => {
+    const trimmed = addText.trim();
+    if (!trimmed) return;
     const month = new Date().getMonth() + 1;
     const halfYear: "h1" | "h2" = month <= 6 ? "h1" : "h2";
-    const id = addGoal("", halfYear);
-    setEditingId(id);
-    requestAnimationFrame(() => {
-      const el = document.getElementById(`goal-input-${id}`) as HTMLInputElement | null;
-      el?.focus();
-    });
+    addGoal(trimmed, halfYear, addPriority);
+    closeAddPopup();
   };
+
+  // Groups active goals by priority. Empty groups are skipped.
+  const grouped = useMemo(() => {
+    const groups: { priority: Priority; items: typeof activeGoals }[] = [];
+    for (const priority of PRIORITIES) {
+      const items = activeGoals.filter((g) => (g.priority ?? "medium") === priority);
+      if (items.length > 0) groups.push({ priority, items });
+    }
+    return groups;
+  }, [activeGoals]);
 
   const startEditing = (id: string) => {
     setEditingId(id);
@@ -106,19 +152,36 @@ function Arsmal() {
             </div>
           ) : (
             <div className="p-0.5">
-              {activeGoals.map((goal, idx) => (
-                <GoalRow
-                  key={goal.id}
-                  goal={goal}
-                  index={idx}
-                  last={idx === activeGoals.length - 1}
-                  isEditing={editingId === goal.id}
-                  onToggle={guard(goal.id, () => toggleGoal(goal.id))}
-                  onStartEdit={guard(goal.id, () => startEditing(goal.id))}
-                  onUpdateText={(text) => updateGoalText(goal.id, text)}
-                  onRemove={guard(goal.id, () => removeGoal(goal.id))}
-                  onFinishEdit={() => finishEdit(goal.id)}
-                />
+              {grouped.map((group, groupIdx) => (
+                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : undefined}>
+                  <div className="flex items-center justify-center gap-1.5 px-2 pb-0.5">
+                    <span
+                      className={cn("inline-block h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
+                      aria-hidden="true"
+                    />
+                    <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
+                      {priorityLabel(t, group.priority)}
+                    </span>
+                    <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
+                      {group.items.length}
+                    </span>
+                  </div>
+                  {group.items.map((goal, idx) => (
+                    <GoalRow
+                      key={goal.id}
+                      goal={goal}
+                      index={idx}
+                      last={idx === group.items.length - 1}
+                      isEditing={editingId === goal.id}
+                      onToggle={guard(goal.id, () => toggleGoal(goal.id))}
+                      onStartEdit={guard(goal.id, () => startEditing(goal.id))}
+                      onUpdateText={(text) => updateGoalText(goal.id, text)}
+                      onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
+                      onRemove={guard(goal.id, () => removeGoal(goal.id))}
+                      onFinishEdit={() => finishEdit(goal.id)}
+                    />
+                  ))}
+                </div>
               ))}
             </div>
           )}
@@ -164,6 +227,7 @@ function Arsmal() {
                       onToggle={guard(goal.id, () => toggleGoal(goal.id))}
                       onStartEdit={guard(goal.id, () => startEditing(goal.id))}
                       onUpdateText={(text) => updateGoalText(goal.id, text)}
+                      onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
                       onRemove={guard(goal.id, () => removeGoal(goal.id))}
                       onFinishEdit={() => finishEdit(goal.id)}
                     />
@@ -196,13 +260,76 @@ function Arsmal() {
       {/* Add goal button at bottom */}
       <button
         type="button"
-        onClick={handleAdd}
+        onClick={openAddPopup}
         className="shrink-0 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2"
       >
         <Plus className="size-4" strokeWidth={2.5} />
         <span className="text-[15px] font-normal">{t("addGoal")}</span>
       </button>
 
+      {addOpen && (
+        <BottomSheet onClose={closeAddPopup} label={t("addGoal")}>
+          <div className="px-4 pb-2">
+            <h2 className="text-center text-[15px] font-semibold text-foreground">{t("addGoal")}</h2>
+          </div>
+          <div className="px-4 pb-6 pt-2">
+            <input
+              ref={(el) => {
+                if (el) requestAnimationFrame(() => el.focus());
+              }}
+              type="text"
+              value={addText}
+              onChange={(e) => setAddText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") submitAddPopup();
+                if (e.key === "Escape") closeAddPopup();
+              }}
+              placeholder={t("yearlyGoalPlaceholder")}
+              className="w-full rounded-xl border border-border bg-background px-3 py-3 text-[16px] font-normal text-foreground outline-none ring-primary focus:border-primary focus:ring-1"
+            />
+            <div className="mt-4">
+              <p className="mb-2 text-[12px] font-normal uppercase tracking-wide text-muted-foreground">
+                {t("priority")}
+              </p>
+              <div className="flex gap-2">
+                {PRIORITIES.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setAddPriority(p)}
+                    className={cn(
+                      "flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-[13px] font-medium transition-colors",
+                      addPriority === p
+                        ? "border-transparent bg-primary text-primary-foreground"
+                        : "border-border bg-secondary text-foreground",
+                    )}
+                  >
+                    <span className={cn("inline-block h-4 w-1 rounded-full", priorityBarClass(p))} />
+                    {priorityLabel(t, p)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mt-5 flex gap-2">
+              <button
+                type="button"
+                onClick={closeAddPopup}
+                className="flex-1 rounded-xl border border-border bg-background py-3 text-[15px] font-medium text-foreground transition-colors active:bg-secondary"
+              >
+                {t("cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={submitAddPopup}
+                disabled={!addText.trim()}
+                className="flex-1 rounded-xl bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-colors active:bg-primary/90 disabled:opacity-40"
+              >
+                {t("save")}
+              </button>
+            </div>
+          </div>
+        </BottomSheet>
+      )}
     </main>
   );
 }
@@ -216,16 +343,18 @@ function GoalRow({
   onToggle,
   onStartEdit,
   onUpdateText,
+  onSetPriority,
   onRemove,
   onFinishEdit,
 }: {
-  goal: { id: string; text: string; completed: boolean };
+  goal: { id: string; text: string; completed: boolean; priority?: Priority };
   index: number;
   last: boolean;
   isEditing: boolean;
   onToggle: () => void;
   onStartEdit: () => void;
   onUpdateText: (text: string) => void;
+  onSetPriority: (priority: Priority) => void;
   onRemove: () => void;
   onFinishEdit: () => void;
 }) {
@@ -274,6 +403,22 @@ function GoalRow({
   // (no blur → no premature commit) across Chromium, Safari and iOS WKWebView.
   const keepFocus = (e: { preventDefault: () => void }) => e.preventDefault();
 
+  // Changing priority re-groups (remounts) the row, so save the typed text first.
+  const pickPriority = (p: Priority) => {
+    const value = readInputValue().trim();
+    if (value) onUpdateText(value);
+    onSetPriority(p);
+  };
+
+  const priority = goal.priority ?? "medium";
+
+  const PriorityIndicator = ({ className }: { className?: string }) => (
+    <span
+      className={cn("inline-block h-5 w-1 rounded-full", priorityBarClass(priority), className)}
+      aria-hidden="true"
+    />
+  );
+
   if (isEditing) {
     return (
       <div
@@ -284,6 +429,7 @@ function GoalRow({
         )}
         style={delay}
       >
+        <PriorityIndicator className="shrink-0" />
         <input
           id={`goal-input-${goal.id}`}
           type="text"
@@ -303,6 +449,27 @@ function GoalRow({
           }}
           autoComplete="off"
         />
+        <div className="flex shrink-0 items-center gap-1">
+          {PRIORITIES.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onPointerDown={keepFocus}
+              onMouseDown={keepFocus}
+              onClick={() => pickPriority(p)}
+              className={cn(
+                "flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-medium transition-colors",
+                priority === p
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-secondary text-muted-foreground"
+              )}
+              aria-label={priorityLabel(t, p)}
+              title={priorityLabel(t, p)}
+            >
+              {p === "high" ? "H" : p === "medium" ? "M" : "L"}
+            </button>
+          ))}
+        </div>
         <button
           type="button"
           onPointerDown={keepFocus}
@@ -369,6 +536,17 @@ function GoalRow({
           touchAction: "pan-y",
         }}
       >
+        {!goal.completed && (
+          <button
+            type="button"
+            onClick={() => onSetPriority(nextPriority(priority))}
+            className="shrink-0 rounded p-0.5 transition-colors active:bg-secondary"
+            aria-label={`${t("priority")}: ${priorityLabel(t, priority)}`}
+            title={`${t("priority")}: ${priorityLabel(t, priority)}`}
+          >
+            <PriorityIndicator />
+          </button>
+        )}
         <button
           type="button"
           onClick={() => {

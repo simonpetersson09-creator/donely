@@ -506,7 +506,7 @@ export function useYearlyGoals(year?: number) {
   );
 
   const addGoal = useCallback(
-    (text: string, halfYear: "h1" | "h2") => {
+    (text: string, halfYear: "h1" | "h2", priority: TodoPriority = "medium") => {
       const trimmed = text.trim();
       // Reuse an existing empty draft row for the same year/half instead of
       // stacking a new one.
@@ -525,6 +525,7 @@ export function useYearlyGoals(year?: number) {
         completed: false,
         halfYear,
         year: targetYear,
+        priority,
         createdAt: new Date().toISOString(),
       };
       commit([...goalsRef.current, goal]);
@@ -569,8 +570,15 @@ export function useYearlyGoals(year?: number) {
     [commit],
   );
 
+  const setGoalPriority = useCallback(
+    (id: string, priority: TodoPriority) => {
+      commit(goalsRef.current.map((g) => (g.id === id ? { ...g, priority } : g)));
+    },
+    [commit],
+  );
 
-  return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, hydrated };
+
+  return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, setGoalPriority, hydrated };
 }
 
 /** Monday 00:00 local time for the week containing `from`. */

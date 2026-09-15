@@ -89,6 +89,8 @@ export const yearlyGoalSchema = z.object({
   halfYear: z.enum(["h1", "h2"]),
   /** Calendar year the goal belongs to. Optional for pre-migration rows. */
   year: z.number().int().min(2000).max(3000).optional(),
+  /** Priority level shown on the left of active goal rows. Defaults to medium. */
+  priority: z.enum(["high", "medium", "low"]).optional(),
   createdAt: z.string().min(1),
 });
 export const yearlyGoalsSchema = z.array(yearlyGoalSchema);
