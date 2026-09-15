@@ -117,13 +117,7 @@ function Arsmal() {
     <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background px-5 pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
       <div className="flex-1 overflow-y-auto pb-4">
         {/* iOS-style navigation header */}
-        <div className="relative flex items-center justify-between pb-3 pt-1">
-          <BackButton
-            fallbackTo="/"
-            className="inline-flex h-9 items-center gap-0.5 rounded-full bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
-          >
-            {t("back")}
-          </BackButton>
+        <div className="relative flex items-center justify-center pb-3 pt-1">
           <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
             <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
               <h1 className="text-[15px] font-normal text-primary-foreground">
@@ -131,7 +125,6 @@ function Arsmal() {
               </h1>
             </div>
           </div>
-          <div className="h-9 w-9" aria-hidden="true" />
         </div>
 
 
@@ -257,15 +250,23 @@ function Arsmal() {
         </div>
       </div>
 
-      {/* Add goal button at bottom */}
-      <button
-        type="button"
-        onClick={openAddPopup}
-        className="shrink-0 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2"
-      >
-        <Plus className="size-4" strokeWidth={2.5} />
-        <span className="text-[15px] font-normal">{t("addGoal")}</span>
-      </button>
+      {/* Bottom actions: back + add goal */}
+      <div className="shrink-0 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2 flex items-center gap-2">
+        <BackButton
+          fallbackTo="/"
+          className="inline-flex h-11 items-center gap-0.5 rounded-2xl bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+        >
+          {t("back")}
+        </BackButton>
+        <button
+          type="button"
+          onClick={openAddPopup}
+          className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-2xl bg-primary text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
+        >
+          <Plus className="size-4" strokeWidth={2.5} />
+          <span className="text-[15px] font-normal">{t("addGoal")}</span>
+        </button>
+      </div>
 
       {addOpen && (
         <BottomSheet onClose={closeAddPopup} label={t("addGoal")}>
