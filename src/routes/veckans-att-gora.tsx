@@ -189,22 +189,24 @@ function VeckansAttGora() {
                     </div>
                     <div className={cn("mt-1.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
-                  {group.items.map((todo, idx) => (
-                    <TodoRow
-                      key={todo.id}
-                      todo={todo}
-                      index={idx}
-                      last={idx === group.items.length - 1}
-                      isEditing={editingId === todo.id}
-                      variant="card"
-                      onToggle={() => handleToggle(todo.id, todo.completed)}
-                      onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                      onUpdateText={(text) => updateTodoText(todo.id, text)}
-                      onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
-                      onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                      onFinishEdit={() => finishEdit(todo.id)}
-                    />
-                  ))}
+                  <div className="flex flex-col gap-1.5">
+                    {group.items.map((todo, idx) => (
+                      <TodoRow
+                        key={todo.id}
+                        todo={todo}
+                        index={idx}
+                        last={idx === group.items.length - 1}
+                        isEditing={editingId === todo.id}
+                        variant="card"
+                        onToggle={() => handleToggle(todo.id, todo.completed)}
+                        onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                        onUpdateText={(text) => updateTodoText(todo.id, text)}
+                        onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
+                        onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                        onFinishEdit={() => finishEdit(todo.id)}
+                      />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
