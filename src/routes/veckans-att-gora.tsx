@@ -161,7 +161,7 @@ function VeckansAttGora() {
 
         {/* Active todos */}
         <section className="mt-10 overflow-hidden rounded-2xl bg-background">
-          <div className="flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-0.5">
+          <div className="flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-1 shadow-sm">
             <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeTodos")}
             </h2>
@@ -218,7 +218,7 @@ function VeckansAttGora() {
           <button
             type="button"
             onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-gold px-3 py-0.5"
+            className="flex w-full items-center justify-center gap-1.5 rounded-full bg-gold px-4 py-1 shadow-sm"
             aria-expanded={completedExpanded}
           >
             <h2 className="text-[13px] font-normal text-gold-foreground">
