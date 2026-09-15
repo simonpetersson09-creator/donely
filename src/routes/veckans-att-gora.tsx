@@ -428,6 +428,10 @@ function TodoRow({
             <button
               key={p}
               type="button"
+              onPointerDown={(e) => {
+                e.preventDefault();
+                onSetPriority(p);
+              }}
               onClick={() => onSetPriority(p)}
               className={cn(
                 "flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-medium transition-colors",
@@ -448,20 +452,28 @@ function TodoRow({
             e.preventDefault();
             commitText(draft);
           }}
+          onClick={() => commitText(draft)}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
-        <div
+        <button
+          type="button"
+          onPointerDown={(e) => {
+            e.preventDefault();
+            commitText(draft);
+            onToggle();
+          }}
           className={cn(
             "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             todo.completed
               ? "border-completed bg-completed"
               : "border-muted-foreground/40 bg-transparent"
           )}
+          aria-label={t("doneEditing")}
         >
           {todo.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
-        </div>
+        </button>
       </div>
     );
   }
