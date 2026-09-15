@@ -155,6 +155,7 @@ function buildWeeklyTodos(): WeeklyTodo[] {
       text: "Skicka veckorapport till teamet",
       completed: false,
       weekStart: weekKey,
+      priority: "high",
       createdAt,
     },
     {
@@ -162,6 +163,7 @@ function buildWeeklyTodos(): WeeklyTodo[] {
       text: "Planera nästa veckas möten",
       completed: false,
       weekStart: weekKey,
+      priority: "medium",
       createdAt,
     },
     {
@@ -169,6 +171,7 @@ function buildWeeklyTodos(): WeeklyTodo[] {
       text: "Gå igenom feedback från användare",
       completed: false,
       weekStart: weekKey,
+      priority: "low",
       createdAt,
     },
     {
@@ -176,6 +179,7 @@ function buildWeeklyTodos(): WeeklyTodo[] {
       text: "Uppdatera app-ikonen",
       completed: true,
       weekStart: weekKey,
+      priority: "medium",
       createdAt,
     },
     {
@@ -183,6 +187,7 @@ function buildWeeklyTodos(): WeeklyTodo[] {
       text: "Skriv månadsbrev",
       completed: true,
       weekStart: weekKey,
+      priority: "high",
       createdAt,
     },
   ];
