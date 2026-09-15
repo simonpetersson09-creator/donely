@@ -115,6 +115,7 @@ export type Entry = z.infer<typeof entrySchema>;
 export type Goals = z.infer<typeof goalsSchema>;
 export type YearlyGoal = z.infer<typeof yearlyGoalSchema>;
 export type WeeklyTodo = z.infer<typeof weeklyTodoSchema>;
+export type TodoPriority = z.infer<typeof todoPrioritySchema>;
 
 export type Snapshot = {
   schemaVersion: number;
