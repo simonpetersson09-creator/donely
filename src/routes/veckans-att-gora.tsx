@@ -177,18 +177,17 @@ function VeckansAttGora() {
           ) : (
             <div className="p-0.5">
               {grouped.map((group, groupIdx) => (
-                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : undefined}>
-                  <div className="flex items-center justify-center gap-1.5 px-3 pb-0.5">
-                    <span
-                      className={cn("inline-block h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
-                      aria-hidden="true"
-                    />
-                    <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
-                      {priorityLabel(t, group.priority)}
-                    </span>
-                    <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
-                      {group.items.length}
-                    </span>
+                <div key={group.priority} className={groupIdx > 0 ? "mt-5" : undefined}>
+                  <div className="flex flex-col items-center px-3 pb-2">
+                    <div className="flex items-center justify-center gap-1.5">
+                      <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
+                        {priorityLabel(t, group.priority)}
+                      </span>
+                      <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
+                        {group.items.length}
+                      </span>
+                    </div>
+                    <div className="mt-1.5 h-px w-14 rounded-full bg-primary/15" />
                   </div>
                   {group.items.map((todo, idx) => (
                     <TodoRow
