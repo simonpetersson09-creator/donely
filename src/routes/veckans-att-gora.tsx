@@ -342,6 +342,73 @@ function VeckansAttGora() {
           </div>
         </BottomSheet>
       )}
+
+      {addOpen && (
+        <BottomSheet onClose={closeAddPopup} label={t("addTodo")}>
+          <div className="px-4 pb-2">
+            <h2 className="text-center text-[15px] font-semibold text-foreground">{t("addTodo")}</h2>
+          </div>
+          <div className="px-4 pb-6 pt-2">
+            <input
+              ref={(el) => {
+                addInputRef.current = el;
+                if (el) {
+                  requestAnimationFrame(() => el.focus());
+                }
+              }}
+              type="text"
+              value={addText}
+              onChange={(e) => setAddText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") submitAddPopup();
+                if (e.key === "Escape") closeAddPopup();
+              }}
+              placeholder={t("addTodo")}
+              className="w-full rounded-xl border border-border bg-background px-3 py-3 text-[16px] font-normal text-foreground outline-none ring-primary focus:border-primary focus:ring-1"
+            />
+            <div className="mt-4">
+              <p className="mb-2 text-[12px] font-normal uppercase tracking-wide text-muted-foreground">
+                {t("priority")}
+              </p>
+              <div className="flex gap-2">
+                {PRIORITIES.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setAddPriority(p)}
+                    className={cn(
+                      "flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-[13px] font-medium transition-colors",
+                      addPriority === p
+                        ? "border-transparent bg-primary text-primary-foreground"
+                        : "border-border bg-secondary text-foreground",
+                    )}
+                  >
+                    <span className={cn("inline-block h-4 w-1 rounded-full", priorityBarClass(p))} />
+                    {priorityLabel(t, p)}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mt-5 flex gap-2">
+              <button
+                type="button"
+                onClick={closeAddPopup}
+                className="flex-1 rounded-xl border border-border bg-background py-3 text-[15px] font-medium text-foreground transition-colors active:bg-secondary"
+              >
+                {t("cancel")}
+              </button>
+              <button
+                type="button"
+                onClick={submitAddPopup}
+                disabled={!addText.trim()}
+                className="flex-1 rounded-xl bg-primary py-3 text-[15px] font-semibold text-primary-foreground transition-colors active:bg-primary/90 disabled:opacity-40"
+              >
+                {t("save")}
+              </button>
+            </div>
+          </div>
+        </BottomSheet>
+      )}
     </main>
   );
 }
