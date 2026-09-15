@@ -49,7 +49,11 @@ class MemoryStorage implements Storage {
 }
 
 const storage = new MemoryStorage();
-vi.stubGlobal("window", { localStorage: storage } as unknown as Window);
+Object.defineProperty(globalThis, "window", {
+  value: { localStorage: storage } as unknown as Window,
+  writable: true,
+  configurable: true,
+});
 
 const entry = (id: string, categoryId = "p-traning"): Entry => ({
   id,
