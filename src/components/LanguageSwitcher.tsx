@@ -68,7 +68,7 @@ export function LanguageSwitcher() {
         aria-label={t("language")}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-12 w-12 flex-col items-center justify-center gap-0.5 rounded-full bg-primary text-primary-foreground shadow-card transition-transform duration-200 active:scale-[0.95]"
+        className="press-down flex h-12 w-12 flex-col items-center justify-center gap-0.5 rounded-full bg-primary text-primary-foreground shadow-card transition-shadow duration-200 active:shadow-soft"
       >
         <Globe className="size-[18px]" />
         <span className="text-[9px] font-bold leading-none tracking-[0.08em]">{short}</span>
