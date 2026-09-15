@@ -362,14 +362,14 @@ function Index() {
             </StepButton>
           </div>
           <div className="mt-1.5 flex gap-2">
-            {[1, 5, 10, 25].map((n) => (
+            {[5, 10, 15, 25].map((n) => (
               <button
                 key={n}
                 type="button"
-                onClick={() => setAmount(String(Math.min(99999, (parsed || 0) + n)))}
-                className="flex-1 rounded-full border border-primary/20 bg-card py-1.5 text-[12px] font-semibold text-primary shadow-soft transition-all duration-200 active:scale-95 active:bg-accent"
+                onClick={() => setAmount(String(Math.min(99999, n)))}
+                className="press-down flex-1 rounded-full border border-primary/20 bg-card py-1.5 text-[12px] font-semibold text-primary shadow-soft transition-all duration-200 active:scale-95 active:bg-accent"
               >
-                +{n}
+                {n}
               </button>
             ))}
           </div>
