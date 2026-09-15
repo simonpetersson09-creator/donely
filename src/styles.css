@@ -390,16 +390,16 @@
   animation-name: num-roll-out-down;
 }
 
-/* Spring-ish press on the primary action: 1 -> 0.97 -> 1. */
+/* Spring-ish press on the primary action: 1 -> 0.97/2px down -> 1. */
 @keyframes press-spring {
   0% {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
   35% {
-    transform: scale(0.97);
+    transform: scale(0.97) translateY(2px);
   }
   100% {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
   }
 }
 .press-spring {
