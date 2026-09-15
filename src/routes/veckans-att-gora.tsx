@@ -274,7 +274,7 @@ function VeckansAttGora() {
           </span>
           <span className="text-[11px] font-medium text-muted-foreground">
             {t("completedTodos")}{" "}
-            <span className="ml-1.5 font-serif text-[15px] italic text-primary">
+            <span className="ml-1.5 text-[15px] font-medium text-primary">
               {completedCount}/{totalCount}
             </span>
           </span>
