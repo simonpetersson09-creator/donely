@@ -592,7 +592,12 @@ function TodoRow({
   const showDelete = offset !== 0;
 
   return (
-    <div className="relative h-8 overflow-hidden rounded-full">
+    <div
+      className={cn(
+        "relative h-8 overflow-hidden rounded-full",
+        isCompact || todo.completed ? "bg-muted/40" : "bg-secondary/30",
+      )}
+    >
       {/* Swipe-revealed delete action */}
       {showDelete && (
         <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
@@ -624,8 +629,8 @@ function TodoRow({
           if (offset === 0 && shouldTriggerAction()) onStartEdit();
         }}
         className={cn(
-          "stagger-item group flex h-8 items-center gap-2 rounded-full bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
-          isCompact && "bg-muted/40 active:bg-muted/60"
+          "stagger-item group flex h-8 w-full items-center gap-2 rounded-[inherit] bg-transparent px-3 py-1 transition-colors active:bg-secondary/50",
+          isCompact && "active:bg-muted/60"
         )}
         style={delay}
       >
