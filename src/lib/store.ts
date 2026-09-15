@@ -675,6 +675,7 @@ export function useWeeklyTodos() {
         text: trimmed,
         completed: false,
         weekStart: currentWeekStart,
+        priority: "medium",
         createdAt: new Date().toISOString(),
       };
       commit([...todosRef.current, todo]);
@@ -724,6 +725,13 @@ export function useWeeklyTodos() {
     [commit],
   );
 
+  const setTodoPriority = useCallback(
+    (id: string, priority: "high" | "medium" | "low") => {
+      commit(todosRef.current.map((t) => (t.id === id ? { ...t, priority } : t)));
+    },
+    [commit],
+  );
+
   const removeTodo = useCallback(
     (id: string) => {
       createBackup("remove-weekly-todo");
@@ -738,6 +746,7 @@ export function useWeeklyTodos() {
     completeTodo,
     uncompleteTodo,
     updateTodoText,
+    setTodoPriority,
     removeTodo,
     hydrated,
   };
