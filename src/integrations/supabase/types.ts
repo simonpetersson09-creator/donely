@@ -46,7 +46,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      record_app_open: {
+        Args: { _app_version?: string; _device_id: string; _platform?: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

@@ -22,6 +22,7 @@ import { Route as VeckostatistikRouteImport } from './routes/veckostatistik'
 import { Route as KategoriIdRouteImport } from './routes/kategori.$id'
 import { Route as SummaryDayRouteImport } from './routes/summary.day'
 import { Route as SummaryWeekRouteImport } from './routes/summary.week'
+import { Route as ApiPublicPingRouteImport } from './routes/api/public/ping'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -88,6 +89,11 @@ const SummaryWeekRoute = SummaryWeekRouteImport.update({
   path: '/summary/week',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPingRoute = ApiPublicPingRouteImport.update({
+  id: '/api/public/ping',
+  path: '/api/public/ping',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
   '/summary/week': typeof SummaryWeekRoute
+  '/api/public/ping': typeof ApiPublicPingRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
   '/summary/week': typeof SummaryWeekRoute
+  '/api/public/ping': typeof ApiPublicPingRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/kategori/$id': typeof KategoriIdRoute
   '/summary/day': typeof SummaryDayRoute
   '/summary/week': typeof SummaryWeekRoute
+  '/api/public/ping': typeof ApiPublicPingRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/kategori/$id'
     | '/summary/day'
     | '/summary/week'
+    | '/api/public/ping'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -166,6 +176,7 @@ export interface FileRouteTypes {
     | '/kategori/$id'
     | '/summary/day'
     | '/summary/week'
+    | '/api/public/ping'
   id:
     | '__root__'
     | '/'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/kategori/$id'
     | '/summary/day'
     | '/summary/week'
+    | '/api/public/ping'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -197,6 +209,7 @@ export interface RootRouteChildren {
   KategoriIdRoute: typeof KategoriIdRoute
   SummaryDayRoute: typeof SummaryDayRoute
   SummaryWeekRoute: typeof SummaryWeekRoute
+  ApiPublicPingRoute: typeof ApiPublicPingRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SummaryWeekRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/ping': {
+      id: '/api/public/ping'
+      path: '/api/public/ping'
+      fullPath: '/api/public/ping'
+      preLoaderRoute: typeof ApiPublicPingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -309,6 +329,7 @@ const rootRouteChildren: RootRouteChildren = {
   KategoriIdRoute: KategoriIdRoute,
   SummaryDayRoute: SummaryDayRoute,
   SummaryWeekRoute: SummaryWeekRoute,
+  ApiPublicPingRoute: ApiPublicPingRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
