@@ -6,9 +6,20 @@ const TRIGGER_RATIO = 0.32; // fraction of screen width needed to go back
 const TRIGGER_VELOCITY = 0.45; // px/ms flick shortcut
 
 /**
+ * Resolves the logical parent screen for a path, mirroring the BackButton
+ * targets so a swipe goes one level up instead of replaying history.
+ */
+function parentPath(pathname: string): string {
+  if (pathname.startsWith("/historik")) return "/installningar";
+  if (pathname.startsWith("/senaste-registreringar")) return "/installningar";
+  if (pathname.startsWith("/kategori")) return "/statistik";
+  return "/";
+}
+
+/**
  * iOS-style "swipe from the left edge to go back" gesture.
  * Purely presentational: it drags the current screen to the right while the
- * finger moves and calls router.history.back() when the swipe is committed.
+ * finger moves and navigates to the parent screen when the swipe is committed.
  */
 export function EdgeSwipeBack({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -47,7 +58,7 @@ export function EdgeSwipeBack({ children }: { children: ReactNode }) {
       // Root screen has nothing to return to.
       if (typeof window === "undefined") return false;
       if (window.location.pathname === "/") return false;
-      return window.history.length > 1;
+      return true;
     };
 
     const onTouchStart = (event: TouchEvent) => {
@@ -104,7 +115,7 @@ export function EdgeSwipeBack({ children }: { children: ReactNode }) {
         window.setTimeout(() => {
           surface.style.transition = "";
           surface.style.transform = "";
-          router.history.back();
+          router.navigate({ to: parentPath(window.location.pathname) });
         }, 200);
       } else {
         reset(true);
