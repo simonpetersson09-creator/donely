@@ -292,14 +292,14 @@ function VeckansAttGora() {
       <div className="shrink-0 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-3 flex items-center gap-3">
         <BackButton
           fallbackTo="/"
-          className="inline-flex h-11 flex-[0.8] items-center justify-center rounded-2xl bg-secondary/80 text-[14px] font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          className="inline-flex h-11 flex-[0.8] items-center justify-center rounded-full bg-secondary/80 text-[14px] font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
         >
           {t("back")}
         </BackButton>
         <button
           type="button"
           onClick={openAddPopup}
-          className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-2xl bg-primary text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
+          className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
         >
           <Plus className="size-4" strokeWidth={2.5} />
           <span className="text-[14px] font-semibold">{t("addTodo")}</span>
@@ -617,7 +617,7 @@ function TodoRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-2 py-1 transition-colors active:bg-secondary/50",
+          "stagger-item group flex items-center gap-2 rounded-full bg-secondary/30 px-3 py-1 transition-colors active:bg-secondary/50",
           isCompact && "bg-muted/40 active:bg-muted/60"
         )}
         style={delay}
