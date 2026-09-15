@@ -105,7 +105,7 @@ function Arsmal() {
               <p className="text-[13px] font-normal text-foreground">{t("emptyGoals")}</p>
             </div>
           ) : (
-            <div className="p-1">
+            <div className="p-0.5">
               {activeGoals.map((goal, idx) => (
                 <GoalRow
                   key={goal.id}
@@ -153,7 +153,7 @@ function Arsmal() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
                 </div>
               ) : (
-                <div className="p-1">
+                <div className="p-0.5">
                   {completedGoals.map((goal, idx) => (
                     <GoalRow
                       key={goal.id}
@@ -246,13 +246,13 @@ function GoalRow({
 
 
   // Empty rows are drafts: discard them instead of leaving a blank goal behind.
-  const commitText = (value: string) => {
+  const commitText = (value: string, { removeIfEmpty = true }: { removeIfEmpty?: boolean } = {}) => {
     if (committedRef.current) return;
     committedRef.current = true;
     const trimmed = value.trim();
     if (!trimmed) {
       // Remove before finishing: finishing arms the tap-through guard.
-      onRemove();
+      if (removeIfEmpty) onRemove();
       onFinishEdit();
       return;
     }
@@ -260,11 +260,25 @@ function GoalRow({
     onFinishEdit();
   };
 
+  // Reads the live input value so "Klar" never loses typed text (stale draft / ghost taps).
+  const readInputValue = () => {
+    const el = document.getElementById(`goal-input-${goal.id}`) as HTMLInputElement | null;
+    return el?.value ?? draft;
+  };
+
+  const commitFromInput = () => {
+    commitText(readInputValue(), { removeIfEmpty: false });
+  };
+
+  // Preventing default on both pointerdown and mousedown keeps the input focused
+  // (no blur → no premature commit) across Chromium, Safari and iOS WKWebView.
+  const keepFocus = (e: { preventDefault: () => void }) => e.preventDefault();
+
   if (isEditing) {
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-1.5 px-2 py-1.5",
+          "stagger-item flex items-center gap-1.5 px-2 py-1",
           !last && "border-b border-primary/10",
           "bg-secondary/50"
         )}
@@ -291,25 +305,31 @@ function GoalRow({
         />
         <button
           type="button"
-          onPointerDown={(e) => {
-            // Commit before the input's blur fires, so the typed value is used.
-            e.preventDefault();
-            commitText(draft);
-          }}
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
+          onClick={commitFromInput}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
-        <div
+        <button
+          type="button"
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
+          onClick={() => {
+            commitFromInput();
+            onToggle();
+          }}
           className={cn(
-            "flex size-3.5 shrink-0 items-center justify-center rounded-full transition-colors",
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             goal.completed
-              ? "border-transparent bg-gradient-gold"
-              : "border-2 border-muted-foreground/40 bg-transparent"
+              ? "border-primary bg-primary"
+              : "border-muted-foreground/40 bg-transparent"
           )}
+          aria-label={t("doneEditing")}
         >
-          {goal.completed && <Check className="size-2 text-gold-foreground" strokeWidth={3} />}
-        </div>
+          {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
+        </button>
       </div>
     );
   }
@@ -340,7 +360,7 @@ function GoalRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 bg-background px-2 py-1.5 transition-colors active:bg-secondary",
+          "stagger-item group flex items-center gap-2 bg-background px-2 py-1 transition-colors active:bg-secondary",
           !last && "border-b border-primary/10"
         )}
         style={{
@@ -376,19 +396,20 @@ function GoalRow({
         </button>
         <button
           type="button"
+          onPointerDown={(e) => e.stopPropagation()}
           onClick={() => {
             if (shouldTriggerAction()) onToggle();
           }}
           className={cn(
             "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
             goal.completed
-              ? "border-transparent bg-gradient-gold shadow-sm"
+              ? "border-transparent bg-primary shadow-sm"
               : "border-2 border-muted-foreground/40 bg-transparent"
           )}
           aria-checked={goal.completed}
           role="checkbox"
         >
-          {goal.completed && <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />}
+          {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
         </button>
       </div>
     </div>
