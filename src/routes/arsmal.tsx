@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
 import { useYearlyGoals } from "@/lib/store";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
+import { RouteErrorRecovery } from "@/components/RouteErrorRecovery";
 
 const PRIORITIES = ["high", "medium", "low"] as const;
 type Priority = (typeof PRIORITIES)[number];
