@@ -51,9 +51,13 @@ export const Route = createFileRoute("/arsmal")({
 
 function Arsmal() {
   const { t } = useLanguage();
-  const { goals, addGoal, toggleGoal, updateGoalText, removeGoal } = useYearlyGoals();
+  const { goals, addGoal, toggleGoal, updateGoalText, removeGoal, setGoalPriority } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [completedExpanded, setCompletedExpanded] = useState(false);
+  // Add-goal popup state.
+  const [addOpen, setAddOpen] = useState(false);
+  const [addText, setAddText] = useState("");
+  const [addPriority, setAddPriority] = useState<Priority>("medium");
   // A tap that ends editing must not "fall through" to the row buttons that
   // appear in the same spot right after the row switches to display mode.
   // Per-row, so a tap-through only blocks the row that was just edited.
@@ -70,16 +74,36 @@ function Arsmal() {
   const completedGoals = goals.filter((g) => g.completed);
   const currentYear = new Date().getFullYear();
 
-  const handleAdd = () => {
+  const openAddPopup = () => {
+    setAddText("");
+    setAddPriority("medium");
+    setAddOpen(true);
+  };
+
+  const closeAddPopup = () => {
+    setAddOpen(false);
+    setAddText("");
+    setAddPriority("medium");
+  };
+
+  const submitAddPopup = () => {
+    const trimmed = addText.trim();
+    if (!trimmed) return;
     const month = new Date().getMonth() + 1;
     const halfYear: "h1" | "h2" = month <= 6 ? "h1" : "h2";
-    const id = addGoal("", halfYear);
-    setEditingId(id);
-    requestAnimationFrame(() => {
-      const el = document.getElementById(`goal-input-${id}`) as HTMLInputElement | null;
-      el?.focus();
-    });
+    addGoal(trimmed, halfYear, addPriority);
+    closeAddPopup();
   };
+
+  // Groups active goals by priority. Empty groups are skipped.
+  const grouped = useMemo(() => {
+    const groups: { priority: Priority; items: typeof activeGoals }[] = [];
+    for (const priority of PRIORITIES) {
+      const items = activeGoals.filter((g) => (g.priority ?? "medium") === priority);
+      if (items.length > 0) groups.push({ priority, items });
+    }
+    return groups;
+  }, [activeGoals]);
 
   const startEditing = (id: string) => {
     setEditingId(id);
