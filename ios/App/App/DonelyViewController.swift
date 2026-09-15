@@ -43,6 +43,9 @@ final class DonelyViewController: CAPBridgeViewController {
         print("DONELY_CAPACITOR: super.viewDidLoad returned webView=\(String(describing: webView)) bridge=\(String(describing: bridge))")
         edgesForExtendedLayout = .all
         extendedLayoutIncludesOpaqueBars = true
+        // Keep the web view under the status bar / Dynamic Island and above
+        // the home indicator so the web app can use viewport-fit=cover safely.
+        layoutWebViewEdgeToEdge()
         applyAppBackgroundColor()
         installNotificationBridge()
         installDiagnosticsOverlay()
