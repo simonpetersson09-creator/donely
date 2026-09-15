@@ -149,7 +149,7 @@ function Arsmal() {
                 <div key={group.priority} className={groupIdx > 0 ? "mt-3" : undefined}>
                   <div className="flex flex-col items-center px-3 pb-0.5">
                     <div className="flex items-center justify-center gap-1.5">
-                      <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
+                      <span className="text-[11px] font-medium uppercase tracking-normal text-muted-foreground">
                         {priorityLabel(t, group.priority)}
                       </span>
                       <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
@@ -236,7 +236,7 @@ function Arsmal() {
       {/* Bottom progress bar */}
       <div className="shrink-0 px-1 pt-2">
         <div className="flex items-baseline justify-between">
-          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
+          <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
             {t("yearlyGoals")}
           </span>
           <span className="text-[11px] font-medium text-muted-foreground">
@@ -261,7 +261,7 @@ function Arsmal() {
       <div className="shrink-0 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-3 flex items-center gap-3">
         <BackButton
           fallbackTo="/"
-          className="inline-flex h-11 flex-[0.8] items-center justify-center rounded-2xl bg-secondary/80 text-[11px] font-bold uppercase tracking-widest text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          className="inline-flex h-11 flex-[0.8] items-center justify-center rounded-2xl bg-secondary/80 text-[14px] font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
         >
           {t("back")}
         </BackButton>
@@ -271,7 +271,7 @@ function Arsmal() {
           className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-2xl bg-primary text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
         >
           <Plus className="size-4" strokeWidth={2.5} />
-          <span className="text-[11px] font-bold uppercase tracking-widest">{t("addGoal")}</span>
+          <span className="text-[14px] font-semibold">{t("addGoal")}</span>
         </button>
       </div>
 
@@ -296,7 +296,7 @@ function Arsmal() {
               className="w-full rounded-xl border border-border bg-background px-3 py-3 text-[16px] font-normal text-foreground outline-none ring-primary focus:border-primary focus:ring-1"
             />
             <div className="mt-4">
-              <p className="mb-2 text-[12px] font-normal uppercase tracking-wide text-muted-foreground">
+              <p className="mb-2 text-[12px] font-medium uppercase tracking-normal text-muted-foreground">
                 {t("priority")}
               </p>
               <div className="flex gap-2">
