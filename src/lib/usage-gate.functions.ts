@@ -2,12 +2,12 @@ import { createServerFn } from "@tanstack/react-start";
 import { useSession } from "@tanstack/react-start/server";
 import { createHash, timingSafeEqual } from "node:crypto";
 
-const sessionConfig = {
+const sessionConfig = () => ({
   password: process.env["SESSION_SECRET"]!,
   name: "usage-gate",
   maxAge: 60 * 60 * 24 * 30,
   cookie: { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/" },
-};
+});
 
 type GateSession = { unlocked?: boolean };
 
