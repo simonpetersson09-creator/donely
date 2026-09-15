@@ -248,7 +248,7 @@ function VeckansAttGora() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
                 </div>
               ) : (
-                <div className="p-1">
+                <div className="p-0.5">
                   {completedTodos.map((todo, idx) => (
                     <TodoRow
                       key={todo.id}
