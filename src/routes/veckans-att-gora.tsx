@@ -291,7 +291,7 @@ function VeckansAttGora() {
       {/* Add todo button */}
       <button
         type="button"
-        onClick={() => handleAdd()}
+        onClick={openAddPopup}
         className="shrink-0 flex w-full items-center justify-center gap-1.5 rounded-2xl bg-primary py-2.5 text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2"
       >
         <Plus className="size-4" strokeWidth={2.5} />
