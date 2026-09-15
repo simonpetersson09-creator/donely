@@ -152,7 +152,7 @@ function VeckansAttGora() {
           <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
             <div className="inline-flex items-center rounded-full bg-primary px-4 py-1.5 shadow-button">
               <h1 className="text-[15px] font-normal text-primary-foreground">
-                {t("weeklyTodos")} {currentWeek}
+                {t("weeklyTodos")} ({t("week")} {currentWeek})
               </h1>
             </div>
           </div>
