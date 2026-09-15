@@ -418,7 +418,15 @@ function Index() {
             <Check className="size-3.5" /> {t("registered")}
           </span>
         </div>
-        <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
+        <div className="grid grid-cols-[auto_1fr_1fr] gap-2">
+          <Link
+            to="/installningar"
+            aria-label={t("settings")}
+            className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-card transition-transform duration-200 active:scale-[0.95]"
+          >
+            <Settings className="size-[20px]" />
+          </Link>
+
           <Link
             to="/dagsstatistik"
             className="flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[15px] font-semibold text-primary shadow-card transition-transform duration-200 active:scale-[0.98]"
@@ -454,13 +462,10 @@ function Index() {
             </span>
           </button>
 
-          <Link
-            to="/installningar"
-            aria-label={t("settings")}
-            className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-card transition-transform duration-200 active:scale-[0.95]"
-          >
-            <Settings className="size-[20px]" />
-          </Link>
+          <div className="relative flex justify-center">
+            <LanguageSwitcher />
+            {!guideSeen && guideHydrated && <LanguageGuideBubble onClose={markGuideSeen} />}
+          </div>
 
           <Link
             to="/arsmal"
@@ -476,10 +481,6 @@ function Index() {
             <ListTodo className="size-4 shrink-0" />
             <span className="truncate">{t("weeklyTodos")}</span>
           </Link>
-          <div className="relative flex justify-center">
-            <LanguageSwitcher />
-            {!guideSeen && guideHydrated && <LanguageGuideBubble onClose={markGuideSeen} />}
-          </div>
         </div>
       </div>
 
