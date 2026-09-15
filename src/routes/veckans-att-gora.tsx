@@ -584,7 +584,7 @@ function TodoRow({
   const showDelete = offset !== 0;
 
   return (
-    <div className="relative overflow-hidden" style={delay}>
+    <div className="relative overflow-hidden">
       {/* Swipe-revealed delete action */}
       {showDelete && (
         <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
@@ -599,6 +599,15 @@ function TodoRow({
         </div>
       )}
 
+      {/* Swipe translate lives on this wrapper; the entrance animation stays on
+          the inner row so the animation's fill-mode transform never overrides it. */}
+      <div
+        style={{
+          transform: `translateX(${offset}px)`,
+          transition: dragging ? "none" : "transform 200ms ease-out",
+          touchAction: "pan-y",
+        }}
+      >
       <div
         {...handlers}
         className={cn(
@@ -606,11 +615,7 @@ function TodoRow({
           foregroundBg,
           !last && "border-b border-primary/10"
         )}
-        style={{
-          transform: `translateX(${offset}px)`,
-          transition: dragging ? "none" : "transform 200ms ease-out",
-          touchAction: "pan-y",
-        }}
+        style={delay}
       >
         <button
           type="button"
@@ -665,6 +670,7 @@ function TodoRow({
             <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />
           )}
         </button>
+      </div>
       </div>
     </div>
   );
