@@ -589,11 +589,12 @@ function GoalRow({
               </svg>
             )}
           </span>
-        </button>
+        </div>
         <button
           type="button"
           onPointerDown={(e) => e.stopPropagation()}
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             if (shouldTriggerAction()) onToggle();
           }}
           className={cn(
