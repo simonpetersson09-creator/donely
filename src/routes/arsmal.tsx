@@ -241,7 +241,7 @@ function Arsmal() {
           </span>
           <span className="text-[11px] font-medium text-muted-foreground">
             {t("archive")}{" "}
-            <span className="ml-1.5 font-serif text-[15px] italic text-gold">
+            <span className="ml-1.5 font-serif text-[15px] italic text-primary">
               {completedGoals.length}/{goals.length}
             </span>
           </span>
@@ -249,7 +249,7 @@ function Arsmal() {
         <div className="relative mt-2">
           <div className="h-[2px] w-full rounded-full bg-primary/10" aria-hidden="true" />
           <div
-            className="absolute top-0 left-0 h-[2px] rounded-full bg-gold shadow-[0_0_8px_rgba(212,168,67,0.3)] transition-[width] duration-500 ease-out"
+            className="absolute top-0 left-0 h-[2px] rounded-full bg-primary shadow-[0_0_8px_rgba(30,58,95,0.3)] transition-[width] duration-500 ease-out"
             style={{
               width: `${goals.length === 0 ? 0 : (completedGoals.length / goals.length) * 100}%`,
             }}
