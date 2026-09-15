@@ -170,11 +170,7 @@ function VeckansAttGora() {
             <div className="p-1">
               {grouped.map((group, groupIdx) => (
                 <div key={group.priority} className={groupIdx > 0 ? "mt-4" : undefined}>
-                  <div className="flex items-center gap-1.5 px-2 pb-1">
-                    <span
-                      className={cn("h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
-                      aria-hidden="true"
-                    />
+                  <div className="flex items-center justify-center gap-1.5 px-2 pb-1">
                     <span className="text-[11px] font-normal uppercase tracking-wide text-muted-foreground">
                       {priorityLabel(t, group.priority)}
                     </span>
@@ -372,17 +368,23 @@ function TodoRow({
     }
   }, [isEditing, todo.text]);
 
-  const commitText = (value: string) => {
+  const commitText = (value: string, { removeIfEmpty = true }: { removeIfEmpty?: boolean } = {}) => {
     if (committedRef.current) return;
     committedRef.current = true;
     const trimmed = value.trim();
     if (!trimmed) {
-      onRemove();
+      if (removeIfEmpty) onRemove();
       onFinishEdit();
       return;
     }
     onUpdateText(trimmed);
     onFinishEdit();
+  };
+
+  // Reads the live input value so "Klar" never loses typed text (stale draft / ghost taps).
+  const commitFromInput = () => {
+    const el = document.getElementById(`todo-input-${todo.id}`) as HTMLInputElement | null;
+    commitText(el?.value ?? draft, { removeIfEmpty: false });
   };
 
   const priority = todo.priority ?? "medium";
@@ -450,9 +452,9 @@ function TodoRow({
           type="button"
           onPointerDown={(e) => {
             e.preventDefault();
-            commitText(draft);
+            commitFromInput();
           }}
-          onClick={() => commitText(draft)}
+          onClick={commitFromInput}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
@@ -461,7 +463,7 @@ function TodoRow({
           type="button"
           onPointerDown={(e) => {
             e.preventDefault();
-            commitText(draft);
+            commitFromInput();
             onToggle();
           }}
           className={cn(
