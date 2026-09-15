@@ -648,20 +648,21 @@ function TodoRow({
         </button>
         <button
           type="button"
+          onPointerDown={(e) => e.stopPropagation()}
           onClick={() => {
             if (shouldTriggerAction()) onToggle();
           }}
           className={cn(
             "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
             isCompact || todo.completed
-              ? "border-transparent bg-gradient-gold shadow-sm"
+              ? "border-transparent bg-primary shadow-sm"
               : "border-2 border-muted-foreground/40 bg-transparent"
           )}
           aria-checked={todo.completed}
           role="checkbox"
         >
           {(isCompact || todo.completed) && (
-            <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
+            <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />
           )}
         </button>
       </div>

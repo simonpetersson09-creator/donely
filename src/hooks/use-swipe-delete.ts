@@ -16,6 +16,7 @@ export function useSwipeDelete({
   const [offset, setOffset] = useState(0);
   const [dragging, setDragging] = useState(false);
   const startXRef = useRef(0);
+  const startYRef = useRef(0);
   const movedRef = useRef(false);
 
   const close = useCallback(() => {
@@ -33,6 +34,7 @@ export function useSwipeDelete({
     (e: React.PointerEvent) => {
       if (!enabled) return;
       startXRef.current = e.clientX;
+      startYRef.current = e.clientY;
       movedRef.current = false;
       setDragging(true);
       (e.currentTarget as Element).setPointerCapture?.(e.pointerId);
@@ -43,10 +45,15 @@ export function useSwipeDelete({
   const onPointerMove = useCallback(
     (e: React.PointerEvent) => {
       if (!enabled || !dragging) return;
-      const delta = e.clientX - startXRef.current;
-      if (Math.abs(delta) > 4) movedRef.current = true;
+      const deltaX = e.clientX - startXRef.current;
+      const deltaY = e.clientY - startYRef.current;
+      // Only treat horizontal motion as a swipe when it clearly dominates
+      // vertical scrolling and is larger than a normal tap jitter.
+      if (Math.abs(deltaX) > 10 && Math.abs(deltaX) > Math.abs(deltaY)) {
+        movedRef.current = true;
+      }
       // Only allow swiping left; right-swipe snaps back immediately.
-      const next = Math.min(0, Math.max(-revealWidth, delta));
+      const next = Math.min(0, Math.max(-revealWidth, deltaX));
       setOffset(next);
     },
     [enabled, dragging, revealWidth]
