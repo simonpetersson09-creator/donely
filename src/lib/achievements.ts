@@ -127,11 +127,17 @@ export function clearAchievementLedger() {
 /**
  * The single most relevant thing to show after a registration, or null when a
  * registration is just an ordinary one (the common, calm case).
+ *
+ * `addedAmount` is the amount of the registration that just happened. It makes
+ * the milestone check exact: only a milestone actually crossed by *this*
+ * registration is celebrated, so an already-large total never fires an old,
+ * long-passed milestone (e.g. "10" when the total is 300).
  */
 export function detectAchievement(
   entries: Entry[],
   categoryId: string,
   now: Date = new Date(),
+  addedAmount = 0,
 ): Achievement | null {
   // 1. New personal record — already de-duplicated by its own ledger.
   const record = detectRecords(entries, categoryId, now).find((r) => claimRecord(r));
@@ -146,12 +152,18 @@ export function detectAchievement(
   }
 
   const total = categoryTotal(entries, categoryId);
+  const before = Math.max(0, total - Math.max(0, addedAmount));
 
-  // 2. Milestone just crossed.
-  for (const target of milestonesUpTo(total)) {
-    if (total >= target && claimKeyIfNew(`ms:${categoryId}:${target}`, total, target)) {
-      return { kind: "milestone", categoryId, target };
-    }
+  // Milestones already passed before this registration are marked as seen so
+  // they can never surface later (e.g. after an import of historic data).
+  for (const passed of milestonesUpTo(before)) {
+    if (before >= passed) claimKey(`ms:${categoryId}:${passed}`);
+  }
+
+  // 2. Milestone just crossed by this registration.
+  const crossed = milestoneCrossed(before, total);
+  if (crossed !== null && claimKey(`ms:${categoryId}:${crossed}`)) {
+    return { kind: "milestone", categoryId, target: crossed };
   }
 
   // 3. Close to a personal record in the current day / week / month.
@@ -178,14 +190,6 @@ export function detectAchievement(
   return null;
 }
 
-/**
- * A milestone only counts the first time it is reached. The ledger key carries
- * the target, so re-reaching it after an undo never fires twice.
- */
-function claimKeyIfNew(key: string, total: number, target: number): boolean {
-  if (total < target) return false;
-  return claimKey(key);
-}
 
 /* -------------------------------------------------- notification enrichment */
 
