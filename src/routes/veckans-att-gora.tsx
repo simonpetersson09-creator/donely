@@ -107,13 +107,23 @@ function VeckansAttGora() {
   const completedCount = completedTodos.length;
   const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
 
-  const handleAdd = (text = "") => {
-    const id = addTodo(text);
-    setEditingId(id);
-    requestAnimationFrame(() => {
-      const el = document.getElementById(`todo-input-${id}`) as HTMLInputElement | null;
-      el?.focus();
-    });
+  const openAddPopup = () => {
+    setAddText("");
+    setAddPriority("medium");
+    setAddOpen(true);
+  };
+
+  const closeAddPopup = () => {
+    setAddOpen(false);
+    setAddText("");
+    setAddPriority("medium");
+  };
+
+  const submitAddPopup = () => {
+    const trimmed = addText.trim();
+    if (!trimmed) return;
+    addTodo(trimmed, addPriority);
+    closeAddPopup();
   };
 
   const startEditing = (id: string) => {
