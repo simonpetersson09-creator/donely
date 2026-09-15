@@ -103,7 +103,7 @@ export const weeklyTodoSchema = z.object({
   /** Entry created when the todo was ticked off (1 point on a category). */
   entryId: z.string().min(1).optional(),
   /** Priority level shown on the left of active todo rows. Defaults to medium. */
-  priority: todoPrioritySchema.default("medium"),
+  priority: todoPrioritySchema.optional(),
   createdAt: z.string().min(1),
 });
 export const weeklyTodosSchema = z.array(weeklyTodoSchema);
