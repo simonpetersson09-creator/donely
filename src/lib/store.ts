@@ -23,6 +23,7 @@ import {
   readFlag,
   readKey,
   subscribeIntegrity,
+  todoPrioritySchema,
   writeTransaction,
   writeKey,
   yearlyGoalsSchema,
@@ -32,6 +33,7 @@ import {
   type Goals,
   type YearlyGoal,
   type WeeklyTodo,
+  type TodoPriority,
 } from "@/lib/persistence";
 
 export type Area = "jobb" | "privat";
