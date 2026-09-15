@@ -9,6 +9,7 @@ import { useLanguage } from "@/lib/use-language";
 import { useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
+import { RouteErrorRecovery } from "@/components/RouteErrorRecovery";
 
 export const Route = createFileRoute("/veckans-att-gora")({
   head: () => ({
