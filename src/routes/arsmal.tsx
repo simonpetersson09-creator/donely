@@ -536,6 +536,17 @@ function GoalRow({
           touchAction: "pan-y",
         }}
       >
+        {!goal.completed && (
+          <button
+            type="button"
+            onClick={() => onSetPriority(nextPriority(priority))}
+            className="shrink-0 rounded p-0.5 transition-colors active:bg-secondary"
+            aria-label={`${t("priority")}: ${priorityLabel(t, priority)}`}
+            title={`${t("priority")}: ${priorityLabel(t, priority)}`}
+          >
+            <PriorityIndicator />
+          </button>
+        )}
         <button
           type="button"
           onClick={() => {
