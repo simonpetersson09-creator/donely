@@ -18,12 +18,20 @@ export function useSwipeDelete({
   const startXRef = useRef(0);
   const startYRef = useRef(0);
   const movedRef = useRef(false);
+  // Mirror of offset that is always current — onPointerUp must not depend on
+  // a possibly stale closure value or fast swipes snap back instead of opening.
+  const offsetRef = useRef(0);
+
+  const applyOffset = useCallback((value: number) => {
+    offsetRef.current = value;
+    setOffset(value);
+  }, []);
 
   const close = useCallback(() => {
-    setOffset(0);
+    applyOffset(0);
     setDragging(false);
     movedRef.current = false;
-  }, []);
+  }, [applyOffset]);
 
   const confirmDelete = useCallback(() => {
     onDelete();
