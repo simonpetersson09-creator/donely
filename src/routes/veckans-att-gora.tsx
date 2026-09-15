@@ -268,25 +268,31 @@ function VeckansAttGora() {
 
       {/* Bottom progress bar */}
       <div className="shrink-0 px-1 pt-2">
-        <div className="flex items-center justify-between">
-          <span className="text-[12px] font-normal text-muted-foreground">{t("completedTodos")}</span>
-          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
-            {completedCount}/{totalCount}
+        <div className="flex items-baseline justify-between">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/70">
+            {t("weeklyTodos")}
+          </span>
+          <span className="text-[11px] font-medium text-muted-foreground">
+            {t("completedTodos")}{" "}
+            <span className="ml-1.5 font-serif text-[15px] italic text-gold">
+              {completedCount}/{totalCount}
+            </span>
           </span>
         </div>
-        <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+        <div className="relative mt-2">
+          <div className="h-[2px] w-full rounded-full bg-primary/10" aria-hidden="true" />
           <div
-            className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
+            className="absolute top-0 left-0 h-[2px] rounded-full bg-gold shadow-[0_0_8px_rgba(212,168,67,0.3)] transition-[width] duration-500 ease-out"
             style={{ width: `${progress}%` }}
           />
         </div>
       </div>
 
       {/* Bottom actions: back + add todo */}
-      <div className="shrink-0 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-2 flex items-center gap-2">
+      <div className="shrink-0 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-3 flex items-center gap-3">
         <BackButton
           fallbackTo="/"
-          className="inline-flex h-11 items-center gap-0.5 rounded-2xl bg-secondary/80 px-3 text-[13px] font-normal text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          className="inline-flex h-11 flex-[0.8] items-center justify-center rounded-2xl bg-secondary/80 text-[11px] font-bold uppercase tracking-widest text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
         >
           {t("back")}
         </BackButton>
@@ -296,7 +302,7 @@ function VeckansAttGora() {
           className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-2xl bg-primary text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
         >
           <Plus className="size-4" strokeWidth={2.5} />
-          <span className="text-[15px] font-normal">{t("addTodo")}</span>
+          <span className="text-[11px] font-bold uppercase tracking-widest">{t("addTodo")}</span>
         </button>
       </div>
 
