@@ -158,6 +158,8 @@ function RootComponent() {
     initializeStorage();
     // Development only: fills the app with demo activities on an empty install.
     initDevSeed();
+    // Anonymous "app opened" ping (no personal data).
+    pingAppOpen();
   }, []);
 
   return (
