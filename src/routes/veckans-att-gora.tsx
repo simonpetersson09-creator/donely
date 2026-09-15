@@ -182,10 +182,10 @@ function VeckansAttGora() {
               <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
             </div>
           ) : (
-            <div className="p-1">
+            <div className="p-0.5">
               {grouped.map((group, groupIdx) => (
-                <div key={group.priority} className={groupIdx > 0 ? "mt-4" : undefined}>
-                  <div className="flex items-center justify-center gap-1.5 px-2 pb-1">
+                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : undefined}>
+                  <div className="flex items-center justify-center gap-1.5 px-2 pb-0.5">
                     <span
                       className={cn("inline-block h-3.5 w-1 rounded-full", priorityBarClass(group.priority))}
                       aria-hidden="true"
@@ -248,7 +248,7 @@ function VeckansAttGora() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
                 </div>
               ) : (
-                <div className="p-1">
+                <div className="p-0.5">
                   {completedTodos.map((todo, idx) => (
                     <TodoRow
                       key={todo.id}
@@ -501,7 +501,7 @@ function TodoRow({
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-2 bg-secondary/50 px-2 py-1.5",
+          "stagger-item flex items-center gap-2 bg-secondary/50 px-2 py-1",
           !last && "border-b border-primary/10",
         )}
         style={delay}
@@ -602,7 +602,7 @@ function TodoRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 px-2 py-1.5 transition-colors active:bg-secondary",
+          "stagger-item group flex items-center gap-2 px-2 py-1 transition-colors active:bg-secondary",
           foregroundBg,
           !last && "border-b border-primary/10"
         )}
