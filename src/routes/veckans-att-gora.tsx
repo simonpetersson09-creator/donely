@@ -32,7 +32,7 @@ export const Route = createFileRoute("/veckans-att-gora")({
 
 function VeckansAttGora() {
   const { t } = useLanguage();
-  const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, removeTodo } =
+  const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, setTodoPriority, removeTodo } =
     useWeeklyTodos();
   const { categories } = useCategories();
   const { addEntry, removeEntry } = useEntries();
