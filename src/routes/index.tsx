@@ -453,7 +453,7 @@ function Index() {
             className="press-down flex h-12 items-center justify-center gap-1.5 rounded-xl bg-primary px-1 text-[14px] font-semibold text-primary-foreground shadow-button transition-shadow duration-200 active:shadow-soft"
           >
             <ListTodo className="size-4 shrink-0" />
-            <span className="truncate">{t("weeklyTodos")}</span>
+            <span className="truncate">{t("addTodo")}</span>
           </Link>
 
           <button

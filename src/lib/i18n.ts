@@ -124,7 +124,7 @@ const sv = {
   activeTodos: "Aktiva uppgifter",
   completedTodos: "Avklarade",
   emptyTodos: "Inga uppgifter än. Tryck nedan för att lägga till en.",
-  addTodo: "Lägg till punkt",
+  addTodo: "Lägg till uppgift",
   todoPlaceholder: "Skriv en uppgift…",
   doneEditing: "Klar",
   archiveTodosEmpty: "Inga avklarade uppgifter ännu.",

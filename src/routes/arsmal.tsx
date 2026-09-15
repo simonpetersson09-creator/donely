@@ -87,8 +87,28 @@ function Arsmal() {
         <div className="h-9 w-9" aria-hidden="true" />
       </div>
 
+      {/* Yearly progress overview */}
+      <section className="mt-2 px-1" aria-labelledby="year-heading">
+        <div className="flex items-center justify-between">
+          <h2 id="year-heading" className="text-[13px] font-normal text-foreground">
+            {t("yearlyGoals")} {currentYear}
+          </h2>
+          <span className="text-[12px] font-normal tabular-nums text-muted-foreground">
+            {completedGoals.length}/{goals.length}
+          </span>
+        </div>
+        <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted" aria-hidden="true">
+          <div
+            className="h-full rounded-full bg-gold transition-[width] duration-500 ease-out"
+            style={{
+              width: `${goals.length === 0 ? 0 : (completedGoals.length / goals.length) * 100}%`,
+            }}
+          />
+        </div>
+      </section>
+
       {/* Active goals */}
-      <div className="mt-2 overflow-hidden rounded-2xl border border-border/50 bg-background">
+      <div className="mt-3 overflow-hidden rounded-2xl border border-border/50 bg-background">
         <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
           <h2 className="text-[13px] font-normal text-primary-foreground">
             {t("activeGoals")}
