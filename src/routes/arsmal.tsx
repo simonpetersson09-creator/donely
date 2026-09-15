@@ -130,7 +130,7 @@ function Arsmal() {
 
         {/* Active goals */}
         <div className="mt-10 overflow-hidden rounded-2xl border border-primary/10 bg-background">
-          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
+          <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1">
             <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeGoals")}
             </h2>
@@ -158,7 +158,7 @@ function Arsmal() {
                     </div>
                     <div className={cn("mt-1.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
-                  <div className="flex flex-col gap-1.5">
+                  <div className="flex flex-col gap-1">
                     {group.items.map((goal, idx) => (
                       <GoalRow
                         key={goal.id}
@@ -186,7 +186,7 @@ function Arsmal() {
           <button
             type="button"
             onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-1.5"
+            className="flex w-full items-center justify-center gap-1.5 bg-gold px-2 py-1"
             aria-expanded={completedExpanded}
           >
             <h2 className="text-[13px] font-normal text-gold-foreground">
@@ -210,7 +210,7 @@ function Arsmal() {
                   <p className="text-[13px] font-normal text-foreground">{t("archiveEmpty")}</p>
                 </div>
               ) : (
-                <div className="flex flex-col gap-1.5 p-0.5">
+                <div className="flex flex-col gap-1 p-0.5">
                   {completedGoals.map((goal, idx) => (
                     <GoalRow
                       key={goal.id}
@@ -426,7 +426,7 @@ function GoalRow({
   if (isEditing) {
     return (
       <div
-        className="stagger-item flex items-center gap-1.5 px-2 py-1 bg-secondary/50"
+        className="stagger-item flex items-center gap-1.5 px-2 py-0.5 bg-secondary/50"
         style={delay}
       >
         <PriorityIndicator className="shrink-0" />
@@ -536,7 +536,7 @@ function GoalRow({
       <div
         {...handlers}
         className={cn(
-          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-3 py-2.5 transition-colors active:bg-secondary/50",
+          "stagger-item group flex items-center gap-2 rounded-xl bg-secondary/30 px-2.5 py-2 transition-colors active:bg-secondary/50",
           goal.completed && "bg-muted/40 active:bg-muted/60"
         )}
         style={delay}
