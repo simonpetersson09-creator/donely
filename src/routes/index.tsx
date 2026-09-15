@@ -466,9 +466,7 @@ function Index() {
             className={cn(
               "relative flex h-12 items-center justify-center overflow-hidden rounded-xl text-[14px] font-semibold shadow-[0_8px_20px_-6px_hsl(0_0%_0%/0.35)] transition-shadow duration-200 ease-out will-change-transform active:shadow-[0_3px_10px_-6px_hsl(0_0%_0%/0.35)] disabled:opacity-40 disabled:shadow-none",
               pressed && "press-spring",
-              locked
-                ? "bg-primary/85 text-primary-foreground"
-                : "bg-gradient-gold text-gold-foreground shadow-gold premium-sheen",
+              "bg-gradient-gold text-gold-foreground shadow-gold premium-sheen",
             )}
           >
             <span className="inline-flex items-center justify-center gap-2">

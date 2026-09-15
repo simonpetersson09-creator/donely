@@ -376,6 +376,8 @@ function VeckansAttGora() {
                   <button
                     key={p}
                     type="button"
+                    onPointerDown={(e) => e.preventDefault()}
+                    onMouseDown={(e) => e.preventDefault()}
                     onClick={() => setAddPriority(p)}
                     className={cn(
                       "flex flex-1 items-center justify-center gap-1.5 rounded-xl border py-2.5 text-[13px] font-medium transition-colors",
