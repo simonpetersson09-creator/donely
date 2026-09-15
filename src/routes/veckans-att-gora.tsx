@@ -137,7 +137,7 @@ function VeckansAttGora() {
         </section>
 
         {/* Active todos */}
-        <section className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+        <section className="mt-6 overflow-hidden rounded-2xl border border-primary/10 bg-background">
           <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
             <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeTodos")}
@@ -173,7 +173,7 @@ function VeckansAttGora() {
         </section>
 
         {/* Completed todos */}
-        <section className="mt-3 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+        <section className="mt-6 overflow-hidden rounded-2xl border border-primary/10 bg-background">
           <div className="flex items-center justify-center gap-1.5 bg-gold px-2 py-1.5">
             <h2 className="text-[13px] font-normal text-gold-foreground">
               {t("completedTodos")}
