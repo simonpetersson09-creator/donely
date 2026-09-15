@@ -322,7 +322,7 @@ function TodoRow({
       <div
         className={cn(
           "stagger-item flex items-center gap-1.5 bg-secondary/50 px-2 py-1.5",
-          !last && "border-b border-border",
+          !last && "border-b border-primary/10",
         )}
         style={delay}
       >
