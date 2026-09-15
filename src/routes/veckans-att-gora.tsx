@@ -28,6 +28,7 @@ export const Route = createFileRoute("/veckans-att-gora")({
     ],
   }),
   component: VeckansAttGora,
+  errorComponent: RouteErrorRecovery,
 });
 
 const PRIORITIES = ["high", "medium", "low"] as const;
