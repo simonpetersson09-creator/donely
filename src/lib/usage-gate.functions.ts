@@ -18,13 +18,13 @@ function passwordMatches(input: string, expected: string): boolean {
 }
 
 export async function requireUnlocked(): Promise<void> {
-  const session = await useSession<GateSession>(sessionConfig);
+  const session = await useSession<GateSession>(sessionConfig());
   if (!session.data.unlocked) throw new Error("Locked");
 }
 
 export const isUsageUnlocked = createServerFn({ method: "GET" }).handler(
   async (): Promise<boolean> => {
-    const session = await useSession<GateSession>(sessionConfig);
+    const session = await useSession<GateSession>(sessionConfig());
     return session.data.unlocked === true;
   },
 );
@@ -37,7 +37,7 @@ export const unlockUsage = createServerFn({ method: "POST" })
     if (!passwordMatches(String(data.password ?? ""), expected)) {
       return { ok: false as const };
     }
-    const session = await useSession<GateSession>(sessionConfig);
+    const session = await useSession<GateSession>(sessionConfig());
     await session.update({ unlocked: true });
     return { ok: true as const };
   });
