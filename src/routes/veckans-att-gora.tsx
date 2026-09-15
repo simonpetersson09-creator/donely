@@ -669,6 +669,7 @@ function TodoRow({
           )}
         </button>
       </div>
+      </div>
     </div>
   );
 }
