@@ -129,7 +129,7 @@ function Arsmal() {
 
 
         {/* Active goals */}
-        <div className="mt-8 overflow-hidden rounded-2xl border border-primary/10 bg-background">
+        <div className="mt-10 overflow-hidden rounded-2xl border border-primary/10 bg-background">
           <div className="flex items-center justify-center gap-1.5 bg-primary px-2 py-1.5">
             <h2 className="text-[13px] font-normal text-primary-foreground">
               {t("activeGoals")}
