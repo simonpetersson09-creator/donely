@@ -278,7 +278,7 @@ function GoalRow({
     return (
       <div
         className={cn(
-          "stagger-item flex items-center gap-1.5 px-2 py-1.5",
+          "stagger-item flex items-center gap-1.5 px-2 py-1",
           !last && "border-b border-primary/10",
           "bg-secondary/50"
         )}
@@ -305,25 +305,31 @@ function GoalRow({
         />
         <button
           type="button"
-          onPointerDown={(e) => {
-            // Commit before the input's blur fires, so the typed value is used.
-            e.preventDefault();
-            commitText(draft);
-          }}
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
+          onClick={commitFromInput}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
           {t("doneEditing")}
         </button>
-        <div
+        <button
+          type="button"
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
+          onClick={() => {
+            commitFromInput();
+            onToggle();
+          }}
           className={cn(
-            "flex size-3.5 shrink-0 items-center justify-center rounded-full transition-colors",
+            "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
             goal.completed
-              ? "border-transparent bg-gradient-gold"
-              : "border-2 border-muted-foreground/40 bg-transparent"
+              ? "border-primary bg-primary"
+              : "border-muted-foreground/40 bg-transparent"
           )}
+          aria-label={t("doneEditing")}
         >
-          {goal.completed && <Check className="size-2 text-gold-foreground" strokeWidth={3} />}
-        </div>
+          {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
+        </button>
       </div>
     );
   }
