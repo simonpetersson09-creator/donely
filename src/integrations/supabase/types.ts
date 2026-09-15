@@ -14,7 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      app_opens: {
+        Row: {
+          app_version: string | null
+          device_id: string
+          first_seen: string
+          last_seen: string
+          open_count: number
+          platform: string | null
+        }
+        Insert: {
+          app_version?: string | null
+          device_id: string
+          first_seen?: string
+          last_seen?: string
+          open_count?: number
+          platform?: string | null
+        }
+        Update: {
+          app_version?: string | null
+          device_id?: string
+          first_seen?: string
+          last_seen?: string
+          open_count?: number
+          platform?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
