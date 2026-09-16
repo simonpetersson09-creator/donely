@@ -358,6 +358,7 @@ function Index() {
             <StepButton
               onClick={() => setAmount(String((parsed || 0) + 1))}
               aria-label={t("increase")}
+              className={area === "privat" ? "bg-accent-life" : undefined}
             >
               <Plus className="size-3.5" />
             </StepButton>
