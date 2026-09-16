@@ -316,6 +316,25 @@ enum ReviewPrompt {
         }
     }
 
+    /// User tapped "Betygsätt Donely" in Settings: ask immediately, without
+    /// the Premium/10-day gate. Apple still throttles the sheet globally.
+    @MainActor
+    static func requestNow(webView: WKWebView?) {
+        markRequested()
+        guard let scene = webView?.window?.windowScene
+            ?? UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first(where: { $0.activationState == .foregroundActive })
+        else { return }
+        if #available(iOS 16.0, *) {
+            AppStore.requestReview(in: scene)
+        } else {
+            SKStoreReviewController.requestReview(in: scene)
+        }
+    }
+
+
+
     // Keychain flags (survive reinstall, like TrialClock)
 
     private static func query() -> [String: Any] {
