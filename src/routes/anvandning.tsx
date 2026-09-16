@@ -36,6 +36,17 @@ function Stat({ label, value }: { label: string; value: number }) {
   );
 }
 
+const TOKEN_KEY = "donely.usage-token";
+
+function readToken(): string {
+  if (typeof window === "undefined") return "";
+  try {
+    return window.localStorage.getItem(TOKEN_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 function UsagePage() {
   const queryClient = useQueryClient();
   const unlock = useServerFn(unlockUsage);
@@ -45,12 +56,12 @@ function UsagePage() {
 
   const { data: unlocked, isLoading: gateLoading } = useQuery({
     queryKey: ["usage-unlocked"],
-    queryFn: () => isUsageUnlocked(),
+    queryFn: () => isUsageUnlocked({ data: { token: readToken() } }),
   });
 
   const { data, isLoading } = useQuery({
     queryKey: ["telemetry-overview"],
-    queryFn: () => getTelemetryOverview(),
+    queryFn: () => getTelemetryOverview({ data: { token: readToken() } }),
     enabled: unlocked === true,
     retry: false,
   });
@@ -60,8 +71,13 @@ function UsagePage() {
     setSubmitting(true);
     setError(false);
     try {
-      const { ok } = await unlock({ data: { password } });
+      const { ok, token } = await unlock({ data: { password: password.trim() } });
       if (ok) {
+        try {
+          window.localStorage.setItem(TOKEN_KEY, token);
+        } catch {
+          // Local storage blocked — the session cookie may still carry it.
+        }
         await queryClient.invalidateQueries({ queryKey: ["usage-unlocked"] });
         await queryClient.invalidateQueries({ queryKey: ["telemetry-overview"] });
       } else {
