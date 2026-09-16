@@ -35,6 +35,7 @@ final class DonelyStoreKitBridge: NSObject {
         "purchasePremium",
         "restorePurchase",
         "manageSubscription",
+        "requestReview",
     ]
 
     static let productID = "se.shiningdays.donely.premium.monthly"
@@ -273,6 +274,8 @@ extension DonelyStoreKitBridge: WKScriptMessageHandler {
             Task { await restore() }
         case "manageSubscription":
             Task { await manageSubscriptions() }
+        case "requestReview":
+            ReviewPrompt.requestNow(webView: webView)
         default:
             break
         }
