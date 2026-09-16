@@ -26,7 +26,7 @@ export const getTelemetryOverview = createServerFn({ method: "GET" })
       .from("app_opens")
       .select("first_seen, last_seen, open_count");
 
-    if (error || !data) return { devices: 0, opens: 0, active7: 0, active30: 0, newLast7: 0 };
+    if (error || !rows) return { devices: 0, opens: 0, active7: 0, active30: 0, newLast7: 0 };
 
     const now = Date.now();
     const day = 24 * 60 * 60 * 1000;
@@ -35,7 +35,7 @@ export const getTelemetryOverview = createServerFn({ method: "GET" })
     let active30 = 0;
     let newLast7 = 0;
 
-    for (const row of data as Array<{
+    for (const row of rows as Array<{
       first_seen: string;
       last_seen: string;
       open_count: number;
@@ -48,5 +48,5 @@ export const getTelemetryOverview = createServerFn({ method: "GET" })
       if (now - first <= 7 * day) newLast7 += 1;
     }
 
-    return { devices: data.length, opens, active7, active30, newLast7 };
+    return { devices: rows.length, opens, active7, active30, newLast7 };
   });
