@@ -654,12 +654,15 @@ function Label({ children }: { children: React.ReactNode }) {
   );
 }
 
-function StepButton({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
+function StepButton({ children, className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
       type="button"
       {...props}
-      className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform active:scale-90"
+      className={cn(
+        "flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-transform active:scale-90",
+        className
+      )}
     >
       {children}
     </button>
