@@ -26,7 +26,7 @@ function safeSet(key: string, value: string): void {
   }
 }
 
-function getDeviceId(): string | null {
+export function getDeviceId(): string | null {
   const existing = safeGet(DEVICE_ID_KEY);
   if (existing && /^[a-zA-Z0-9-]{8,64}$/.test(existing)) return existing;
   const generated =
