@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { ChevronLeft, Lock } from "lucide-react";
 
-import { getTelemetryOverview } from "@/lib/telemetry.functions";
+import { getFeedback, getTelemetryOverview } from "@/lib/telemetry.functions";
 import { isUsageUnlocked, unlockUsage } from "@/lib/usage-gate.functions";
 
 export const Route = createFileRoute("/anvandning")({
@@ -63,6 +63,13 @@ function UsagePage() {
   const { data, isLoading } = useQuery({
     queryKey: ["telemetry-overview"],
     queryFn: () => getTelemetryOverview({ data: { token: readToken() } }),
+    enabled: unlocked === true,
+    retry: false,
+  });
+
+  const { data: feedback } = useQuery({
+    queryKey: ["app-feedback"],
+    queryFn: () => getFeedback({ data: { token: readToken() } }),
     enabled: unlocked === true,
     retry: false,
   });
