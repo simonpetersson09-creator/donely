@@ -87,8 +87,8 @@
   /* Färgkoder från Sign & Go – varm, premium, lugn palett */
   --accent-work: oklch(0.34 0.06 244);
   --accent-work-soft: oklch(0.92 0.03 200);
-  --accent-life: oklch(0.6 0.12 45);
-  --accent-life-soft: oklch(0.92 0.04 55);
+  --accent-life: oklch(0.35 0.067 24);
+  --accent-life-soft: oklch(0.92 0.025 24);
   --gold: oklch(0.78 0.13 85);
   --gold-soft: oklch(0.88 0.08 92);
   --gold-deep: oklch(0.6 0.12 68);
@@ -155,8 +155,8 @@
 .dark {
   --accent-work: oklch(0.66 0.1 244);
   --accent-work-soft: oklch(0.3 0.05 230);
-  --accent-life: oklch(0.68 0.11 45);
-  --accent-life-soft: oklch(0.3 0.05 45);
+  --accent-life: oklch(0.62 0.09 24);
+  --accent-life-soft: oklch(0.3 0.04 24);
   --gold: oklch(0.82 0.13 88);
   --gold-soft: oklch(0.88 0.08 92);
   --gold-deep: oklch(0.6 0.12 68);
