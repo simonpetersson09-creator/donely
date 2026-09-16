@@ -35,6 +35,7 @@ final class DonelyStoreKitBridge: NSObject {
         "purchasePremium",
         "restorePurchase",
         "manageSubscription",
+        "requestReview",
     ]
 
     static let productID = "se.shiningdays.donely.premium.monthly"
@@ -273,6 +274,8 @@ extension DonelyStoreKitBridge: WKScriptMessageHandler {
             Task { await restore() }
         case "manageSubscription":
             Task { await manageSubscriptions() }
+        case "requestReview":
+            ReviewPrompt.requestNow(webView: webView)
         default:
             break
         }
@@ -312,6 +315,26 @@ enum ReviewPrompt {
             }
         }
     }
+
+    /// User tapped "Betygsätt Donely" in Settings: ask immediately, without
+    /// the Premium/10-day gate. Apple still throttles the sheet globally.
+    static func requestNow(webView: WKWebView?) {
+        markRequested()
+        DispatchQueue.main.async {
+            guard let scene = webView?.window?.windowScene
+                ?? UIApplication.shared.connectedScenes
+                    .compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive })
+            else { return }
+            if #available(iOS 16.0, *) {
+                AppStore.requestReview(in: scene)
+            } else {
+                SKStoreReviewController.requestReview(in: scene)
+            }
+        }
+    }
+
+
 
     // Keychain flags (survive reinstall, like TrialClock)
 
