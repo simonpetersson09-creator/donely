@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { ChevronLeft, Lock } from "lucide-react";
+import { ChevronLeft, Lock, MessageSquareText } from "lucide-react";
 
 import { getFeedback, getTelemetryOverview } from "@/lib/telemetry.functions";
 import { isUsageUnlocked, unlockUsage } from "@/lib/usage-gate.functions";
@@ -184,6 +184,38 @@ function UsagePage() {
           value={isLoading ? 0 : (data?.newLast7 ?? 0)}
           hint="Nya enheter som öppnat appen första gången"
         />
+      </div>
+
+      <div className="mt-6">
+        <div className="flex items-center gap-2">
+          <MessageSquareText className="h-4 w-4 text-primary" />
+          <h2 className="text-[15px] font-semibold text-foreground">Feedback från användare</h2>
+        </div>
+        <p className="mt-1 text-[12px] text-muted-foreground">
+          Svar på frågan ”Vad saknar du i appen?”. Anonymt – bara texten sparas.
+        </p>
+        {feedback && feedback.length > 0 ? (
+          <ul className="mt-3 flex flex-col gap-2">
+            {feedback.map((item) => (
+              <li
+                key={item.id}
+                className="rounded-2xl border border-primary/10 bg-card/60 px-4 py-3"
+              >
+                <p className="text-[14px] leading-snug text-foreground">{item.message}</p>
+                <p className="mt-1 text-[11px] text-muted-foreground/80">
+                  {new Date(item.created_at).toLocaleDateString("sv-SE", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                  {item.platform ? ` · ${item.platform}` : ""}
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="mt-3 text-[13px] text-muted-foreground">Ingen feedback ännu.</p>
+        )}
       </div>
 
       <div className="mt-auto pt-8">
