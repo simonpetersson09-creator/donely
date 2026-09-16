@@ -40,6 +40,15 @@ function getDeviceId(): string | null {
 export function pingAppOpen(): void {
   if (typeof window === "undefined") return;
 
+  const isNative =
+    typeof (window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor
+      ?.isNativePlatform === "function" &&
+    (window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor!.isNativePlatform!();
+
+  // Only the installed app counts. Browser/preview sessions get a brand new
+  // device id every time storage is cleared, which inflated the numbers.
+  if (!isNative) return;
+
   const last = Number(safeGet(LAST_PING_KEY) ?? 0);
   if (Number.isFinite(last) && Date.now() - last < PING_INTERVAL_MS) return;
 
@@ -48,17 +57,12 @@ export function pingAppOpen(): void {
 
   safeSet(LAST_PING_KEY, String(Date.now()));
 
-  const isNative =
-    typeof (window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor
-      ?.isNativePlatform === "function" &&
-    (window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor!.isNativePlatform!();
-
   void fetch("/api/public/ping", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       deviceId,
-      platform: isNative ? "ios" : "web",
+      platform: "ios",
     }),
   }).catch(() => {
     /* offline — ignore */
