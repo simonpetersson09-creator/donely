@@ -8,10 +8,11 @@ export type TelemetryOverview = {
   newLast7: number;
 };
 
-export const getTelemetryOverview = createServerFn({ method: "GET" }).handler(
-  async (): Promise<TelemetryOverview> => {
+export const getTelemetryOverview = createServerFn({ method: "GET" })
+  .inputValidator((data: { token?: string } | undefined) => data ?? {})
+  .handler(async ({ data }): Promise<TelemetryOverview> => {
     const { requireUnlocked } = await import("@/lib/usage-gate.server");
-    await requireUnlocked();
+    await requireUnlocked(data?.token);
     const { createClient } = await import("@supabase/supabase-js");
     const url = process.env["SUPABASE_URL"];
     const key = process.env["SUPABASE_SERVICE_ROLE_KEY"];
