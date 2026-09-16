@@ -437,7 +437,7 @@ function Index() {
 
           <Link
             to="/dagsstatistik"
-            className="press-down flex h-12 items-center justify-center gap-1.5 rounded-xl border border-border bg-card px-1 text-[14px] font-semibold text-primary shadow-card transition-shadow duration-200 active:shadow-soft"
+            className="press-down flex h-12 items-center justify-center gap-1.5 rounded-xl bg-accent-life px-1 text-[14px] font-semibold text-primary-foreground shadow-button transition-shadow duration-200 active:shadow-soft"
           >
             <BarChart3 className="size-4 shrink-0" />
             <span className="truncate">{t("statistics")}</span>
