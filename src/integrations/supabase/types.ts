@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_feedback: {
+        Row: {
+          created_at: string
+          device_id: string
+          id: string
+          message: string
+          platform: string | null
+        }
+        Insert: {
+          created_at?: string
+          device_id: string
+          id?: string
+          message: string
+          platform?: string | null
+        }
+        Update: {
+          created_at?: string
+          device_id?: string
+          id?: string
+          message?: string
+          platform?: string | null
+        }
+        Relationships: []
+      }
       app_opens: {
         Row: {
           app_version: string | null
