@@ -27,11 +27,12 @@ export const Route = createFileRoute("/anvandning")({
   }),
 });
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Stat({ label, value, hint }: { label: string; value: number; hint: string }) {
   return (
     <div className="rounded-2xl border border-primary/10 bg-card/60 px-4 py-3">
       <p className="text-2xl font-semibold text-foreground">{value}</p>
       <p className="mt-0.5 text-[13px] text-muted-foreground">{label}</p>
+      <p className="mt-1 text-[11px] leading-snug text-muted-foreground/80">{hint}</p>
     </div>
   );
 }
