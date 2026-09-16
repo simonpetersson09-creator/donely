@@ -49,5 +49,4 @@ export const getTelemetryOverview = createServerFn({ method: "GET" })
     }
 
     return { devices: data.length, opens, active7, active30, newLast7 };
-  },
-);
+  });
