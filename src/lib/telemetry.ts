@@ -57,14 +57,16 @@ export function pingAppOpen(): void {
 
   safeSet(LAST_PING_KEY, String(Date.now()));
 
-  void fetch("/api/public/ping", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      deviceId,
-      platform: "ios",
-    }),
-  }).catch(() => {
-    /* offline — ignore */
-  });
+  // The installed app runs from capacitor://localhost, so a relative URL would
+  // never reach the backend. Talk to the database directly instead.
+  void import("@/integrations/supabase/client")
+    .then(({ supabase }) =>
+      supabase.rpc("record_app_open", {
+        _device_id: deviceId,
+        _platform: "ios",
+      }),
+    )
+    .catch(() => {
+      /* offline — ignore */
+    });
 }

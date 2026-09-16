@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.record_app_open(text, text, text) TO anon, authenticated;
