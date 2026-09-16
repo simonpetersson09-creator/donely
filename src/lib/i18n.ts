@@ -35,6 +35,12 @@ export function localeOf(code: string) {
 }
 
 const sv = {
+  feedbackTitle: "Vad saknar du i appen?",
+  feedbackBody: "Berätta gärna vad du saknar eller vad som skulle göra Donely bättre för dig.",
+  feedbackPlaceholder: "Skriv här …",
+  feedbackSend: "Skicka",
+  feedbackNotNow: "Inte nu",
+  feedbackThanks: "Tack! Din feedback är skickad.",
   work: "Jobb",
   private: "Privat",
   category: "Kategori",
@@ -316,6 +322,12 @@ const sv = {
 type Dict = typeof sv & Record<string, string>;
 
 const en: Dict = {
+  feedbackTitle: "What's missing in the app?",
+  feedbackBody: "Tell us what you're missing or what would make Donely better for you.",
+  feedbackPlaceholder: "Write here …",
+  feedbackSend: "Send",
+  feedbackNotNow: "Not now",
+  feedbackThanks: "Thanks! Your feedback has been sent.",
   work: "Work",
   private: "Personal",
   category: "Category",
@@ -595,6 +607,12 @@ const en: Dict = {
 };
 
 const de: Dict = {
+  feedbackTitle: "Was fehlt dir in der App?",
+  feedbackBody: "Sag uns, was du vermisst oder was Donely für dich besser machen würde.",
+  feedbackPlaceholder: "Hier schreiben …",
+  feedbackSend: "Senden",
+  feedbackNotNow: "Nicht jetzt",
+  feedbackThanks: "Danke! Dein Feedback wurde gesendet.",
   work: "Arbeit",
   private: "Privat",
   category: "Kategorie",
@@ -876,6 +894,12 @@ const de: Dict = {
 };
 
 const fr: Dict = {
+  feedbackTitle: "Que manque-t-il dans l'app ?",
+  feedbackBody: "Dis-nous ce qui te manque ou ce qui rendrait Donely meilleur pour toi.",
+  feedbackPlaceholder: "Écris ici …",
+  feedbackSend: "Envoyer",
+  feedbackNotNow: "Pas maintenant",
+  feedbackThanks: "Merci ! Ton avis a été envoyé.",
   work: "Travail",
   private: "Personnel",
   category: "Catégorie",
@@ -1163,6 +1187,12 @@ const fr: Dict = {
 };
 
 const es: Dict = {
+  feedbackTitle: "¿Qué echas de menos en la app?",
+  feedbackBody: "Cuéntanos qué te falta o qué haría que Donely fuera mejor para ti.",
+  feedbackPlaceholder: "Escribe aquí …",
+  feedbackSend: "Enviar",
+  feedbackNotNow: "Ahora no",
+  feedbackThanks: "¡Gracias! Tu comentario ha sido enviado.",
   work: "Trabajo",
   private: "Personal",
   category: "Categoría",
@@ -1450,6 +1480,12 @@ const es: Dict = {
 };
 
 const it: Dict = {
+  feedbackTitle: "Cosa manca nell'app?",
+  feedbackBody: "Dicci cosa ti manca o cosa renderebbe Donely migliore per te.",
+  feedbackPlaceholder: "Scrivi qui …",
+  feedbackSend: "Invia",
+  feedbackNotNow: "Non ora",
+  feedbackThanks: "Grazie! Il tuo feedback è stato inviato.",
   work: "Lavoro",
   private: "Personale",
   category: "Categoria",
@@ -1736,6 +1772,12 @@ const it: Dict = {
 };
 
 const ptBR: Dict = {
+  feedbackTitle: "O que está faltando no app?",
+  feedbackBody: "Conte o que você sente falta ou o que tornaria o Donely melhor para você.",
+  feedbackPlaceholder: "Escreva aqui …",
+  feedbackSend: "Enviar",
+  feedbackNotNow: "Agora não",
+  feedbackThanks: "Obrigado! Seu feedback foi enviado.",
   work: "Trabalho",
   private: "Pessoal",
   category: "Categoria",
@@ -2022,6 +2064,12 @@ const ptBR: Dict = {
 };
 
 const nl: Dict = {
+  feedbackTitle: "Wat mis je in de app?",
+  feedbackBody: "Vertel ons wat je mist of wat Donely beter voor jou zou maken.",
+  feedbackPlaceholder: "Schrijf hier …",
+  feedbackSend: "Verstuur",
+  feedbackNotNow: "Niet nu",
+  feedbackThanks: "Bedankt! Je feedback is verzonden.",
   work: "Werk",
   private: "Privé",
   category: "Categorie",
@@ -2302,6 +2350,12 @@ const nl: Dict = {
 };
 
 const pl: Dict = {
+  feedbackTitle: "Czego brakuje Ci w aplikacji?",
+  feedbackBody: "Powiedz nam, czego Ci brakuje lub co sprawiłoby, że Donely byłoby dla Ciebie lepsze.",
+  feedbackPlaceholder: "Napisz tutaj …",
+  feedbackSend: "Wyślij",
+  feedbackNotNow: "Nie teraz",
+  feedbackThanks: "Dziękujemy! Twoja opinia została wysłana.",
   work: "Praca",
   private: "Prywatne",
   category: "Kategoria",
@@ -2595,6 +2649,12 @@ const pl: Dict = {
 };
 
 const da: Dict = {
+  feedbackTitle: "Hvad mangler du i appen?",
+  feedbackBody: "Fortæl os, hvad du savner, eller hvad der ville gøre Donely bedre for dig.",
+  feedbackPlaceholder: "Skriv her …",
+  feedbackSend: "Send",
+  feedbackNotNow: "Ikke nu",
+  feedbackThanks: "Tak! Din feedback er sendt.",
   work: "Arbejde",
   private: "Privat",
   category: "Kategori",
@@ -2874,6 +2934,12 @@ const da: Dict = {
 };
 
 const no: Dict = {
+  feedbackTitle: "Hva savner du i appen?",
+  feedbackBody: "Fortell oss hva du savner, eller hva som ville gjort Donely bedre for deg.",
+  feedbackPlaceholder: "Skriv her …",
+  feedbackSend: "Send",
+  feedbackNotNow: "Ikke nå",
+  feedbackThanks: "Takk! Tilbakemeldingen din er sendt.",
   work: "Jobb",
   private: "Privat",
   category: "Kategori",
@@ -3153,6 +3219,12 @@ const no: Dict = {
 };
 
 const fi: Dict = {
+  feedbackTitle: "Mitä kaipaat sovelluksesta?",
+  feedbackBody: "Kerro, mitä kaipaat tai mikä tekisi Donelystä sinulle paremman.",
+  feedbackPlaceholder: "Kirjoita tähän …",
+  feedbackSend: "Lähetä",
+  feedbackNotNow: "Ei nyt",
+  feedbackThanks: "Kiitos! Palautteesi on lähetetty.",
   work: "Työ",
   private: "Yksityinen",
   category: "Kategoria",
@@ -3432,6 +3504,12 @@ const fi: Dict = {
 };
 
 const ja: Dict = {
+  feedbackTitle: "アプリに欲しい機能は？",
+  feedbackBody: "足りないものや、Donely をもっと良くするアイデアをぜひ教えてください。",
+  feedbackPlaceholder: "ここに入力 …",
+  feedbackSend: "送信",
+  feedbackNotNow: "今はいい",
+  feedbackThanks: "ありがとうございます！フィードバックを送信しました。",
   work: "仕事",
   private: "プライベート",
   category: "カテゴリー",

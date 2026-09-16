@@ -50,3 +50,34 @@ export const getTelemetryOverview = createServerFn({ method: "GET" })
 
     return { devices: rows.length, opens, active7, active30, newLast7 };
   });
+
+export type FeedbackItem = {
+  id: string;
+  message: string;
+  platform: string | null;
+  created_at: string;
+};
+
+export const getFeedback = createServerFn({ method: "GET" })
+  .inputValidator((data: { token?: string } | undefined) => data ?? {})
+  .handler(async ({ data }): Promise<FeedbackItem[]> => {
+    const { requireUnlocked } = await import("@/lib/usage-gate.server");
+    await requireUnlocked(data?.token);
+    const { createClient } = await import("@supabase/supabase-js");
+    const url = process.env["SUPABASE_URL"];
+    const key = process.env["SUPABASE_SERVICE_ROLE_KEY"];
+    if (!url || !key) return [];
+
+    const admin = createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+
+    const { data: rows, error } = await admin
+      .from("app_feedback")
+      .select("id, message, platform, created_at")
+      .order("created_at", { ascending: false })
+      .limit(100);
+
+    if (error || !rows) return [];
+    return rows as FeedbackItem[];
+  });

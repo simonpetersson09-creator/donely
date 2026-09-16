@@ -18,6 +18,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { PurchaseFeedback } from "@/components/PurchaseFeedback";
 import { DataIntegrityNotice } from "@/components/DataIntegrityNotice";
+import { FeedbackPrompt } from "@/components/FeedbackPrompt";
 import { initializeStorage } from "@/lib/persistence";
 import { initDevSeed } from "@/lib/dev-seed";
 import { EdgeSwipeBack } from "@/components/EdgeSwipeBack";
@@ -171,6 +172,7 @@ function RootComponent() {
       </EdgeSwipeBack>
       <PurchaseFeedback />
       <DataIntegrityNotice />
+      <FeedbackPrompt />
       <Toaster
         position="top-center"
         richColors
