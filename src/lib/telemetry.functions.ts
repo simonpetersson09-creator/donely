@@ -22,7 +22,7 @@ export const getTelemetryOverview = createServerFn({ method: "GET" })
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
-    const { data, error } = await admin
+    const { data: rows, error } = await admin
       .from("app_opens")
       .select("first_seen, last_seen, open_count");
 
