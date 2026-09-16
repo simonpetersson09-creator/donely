@@ -152,11 +152,31 @@ function UsagePage() {
       </p>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <Stat label="Enheter totalt" value={isLoading ? 0 : (data?.devices ?? 0)} />
-        <Stat label="Appöppningar" value={isLoading ? 0 : (data?.opens ?? 0)} />
-        <Stat label="Aktiva senaste 7 dagarna" value={isLoading ? 0 : (data?.active7 ?? 0)} />
-        <Stat label="Aktiva senaste 30 dagarna" value={isLoading ? 0 : (data?.active30 ?? 0)} />
-        <Stat label="Nya senaste 7 dagarna" value={isLoading ? 0 : (data?.newLast7 ?? 0)} />
+        <Stat
+          label="Enheter totalt"
+          value={isLoading ? 0 : (data?.devices ?? 0)}
+          hint="Unika telefoner som öppnat appen minst en gång"
+        />
+        <Stat
+          label="Appöppningar"
+          value={isLoading ? 0 : (data?.opens ?? 0)}
+          hint="Alla starter av appen, alla enheter sammanlagt"
+        />
+        <Stat
+          label="Aktiva senaste 7 dagarna"
+          value={isLoading ? 0 : (data?.active7 ?? 0)}
+          hint="Enheter som öppnat appen den senaste veckan"
+        />
+        <Stat
+          label="Aktiva senaste 30 dagarna"
+          value={isLoading ? 0 : (data?.active30 ?? 0)}
+          hint="Enheter som öppnat appen den senaste månaden"
+        />
+        <Stat
+          label="Nya senaste 7 dagarna"
+          value={isLoading ? 0 : (data?.newLast7 ?? 0)}
+          hint="Nya enheter som öppnat appen första gången"
+        />
       </div>
 
       <div className="mt-auto pt-8">
