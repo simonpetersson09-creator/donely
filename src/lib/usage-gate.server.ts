@@ -6,7 +6,9 @@ export const sessionConfig = () => ({
   password: process.env["SESSION_SECRET"]!,
   name: "usage-gate",
   maxAge: 60 * 60 * 24 * 30,
-  cookie: { httpOnly: true, secure: true, sameSite: "lax" as const, path: "/" },
+  // "none" so the cookie also survives when the app runs inside the Lovable
+  // preview iframe (cross-site context); "lax" is dropped there.
+  cookie: { httpOnly: true, secure: true, sameSite: "none" as const, path: "/" },
 });
 
 export async function requireUnlocked(): Promise<void> {
