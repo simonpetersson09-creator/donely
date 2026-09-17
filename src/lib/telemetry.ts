@@ -40,33 +40,32 @@ export function getDeviceId(): string | null {
 export function pingAppOpen(): void {
   if (typeof window === "undefined") return;
 
-  const isNative =
-    typeof (window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor
-      ?.isNativePlatform === "function" &&
-    (window as { Capacitor?: { isNativePlatform?: () => boolean } }).Capacitor!.isNativePlatform!();
+  void (async () => {
+    const { Capacitor } = await import("@capacitor/core");
 
-  // Only the installed app counts. Browser/preview sessions get a brand new
-  // device id every time storage is cleared, which inflated the numbers.
-  if (!isNative) return;
+    // Only the installed app counts. Browser/preview sessions get a brand new
+    // device id every time storage is cleared, which inflated the numbers.
+    if (!Capacitor.isNativePlatform()) return;
 
-  const last = Number(safeGet(LAST_PING_KEY) ?? 0);
-  if (Number.isFinite(last) && Date.now() - last < PING_INTERVAL_MS) return;
+    const last = Number(safeGet(LAST_PING_KEY) ?? 0);
+    if (Number.isFinite(last) && Date.now() - last < PING_INTERVAL_MS) return;
 
-  const deviceId = getDeviceId();
-  if (!deviceId) return;
+    const deviceId = getDeviceId();
+    if (!deviceId) return;
 
-  safeSet(LAST_PING_KEY, String(Date.now()));
-
-  // The installed app runs from capacitor://localhost, so a relative URL would
-  // never reach the backend. Talk to the database directly instead.
-  void import("@/integrations/supabase/client")
-    .then(({ supabase }) =>
-      supabase.rpc("record_app_open", {
+    // The installed app runs from capacitor://localhost, so a relative URL would
+    // never reach the backend. Talk to the database directly instead.
+    const { supabase } = await import("@/integrations/supabase/client");
+    const { error } = await supabase.rpc("record_app_open", {
         _device_id: deviceId,
         _platform: "ios",
-      }),
-    )
-    .catch(() => {
-      /* offline — ignore */
     });
+
+    // Failed/offline attempts must remain eligible for retry on the next app
+    // launch. Previously this timestamp was stored before the request, silently
+    // suppressing retries for six hours even when no row reached the database.
+    if (!error) safeSet(LAST_PING_KEY, String(Date.now()));
+  })().catch(() => {
+    /* offline — retry on next app launch */
+  });
 }
