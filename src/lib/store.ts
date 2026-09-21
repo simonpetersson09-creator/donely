@@ -664,13 +664,18 @@ export function useWeeklyTodos() {
   );
 
   // Completed todos are wiped when the week turns (Sunday 23:59 → Monday
-  // 00:00). Unfinished ones from earlier weeks stay in storage untouched.
+  // 00:00). Unfinished ones are carried over to the new week so nothing is lost.
   useEffect(() => {
     if (!hydrated) return;
-    const hasStale = todosRef.current.some((t) => t.completed && t.weekStart !== currentWeekStart);
+    const hasStale = todosRef.current.some((t) => t.weekStart !== currentWeekStart);
     if (!hasStale) return;
-    commit(todosRef.current.filter((t) => !(t.completed && t.weekStart !== currentWeekStart)));
+    commit(
+      todosRef.current
+        .filter((t) => !(t.completed && t.weekStart !== currentWeekStart))
+        .map((t) => (t.weekStart === currentWeekStart ? t : { ...t, weekStart: currentWeekStart })),
+    );
   }, [hydrated, currentWeekStart, commit]);
+
 
   const addTodo = useCallback(
     (text: string, priority: TodoPriority = "medium") => {
