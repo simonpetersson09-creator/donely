@@ -17,6 +17,7 @@
     "cap:open": "npx cap open ios"
   },
   "dependencies": {
+    "@capacitor/android": "^7",
     "@capacitor/core": "^7",
     "@capacitor/filesystem": "^7",
     "@capacitor/haptics": "^7",
