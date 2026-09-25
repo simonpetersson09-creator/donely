@@ -58,7 +58,7 @@ export function pingAppOpen(): void {
     const { supabase } = await import("@/integrations/supabase/client");
     const { error } = await supabase.rpc("record_app_open", {
         _device_id: deviceId,
-        _platform: "ios",
+        _platform: Capacitor.getPlatform() === "android" ? "android" : "ios",
     });
 
     // Failed/offline attempts must remain eligible for retry on the next app
