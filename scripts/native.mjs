@@ -1,8 +1,8 @@
 // Cross-platform native workflow (Windows PowerShell, macOS, Linux).
-// Only Node + npx — no Bash, WSL or Git Bash required.
+// Only Node — no npx, Bash, WSL or Git Bash required.
 //
 //   node scripts/native.mjs build           → fresh web build + static app shell (dist/client)
-//   node scripts/native.mjs android:sync    → build + npx cap sync android
+//   node scripts/native.mjs android:sync    → build + cap sync android
 //   node scripts/native.mjs android:open    → open the project in Android Studio
 //   node scripts/native.mjs android:bundle  → signed release AAB (needs android/keystore.properties)
 import { spawnSync } from "node:child_process";
@@ -13,16 +13,32 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const isWin = process.platform === "win32";
 
-function run(command, args, cwd = root) {
-  // .cmd/.bat launchers (npx, gradlew.bat) need a shell on Windows.
-  const result = spawnSync(command, args, { cwd, stdio: "inherit", shell: isWin });
+// Capacitor CLI is invoked through its local Node entrypoint with the current
+// Node executable. This works identically on Windows PowerShell, macOS and
+// Linux and never depends on npx resolving a .cmd shim.
+const capCli = resolve(root, "node_modules/@capacitor/cli/bin/capacitor");
+
+function run(command, args, cwd = root, shell = false) {
+  const result = spawnSync(command, args, { cwd, stdio: "inherit", shell });
+  if (result.error) {
+    console.error(result.error.message);
+    process.exit(1);
+  }
   if (result.status !== 0) process.exit(result.status ?? 1);
 }
 
+function cap(args) {
+  if (!existsSync(capCli)) {
+    console.error("Capacitor CLI hittades inte. Kör `npm install` först.");
+    process.exit(1);
+  }
+  run(process.execPath, [capCli, ...args]);
+}
+
 function build() {
-  run("node", ["scripts/clean-build.mjs"]);
-  run("npx", ["vite", "build"]);
-  run("node", ["scripts/capacitor-postbuild.mjs"]);
+  run(process.execPath, ["scripts/clean-build.mjs"]);
+  run(process.execPath, [resolve(root, "node_modules/vite/bin/vite.js"), "build"]);
+  run(process.execPath, ["scripts/capacitor-postbuild.mjs"]);
 }
 
 const task = process.argv[2];
@@ -32,10 +48,10 @@ switch (task) {
     break;
   case "android:sync":
     build();
-    run("npx", ["cap", "sync", "android"]);
+    cap(["sync", "android"]);
     break;
   case "android:open":
-    run("npx", ["cap", "open", "android"]);
+    cap(["open", "android"]);
     break;
   case "android:bundle": {
     const androidDir = resolve(root, "android");
@@ -44,8 +60,9 @@ switch (task) {
       process.exit(1);
     }
     build();
-    run("npx", ["cap", "sync", "android"]);
-    run(isWin ? "gradlew.bat" : "./gradlew", ["bundleRelease"], androidDir);
+    cap(["sync", "android"]);
+    // gradlew.bat needs a shell on Windows.
+    run(isWin ? "gradlew.bat" : "./gradlew", ["bundleRelease"], androidDir, isWin);
     console.log("\nKlart: android/app/build/outputs/bundle/release/app-release.aab");
     break;
   }
