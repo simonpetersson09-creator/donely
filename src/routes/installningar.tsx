@@ -20,6 +20,7 @@ import { readBackupFile, saveBackupFile } from "@/lib/backup-file";
 import { useLanguage } from "@/lib/use-language";
 import { LEGAL_URL, openExternalUrl } from "@/lib/config";
 import { Switch } from "@/components/ui/switch";
+import { Capacitor } from "@capacitor/core";
 import { formatFireDate, openNotificationSettings, useReminder } from "@/lib/notifications";
 
 import {
@@ -47,6 +48,12 @@ function requestAppStoreReview() {
     return;
   }
   window.open(APP_STORE_REVIEW_URL, "_blank", "noopener");
+}
+
+/** Same text on iOS/web; on Android "iOS" in the settings hint becomes "Android". */
+function notifDeniedText(t: (key: "notifDenied") => string): string {
+  const text = t("notifDenied");
+  return Capacitor.getPlatform() === "android" ? text.replace(/iOS/g, "Android") : text;
 }
 
 export const Route = createFileRoute("/installningar")({
@@ -205,7 +212,7 @@ function Installningar() {
                     toast.success(t("reminderOffToast"));
                     return;
                   }
-                  if (result === "denied") toast.error(t("notifDenied"));
+                  if (result === "denied") toast.error(notifDeniedText(t));
                   else if (result === "unsupported") toast.error(t("notifUnsupported"));
                   else if (result === "granted" || result === "provisional")
                     toast.success(t("reminderOnToast"));
@@ -241,7 +248,7 @@ function Installningar() {
                     toast.success(t("reminderOffToast"));
                     return;
                   }
-                  if (result === "denied") toast.error(t("notifDenied"));
+                  if (result === "denied") toast.error(notifDeniedText(t));
                   else if (result === "unsupported") toast.error(t("notifUnsupported"));
                   else if (result === "granted" || result === "provisional")
                     toast.success(t("reminderOnToast"));
@@ -252,7 +259,7 @@ function Installningar() {
             {reminder.permission === "denied" && (
               <div className="mt-3 rounded-lg bg-secondary px-3 py-2.5">
                 <p className="text-[10px] font-normal leading-[14px] text-muted-foreground">
-                  {t("notifDenied")}
+                  {notifDeniedText(t)}
                 </p>
                 <button
                   type="button"

@@ -14,9 +14,14 @@
     "cap:sync": "npx cap sync ios",
     "ios:pull": "node scripts/ios-pull.mjs",
     "icon": "node scripts/update-icon.mjs",
-    "cap:open": "npx cap open ios"
+    "cap:open": "npx cap open ios",
+    "build:native": "node scripts/native.mjs build",
+    "android:sync": "node scripts/native.mjs android:sync",
+    "android:open": "node scripts/native.mjs android:open",
+    "android:bundle": "node scripts/native.mjs android:bundle"
   },
   "dependencies": {
+    "@capacitor/android": "^7",
     "@capacitor/core": "^7",
     "@capacitor/filesystem": "^7",
     "@capacitor/haptics": "^7",

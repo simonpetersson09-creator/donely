@@ -60,6 +60,11 @@ export function markFeedbackSent(): void {
   safeSet(FEEDBACK_STATE_KEY, "sent");
 }
 
+function platformName(): string {
+  const cap = (window as { Capacitor?: { getPlatform?: () => string } }).Capacitor;
+  return cap?.getPlatform?.() === "android" ? "android" : "ios";
+}
+
 export async function submitFeedback(message: string): Promise<boolean> {
   const text = message.trim().slice(0, 2000);
   if (!text) return false;
@@ -73,7 +78,7 @@ export async function submitFeedback(message: string): Promise<boolean> {
     const { error } = await supabase.from("app_feedback").insert({
       device_id: getDeviceId() ?? "unknown",
       message: text,
-      platform: isNative ? "ios" : "web",
+      platform: isNative ? platformName() : "web",
     });
     return !error;
   } catch {
