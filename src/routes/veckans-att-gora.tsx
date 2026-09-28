@@ -299,14 +299,14 @@ function VeckansAttGora() {
             </button>
           )}
         </div>
-        <div className="relative mt-2">
-          <div className="h-[2px] w-full rounded-full bg-primary/10" aria-hidden="true" />
+        <div className="relative mt-2.5">
+          <div className="h-[5px] w-full rounded-full bg-primary/12" aria-hidden="true" />
           <div
             className={cn(
-              "absolute top-0 left-0 h-[2px] rounded-full transition-[width] duration-500 ease-out",
+              "absolute top-0 left-0 h-[5px] rounded-full transition-[width] duration-500 ease-out",
               allDone
-                ? "bg-gold shadow-[0_0_8px_rgba(202,158,44,0.45)]"
-                : "bg-primary shadow-[0_0_8px_rgba(30,58,95,0.3)]"
+                ? "bg-gold shadow-[0_0_10px_rgba(202,158,44,0.5)]"
+                : "bg-primary shadow-[0_0_10px_rgba(30,58,95,0.35)]"
             )}
             style={{ width: `${progress}%` }}
           />
