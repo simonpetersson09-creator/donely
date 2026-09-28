@@ -495,8 +495,6 @@ function TodoRow({
   const isCompact = variant === "compact";
   const isDone = isCompact || todo.completed;
 
-
-
     <span
       className={cn("block h-5 w-1 self-center rounded-full", priorityBarClass(priority), isDone && "opacity-40", className)}
       aria-hidden="true"
