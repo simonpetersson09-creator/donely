@@ -162,16 +162,7 @@ function VeckansAttGora() {
 
 
         {/* Active todos */}
-        <section className="mt-10 rounded-2xl bg-background">
-          <div className="flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-1 shadow-sm">
-            <h2 className="text-[13px] font-normal text-primary-foreground">
-              {t("activeTodos")}
-            </h2>
-            <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
-              {activeTodos.length}
-            </span>
-          </div>
-
+        <section className="mt-8 rounded-2xl bg-background">
           {activeTodos.length === 0 ? (
             <div className="px-3 py-1.5 text-center">
               <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
@@ -179,17 +170,17 @@ function VeckansAttGora() {
           ) : (
             <div className="p-0">
               {grouped.map((group, groupIdx) => (
-                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : "mt-4"}>
-                  <div className="flex flex-col items-center px-3 pb-0.5">
+                <div key={group.priority} className={groupIdx > 0 ? "mt-4" : "mt-3"}>
+                  <div className="flex flex-col items-center px-3 pb-1">
                     <div className="flex items-center justify-center gap-1.5">
-                      <span className="text-[11px] font-medium uppercase tracking-normal text-muted-foreground">
+                      <span className="text-[13px] font-semibold uppercase tracking-normal text-muted-foreground">
                         {priorityLabel(t, group.priority)}
                       </span>
-                      <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
+                      <span className="text-[12px] font-normal tabular-nums text-muted-foreground/70">
                         {group.items.length}
                       </span>
                     </div>
-                    <div className={cn("mt-0.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
+                    <div className={cn("mt-1 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
                   <div className="flex flex-col gap-1">
                     {group.items.map((todo, idx) => (
@@ -588,6 +579,7 @@ function TodoRow({
   }
 
   const isCompact = variant === "compact";
+  const isDone = isCompact || todo.completed;
 
   const showDelete = offset !== 0;
 
@@ -595,7 +587,7 @@ function TodoRow({
     <div
       className={cn(
         "relative h-8 overflow-hidden rounded-full",
-        isCompact || todo.completed ? "bg-muted/40" : "bg-secondary/30",
+        isDone ? "bg-muted/20" : "bg-secondary/30",
       )}
     >
       {/* Swipe-revealed delete action */}
@@ -650,14 +642,14 @@ function TodoRow({
         <div
           className={cn(
             "min-w-0 flex-1 truncate text-left text-[13px] font-normal transition-colors",
-            isCompact || todo.completed ? "text-muted-foreground" : "text-primary"
+            isDone ? "text-muted-foreground/70" : "text-primary"
           )}
         >
           <span className="relative inline-block">
             {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
-            {(isCompact || todo.completed) && (
+            {isDone && (
               <svg
-                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/60"
+                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/30"
                 viewBox="0 0 100 20"
                 preserveAspectRatio="none"
                 aria-hidden="true"
@@ -675,16 +667,16 @@ function TodoRow({
             e.stopPropagation();
             if (shouldTriggerAction()) onToggle();
           }}
-          className={cn(
-            "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
-            isCompact || todo.completed
-              ? "border-transparent bg-primary shadow-sm"
-              : "border-2 border-muted-foreground/40 bg-transparent"
-          )}
-          aria-checked={todo.completed}
-          role="checkbox"
-        >
-          {(isCompact || todo.completed) && (
+            className={cn(
+              "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
+              isDone
+                ? "border-transparent bg-primary/50"
+                : "border-2 border-muted-foreground/40 bg-transparent"
+            )}
+            aria-checked={todo.completed}
+            role="checkbox"
+          >
+            {isDone && (
             <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />
           )}
         </button>
