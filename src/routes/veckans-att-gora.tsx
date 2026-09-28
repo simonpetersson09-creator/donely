@@ -165,14 +165,22 @@ function VeckansAttGora() {
         {/* Active todos */}
         <section className="mt-8 rounded-2xl bg-background">
           {activeTodos.length === 0 ? (
-            <div className="flex flex-col items-center gap-2.5 px-3 py-7 text-center">
-              <span className="flex size-10 items-center justify-center rounded-full border border-border/60 bg-secondary/40">
-                <Plus className="size-4.5 text-muted-foreground/70" strokeWidth={2} />
-              </span>
-              <p className="max-w-[26ch] text-[13px] font-normal text-muted-foreground">
-                {t("emptyTodos")}
-              </p>
-            </div>
+            totalCount === 0 ? (
+              <div className="flex flex-col items-center gap-2.5 px-3 py-7 text-center">
+                <span className="flex size-10 items-center justify-center rounded-full border border-border/60 bg-secondary/40">
+                  <Plus className="size-4.5 text-muted-foreground/70" strokeWidth={2} />
+                </span>
+                <p className="max-w-[26ch] text-[13px] font-normal text-muted-foreground">
+                  {t("emptyTodos")}
+                </p>
+              </div>
+            ) : (
+              <div className="flex justify-center py-2">
+                <span className="flex size-9 items-center justify-center rounded-full bg-gold shadow-gold">
+                  <Check className="size-4 text-gold-foreground" strokeWidth={3} />
+                </span>
+              </div>
+            )
           ) : (
             <div className="p-0">
               {grouped.map((group, groupIdx) => (
