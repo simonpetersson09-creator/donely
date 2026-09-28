@@ -5,7 +5,7 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { CategoryDot } from "@/components/CategoryDot";
 import { cn } from "@/lib/utils";
-import { useLanguage, useLocale } from "@/lib/use-language";
+import { useLanguage } from "@/lib/use-language";
 import { useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
@@ -51,53 +51,6 @@ function nextPriority(priority: Priority): Priority {
   if (priority === "high") return "medium";
   if (priority === "medium") return "low";
   return "high";
-}
-
-/** Quiet week strip: Mon–Sun with today marked, plus a one-line progress summary. */
-function WeekOverview({ locale, line, accent }: { locale: string; line: string; accent: "primary" | "gold" }) {
-  const days = useMemo(() => {
-    const now = new Date();
-    const monday = new Date(now);
-    monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-    return Array.from({ length: 7 }, (_, i) => {
-      const d = new Date(monday);
-      d.setDate(monday.getDate() + i);
-      return {
-        label: d.toLocaleDateString(locale, { weekday: "short" }),
-        isToday: d.toDateString() === now.toDateString(),
-      };
-    });
-  }, [locale]);
-
-  return (
-    <div className="rounded-2xl border border-border/40 bg-secondary/40 px-3 py-3">
-      <div className="flex items-start justify-between px-1">
-        {days.map((d, i) => (
-          <div key={i} className="flex flex-col items-center gap-1.5">
-            <span
-              className={cn(
-                "text-[10px] leading-none",
-                d.isToday ? "font-semibold text-primary" : "font-normal text-muted-foreground/60"
-              )}
-            >
-              {d.label}
-            </span>
-            <span
-              className={cn(
-                "size-1.5 rounded-full",
-                d.isToday
-                  ? accent === "gold"
-                    ? "bg-gold"
-                    : "bg-primary"
-                  : "bg-border/70"
-              )}
-            />
-          </div>
-        ))}
-      </div>
-      <p className="mt-2.5 text-center text-[11px] font-normal text-muted-foreground">{line}</p>
-    </div>
-  );
 }
 
 function VeckansAttGora() {
@@ -156,7 +109,6 @@ function VeckansAttGora() {
   const completedCount = completedTodos.length;
   const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
   const allDone = totalCount > 0 && completedCount === totalCount;
-  const locale = useLocale();
 
   const openAddPopup = () => {
     setAddText("");
@@ -197,7 +149,13 @@ function VeckansAttGora() {
 
   return (
     <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background px-5 pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
-      <div className="flex flex-1 flex-col overflow-y-auto pb-4">
+      <div
+        className="flex flex-1 flex-col overflow-y-auto pb-4"
+        style={{
+          maskImage: "linear-gradient(to bottom, black 0%, black 88%, transparent 100%)",
+          WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 88%, transparent 100%)",
+        }}
+      >
         {/* iOS-style navigation header */}
         <div className="relative flex items-center justify-center pb-3 pt-1">
           <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
@@ -303,16 +261,6 @@ function VeckansAttGora() {
           </section>
         )}
 
-        {/* Calm week overview pinned to the quiet space under the list */}
-        {totalCount > 0 && (
-          <div className="mt-auto pt-7">
-            <WeekOverview
-              locale={locale}
-              line={`${t("weeklyTasksCount", { count: totalCount })} · ${t("completedTodos")} ${completedCount}/${totalCount}`}
-              accent={allDone ? "gold" : "primary"}
-            />
-          </div>
-        )}
       </div>
 
       {/* Bottom progress bar */}
