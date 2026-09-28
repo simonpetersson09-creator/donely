@@ -584,7 +584,6 @@ function TodoRow({
     );
   }
 
-  const isCompact = variant === "compact";
 
 
   const showDelete = offset !== 0;
