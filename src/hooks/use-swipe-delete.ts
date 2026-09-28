@@ -122,7 +122,8 @@ export function useSwipeDelete({
     lockRef.current = null;
   }, [enabled, threshold, revealWidth, applyOffset]);
 
-  const onPointerCancel = useCallback(() => {
+  const onPointerCancel = useCallback((e: React.PointerEvent) => {
+    if (e.pointerType === "touch") return;
     setDragging(false);
     applyOffset(0);
     movedRef.current = false;
