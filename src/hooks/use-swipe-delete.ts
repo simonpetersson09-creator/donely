@@ -40,7 +40,7 @@ export function useSwipeDelete({
 
   const onPointerDown = useCallback(
     (e: React.PointerEvent) => {
-      if (!enabled) return;
+      if (!enabled || e.pointerType === "touch") return;
       startXRef.current = e.clientX;
       startYRef.current = e.clientY;
       movedRef.current = false;
@@ -52,7 +52,7 @@ export function useSwipeDelete({
 
   const onPointerMove = useCallback(
     (e: React.PointerEvent) => {
-      if (!enabled || !dragging) return;
+      if (!enabled || !dragging || e.pointerType === "touch") return;
       const deltaX = e.clientX - startXRef.current;
       const deltaY = e.clientY - startYRef.current;
       // Only treat horizontal motion as a swipe when it clearly dominates
@@ -69,7 +69,7 @@ export function useSwipeDelete({
 
   const onPointerUp = useCallback(
     (e: React.PointerEvent) => {
-      if (!enabled) return;
+      if (!enabled || e.pointerType === "touch") return;
       setDragging(false);
       (e.currentTarget as Element).releasePointerCapture?.(e.pointerId);
       if (offsetRef.current <= -threshold) {
@@ -81,6 +81,46 @@ export function useSwipeDelete({
     },
     [enabled, threshold, revealWidth, applyOffset]
   );
+
+  // Touch devices (iOS/Android WebView): native touch events with a direction
+  // lock, so vertical page scrolling never cancels a horizontal swipe.
+  const lockRef = useRef<"x" | "y" | null>(null);
+  const baseRef = useRef(0);
+  const onTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if (!enabled || e.touches.length !== 1) return;
+      startXRef.current = e.touches[0].clientX;
+      startYRef.current = e.touches[0].clientY;
+      baseRef.current = offsetRef.current;
+      lockRef.current = null;
+      movedRef.current = false;
+      setDragging(true);
+    },
+    [enabled]
+  );
+  const onTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!enabled) return;
+      const dx = e.touches[0].clientX - startXRef.current;
+      const dy = e.touches[0].clientY - startYRef.current;
+      if (!lockRef.current) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        lockRef.current = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      }
+      if (lockRef.current !== "x") return;
+      movedRef.current = true;
+      applyOffset(Math.min(0, Math.max(-revealWidth, baseRef.current + dx)));
+    },
+    [enabled, revealWidth, applyOffset]
+  );
+  const onTouchEnd = useCallback(() => {
+    if (!enabled) return;
+    setDragging(false);
+    if (lockRef.current === "x") {
+      applyOffset(offsetRef.current <= -threshold ? -revealWidth : 0);
+    }
+    lockRef.current = null;
+  }, [enabled, threshold, revealWidth, applyOffset]);
 
   const onPointerCancel = useCallback(() => {
     setDragging(false);
@@ -103,6 +143,10 @@ export function useSwipeDelete({
       onPointerMove,
       onPointerUp,
       onPointerCancel,
+      onTouchStart,
+      onTouchMove,
+      onTouchEnd,
+      onTouchCancel: onTouchEnd,
     },
     confirmDelete,
     close,
