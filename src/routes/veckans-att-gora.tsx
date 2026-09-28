@@ -5,7 +5,7 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { CategoryDot } from "@/components/CategoryDot";
 import { cn } from "@/lib/utils";
-import { useLanguage, useLocale, useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
+import { useLanguage, useLocale } from "@/lib/use-language";
 import { useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
