@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, Plus, Trash2 } from "lucide-react";
+import { Check, ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
+import { SubtaskSheet } from "@/components/SubtaskSheet";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { cn } from "@/lib/utils";
@@ -53,8 +54,9 @@ export const Route = createFileRoute("/arsmal")({
 
 function Arsmal() {
   const { t } = useLanguage();
-  const { goals, addGoal, toggleGoal, updateGoalText, removeGoal, setGoalPriority } = useYearlyGoals();
+  const { setGoalSubtasks, goals, addGoal, toggleGoal, updateGoalText, removeGoal, setGoalPriority } = useYearlyGoals();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [subtasksId, setSubtasksId] = useState<string | null>(null);
   const [completedExpanded, setCompletedExpanded] = useState(false);
   // Add-goal popup state.
   const [addOpen, setAddOpen] = useState(false);
@@ -174,6 +176,7 @@ function Arsmal() {
                         onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
                         onRemove={guard(goal.id, () => removeGoal(goal.id))}
                         onFinishEdit={() => finishEdit(goal.id)}
+                        onOpenSubtasks={() => setSubtasksId(goal.id)}
                       />
                     ))}
                   </div>
@@ -226,6 +229,7 @@ function Arsmal() {
                       onSetPriority={(priority) => setGoalPriority(goal.id, priority)}
                       onRemove={guard(goal.id, () => removeGoal(goal.id))}
                       onFinishEdit={() => finishEdit(goal.id)}
+                      onOpenSubtasks={() => setSubtasksId(goal.id)}
                     />
                   ))}
                 </div>
@@ -277,6 +281,18 @@ function Arsmal() {
         </button>
       </div>
 
+      {subtasksId && (() => {
+        const target = goals.find((x) => x.id === subtasksId);
+        if (!target) return null;
+        return (
+          <SubtaskSheet
+            title={target.text}
+            subtasks={target.subtasks ?? []}
+            onChange={(next) => setGoalSubtasks(target.id, next)}
+            onClose={() => setSubtasksId(null)}
+          />
+        );
+      })()}
       {addOpen && (
         <BottomSheet onClose={closeAddPopup} label={t("addGoal")}>
           <div className="px-4 pb-2">
@@ -358,8 +374,9 @@ function GoalRow({
   onSetPriority,
   onRemove,
   onFinishEdit,
+  onOpenSubtasks,
 }: {
-  goal: { id: string; text: string; completed: boolean; priority?: Priority };
+  goal: { id: string; text: string; completed: boolean; priority?: Priority; subtasks?: { done: boolean }[] };
   index: number;
   last: boolean;
   isEditing: boolean;
@@ -369,6 +386,7 @@ function GoalRow({
   onSetPriority: (priority: Priority) => void;
   onRemove: () => void;
   onFinishEdit: () => void;
+  onOpenSubtasks: () => void;
 }) {
   const { t } = useLanguage();
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
@@ -488,6 +506,20 @@ function GoalRow({
           type="button"
           onPointerDown={keepFocus}
           onMouseDown={keepFocus}
+          onClick={() => {
+            commitFromInput();
+            onOpenSubtasks();
+          }}
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground"
+          aria-label={t("subtasks")}
+          title={t("subtasks")}
+        >
+          <ListChecks className="size-3.5" />
+        </button>
+        <button
+          type="button"
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
           onClick={commitFromInput}
           className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[13px] font-normal text-primary-foreground shadow-sm transition-colors active:bg-primary/90"
         >
@@ -602,6 +634,21 @@ function GoalRow({
             )}
           </span>
         </div>
+        {(goal.subtasks?.length ?? 0) > 0 && (
+          <button
+            type="button"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (shouldTriggerAction()) onOpenSubtasks();
+            }}
+            className="flex shrink-0 items-center gap-0.5 rounded-full bg-background/60 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground active:scale-95"
+            aria-label={t("subtasks")}
+          >
+            <ListChecks className="size-3" />
+            {goal.subtasks!.filter((x) => x.done).length}/{goal.subtasks!.length}
+          </button>
+        )}
         <button
           type="button"
           onPointerDown={(e) => e.stopPropagation()}

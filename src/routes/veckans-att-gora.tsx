@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Check, ChevronDown, Plus, Trash2 } from "lucide-react";
+import { Check, ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
+import { SubtaskSheet } from "@/components/SubtaskSheet";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { CategoryDot } from "@/components/CategoryDot";
@@ -55,11 +56,12 @@ function nextPriority(priority: Priority): Priority {
 
 function VeckansAttGora() {
   const { t } = useLanguage();
-  const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, setTodoPriority, removeTodo } =
+  const { setTodoSubtasks, todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, setTodoPriority, removeTodo } =
     useWeeklyTodos();
   const { categories } = useCategories();
   const { addEntry, removeEntry } = useEntries();
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [subtasksId, setSubtasksId] = useState<string | null>(null);
   // Id of the todo waiting for the user to pick which activity gets the point.
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [completedExpanded, setCompletedExpanded] = useState(false);
@@ -213,6 +215,7 @@ function VeckansAttGora() {
                         onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
                         onRemove={guard(todo.id, () => removeTodo(todo.id))}
                         onFinishEdit={() => finishEdit(todo.id)}
+                        onOpenSubtasks={() => setSubtasksId(todo.id)}
                       />
                     ))}
                   </div>
@@ -249,6 +252,7 @@ function VeckansAttGora() {
                     onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
                     onRemove={guard(todo.id, () => removeTodo(todo.id))}
                     onFinishEdit={() => finishEdit(todo.id)}
+                    onOpenSubtasks={() => setSubtasksId(todo.id)}
                   />
                 ))}
               </div>
@@ -367,6 +371,18 @@ function VeckansAttGora() {
         </BottomSheet>
       )}
 
+      {subtasksId && (() => {
+        const target = todos.find((x) => x.id === subtasksId);
+        if (!target) return null;
+        return (
+          <SubtaskSheet
+            title={target.text}
+            subtasks={target.subtasks ?? []}
+            onChange={(next) => setTodoSubtasks(target.id, next)}
+            onClose={() => setSubtasksId(null)}
+          />
+        );
+      })()}
       {addOpen && (
         <BottomSheet onClose={closeAddPopup} label={t("addTodo")}>
           <div className="px-4 pb-2">
@@ -451,8 +467,9 @@ function TodoRow({
   onSetPriority,
   onRemove,
   onFinishEdit,
+  onOpenSubtasks,
 }: {
-  todo: { id: string; text: string; completed: boolean; priority?: Priority };
+  todo: { id: string; text: string; completed: boolean; priority?: Priority; subtasks?: { done: boolean }[] };
   index: number;
   last: boolean;
   isEditing: boolean;
@@ -463,6 +480,7 @@ function TodoRow({
   onSetPriority: (priority: Priority) => void;
   onRemove: () => void;
   onFinishEdit: () => void;
+  onOpenSubtasks: () => void;
 }) {
   const { t } = useLanguage();
   const delay = useMemo(() => ({ animationDelay: `${Math.min(index, 12) * 30}ms` }), [index]);
@@ -573,6 +591,20 @@ function TodoRow({
             </button>
           ))}
         </div>
+        <button
+          type="button"
+          onPointerDown={keepFocus}
+          onMouseDown={keepFocus}
+          onClick={() => {
+            commitFromInput();
+            onOpenSubtasks();
+          }}
+          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-muted-foreground"
+          aria-label={t("subtasks")}
+          title={t("subtasks")}
+        >
+          <ListChecks className="size-3.5" />
+        </button>
         <button
           type="button"
           onPointerDown={keepFocus}
@@ -699,6 +731,21 @@ function TodoRow({
             )}
           </span>
         </div>
+        {(todo.subtasks?.length ?? 0) > 0 && (
+          <button
+            type="button"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (shouldTriggerAction()) onOpenSubtasks();
+            }}
+            className="flex shrink-0 items-center gap-0.5 rounded-full bg-background/60 px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground active:scale-95"
+            aria-label={t("subtasks")}
+          >
+            <ListChecks className="size-3" />
+            {todo.subtasks!.filter((x) => x.done).length}/{todo.subtasks!.length}
+          </button>
+        )}
         <button
           type="button"
           onPointerDown={(e) => e.stopPropagation()}
