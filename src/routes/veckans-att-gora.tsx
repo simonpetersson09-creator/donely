@@ -257,69 +257,69 @@ function VeckansAttGora() {
           </section>
         )}
 
-      </div>
-
-      {/* Bottom progress bar */}
-      <div className="shrink-0 px-1 pt-2">
-        <div className="flex items-baseline justify-between">
-          <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
-            {t("weeklyTodos")}
-          </span>
-          {totalCount > 0 && (
-            <button
-              type="button"
-              onClick={() => setCompletedExpanded((v) => !v)}
-              className="-mr-2 flex items-center px-2 py-2 text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
-              aria-expanded={completedExpanded}
-            >
-              {allDone && (
-                <span className="mr-1.5 flex size-4 items-center justify-center rounded-full bg-gold">
-                  <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
-                </span>
-              )}
-              {t("completedTodos")}
-              <span className={cn("ml-1.5 text-[15px] font-medium", allDone ? "text-gold" : "text-primary")}>
-                {completedCount}/{totalCount}
-              </span>
-              <ChevronDown
-                className={cn(
-                  "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
-                  completedExpanded && "rotate-180"
+        {/* Bottom progress bar (scrolls with the page) */}
+        <div className="mt-6 shrink-0 px-1 pt-2">
+          <div className="flex items-baseline justify-between">
+            <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
+              {t("weeklyTodos")}
+            </span>
+            {totalCount > 0 && (
+              <button
+                type="button"
+                onClick={() => setCompletedExpanded((v) => !v)}
+                className="-mr-2 flex items-center px-2 py-2 text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
+                aria-expanded={completedExpanded}
+              >
+                {allDone && (
+                  <span className="mr-1.5 flex size-4 items-center justify-center rounded-full bg-gold">
+                    <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
+                  </span>
                 )}
-              />
-            </button>
-          )}
-        </div>
-        <div className="relative mt-2.5">
-          <div className="h-[5px] w-full rounded-full bg-primary/12" aria-hidden="true" />
-          <div
-            className={cn(
-              "absolute top-0 left-0 h-[5px] rounded-full transition-[width] duration-500 ease-out",
-              allDone
-                ? "bg-gold shadow-[0_0_10px_rgba(202,158,44,0.5)]"
-                : "bg-primary shadow-[0_0_10px_rgba(30,58,95,0.35)]"
+                {t("completedTodos")}
+                <span className={cn("ml-1.5 text-[15px] font-medium", allDone ? "text-gold" : "text-primary")}>
+                  {completedCount}/{totalCount}
+                </span>
+                <ChevronDown
+                  className={cn(
+                    "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
+                    completedExpanded && "rotate-180"
+                  )}
+                />
+              </button>
             )}
-            style={{ width: `${progress}%` }}
-          />
+          </div>
+          <div className="relative mt-2.5">
+            <div className="h-[5px] w-full rounded-full bg-primary/12" aria-hidden="true" />
+            <div
+              className={cn(
+                "absolute top-0 left-0 h-[5px] rounded-full transition-[width] duration-500 ease-out",
+                allDone
+                  ? "bg-gold shadow-[0_0_10px_rgba(202,158,44,0.5)]"
+                  : "bg-primary shadow-[0_0_10px_rgba(30,58,95,0.35)]"
+              )}
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Bottom actions: back + add todo */}
-      <div className="shrink-0 mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-3 flex items-center gap-3">
-        <BackButton
-          fallbackTo="/"
-          className="inline-flex h-11 flex-[0.8] items-center justify-center rounded-full bg-secondary/80 text-[14px] font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
-        >
-          {t("back")}
-        </BackButton>
-        <button
-          type="button"
-          onClick={openAddPopup}
-          className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
-        >
-          <Plus className="size-4" strokeWidth={2.5} />
-          <span className="text-[14px] font-semibold">{t("addTodo")}</span>
-        </button>
+        {/* Bottom actions: back + add todo */}
+        <div className="mb-[calc(env(safe-area-inset-bottom)+0.5rem)] mt-3 flex items-center gap-3">
+          <BackButton
+            fallbackTo="/"
+            className="inline-flex h-11 flex-[0.8] items-center justify-center rounded-full bg-secondary/80 text-[14px] font-semibold text-primary shadow-sm backdrop-blur-sm transition-all active:scale-95 active:bg-secondary"
+          >
+            {t("back")}
+          </BackButton>
+          <button
+            type="button"
+            onClick={openAddPopup}
+            className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-full bg-primary text-primary-foreground shadow-button transition-all active:scale-95 active:bg-primary/90"
+          >
+            <Plus className="size-4" strokeWidth={2.5} />
+            <span className="text-[14px] font-semibold">{t("addTodo")}</span>
+          </button>
+        </div>
+
       </div>
 
       {pendingId && (
