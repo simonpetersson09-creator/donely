@@ -643,8 +643,16 @@ function TodoRow({
         </button>
         <div
           className={cn(
-            "min-w-0 flex-1 truncate text-left text-[13px] font-normal transition-colors",
-            isDone ? "text-muted-foreground/40" : "text-primary"
+            "min-w-0 flex-1 truncate text-left transition-colors",
+            // Weight and tint scale with priority: bold/high-contrast for Hög,
+            // progressively lighter for Medel and Låg.
+            isDone
+              ? "text-[13px] font-normal text-muted-foreground/40"
+              : priority === "high"
+                ? "text-[14.5px] font-bold tracking-[-0.02em] text-primary"
+                : priority === "medium"
+                  ? "text-[14.5px] font-semibold tracking-[-0.01em] text-primary/90"
+                  : "text-[14.5px] font-medium tracking-normal text-primary/75"
           )}
         >
           <span className="relative inline-block">
