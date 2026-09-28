@@ -162,7 +162,7 @@ function VeckansAttGora() {
 
 
         {/* Active todos */}
-        <section className="mt-2 rounded-2xl bg-background">
+        <section className="mt-8 rounded-2xl bg-background">
           {activeTodos.length === 0 ? (
             <div className="px-3 py-1.5 text-center">
               <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
