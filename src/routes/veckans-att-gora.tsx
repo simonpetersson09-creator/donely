@@ -255,6 +255,17 @@ function VeckansAttGora() {
             )}
           </section>
         )}
+
+        {/* Calm week overview pinned to the quiet space under the list */}
+        {totalCount > 0 && (
+          <div className="mt-auto pt-7">
+            <WeekOverview
+              locale={locale}
+              line={`${t("weeklyTasksCount", { count: totalCount })} · ${t("completedTodos")} ${completedCount}/${totalCount}`}
+              accent={allDone ? "gold" : "primary"}
+            />
+          </div>
+        )}
       </div>
 
       {/* Bottom progress bar */}
