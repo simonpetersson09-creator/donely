@@ -5,7 +5,7 @@ import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { CategoryDot } from "@/components/CategoryDot";
 import { cn } from "@/lib/utils";
-import { useLanguage, useLocale } from "@/lib/use-language";
+import { useLanguage } from "@/lib/use-language";
 import { useCategories, useEntries, useWeeklyTodos } from "@/lib/store";
 import { isoWeek } from "@/lib/weekly-summary";
 import { useSwipeDelete } from "@/hooks/use-swipe-delete";
@@ -109,7 +109,6 @@ function VeckansAttGora() {
   const completedCount = completedTodos.length;
   const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
   const allDone = totalCount > 0 && completedCount === totalCount;
-  const locale = useLocale();
 
   const openAddPopup = () => {
     setAddText("");
