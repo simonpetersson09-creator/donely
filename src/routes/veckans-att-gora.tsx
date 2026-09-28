@@ -606,12 +606,18 @@ function TodoRow({
   const showDelete = offset !== 0;
 
   return (
-    <div
-      className={cn(
-        "relative h-8 overflow-hidden rounded-full",
-        isDone ? "bg-muted/10" : "bg-secondary/30",
-      )}
-    >
+      <div
+        className={cn(
+          "relative h-8 overflow-hidden rounded-full",
+          isDone
+            ? "bg-muted/10"
+            : priority === "high"
+              ? "bg-red-500/[0.08]"
+              : priority === "medium"
+                ? "bg-blue-500/[0.07]"
+                : "bg-yellow-500/[0.11]",
+        )}
+      >
       {/* Swipe-revealed delete action */}
       {showDelete && (
         <div className="absolute inset-y-0 right-0 flex w-[72px] items-center justify-center bg-destructive">
