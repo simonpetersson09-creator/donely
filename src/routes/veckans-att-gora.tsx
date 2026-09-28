@@ -206,57 +206,35 @@ function VeckansAttGora() {
           )}
         </section>
 
-        {/* Completed todos */}
-        <section className="mt-6 rounded-2xl bg-background">
-          <button
-            type="button"
-            onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-full bg-gold px-4 py-1 shadow-sm"
-            aria-expanded={completedExpanded}
-          >
-            <h2 className="text-[13px] font-normal text-gold-foreground">
-              {t("completedTodos")}
-            </h2>
-            <span className="text-[12px] font-normal tabular-nums text-gold-foreground/80">
-              {completedTodos.length}
-            </span>
-            <ChevronDown
-              className={cn(
-                "size-4 text-gold-foreground/80 transition-transform",
-                completedExpanded && "rotate-180"
-              )}
-            />
-          </button>
-
-          {completedExpanded && (
-            <>
-              {completedTodos.length === 0 ? (
-                <div className="px-3 py-1.5 text-center">
-                  <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-1 p-0">
-                  {completedTodos.map((todo, idx) => (
-                    <TodoRow
-                      key={todo.id}
-                      todo={todo}
-                      index={idx}
-                      last={idx === completedTodos.length - 1}
-                      isEditing={editingId === todo.id}
-                      variant="compact"
-                      onToggle={() => handleToggle(todo.id, todo.completed)}
-                      onStartEdit={guard(todo.id, () => startEditing(todo.id))}
-                      onUpdateText={(text) => updateTodoText(todo.id, text)}
-                      onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
-                      onRemove={guard(todo.id, () => removeTodo(todo.id))}
-                      onFinishEdit={() => finishEdit(todo.id)}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
-        </section>
+        {/* Completed todos (toggle lives in the bottom bar) */}
+        {completedExpanded && (
+          <section className="mt-6 rounded-2xl bg-background">
+            {completedTodos.length === 0 ? (
+              <div className="px-3 py-1.5 text-center">
+                <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-1 p-0">
+                {completedTodos.map((todo, idx) => (
+                  <TodoRow
+                    key={todo.id}
+                    todo={todo}
+                    index={idx}
+                    last={idx === completedTodos.length - 1}
+                    isEditing={editingId === todo.id}
+                    variant="compact"
+                    onToggle={() => handleToggle(todo.id, todo.completed)}
+                    onStartEdit={guard(todo.id, () => startEditing(todo.id))}
+                    onUpdateText={(text) => updateTodoText(todo.id, text)}
+                    onSetPriority={(priority) => setTodoPriority(todo.id, priority)}
+                    onRemove={guard(todo.id, () => removeTodo(todo.id))}
+                    onFinishEdit={() => finishEdit(todo.id)}
+                  />
+                ))}
+              </div>
+            )}
+          </section>
+        )}
       </div>
 
       {/* Bottom progress bar */}
@@ -265,12 +243,23 @@ function VeckansAttGora() {
           <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
             {t("weeklyTodos")}
           </span>
-          <span className="text-[11px] font-medium text-muted-foreground">
-            {t("completedTodos")}{" "}
+          <button
+            type="button"
+            onClick={() => setCompletedExpanded((v) => !v)}
+            className="flex items-center text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
+            aria-expanded={completedExpanded}
+          >
+            {t("completedTodos")}
             <span className="ml-1.5 text-[15px] font-medium text-primary">
               {completedCount}/{totalCount}
             </span>
-          </span>
+            <ChevronDown
+              className={cn(
+                "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
+                completedExpanded && "rotate-180"
+              )}
+            />
+          </button>
         </div>
         <div className="relative mt-2">
           <div className="h-[2px] w-full rounded-full bg-primary/10" aria-hidden="true" />
