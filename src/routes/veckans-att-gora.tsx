@@ -612,10 +612,10 @@ function TodoRow({
           isDone
             ? "bg-muted/10"
             : priority === "high"
-              ? "bg-red-500/[0.08]"
+              ? "bg-red-500/[0.04]"
               : priority === "medium"
-                ? "bg-blue-500/[0.07]"
-                : "bg-yellow-500/[0.11]",
+                ? "bg-blue-500/[0.035]"
+                : "bg-yellow-500/[0.055]",
         )}
       >
       {/* Swipe-revealed delete action */}
