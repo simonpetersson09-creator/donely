@@ -108,6 +108,7 @@ function VeckansAttGora() {
   const totalCount = todos.length;
   const completedCount = completedTodos.length;
   const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
+  const allDone = totalCount > 0 && completedCount === totalCount;
 
   const openAddPopup = () => {
     setAddText("");
@@ -164,9 +165,22 @@ function VeckansAttGora() {
         {/* Active todos */}
         <section className="mt-8 rounded-2xl bg-background">
           {activeTodos.length === 0 ? (
-            <div className="px-3 py-1.5 text-center">
-              <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
-            </div>
+            totalCount === 0 ? (
+              <div className="flex flex-col items-center gap-2.5 px-3 py-7 text-center">
+                <span className="flex size-10 items-center justify-center rounded-full border border-border/60 bg-secondary/40">
+                  <Plus className="size-4.5 text-muted-foreground/70" strokeWidth={2} />
+                </span>
+                <p className="max-w-[26ch] text-[13px] font-normal text-muted-foreground">
+                  {t("emptyTodos")}
+                </p>
+              </div>
+            ) : (
+              <div className="flex justify-center py-2">
+                <span className="flex size-9 items-center justify-center rounded-full bg-gold shadow-gold">
+                  <Check className="size-4 text-gold-foreground" strokeWidth={3} />
+                </span>
+              </div>
+            )
           ) : (
             <div className="p-0">
               {grouped.map((group, groupIdx) => (
@@ -214,7 +228,11 @@ function VeckansAttGora() {
                 <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-1 p-0">
+              <>
+                <p className="px-3 pb-1.5 text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/60">
+                  {t("completedTodos")}
+                </p>
+                <div className="flex flex-col gap-1 p-0">
                 {completedTodos.map((todo, idx) => (
                   <TodoRow
                     key={todo.id}
@@ -232,6 +250,7 @@ function VeckansAttGora() {
                   />
                 ))}
               </div>
+              </>
             )}
           </section>
         )}
@@ -243,28 +262,40 @@ function VeckansAttGora() {
           <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
             {t("weeklyTodos")}
           </span>
-          <button
-            type="button"
-            onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex items-center text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
-            aria-expanded={completedExpanded}
-          >
-            {t("completedTodos")}
-            <span className="ml-1.5 text-[15px] font-medium text-primary">
-              {completedCount}/{totalCount}
-            </span>
-            <ChevronDown
-              className={cn(
-                "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
-                completedExpanded && "rotate-180"
+          {totalCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setCompletedExpanded((v) => !v)}
+              className="-mr-2 flex items-center px-2 py-2 text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
+              aria-expanded={completedExpanded}
+            >
+              {allDone && (
+                <span className="mr-1.5 flex size-4 items-center justify-center rounded-full bg-gold">
+                  <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
+                </span>
               )}
-            />
-          </button>
+              {t("completedTodos")}
+              <span className={cn("ml-1.5 text-[15px] font-medium", allDone ? "text-gold" : "text-primary")}>
+                {completedCount}/{totalCount}
+              </span>
+              <ChevronDown
+                className={cn(
+                  "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
+                  completedExpanded && "rotate-180"
+                )}
+              />
+            </button>
+          )}
         </div>
         <div className="relative mt-2">
           <div className="h-[2px] w-full rounded-full bg-primary/10" aria-hidden="true" />
           <div
-            className="absolute top-0 left-0 h-[2px] rounded-full bg-primary shadow-[0_0_8px_rgba(30,58,95,0.3)] transition-[width] duration-500 ease-out"
+            className={cn(
+              "absolute top-0 left-0 h-[2px] rounded-full transition-[width] duration-500 ease-out",
+              allDone
+                ? "bg-gold shadow-[0_0_8px_rgba(202,158,44,0.45)]"
+                : "bg-primary shadow-[0_0_8px_rgba(30,58,95,0.3)]"
+            )}
             style={{ width: `${progress}%` }}
           />
         </div>
