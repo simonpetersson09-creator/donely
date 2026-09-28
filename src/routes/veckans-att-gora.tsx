@@ -162,16 +162,7 @@ function VeckansAttGora() {
 
 
         {/* Active todos */}
-        <section className="mt-10 rounded-2xl bg-background">
-          <div className="flex items-center justify-center gap-1.5 rounded-full bg-primary px-4 py-1 shadow-sm">
-            <h2 className="text-[13px] font-normal text-primary-foreground">
-              {t("activeTodos")}
-            </h2>
-            <span className="text-[12px] font-normal tabular-nums text-primary-foreground/80">
-              {activeTodos.length}
-            </span>
-          </div>
-
+        <section className="mt-2 rounded-2xl bg-background">
           {activeTodos.length === 0 ? (
             <div className="px-3 py-1.5 text-center">
               <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
@@ -179,17 +170,17 @@ function VeckansAttGora() {
           ) : (
             <div className="p-0">
               {grouped.map((group, groupIdx) => (
-                <div key={group.priority} className={groupIdx > 0 ? "mt-3" : "mt-4"}>
-                  <div className="flex flex-col items-center px-3 pb-0.5">
+                <div key={group.priority} className={groupIdx > 0 ? "mt-4" : "mt-3"}>
+                  <div className="flex flex-col items-center px-3 pb-1">
                     <div className="flex items-center justify-center gap-1.5">
-                      <span className="text-[11px] font-medium uppercase tracking-normal text-muted-foreground">
+                      <span className="text-[13px] font-semibold uppercase tracking-normal text-muted-foreground">
                         {priorityLabel(t, group.priority)}
                       </span>
-                      <span className="text-[11px] font-normal tabular-nums text-muted-foreground/70">
+                      <span className="text-[12px] font-normal tabular-nums text-muted-foreground/70">
                         {group.items.length}
                       </span>
                     </div>
-                    <div className={cn("mt-0.5 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
+                    <div className={cn("mt-1 h-0.5 w-14 rounded-full", priorityBarClass(group.priority))} />
                   </div>
                   <div className="flex flex-col gap-1">
                     {group.items.map((todo, idx) => (
