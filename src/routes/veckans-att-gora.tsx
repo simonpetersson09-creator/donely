@@ -243,12 +243,23 @@ function VeckansAttGora() {
           <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
             {t("weeklyTodos")}
           </span>
-          <span className="text-[11px] font-medium text-muted-foreground">
-            {t("completedTodos")}{" "}
+          <button
+            type="button"
+            onClick={() => setCompletedExpanded((v) => !v)}
+            className="flex items-center text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
+            aria-expanded={completedExpanded}
+          >
+            {t("completedTodos")}
             <span className="ml-1.5 text-[15px] font-medium text-primary">
               {completedCount}/{totalCount}
             </span>
-          </span>
+            <ChevronDown
+              className={cn(
+                "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
+                completedExpanded && "rotate-180"
+              )}
+            />
+          </button>
         </div>
         <div className="relative mt-2">
           <div className="h-[2px] w-full rounded-full bg-primary/10" aria-hidden="true" />
