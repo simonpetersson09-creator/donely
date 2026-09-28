@@ -649,7 +649,7 @@ function TodoRow({
             {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
             {isDone && (
               <svg
-                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/60"
+                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/30"
                 viewBox="0 0 100 20"
                 preserveAspectRatio="none"
                 aria-hidden="true"
@@ -667,16 +667,16 @@ function TodoRow({
             e.stopPropagation();
             if (shouldTriggerAction()) onToggle();
           }}
-          className={cn(
-            "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
-            isCompact || todo.completed
-              ? "border-transparent bg-primary shadow-sm"
-              : "border-2 border-muted-foreground/40 bg-transparent"
-          )}
-          aria-checked={todo.completed}
-          role="checkbox"
-        >
-          {(isCompact || todo.completed) && (
+            className={cn(
+              "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
+              isDone
+                ? "border-transparent bg-primary/50"
+                : "border-2 border-muted-foreground/40 bg-transparent"
+            )}
+            aria-checked={todo.completed}
+            role="checkbox"
+          >
+            {isDone && (
             <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />
           )}
         </button>
