@@ -82,6 +82,13 @@ export const entrySchema = z.object({
 export const categoriesSchema = z.array(categorySchema);
 export const entriesSchema = z.array(entrySchema);
 export const goalsSchema = z.record(z.string(), z.number().finite());
+export const subtaskSchema = z.object({
+  id: z.string().min(1),
+  text: z.string(),
+  done: z.boolean(),
+});
+export type Subtask = z.infer<typeof subtaskSchema>;
+
 export const yearlyGoalSchema = z.object({
   id: z.string().min(1),
   text: z.string(),
@@ -91,6 +98,8 @@ export const yearlyGoalSchema = z.object({
   year: z.number().int().min(2000).max(3000).optional(),
   /** Priority level shown on the left of active goal rows. Defaults to medium. */
   priority: z.enum(["high", "medium", "low"]).optional(),
+  /** Checklist of smaller steps inside the goal. */
+  subtasks: z.array(subtaskSchema).optional(),
   createdAt: z.string().min(1),
 });
 export const yearlyGoalsSchema = z.array(yearlyGoalSchema);
@@ -106,6 +115,8 @@ export const weeklyTodoSchema = z.object({
   entryId: z.string().min(1).optional(),
   /** Priority level shown on the left of active todo rows. Defaults to medium. */
   priority: todoPrioritySchema.optional(),
+  /** Checklist of smaller steps inside the todo. */
+  subtasks: z.array(subtaskSchema).optional(),
   createdAt: z.string().min(1),
 });
 export const weeklyTodosSchema = z.array(weeklyTodoSchema);

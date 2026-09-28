@@ -35,6 +35,9 @@ export function localeOf(code: string) {
 }
 
 const sv = {
+  subtasks: "Deluppgifter",
+  addSubtask: "Lägg till deluppgift…",
+  subtasksEmpty: "Inga deluppgifter än.",
   feedbackTitle: "Vad saknar du i appen?",
   feedbackBody: "Berätta gärna vad du saknar eller vad som skulle göra Donely bättre för dig.",
   feedbackPlaceholder: "Skriv här …",
@@ -322,6 +325,9 @@ const sv = {
 type Dict = typeof sv & Record<string, string>;
 
 const en: Dict = {
+  subtasks: "Subtasks",
+  addSubtask: "Add subtask…",
+  subtasksEmpty: "No subtasks yet.",
   feedbackTitle: "What's missing in the app?",
   feedbackBody: "Tell us what you're missing or what would make Donely better for you.",
   feedbackPlaceholder: "Write here …",
@@ -607,6 +613,9 @@ const en: Dict = {
 };
 
 const de: Dict = {
+  subtasks: "Teilaufgaben",
+  addSubtask: "Teilaufgabe hinzufügen…",
+  subtasksEmpty: "Noch keine Teilaufgaben.",
   feedbackTitle: "Was fehlt dir in der App?",
   feedbackBody: "Sag uns, was du vermisst oder was Donely für dich besser machen würde.",
   feedbackPlaceholder: "Hier schreiben …",
@@ -894,6 +903,9 @@ const de: Dict = {
 };
 
 const fr: Dict = {
+  subtasks: "Sous-tâches",
+  addSubtask: "Ajouter une sous-tâche…",
+  subtasksEmpty: "Aucune sous-tâche pour l’instant.",
   feedbackTitle: "Que manque-t-il dans l'app ?",
   feedbackBody: "Dis-nous ce qui te manque ou ce qui rendrait Donely meilleur pour toi.",
   feedbackPlaceholder: "Écris ici …",
@@ -1187,6 +1199,9 @@ const fr: Dict = {
 };
 
 const es: Dict = {
+  subtasks: "Subtareas",
+  addSubtask: "Añadir subtarea…",
+  subtasksEmpty: "Aún no hay subtareas.",
   feedbackTitle: "¿Qué echas de menos en la app?",
   feedbackBody: "Cuéntanos qué te falta o qué haría que Donely fuera mejor para ti.",
   feedbackPlaceholder: "Escribe aquí …",
@@ -1480,6 +1495,9 @@ const es: Dict = {
 };
 
 const it: Dict = {
+  subtasks: "Sottoattività",
+  addSubtask: "Aggiungi sottoattività…",
+  subtasksEmpty: "Ancora nessuna sottoattività.",
   feedbackTitle: "Cosa manca nell'app?",
   feedbackBody: "Dicci cosa ti manca o cosa renderebbe Donely migliore per te.",
   feedbackPlaceholder: "Scrivi qui …",
@@ -1772,6 +1790,9 @@ const it: Dict = {
 };
 
 const ptBR: Dict = {
+  subtasks: "Subtarefas",
+  addSubtask: "Adicionar subtarefa…",
+  subtasksEmpty: "Nenhuma subtarefa ainda.",
   feedbackTitle: "O que está faltando no app?",
   feedbackBody: "Conte o que você sente falta ou o que tornaria o Donely melhor para você.",
   feedbackPlaceholder: "Escreva aqui …",
@@ -2064,6 +2085,9 @@ const ptBR: Dict = {
 };
 
 const nl: Dict = {
+  subtasks: "Subtaken",
+  addSubtask: "Subtaak toevoegen…",
+  subtasksEmpty: "Nog geen subtaken.",
   feedbackTitle: "Wat mis je in de app?",
   feedbackBody: "Vertel ons wat je mist of wat Donely beter voor jou zou maken.",
   feedbackPlaceholder: "Schrijf hier …",
@@ -2350,6 +2374,9 @@ const nl: Dict = {
 };
 
 const pl: Dict = {
+  subtasks: "Podzadania",
+  addSubtask: "Dodaj podzadanie…",
+  subtasksEmpty: "Brak podzadań.",
   feedbackTitle: "Czego brakuje Ci w aplikacji?",
   feedbackBody: "Powiedz nam, czego Ci brakuje lub co sprawiłoby, że Donely byłoby dla Ciebie lepsze.",
   feedbackPlaceholder: "Napisz tutaj …",
@@ -2649,6 +2676,9 @@ const pl: Dict = {
 };
 
 const da: Dict = {
+  subtasks: "Delopgaver",
+  addSubtask: "Tilføj delopgave…",
+  subtasksEmpty: "Ingen delopgaver endnu.",
   feedbackTitle: "Hvad mangler du i appen?",
   feedbackBody: "Fortæl os, hvad du savner, eller hvad der ville gøre Donely bedre for dig.",
   feedbackPlaceholder: "Skriv her …",
@@ -2934,6 +2964,9 @@ const da: Dict = {
 };
 
 const no: Dict = {
+  subtasks: "Deloppgaver",
+  addSubtask: "Legg til deloppgave…",
+  subtasksEmpty: "Ingen deloppgaver ennå.",
   feedbackTitle: "Hva savner du i appen?",
   feedbackBody: "Fortell oss hva du savner, eller hva som ville gjort Donely bedre for deg.",
   feedbackPlaceholder: "Skriv her …",
@@ -3219,6 +3252,9 @@ const no: Dict = {
 };
 
 const fi: Dict = {
+  subtasks: "Alitehtävät",
+  addSubtask: "Lisää alitehtävä…",
+  subtasksEmpty: "Ei vielä alitehtäviä.",
   feedbackTitle: "Mitä kaipaat sovelluksesta?",
   feedbackBody: "Kerro, mitä kaipaat tai mikä tekisi Donelystä sinulle paremman.",
   feedbackPlaceholder: "Kirjoita tähän …",
@@ -3504,6 +3540,9 @@ const fi: Dict = {
 };
 
 const ja: Dict = {
+  subtasks: "サブタスク",
+  addSubtask: "サブタスクを追加…",
+  subtasksEmpty: "サブタスクはまだありません。",
   feedbackTitle: "アプリに欲しい機能は？",
   feedbackBody: "足りないものや、Donely をもっと良くするアイデアをぜひ教えてください。",
   feedbackPlaceholder: "ここに入力 …",

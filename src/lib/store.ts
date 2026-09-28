@@ -34,10 +34,11 @@ import {
   type YearlyGoal,
   type WeeklyTodo,
   type TodoPriority,
+  type Subtask,
 } from "@/lib/persistence";
 
 export type Area = "jobb" | "privat";
-export type { Category, Entry, Goals, YearlyGoal, WeeklyTodo };
+export type { Category, Entry, Goals, YearlyGoal, WeeklyTodo, Subtask };
 export { DEFAULT_CATEGORIES };
 
 const CATS_KEY = STORAGE_KEYS.categories;
@@ -578,7 +579,14 @@ export function useYearlyGoals(year?: number) {
   );
 
 
-  return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, setGoalPriority, hydrated };
+  const setGoalSubtasks = useCallback(
+    (id: string, subtasks: Subtask[]) => {
+      commit(goalsRef.current.map((g) => (g.id === id ? { ...g, subtasks } : g)));
+    },
+    [commit],
+  );
+
+  return { goals, addGoal, toggleGoal, updateGoalText, removeGoal, moveGoal, setGoalPriority, setGoalSubtasks, hydrated };
 }
 
 /** Monday 00:00 local time for the week containing `from`. */
@@ -755,8 +763,16 @@ export function useWeeklyTodos() {
     [commit],
   );
 
+  const setTodoSubtasks = useCallback(
+    (id: string, subtasks: Subtask[]) => {
+      commit(todosRef.current.map((t) => (t.id === id ? { ...t, subtasks } : t)));
+    },
+    [commit],
+  );
+
   return {
     todos,
+    setTodoSubtasks,
     addTodo,
     completeTodo,
     uncompleteTodo,
