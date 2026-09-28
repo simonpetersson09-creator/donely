@@ -150,7 +150,7 @@ function VeckansAttGora() {
 
   return (
     <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden bg-background px-5 pt-[calc(env(safe-area-inset-top)+0.5rem)] font-sans">
-      <div className="flex-1 overflow-y-auto pb-4">
+      <div className="flex flex-1 flex-col overflow-y-auto pb-4">
         {/* iOS-style navigation header */}
         <div className="relative flex items-center justify-center pb-3 pt-1">
           <div className="pointer-events-none absolute inset-x-0 top-1 flex justify-center">
