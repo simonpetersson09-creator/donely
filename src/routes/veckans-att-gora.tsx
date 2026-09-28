@@ -109,6 +109,7 @@ function VeckansAttGora() {
   const completedCount = completedTodos.length;
   const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
   const allDone = totalCount > 0 && completedCount === totalCount;
+  const locale = useLocale();
 
   const openAddPopup = () => {
     setAddText("");
