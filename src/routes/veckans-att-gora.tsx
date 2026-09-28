@@ -492,10 +492,13 @@ function TodoRow({
   const keepFocus = (e: { preventDefault: () => void }) => e.preventDefault();
 
   const priority = todo.priority ?? "medium";
+  const isCompact = variant === "compact";
+  const isDone = isCompact || todo.completed;
 
   const PriorityIndicator = ({ className }: { className?: string }) => (
+
     <span
-      className={cn("block h-5 w-1 self-center rounded-full", priorityBarClass(priority), className)}
+      className={cn("block h-5 w-1 self-center rounded-full", priorityBarClass(priority), isDone && "opacity-40", className)}
       aria-hidden="true"
     />
   );
@@ -578,8 +581,7 @@ function TodoRow({
     );
   }
 
-  const isCompact = variant === "compact";
-  const isDone = isCompact || todo.completed;
+
 
   const showDelete = offset !== 0;
 
@@ -587,7 +589,7 @@ function TodoRow({
     <div
       className={cn(
         "relative h-8 overflow-hidden rounded-full",
-        isDone ? "bg-muted/20" : "bg-secondary/30",
+        isDone ? "bg-muted/10" : "bg-secondary/30",
       )}
     >
       {/* Swipe-revealed delete action */}
@@ -642,14 +644,14 @@ function TodoRow({
         <div
           className={cn(
             "min-w-0 flex-1 truncate text-left text-[13px] font-normal transition-colors",
-            isDone ? "text-muted-foreground/70" : "text-primary"
+            isDone ? "text-muted-foreground/40" : "text-primary"
           )}
         >
           <span className="relative inline-block">
             {todo.text || <span className="italic text-muted-foreground">{t("todoPlaceholder")}</span>}
             {isDone && (
               <svg
-                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/30"
+                className="pointer-events-none absolute inset-0 h-full w-full text-destructive/20"
                 viewBox="0 0 100 20"
                 preserveAspectRatio="none"
                 aria-hidden="true"
@@ -670,14 +672,14 @@ function TodoRow({
             className={cn(
               "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
               isDone
-                ? "border-transparent bg-primary/50"
+                ? "border-transparent bg-primary/30"
                 : "border-2 border-muted-foreground/40 bg-transparent"
             )}
             aria-checked={todo.completed}
             role="checkbox"
           >
             {isDone && (
-            <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />
+            <Check className="size-2.5 text-primary-foreground/80" strokeWidth={3} />
           )}
         </button>
       </div>
