@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
 import { SubtaskSheet } from "@/components/SubtaskSheet";
+import { InlineSubtasks } from "@/components/InlineSubtasks";
+import type { Subtask } from "@/lib/store";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { CategoryDot } from "@/components/CategoryDot";
@@ -216,6 +218,9 @@ function VeckansAttGora() {
                         onRemove={guard(todo.id, () => removeTodo(todo.id))}
                         onFinishEdit={() => finishEdit(todo.id)}
                         onOpenSubtasks={() => setSubtasksId(todo.id)}
+                        onToggleSubtask={(subId) =>
+                          setTodoSubtasks(todo.id, (todo.subtasks ?? []).map((x) => (x.id === subId ? { ...x, done: !x.done } : x)))
+                        }
                       />
                     ))}
                   </div>
@@ -253,6 +258,9 @@ function VeckansAttGora() {
                     onRemove={guard(todo.id, () => removeTodo(todo.id))}
                     onFinishEdit={() => finishEdit(todo.id)}
                     onOpenSubtasks={() => setSubtasksId(todo.id)}
+                    onToggleSubtask={(subId) =>
+                      setTodoSubtasks(todo.id, (todo.subtasks ?? []).map((x) => (x.id === subId ? { ...x, done: !x.done } : x)))
+                    }
                   />
                 ))}
               </div>
@@ -468,8 +476,9 @@ function TodoRow({
   onRemove,
   onFinishEdit,
   onOpenSubtasks,
+  onToggleSubtask,
 }: {
-  todo: { id: string; text: string; completed: boolean; priority?: Priority; subtasks?: { done: boolean }[] };
+  todo: { id: string; text: string; completed: boolean; priority?: Priority; subtasks?: Subtask[] };
   index: number;
   last: boolean;
   isEditing: boolean;
@@ -481,6 +490,7 @@ function TodoRow({
   onRemove: () => void;
   onFinishEdit: () => void;
   onOpenSubtasks: () => void;
+  onToggleSubtask: (subtaskId: string) => void;
 }) {
   const { t } = useLanguage();
   const delay = useMemo(() => ({ animationDelay: `${Math.min(index, 12) * 30}ms` }), [index]);
@@ -535,6 +545,7 @@ function TodoRow({
   const priority = todo.priority ?? "medium";
   const isCompact = variant === "compact";
   const isDone = isCompact || todo.completed;
+  const subtasks = todo.subtasks ?? [];
 
   const PriorityIndicator = ({ className }: { className?: string }) => (
 
@@ -546,6 +557,7 @@ function TodoRow({
 
   if (isEditing) {
     return (
+      <>
       <div
         className="stagger-item flex min-h-8 items-center gap-2 rounded-full bg-secondary/50 px-2 py-0.5"
         style={delay}
@@ -633,6 +645,15 @@ function TodoRow({
           {todo.completed && <Check className="size-2.5 text-completed-foreground" strokeWidth={3} />}
         </button>
       </div>
+      {subtasks.length > 0 && (
+        <InlineSubtasks
+          subtasks={subtasks}
+          faded={todo.completed}
+          onToggle={onToggleSubtask}
+          onOpen={onOpenSubtasks}
+        />
+      )}
+      </>
     );
   }
 
@@ -643,7 +664,8 @@ function TodoRow({
   return (
       <div
         className={cn(
-          "relative h-8 overflow-hidden rounded-full",
+          "relative overflow-hidden",
+          subtasks.length > 0 ? "rounded-2xl" : "h-8 rounded-full",
           isDone
             ? "bg-muted/10"
             : priority === "high"
@@ -767,6 +789,14 @@ function TodoRow({
           )}
         </button>
       </div>
+        {subtasks.length > 0 && (
+          <InlineSubtasks
+            subtasks={subtasks}
+            faded={isDone}
+            onToggle={onToggleSubtask}
+            onOpen={onOpenSubtasks}
+          />
+        )}
       </div>
     </div>
   );

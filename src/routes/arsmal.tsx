@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Check, ChevronDown, ListChecks, Plus, Trash2 } from "lucide-react";
 import { SubtaskSheet } from "@/components/SubtaskSheet";
+import { InlineSubtasks } from "@/components/InlineSubtasks";
+import type { Subtask } from "@/lib/store";
 import { BackButton } from "@/components/BackButton";
 import { BottomSheet } from "@/components/BottomSheet";
 import { cn } from "@/lib/utils";
@@ -177,6 +179,9 @@ function Arsmal() {
                         onRemove={guard(goal.id, () => removeGoal(goal.id))}
                         onFinishEdit={() => finishEdit(goal.id)}
                         onOpenSubtasks={() => setSubtasksId(goal.id)}
+                        onToggleSubtask={(subId) =>
+                          setGoalSubtasks(goal.id, (goal.subtasks ?? []).map((x) => (x.id === subId ? { ...x, done: !x.done } : x)))
+                        }
                       />
                     ))}
                   </div>
@@ -230,6 +235,9 @@ function Arsmal() {
                       onRemove={guard(goal.id, () => removeGoal(goal.id))}
                       onFinishEdit={() => finishEdit(goal.id)}
                       onOpenSubtasks={() => setSubtasksId(goal.id)}
+                      onToggleSubtask={(subId) =>
+                        setGoalSubtasks(goal.id, (goal.subtasks ?? []).map((x) => (x.id === subId ? { ...x, done: !x.done } : x)))
+                      }
                     />
                   ))}
                 </div>
@@ -375,8 +383,9 @@ function GoalRow({
   onRemove,
   onFinishEdit,
   onOpenSubtasks,
+  onToggleSubtask,
 }: {
-  goal: { id: string; text: string; completed: boolean; priority?: Priority; subtasks?: { done: boolean }[] };
+  goal: { id: string; text: string; completed: boolean; priority?: Priority; subtasks?: Subtask[] };
   index: number;
   last: boolean;
   isEditing: boolean;
@@ -387,6 +396,7 @@ function GoalRow({
   onRemove: () => void;
   onFinishEdit: () => void;
   onOpenSubtasks: () => void;
+  onToggleSubtask: (subtaskId: string) => void;
 }) {
   const { t } = useLanguage();
   const delay = { animationDelay: `${Math.min(index, 12) * 30}ms` };
@@ -447,6 +457,7 @@ function GoalRow({
   });
 
   const priority = goal.priority ?? "medium";
+  const subtasks = goal.subtasks ?? [];
 
   const PriorityIndicator = ({ className }: { className?: string }) => (
     <span
@@ -457,6 +468,7 @@ function GoalRow({
 
   if (isEditing) {
     return (
+      <>
       <div
         className="stagger-item flex min-h-8 items-center gap-1.5 rounded-full bg-secondary/50 px-2 py-0.5"
         style={delay}
@@ -544,6 +556,15 @@ function GoalRow({
           {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
         </button>
       </div>
+      {subtasks.length > 0 && (
+        <InlineSubtasks
+          subtasks={subtasks}
+          faded={goal.completed}
+          onToggle={onToggleSubtask}
+          onOpen={onOpenSubtasks}
+        />
+      )}
+      </>
     );
   }
 
@@ -552,7 +573,8 @@ function GoalRow({
   return (
       <div
         className={cn(
-          "relative h-8 overflow-hidden rounded-full",
+          "relative overflow-hidden",
+          subtasks.length > 0 ? "rounded-2xl" : "h-8 rounded-full",
           goal.completed
             ? "bg-muted/40"
             : priority === "high"
@@ -668,6 +690,14 @@ function GoalRow({
           {goal.completed && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
         </button>
       </div>
+        {subtasks.length > 0 && (
+          <InlineSubtasks
+            subtasks={subtasks}
+            faded={goal.completed}
+            onToggle={onToggleSubtask}
+            onOpen={onOpenSubtasks}
+          />
+        )}
       </div>
     </div>
   );
