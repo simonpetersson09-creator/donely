@@ -492,6 +492,8 @@ function TodoRow({
   const keepFocus = (e: { preventDefault: () => void }) => e.preventDefault();
 
   const priority = todo.priority ?? "medium";
+  const isDone = isCompact || todo.completed;
+
 
   const isDone = isCompact || todo.completed;
 
