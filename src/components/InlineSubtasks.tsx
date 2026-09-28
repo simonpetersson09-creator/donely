@@ -52,7 +52,7 @@ export function InlineSubtasks({
           <span
             className={cn(
               "min-w-0 flex-1 truncate text-[12px] leading-tight transition-colors",
-              s.done ? "text-muted-foreground/40 line-through" : "text-muted-foreground/90",
+              s.done ? "text-muted-foreground/40 line-through" : "text-foreground/85",
             )}
           >
             {s.text}
