@@ -164,8 +164,13 @@ function VeckansAttGora() {
         {/* Active todos */}
         <section className="mt-8 rounded-2xl bg-background">
           {activeTodos.length === 0 ? (
-            <div className="px-3 py-1.5 text-center">
-              <p className="text-[13px] font-normal text-foreground">{t("emptyTodos")}</p>
+            <div className="flex flex-col items-center gap-2.5 px-3 py-7 text-center">
+              <span className="flex size-10 items-center justify-center rounded-full border border-border/60 bg-secondary/40">
+                <Plus className="size-4.5 text-muted-foreground/70" strokeWidth={2} />
+              </span>
+              <p className="max-w-[26ch] text-[13px] font-normal text-muted-foreground">
+                {t("emptyTodos")}
+              </p>
             </div>
           ) : (
             <div className="p-0">
@@ -214,7 +219,11 @@ function VeckansAttGora() {
                 <p className="text-[13px] font-normal text-foreground">{t("archiveTodosEmpty")}</p>
               </div>
             ) : (
-              <div className="flex flex-col gap-1 p-0">
+              <>
+                <p className="px-3 pb-1.5 text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/60">
+                  {t("completedTodos")}
+                </p>
+                <div className="flex flex-col gap-1 p-0">
                 {completedTodos.map((todo, idx) => (
                   <TodoRow
                     key={todo.id}
