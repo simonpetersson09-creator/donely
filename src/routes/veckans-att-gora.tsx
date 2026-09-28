@@ -108,6 +108,7 @@ function VeckansAttGora() {
   const totalCount = todos.length;
   const completedCount = completedTodos.length;
   const progress = totalCount === 0 ? 0 : (completedCount / totalCount) * 100;
+  const allDone = totalCount > 0 && completedCount === totalCount;
 
   const openAddPopup = () => {
     setAddText("");
@@ -241,6 +242,7 @@ function VeckansAttGora() {
                   />
                 ))}
               </div>
+              </>
             )}
           </section>
         )}
@@ -252,28 +254,40 @@ function VeckansAttGora() {
           <span className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
             {t("weeklyTodos")}
           </span>
-          <button
-            type="button"
-            onClick={() => setCompletedExpanded((v) => !v)}
-            className="flex items-center text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
-            aria-expanded={completedExpanded}
-          >
-            {t("completedTodos")}
-            <span className="ml-1.5 text-[15px] font-medium text-primary">
-              {completedCount}/{totalCount}
-            </span>
-            <ChevronDown
-              className={cn(
-                "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
-                completedExpanded && "rotate-180"
+          {totalCount > 0 && (
+            <button
+              type="button"
+              onClick={() => setCompletedExpanded((v) => !v)}
+              className="-mr-2 flex items-center px-2 py-2 text-[11px] font-medium text-muted-foreground transition-colors active:text-primary"
+              aria-expanded={completedExpanded}
+            >
+              {allDone && (
+                <span className="mr-1.5 flex size-4 items-center justify-center rounded-full bg-gold">
+                  <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />
+                </span>
               )}
-            />
-          </button>
+              {t("completedTodos")}
+              <span className={cn("ml-1.5 text-[15px] font-medium", allDone ? "text-gold" : "text-primary")}>
+                {completedCount}/{totalCount}
+              </span>
+              <ChevronDown
+                className={cn(
+                  "ml-1 size-3.5 text-muted-foreground/70 transition-transform",
+                  completedExpanded && "rotate-180"
+                )}
+              />
+            </button>
+          )}
         </div>
         <div className="relative mt-2">
           <div className="h-[2px] w-full rounded-full bg-primary/10" aria-hidden="true" />
           <div
-            className="absolute top-0 left-0 h-[2px] rounded-full bg-primary shadow-[0_0_8px_rgba(30,58,95,0.3)] transition-[width] duration-500 ease-out"
+            className={cn(
+              "absolute top-0 left-0 h-[2px] rounded-full transition-[width] duration-500 ease-out",
+              allDone
+                ? "bg-gold shadow-[0_0_8px_rgba(202,158,44,0.45)]"
+                : "bg-primary shadow-[0_0_8px_rgba(30,58,95,0.3)]"
+            )}
             style={{ width: `${progress}%` }}
           />
         </div>
