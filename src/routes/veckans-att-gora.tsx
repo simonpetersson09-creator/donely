@@ -579,6 +579,7 @@ function TodoRow({
   }
 
   const isCompact = variant === "compact";
+  const isDone = isCompact || todo.completed;
 
   const showDelete = offset !== 0;
 
@@ -586,7 +587,7 @@ function TodoRow({
     <div
       className={cn(
         "relative h-8 overflow-hidden rounded-full",
-        isCompact || todo.completed ? "bg-muted/40" : "bg-secondary/30",
+        isDone ? "bg-muted/20" : "bg-secondary/30",
       )}
     >
       {/* Swipe-revealed delete action */}
