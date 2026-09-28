@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, Plus, X } from "lucide-react";
+import { Check, ListChecks, Plus, X } from "lucide-react";
 import { BottomSheet } from "@/components/BottomSheet";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/lib/use-language";
@@ -20,6 +20,7 @@ export function SubtaskSheet({
   const { t } = useLanguage();
   const [text, setText] = useState("");
   const done = subtasks.filter((s) => s.done).length;
+  const allDone = subtasks.length > 0 && done === subtasks.length;
 
   const add = () => {
     const trimmed = text.trim();
@@ -30,41 +31,72 @@ export function SubtaskSheet({
 
   return (
     <BottomSheet onClose={onClose} label={t("subtasks")}>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         <div className="flex items-baseline justify-between gap-3">
-          <h2 className="min-w-0 truncate text-[17px] font-semibold text-foreground">{title}</h2>
+          <h2 className="min-w-0 truncate text-[17px] font-semibold tracking-tight text-foreground">{title}</h2>
           {subtasks.length > 0 && (
-            <span className="shrink-0 text-[13px] tabular-nums text-muted-foreground">
+            <span
+              className={cn(
+                "shrink-0 rounded-full px-2.5 py-0.5 text-[13px] font-semibold tabular-nums transition-colors",
+                allDone ? "bg-gold/15 text-gold" : "bg-secondary text-muted-foreground",
+              )}
+            >
               {done}/{subtasks.length}
             </span>
           )}
         </div>
-        <p className="-mt-2 text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
-          {t("subtasks")}
-        </p>
+
+        {subtasks.length > 0 ? (
+          <div className="flex items-center gap-3">
+            <span className="shrink-0 text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
+              {t("subtasks")}
+            </span>
+            <div className="h-1 flex-1 overflow-hidden rounded-full bg-secondary">
+              <div
+                className={cn("h-full rounded-full transition-all duration-300 ease-out", allDone ? "bg-gold" : "bg-primary/80")}
+                style={{ width: `${(done / subtasks.length) * 100}%` }}
+              />
+            </div>
+          </div>
+        ) : (
+          <p className="-mt-1 text-[11px] font-medium uppercase tracking-[0.1em] text-muted-foreground/70">
+            {t("subtasks")}
+          </p>
+        )}
 
         {subtasks.length === 0 ? (
-          <p className="py-2 text-center text-[13px] text-muted-foreground">{t("subtasksEmpty")}</p>
+          <div className="flex flex-col items-center gap-2 py-5">
+            <span className="flex size-10 items-center justify-center rounded-full bg-secondary">
+              <ListChecks className="size-5 text-muted-foreground/70" />
+            </span>
+            <p className="text-center text-[13px] text-muted-foreground">{t("subtasksEmpty")}</p>
+          </div>
         ) : (
-          <ul className="flex max-h-[45vh] flex-col gap-1 overflow-y-auto">
+          <ul className="flex max-h-[45vh] flex-col gap-1.5 overflow-y-auto">
             {subtasks.map((s) => (
-              <li key={s.id} className="flex h-9 items-center gap-2 rounded-full bg-secondary/50 px-3">
+              <li
+                key={s.id}
+                className={cn(
+                  "flex min-h-11 items-center gap-2.5 rounded-full px-3 transition-colors duration-300",
+                  s.done ? "bg-gold/10" : "bg-secondary/50",
+                )}
+              >
                 <button
                   type="button"
                   role="checkbox"
                   aria-checked={s.done}
                   onClick={() => onChange(subtasks.map((x) => (x.id === s.id ? { ...x, done: !x.done } : x)))}
                   className={cn(
-                    "flex size-[18px] shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
-                    s.done ? "bg-primary" : "border-2 border-muted-foreground/40",
+                    "flex size-5 shrink-0 items-center justify-center rounded-full transition-all active:scale-90",
+                    s.done ? "bg-gold shadow-[0_0_6px_rgba(202,158,44,0.4)]" : "border-2 border-muted-foreground/40",
                   )}
                 >
-                  {s.done && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
+                  {s.done && <Check className="size-2.5 text-gold-foreground" strokeWidth={3} />}
                 </button>
                 <span
                   className={cn(
-                    "min-w-0 flex-1 truncate text-[14px]",
-                    s.done ? "text-muted-foreground line-through" : "text-foreground",
+                    "min-w-0 flex-1 truncate text-[14px] transition-colors",
+                    s.done ? "text-muted-foreground/70 line-through" : "text-foreground",
                   )}
                 >
                   {s.text}
@@ -72,7 +104,7 @@ export function SubtaskSheet({
                 <button
                   type="button"
                   onClick={() => onChange(subtasks.filter((x) => x.id !== s.id))}
-                  className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground active:bg-secondary"
+                  className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground/70 transition-colors active:bg-secondary"
                   aria-label={t("remove")}
                 >
                   <X className="size-4" />
@@ -93,14 +125,14 @@ export function SubtaskSheet({
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder={t("addSubtask")}
-            className="h-10 min-w-0 flex-1 rounded-full bg-secondary/60 px-4 text-[14px] text-foreground outline-none placeholder:text-muted-foreground"
+            className="h-11 min-w-0 flex-1 rounded-full bg-secondary/60 px-4 text-[14px] text-foreground outline-none transition-shadow placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary/30"
             autoComplete="off"
             enterKeyHint="done"
           />
           <button
             type="submit"
             disabled={!text.trim()}
-            className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm disabled:opacity-40"
+            className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-all active:scale-95 disabled:opacity-40"
             aria-label={t("addSubtask")}
           >
             <Plus className="size-5" />
