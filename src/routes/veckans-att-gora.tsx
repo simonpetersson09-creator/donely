@@ -53,6 +53,53 @@ function nextPriority(priority: Priority): Priority {
   return "high";
 }
 
+/** Quiet week strip: Mon–Sun with today marked, plus a one-line progress summary. */
+function WeekOverview({ locale, line, accent }: { locale: string; line: string; accent: "primary" | "gold" }) {
+  const days = useMemo(() => {
+    const now = new Date();
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      return {
+        label: d.toLocaleDateString(locale, { weekday: "short" }),
+        isToday: d.toDateString() === now.toDateString(),
+      };
+    });
+  }, [locale]);
+
+  return (
+    <div className="rounded-2xl border border-border/40 bg-secondary/40 px-3 py-3">
+      <div className="flex items-start justify-between px-1">
+        {days.map((d, i) => (
+          <div key={i} className="flex flex-col items-center gap-1.5">
+            <span
+              className={cn(
+                "text-[10px] leading-none",
+                d.isToday ? "font-semibold text-primary" : "font-normal text-muted-foreground/60"
+              )}
+            >
+              {d.label}
+            </span>
+            <span
+              className={cn(
+                "size-1.5 rounded-full",
+                d.isToday
+                  ? accent === "gold"
+                    ? "bg-gold"
+                    : "bg-primary"
+                  : "bg-border/70"
+              )}
+            />
+          </div>
+        ))}
+      </div>
+      <p className="mt-2.5 text-center text-[11px] font-normal text-muted-foreground">{line}</p>
+    </div>
+  );
+}
+
 function VeckansAttGora() {
   const { t } = useLanguage();
   const { todos, addTodo, completeTodo, uncompleteTodo, updateTodoText, setTodoPriority, removeTodo } =
