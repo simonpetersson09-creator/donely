@@ -569,9 +569,18 @@ function installBridge() {
       typeof value === "string"
         ? value
         : (parsePayload<{ route?: string }>(value)?.route ?? REMINDER_ROUTE);
-    if (!path.startsWith("/")) return;
+    // Only allow same-origin app paths (block "//evil.com" and "/\evil.com").
+    if (typeof path !== "string" || !/^\/(?![\/\\])/.test(path)) return;
+    let target: URL;
+    try {
+      target = new URL(path, window.location.origin);
+    } catch {
+      return;
+    }
+    if (target.origin !== window.location.origin) return;
+    const safe = `${target.pathname}${target.search}`;
     const current = `${window.location.pathname}${window.location.search}`;
-    if (current !== path) window.location.assign(path);
+    if (current !== safe) window.location.assign(safe);
   };
 
   const onForeground = () => {
