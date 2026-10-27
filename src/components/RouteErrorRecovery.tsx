@@ -10,7 +10,7 @@ import { useRouter } from "@tanstack/react-router";
  * the page, so this boundary quietly resets itself once and puts the user back
  * on the same screen instead of on an error page.
  */
-export function RouteErrorRecovery({ reset }: { error: Error; reset: () => void }) {
+export function RouteErrorRecovery({ reset }: { error: unknown; reset: () => void }) {
   const router = useRouter();
   const resetRef = useRef(reset);
   resetRef.current = reset;
