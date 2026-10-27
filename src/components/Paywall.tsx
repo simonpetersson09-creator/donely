@@ -56,7 +56,7 @@ export function Paywall({ onClose }: { onClose: () => void }) {
 
         {price ? (
           <p className="mt-4 text-center text-[26px] font-bold tabular-nums tracking-[-0.02em] text-foreground">
-            {t("pricePerMonth", { price })}
+            {t(isYearlyProduct(premium.product?.id) ? "pricePerYear" : "pricePerMonth", { price })}
           </p>
         ) : (
           <p className="mt-4 text-center text-[14px] font-medium text-muted-foreground">
@@ -76,7 +76,7 @@ export function Paywall({ onClose }: { onClose: () => void }) {
               : premium.phase === "purchasing"
                 ? t("purchasePending")
                 : price
-                  ? t("startPremiumDynamic", { price })
+                  ? t(isYearlyProduct(premium.product?.id) ? "startPremiumYearlyDynamic" : "startPremiumDynamic", { price })
                   : t("startPremiumPlain")}
           </button>
           <button

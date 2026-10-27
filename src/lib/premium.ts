@@ -32,7 +32,15 @@ const TRIAL_KEY = "vr.trial.v1";
 const PREMIUM_KEY = "vr.premium.v1";
 
 export const TRIAL_DAYS = 14;
-export const PRODUCT_ID = "se.shiningdays.donely.premium.monthly";
+/** The only subscription offered for new purchases on iOS (yearly). */
+export const PRODUCT_ID = "se.shiningdays.donely.premium.yearly";
+/** Retired monthly product. Still honoured for entitlement until it expires. */
+export const LEGACY_MONTHLY_PRODUCT_ID = "se.shiningdays.donely.premium.monthly";
+
+/** True when the given product is billed yearly (drives "/year" copy). */
+export function isYearlyProduct(id: string | null | undefined): boolean {
+  return id === PRODUCT_ID;
+}
 
 /** Fallback price shown only until StoreKit reports the real localized price. */
 export const FALLBACK_PRICE = "19 kr";

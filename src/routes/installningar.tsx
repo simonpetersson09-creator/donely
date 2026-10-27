@@ -161,7 +161,7 @@ function Installningar() {
                     : premium.productStatus === "loading"
                       ? t("productLoading")
                       : price
-                        ? t("startPremiumPriceDynamic", { price })
+                        ? t(isYearlyProduct(premium.product?.id) ? "startPremiumPriceYearlyDynamic" : "startPremiumPriceDynamic", { price })
                         : t("startPremiumPlain")}
             </span>
           </button>
