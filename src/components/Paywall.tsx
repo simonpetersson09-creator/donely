@@ -8,6 +8,7 @@ import {
   subscribePurchaseEvents,
   usePremium,
   usePrice,
+  isYearlyProduct,
 } from "@/lib/premium";
 
 /** Full-screen iOS-style paywall shown when the free trial has ended. */
