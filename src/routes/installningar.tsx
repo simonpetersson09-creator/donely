@@ -29,6 +29,7 @@ import {
   restorePurchase,
   usePremium,
   usePrice,
+  isYearlyProduct,
 } from "@/lib/premium";
 
 const APP_STORE_REVIEW_URL = "https://apps.apple.com/app/id0000000000?action=write-review";
@@ -161,7 +162,7 @@ function Installningar() {
                     : premium.productStatus === "loading"
                       ? t("productLoading")
                       : price
-                        ? t("startPremiumPriceDynamic", { price })
+                        ? t(isYearlyProduct(premium.product?.id) ? "startPremiumPriceYearlyDynamic" : "startPremiumPriceDynamic", { price })
                         : t("startPremiumPlain")}
             </span>
           </button>

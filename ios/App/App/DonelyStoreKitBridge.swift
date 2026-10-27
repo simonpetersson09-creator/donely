@@ -38,7 +38,14 @@ final class DonelyStoreKitBridge: NSObject {
         "requestReview",
     ]
 
-    static let productID = "se.shiningdays.donely.premium.monthly"
+    /// Only product offered for new purchases (yearly).
+    static let productID = "se.shiningdays.donely.premium.yearly"
+    /// Products that still grant Premium. The retired monthly plan stays
+    /// valid until Apple reports it expired or revoked.
+    static let entitlementProductIDs: Set<String> = [
+        "se.shiningdays.donely.premium.yearly",
+        "se.shiningdays.donely.premium.monthly",
+    ]
 
     private weak var webView: WKWebView?
     private var product: Product?
@@ -120,7 +127,7 @@ final class DonelyStoreKitBridge: NSObject {
 
         for await result in Transaction.currentEntitlements {
             guard case .verified(let transaction) = result,
-                  transaction.productID == DonelyStoreKitBridge.productID else { continue }
+                  DonelyStoreKitBridge.entitlementProductIDs.contains(transaction.productID) else { continue }
             if let revocation = transaction.revocationDate, revocation <= Date() { continue }
             if let expiration = transaction.expirationDate, expiration <= Date() { continue }
 
@@ -201,7 +208,7 @@ final class DonelyStoreKitBridge: NSObject {
         var found = false
         for await result in Transaction.currentEntitlements {
             if case .verified(let transaction) = result,
-               transaction.productID == DonelyStoreKitBridge.productID {
+               DonelyStoreKitBridge.entitlementProductIDs.contains(transaction.productID) {
                 found = true
             }
         }
