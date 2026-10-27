@@ -103,7 +103,7 @@ Swift → JS (kör via `webView.evaluateJavaScript`):
 
 ```js
 window.__donelySetEntitlement({ subscribed: Bool, inTrial: Bool, trialDaysLeft: Int })
-window.__donelySetProduct({ id: "se.shiningdays.donely.premium.monthly", displayPrice: "19 kr" }) // eller null
+window.__donelySetProduct({ id: "se.shiningdays.donely.premium.yearly", displayPrice: "199 kr" }) // eller null
 window.__donelyPurchaseResult(status, message?)
 ```
 
